@@ -166,10 +166,11 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       consumes
           .forEach(mediaType ->
                        context.requestParameterBuilder()
-                           .contentSpecificationBuilder()
-                           .representationBuilderFor(mediaType)
-                           .modelSpecificationBuilder()
-                           .copyOf(parameterModel));
+                              .contentSpecificationBuilder()
+                              .requestBody(true)
+                              .representationBuilderFor(mediaType)
+                              .modelSpecificationBuilder()
+                              .copyOf(parameterModel));
     } else {
       context.requestParameterBuilder()
           .simpleParameterBuilder()

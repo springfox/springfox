@@ -56,6 +56,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     return true;
   }
 
+  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
   public static String findParameterType(ParameterContext parameterContext) {
     ResolvedMethodParameter resolvedMethodParameter = parameterContext.resolvedMethodParameter();
     ResolvedType parameterType = resolvedMethodParameter.getParameterType();
@@ -63,7 +64,10 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
 
     //Multi-part file trumps any other annotations
     if (isFileType(parameterType) || isListOfFiles(parameterType)) {
-      return "form";
+      if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
+        return "formData";
+      }
+      return "body";
     }
     if (resolvedMethodParameter.hasParameterAnnotation(PathVariable.class)) {
       return "path";

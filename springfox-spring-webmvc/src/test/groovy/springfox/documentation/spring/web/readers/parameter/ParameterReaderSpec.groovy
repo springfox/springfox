@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
 import spock.lang.Unroll
+import springfox.documentation.builders.RequestParameterBuilder
+import springfox.documentation.service.Parameter
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -59,7 +62,10 @@ class ParameterReaderSpec
 
     then:
     parameterContext.parameterBuilder().build()."$resultProperty" == expected
-    parameterContext.requestParameterBuilder().build()
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
         .parameterSpecification
         ?.query
         ?.orElse(null)
@@ -68,15 +74,8 @@ class ParameterReaderSpec
     where:
     parameterPlugin                         | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation | reqParamAnnot | expected
     new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | null          | null
-    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: {
-      ->
-      'defl'
-    }])                                                                                                                       | null          | null
-    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | reqParam([defaultValue: {
-      ->
-      'defr'
-    }])                                                                                                                                       | 'defr'
-  }
+    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }]) | null          | null
+    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | reqParam([defaultValue: { -> 'defr' }]) | 'defr' }
 
   @Unroll
   def "should set parameter name and description correctly for #methodName"() {
@@ -86,7 +85,9 @@ class ParameterReaderSpec
     HandlerMethod method = new HandlerMethod(
         bean,
         ParamNameClazzSpecimen.methods.find { it.name.equals(methodName) })
-    def resolvedMethodParameter = new ResolvedMethodParameter("someName", method.getMethodParameters().first(),
+    def resolvedMethodParameter = new ResolvedMethodParameter(
+        "someName",
+        method.getMethodParameters().first(),
         resolvedBeanType)
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
@@ -97,14 +98,19 @@ class ParameterReaderSpec
     when:
     parameterPlugin.apply(parameterContext)
 
+
     then:
-    parameterContext.parameterBuilder().build()."$resultProperty" == expected
-    parameterContext.parameterBuilder().build().description == expected
+    def builtParameter = parameterContext.parameterBuilder().build()
+    builtParameter."$resultProperty" == expected
+    builtParameter.description == expected
+
 
     and:
-
-    parameterContext.requestParameterBuilder().build()."$resultProperty" == expected
-    parameterContext.requestParameterBuilder().build().description == expected
+    def builtRequestParameter = parameterContext.requestParameterBuilder()
+        .in(ParameterType.QUERY)
+        .build()
+    builtRequestParameter."$resultProperty" == expected
+    builtRequestParameter.description == expected
 
     where:
     parameterPlugin           | resultProperty | methodName | expected

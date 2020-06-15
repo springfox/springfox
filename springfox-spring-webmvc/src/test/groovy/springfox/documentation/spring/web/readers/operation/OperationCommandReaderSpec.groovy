@@ -31,32 +31,36 @@ class OperationCommandReaderSpec extends DocumentationContextSpec implements Req
   @Unroll("property #property expected: #expected")
   def "should set various properties based on method name or swagger annotation"() {
     given:
-      OperationContext operationContext =
-        operationContext(documentationContext(), handlerMethod, CURRENT_COUNT)
+    OperationContext operationContext =
+        operationContext(
+            documentationContext(),
+            handlerMethod,
+            CURRENT_COUNT)
 
     when:
-      command.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
+    command.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
     then:
-      operation."$property" == expected
+    operation."$property" == expected
+
     where:
-      command                         | property     | handlerMethod                              | expected
-      new DefaultOperationReader()    | 'notes'      | dummyHandlerMethod()                       | null
-      new DefaultOperationReader()    | 'uniqueId'   | dummyHandlerMethod()                       | 'dummyMethodUsingGET'
-      new DefaultOperationReader()    | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
-      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'
-      new OperationDeprecatedReader() | 'deprecated' | dummyDeprecatedController()                | 'true'
-      new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | 'false'
+    command                         | property     | handlerMethod                              | expected
+    new DefaultOperationReader()    | 'notes'      | dummyHandlerMethod()                       | null
+    new DefaultOperationReader()    | 'uniqueId'   | dummyHandlerMethod()                       | 'dummyMethodUsingGET'
+    new DefaultOperationReader()    | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
+    new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'
+    new OperationDeprecatedReader() | 'deprecated' | dummyDeprecatedController()                | 'true'
+    new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | null
   }
 
   def "Should support all documentation types"() {
     expect:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
 
     where:
-      sut << [new OperationDeprecatedReader(), new DefaultOperationReader()]
+    sut << [new OperationDeprecatedReader(), new DefaultOperationReader()]
   }
 }

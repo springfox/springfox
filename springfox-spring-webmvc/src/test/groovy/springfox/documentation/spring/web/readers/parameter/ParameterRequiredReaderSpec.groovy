@@ -27,6 +27,7 @@ import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.common.SpringVersion
 import springfox.documentation.common.Version
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -82,7 +83,10 @@ class ParameterRequiredReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().isRequired() == expected
-    parameterContext.requestParameterBuilder().build().required == expected
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().required == expected
 
     where:
     paramAnnotations                                        | version         | requestPattern           | expected
@@ -149,7 +153,10 @@ class ParameterRequiredReaderSpec
 
     then:
     !parameterContext.parameterBuilder().build().isRequired()
-    !parameterContext.requestParameterBuilder().build().required
+    !parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().required
 
     where:
     paramAnnotations << [

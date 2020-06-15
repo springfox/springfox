@@ -1,13 +1,14 @@
 package springfox.documentation.spring.web.readers.operation;
 
+import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.schema.ModelKeyBuilder;
-import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.PropertySpecification;
+import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.service.Encoding;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
@@ -17,12 +18,31 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.slf4j.LoggerFactory.*;
+
 @Component
 public class ContentParameterAggregator implements ParameterAggregator {
+  private static final Logger LOGGER = getLogger(ContentParameterAggregator.class);
+
+  @SuppressWarnings("CyclomaticComplexity")
   public Collection<RequestParameter> aggregate(Collection<RequestParameter> parameters) {
     if (parameters.size() == 0) {
       return new ArrayList<>();
     }
+    LOGGER.info(
+        "Aggregating content parameters from parameters: {}",
+        parameters.stream()
+                  .map(RequestParameter::getName)
+                .collect(Collectors.joining(", ")));
+
+    MediaType contentMediaType = MediaType.MULTIPART_FORM_DATA;
+    ParameterType in = ParameterType.FORMDATA;
+    if (parameters.stream().noneMatch(p -> p.getIn() == ParameterType.FORMDATA)) {
+      contentMediaType = MediaType.APPLICATION_FORM_URLENCODED;
+      in = ParameterType.FORM;
+    }
+    final MediaType aggregateMediaType = contentMediaType;
+    final ParameterType aggregateIn = in;
     RequestParameterBuilder builder = new RequestParameterBuilder();
 
     // @formatter:off
@@ -30,10 +50,10 @@ public class ContentParameterAggregator implements ParameterAggregator {
         .filter(p -> p.getIn() == ParameterType.FORM)
         .forEach(each -> builder
             .name("body")
-            .in(ParameterType.FORMDATA)
+            .in(aggregateIn)
             .contentSpecificationBuilder()
                 .requestBody(true)
-                .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
+                .representationBuilderFor(aggregateMediaType)
                   .modelSpecificationBuilder()
                   .compoundModelBuilder()
                     .modelKey(new ModelKeyBuilder()
@@ -59,14 +79,16 @@ public class ContentParameterAggregator implements ParameterAggregator {
             && p.getParameterSpecification().getContent()
             .map(c -> c.getRepresentations().stream()
                 .anyMatch(m -> m.getMediaType().equals(MediaType.MULTIPART_FORM_DATA)
-                    || m.getMediaType().equals(MediaType.MULTIPART_MIXED)))
+                    || m.getMediaType().equals(MediaType.MULTIPART_MIXED)
+                    || m.getMediaType().equals(MediaType.APPLICATION_OCTET_STREAM)
+                    || m.getMediaType().equals(MediaType.ALL)))
             .orElse(false))
         .forEach(each -> builder
             .name("body")
-            .in(ParameterType.FORMDATA)
+            .in(aggregateIn)
             .contentSpecificationBuilder()
               .requestBody(true)
-              .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
+              .representationBuilderFor(aggregateMediaType)
                 .modelSpecificationBuilder()
                   .compoundModelBuilder()
                     .modelKey(new ModelKeyBuilder()
@@ -80,7 +102,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
                     .yield()
                   .yield(RepresentationBuilder.class)
                 .encodingForProperty(each.getName())
-                .copyOf(encoding(each, MediaType.MULTIPART_FORM_DATA))
+                .copyOf(encoding(each, aggregateMediaType))
                 .yield()
               .yield()
             .yield()
@@ -93,9 +115,14 @@ public class ContentParameterAggregator implements ParameterAggregator {
                   .filter(p -> p.getIn() != ParameterType.FORMDATA
                       && p.getIn() != ParameterType.FORM)
                   .collect(Collectors.toCollection(ArrayList::new));
-    if (content.getIn() != null) {
+    if (content != null && content.getIn() != null) {
       requestParameters.add(content);
     }
+    LOGGER.info(
+        "Post content aggregation parameters: {}",
+        requestParameters.stream()
+                  .map(RequestParameter::getName)
+                  .collect(Collectors.joining(", ")));
     return requestParameters;
   }
 

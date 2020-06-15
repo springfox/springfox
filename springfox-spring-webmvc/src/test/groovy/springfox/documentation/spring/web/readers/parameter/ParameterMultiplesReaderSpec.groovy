@@ -23,6 +23,8 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import spock.lang.Unroll
+import springfox.documentation.service.CollectionFormat
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -63,27 +65,24 @@ class ParameterMultiplesReaderSpec
     sut.apply(parameterContext)
     
     then:
-    parameterContext.parameterBuilder().build().isAllowMultiple() == expected
-    (parameterContext.requestParameterBuilder().build()
-        .parameterSpecification
-        .query
-        .orElse(null)
-        ?.collectionFormat != null) == expected
+    parameterContext.parameterBuilder().build().isAllowMultiple() == (expected != null)
+    parameterContext.requestParameterBuilder().simpleParameterBuilder().collectionFormat == expected
+
 
     where:
     apiParamAnnotation                        | paramType                       | expected
-    [allowMultiple: { -> true }] as ApiParam  | String.class                    | false
-    [allowMultiple: { -> true }] as ApiParam  | String[].class                  | true
-    [allowMultiple: { -> false }] as ApiParam | String[].class                  | true
-    [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | true
-    null                                      | String[].class                  | true
-    null                                      | List.class                      | true
-    null                                      | Collection.class                | true
-    null                                      | Set.class                       | true
-    null                                      | Vector.class                    | true
-    null                                      | Object[].class                  | true
-    null                                      | Integer.class                   | false
-    null                                      | Iterable.class                  | true
+    [allowMultiple: { -> true }] as ApiParam  | String.class                    | null
+    [allowMultiple: { -> true }] as ApiParam  | String[].class                  | CollectionFormat.CSV
+    [allowMultiple: { -> false }] as ApiParam | String[].class                  | CollectionFormat.CSV
+    [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | CollectionFormat.CSV
+    null                                      | String[].class                  | CollectionFormat.CSV
+    null                                      | List.class                      | CollectionFormat.CSV
+    null                                      | Collection.class                | CollectionFormat.CSV
+    null                                      | Set.class                       | CollectionFormat.CSV
+    null                                      | Vector.class                    | CollectionFormat.CSV
+    null                                      | Object[].class                  | CollectionFormat.CSV
+    null                                      | Integer.class                   | null
+    null                                      | Iterable.class                  | CollectionFormat.CSV
   }
 
 

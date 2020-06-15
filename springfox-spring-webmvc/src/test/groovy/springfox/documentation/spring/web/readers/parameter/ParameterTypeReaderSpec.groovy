@@ -65,7 +65,9 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec implements Reques
 
     then:
     parameterContext.parameterBuilder().build().paramType == expected
-    parameterContext.requestParameterBuilder().build().in.in == expected
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .build().in.in == expected
 
     where:
     annotations                               | type            | consumes                      | httpMethod      | expected
@@ -82,9 +84,9 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec implements Reques
     [[:] as RequestPart]                      | Example         | [MULTIPART_FORM_DATA]         | HttpMethod.POST | "formData"
     [[:] as RequestBody]                      | Integer         | [APPLICATION_JSON]            | HttpMethod.POST | "body"
     null                                      | Integer         | []                            | HttpMethod.GET  | "query"
-    [[:] as RequestPart]                      | MultipartFile   | []                            | HttpMethod.GET  | "form"
-    null                                      | MultipartFile   | []                            | HttpMethod.GET  | "form"
-    null                                      | MultipartFile[] | []                            | HttpMethod.GET  | "form"
+    [[:] as RequestPart]                      | MultipartFile   | []                            | HttpMethod.GET  | "formData"
+    null                                      | MultipartFile   | []                            | HttpMethod.GET  | "body"
+    null                                      | MultipartFile[] | []                            | HttpMethod.GET  | "body"
     null                                      | Example         | []                            | HttpMethod.GET  | "query"
   }
 

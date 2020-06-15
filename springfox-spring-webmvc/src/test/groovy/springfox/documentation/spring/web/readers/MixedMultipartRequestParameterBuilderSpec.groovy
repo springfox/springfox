@@ -173,7 +173,8 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                 new ModelSpecificationBuilder()
                     .name("Integer")
                     .scalarModel(ScalarType.INTEGER)
-                    .build())])
+                    .build()
+            )])
         .yield()
         .yield()
         .yield()
@@ -215,13 +216,14 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
           .encodingForProperty("profileImage")
                 .contentType("image/png, image/jpeg")
                 .headers([new Header(
-                  " X-Rate-Limit-Limit",
-                  "The number of allowed requests in the current period",
-                  null,
-                  new ModelSpecificationBuilder()
-                    .name("Integer")
-                    .scalarModel(ScalarType.INTEGER)
-                    .build())])
+                    " X-Rate-Limit-Limit",
+                    "The number of allowed requests in the current period",
+                    null,
+                    new ModelSpecificationBuilder()
+                        .name("Integer")
+                        .scalarModel(ScalarType.INTEGER)
+                        .build()
+                )])
               .yield()
             .yield()
           .yield()

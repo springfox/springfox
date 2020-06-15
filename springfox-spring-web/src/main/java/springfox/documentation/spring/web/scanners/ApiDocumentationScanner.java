@@ -90,6 +90,7 @@ public class ApiDocumentationScanner {
             .collect(toList()))
         .securitySchemes(context.getSecuritySchemes())
         .info(context.getApiInfo())
+        .servers(context.getServers())
         .build();
     group.resourceListing(resourceListing);
     return group.build();

@@ -30,7 +30,7 @@ class OperationTagsReaderSpec extends DocumentationContextSpec implements Reques
         operationContext(documentationContext(), handlerMethod)
 
     and:
-      OperationTagsReader sut = new OperationTagsReader(new DefaultTagsProvider())
+      OperationTagsReader sut = new OperationTagsReader()
 
     when:
       sut.apply(operationContext)

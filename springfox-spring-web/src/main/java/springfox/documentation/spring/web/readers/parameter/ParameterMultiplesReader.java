@@ -43,8 +43,8 @@ public class ParameterMultiplesReader implements ParameterBuilderPlugin {
   }
 
   private boolean isCollectionType(ResolvedType parameterType) {
-    return isContainerType(parameterType) || Iterable.class.isAssignableFrom(parameterType
-    .getErasedType());
+    return isContainerType(parameterType) ||
+        Iterable.class.isAssignableFrom(parameterType.getErasedType());
   }
 
   @Override
