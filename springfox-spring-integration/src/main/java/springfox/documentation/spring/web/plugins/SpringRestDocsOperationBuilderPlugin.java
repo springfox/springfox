@@ -155,7 +155,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
 
   private List<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
     return singletonList(new ExampleBuilder()
-        .withMediaType(getContentType(parsedResponse))
+        .mediaType(getContentType(parsedResponse))
         .value(getBody(parsedResponse))
         .build());
   }
