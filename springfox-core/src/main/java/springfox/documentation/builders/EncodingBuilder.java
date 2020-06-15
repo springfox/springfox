@@ -63,7 +63,19 @@ public class EncodingBuilder {
   }
 
   public Encoding build() {
+    if (hasOnlyPropertyRef()) {
+      return null;
+    }
     return new Encoding(propertyRef, contentType, style, explode, allowReserved, headers, vendorExtensions);
+  }
+
+  private boolean hasOnlyPropertyRef() {
+    return contentType == null
+        && style == null
+        && explode == null
+        && allowReserved == null
+        && headers.isEmpty()
+        && vendorExtensions.isEmpty();
   }
 
   public RepresentationBuilder yield() {

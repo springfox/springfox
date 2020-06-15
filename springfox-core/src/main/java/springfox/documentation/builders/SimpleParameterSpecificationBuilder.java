@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.builders.ElementFacets.*;
 
 public class SimpleParameterSpecificationBuilder {
@@ -32,12 +33,12 @@ public class SimpleParameterSpecificationBuilder {
 
   public SimpleParameterSpecificationBuilder style(ParameterStyle style) {
     this.style = style;
-    this.explode(style == ParameterStyle.FORM);
+//    this.explode(style == ParameterStyle.FORM); //TODO: Is this needed
     return this;
   }
 
   public SimpleParameterSpecificationBuilder explode(Boolean explode) {
-    this.explode = explode;
+    this.explode = defaultIfAbsent(Boolean.TRUE.equals(explode) ? true : null, this.explode);
     return this;
   }
 
@@ -52,7 +53,7 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder allowEmptyValue(Boolean allowEmptyValue) {
-    this.allowEmptyValue = allowEmptyValue;
+    this.allowEmptyValue = defaultIfAbsent(Boolean.TRUE.equals(allowEmptyValue) ? true : null, this.allowEmptyValue);
     return this;
   }
 
@@ -61,6 +62,7 @@ public class SimpleParameterSpecificationBuilder {
     return this;
   }
 
+  //TODO: May not be needed for 3.0
   public SimpleParameterSpecificationBuilder collectionFormat(CollectionFormat collectionFormat) {
     this.collectionFormat = collectionFormat;
     return this;
@@ -78,6 +80,11 @@ public class SimpleParameterSpecificationBuilder {
         .map(ElementFacetBuilder::build)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
+    if (explode != null
+        && explode
+        && model.getCollection().isPresent()) {
+      model = model.getCollection().get().getModel();
+    }
 
     return new SimpleParameterSpecification(
         style,

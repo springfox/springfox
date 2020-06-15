@@ -1,6 +1,7 @@
 package springfox.documentation.builders;
 
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.ParameterSpecification;
 import springfox.documentation.service.ParameterStyle;
@@ -55,7 +56,7 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder in(String in) {
-    if (in != null && !in.isEmpty()) {
+    if (!StringUtils.isEmpty(in)) {
       this.in = ParameterType.from(in);
     }
     return this;
@@ -67,7 +68,7 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder required(Boolean required) {
-    this.required = defaultIfAbsent(required, this.required);
+    this.required = defaultIfAbsent(Boolean.TRUE.equals(required) ? true : null, this.required);
     return this;
   }
 
@@ -126,11 +127,10 @@ public class RequestParameterBuilder {
     return this;
   }
 
-  public RequestParameterBuilder validator(RequestParameterBuilderValidator validator) {
+  public RequestParameterBuilder validator(Validator<RequestParameterBuilder> validator) {
     this.validator = validator;
     return this;
   }
-
 
   public RequestParameter build() {
     List<ValidationResult> results = validator.validate(this);

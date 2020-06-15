@@ -4,15 +4,18 @@ import springfox.documentation.service.Server;
 import springfox.documentation.service.ServerVariable;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ServerBuilder {
   private String name;
   private String url;
   private String description;
-  private Collection<ServerVariable> variables;
-  private List<VendorExtension> extensions;
+  private List<ServerVariable> variables = new ArrayList<>();
+  private List<VendorExtension> extensions = new ArrayList<>();
 
   public ServerBuilder name(String name) {
     this.name = name;
@@ -30,16 +33,16 @@ public class ServerBuilder {
   }
 
   public ServerBuilder variables(Collection<ServerVariable> variables) {
-    this.variables = variables;
+    this.variables.addAll(nullToEmptyList(variables));
     return this;
   }
 
-  public ServerBuilder extensions(List<VendorExtension> extensions) {
-    this.extensions = extensions;
+  public ServerBuilder extensions(Collection<VendorExtension> extensions) {
+    this.extensions.addAll(nullToEmptyList(extensions));
     return this;
   }
 
-  public Server createServer() {
+  public Server build() {
     return new Server(name, url, description, variables, extensions);
   }
 }

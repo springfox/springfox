@@ -49,7 +49,6 @@ public class ModelPropertyBuilder {
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public ModelPropertyBuilder() {
-    
   }
 
   public ModelPropertyBuilder(ModelProperty modelProperty) {

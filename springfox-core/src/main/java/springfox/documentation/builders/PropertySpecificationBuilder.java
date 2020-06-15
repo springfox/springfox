@@ -84,12 +84,12 @@ public class PropertySpecificationBuilder {
   }
 
   public PropertySpecificationBuilder readOnly(Boolean readOnly) {
-    this.readOnly = readOnly;
+    this.readOnly = defaultIfAbsent(Boolean.TRUE.equals(readOnly) ? true : null, this.readOnly);
     return this;
   }
 
   public PropertySpecificationBuilder writeOnly(Boolean writeOnly) {
-    this.writeOnly = writeOnly;
+    this.writeOnly = defaultIfAbsent(Boolean.TRUE.equals(writeOnly) ? true : null, this.writeOnly);
     return this;
   }
 

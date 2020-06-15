@@ -48,7 +48,7 @@ public class ModelFacetsBuilder {
     return this;
   }
 
-  public ModelFacetsBuilder withDeprecated(Boolean deprecated) {
+  public ModelFacetsBuilder deprecated(Boolean deprecated) {
     this.deprecated = deprecated;
     return this;
   }
@@ -101,7 +101,7 @@ public class ModelFacetsBuilder {
         .withTitle(other.getTitle())
         .description(other.getDescription())
         .withNullable(other.getNullable())
-        .withDeprecated(other.getDeprecated())
+        .deprecated(other.getDeprecated())
         .enumeration(other.getEnumerationFacet())
         .withExtensions(other.getExtensions())
         .withExternalDocumentation(other.getExternalDocumentation())

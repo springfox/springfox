@@ -23,17 +23,20 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Server;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ResourceListingBuilder {
   private String apiVersion;
-  private List<ApiListingReference> apis = new ArrayList<>();
-  private List<SecurityScheme> securitySchemes = new ArrayList<>();
+  private final List<ApiListingReference> apis = new ArrayList<>();
+  private final List<SecurityScheme> securitySchemes = new ArrayList<>();
   private ApiInfo info;
+  private final List<Server> servers = new ArrayList<>();
 
   /**
    * Updates the api version
@@ -80,6 +83,11 @@ public class ResourceListingBuilder {
   }
 
   public ResourceListing build() {
-    return new ResourceListing(apiVersion, apis, securitySchemes, info);
+    return new ResourceListing(apiVersion, apis, securitySchemes, info, servers);
+  }
+
+  public ResourceListingBuilder servers(Collection<Server> servers) {
+    this.servers.addAll(nullToEmptyList(servers));
+    return this;
   }
 }

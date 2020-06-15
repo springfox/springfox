@@ -33,12 +33,13 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
     }
 
     if (simpleParameter != null && simpleParameter.getModel() != null) {
-      RepresentationBuilder representationBuilder = context.getContentSpecificationBuilder()
-                                                           .requestBody(true)
-                                                           .representationBuilderFor(mediaType)
-                                                           .modelSpecificationBuilder()
-                                                           .copyOf(simpleParameter.getModel())
-                                                           .yield(RepresentationBuilder.class);
+      RepresentationBuilder representationBuilder
+          = context.getContentSpecificationBuilder()
+                   .requestBody(true)
+                   .representationBuilderFor(mediaType)
+                   .modelSpecificationBuilder()
+                   .copyOf(simpleParameter.getModel())
+                   .yield(RepresentationBuilder.class);
       if (mediaType == MediaType.APPLICATION_FORM_URLENCODED) {
         contentSpecification = representationBuilder
             .encodings(null)

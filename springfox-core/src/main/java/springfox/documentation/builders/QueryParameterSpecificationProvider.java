@@ -64,7 +64,7 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
                                : simpleParameter.nullSafeIsExplode() ? ParameterStyle.FORM : ParameterStyle.DEEPOBJECT;
         validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
             .copyOf(simpleParameter)
-            .explode(style == ParameterStyle.DEEPOBJECT ? true : simpleParameter.getExplode())
+            .explode(style == ParameterStyle.DEEPOBJECT ? Boolean.TRUE : simpleParameter.getExplode())
             .style(style)
             .collectionFormat(null)
             .build();

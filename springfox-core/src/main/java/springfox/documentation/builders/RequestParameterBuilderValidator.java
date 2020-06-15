@@ -1,5 +1,7 @@
 package springfox.documentation.builders;
 
+import org.springframework.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,18 +9,18 @@ public class RequestParameterBuilderValidator implements Validator<RequestParame
   @Override
   public List<ValidationResult> validate(RequestParameterBuilder builder) {
     List<ValidationResult> results = new ArrayList<>();
-    if (builder.name == null) {
+    if (StringUtils.isEmpty(builder.name)) {
       results.add(
           new ValidationResult(
               "RequestParameter",
               "name",
               "Parameter name is required"));
     }
-    if (builder.in == null) {
+    if (StringUtils.isEmpty(builder.in)) {
       results.add(new ValidationResult(
           "RequestParameter",
           "in",
-          String.format("Parameter %s is required", builder.name)));
+          "Parameter in is required"));
     }
     if (builder.simpleParameterBuilder != null && builder.contentSpecificationBuilder != null) {
       results.add(new ValidationResult(

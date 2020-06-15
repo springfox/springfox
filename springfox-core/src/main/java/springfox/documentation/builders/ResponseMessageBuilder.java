@@ -114,7 +114,8 @@ public class ResponseMessageBuilder {
             entry.getValue(),
             new ModelSpecificationBuilder()
                 .scalarModel(ScalarType.STRING)
-                .build()));
+                .build()
+        ));
   }
 
   /**

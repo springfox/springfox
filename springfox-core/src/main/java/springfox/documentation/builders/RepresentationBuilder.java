@@ -6,6 +6,7 @@ import springfox.documentation.service.Representation;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RepresentationBuilder {
@@ -62,6 +63,7 @@ public class RepresentationBuilder {
         encodings.values()
             .stream()
             .map(EncodingBuilder::build)
+            .filter(Objects::nonNull)
             .collect(Collectors.toSet()));
   }
 

@@ -199,7 +199,11 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder authorizations(Collection<SecurityReference> securityReferences) {
-    this.securityReferences.addAll(nullToEmptyList(securityReferences));
+    List<SecurityReference> newSecurityReferences = nullToEmptyList(securityReferences);
+    if (!newSecurityReferences.isEmpty()) {
+      this.securityReferences.clear();
+      this.securityReferences.addAll(newSecurityReferences);
+    }
     return this;
   }
 
@@ -296,7 +300,11 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder tags(Set<String> tags) {
-    this.tags.addAll(nullToEmptySet(tags));
+    Set<String> newTags = nullToEmptySet(tags);
+    if (!newTags.isEmpty()) {
+      this.tags.clear();
+      this.tags.addAll(newTags);
+    }
     return this;
   }
 

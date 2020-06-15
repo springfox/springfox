@@ -17,7 +17,7 @@ public class ExampleBuilder {
     return this;
   }
 
-  public ExampleBuilder withMediaType(String mediaType) {
+  public ExampleBuilder mediaType(String mediaType) {
     this.mediaType = emptyToNull(mediaType);
     return this;
   }
