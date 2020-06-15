@@ -38,8 +38,8 @@ public class ResponseContext {
       DocumentationContext documentationContext,
       GenericTypeNamingStrategy genericNamingStrategy,
       OperationContext operationContext) {
+    
     this.responseType = responseType;
-
     this.documentationContext = documentationContext;
     this.genericNamingStrategy = genericNamingStrategy;
     this.operationContext = operationContext;

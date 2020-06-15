@@ -36,6 +36,7 @@ import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.Tags;
 import springfox.documentation.service.VendorExtension;
@@ -74,7 +75,8 @@ public class DocumentationContextBuilder {
   private final Set<String> consumes = new LinkedHashSet<>();
   private final Set<ResolvedType> additionalModels = new HashSet<>();
   private final Set<Tag> tags = new TreeSet<>(Tags.tagComparator());
-  private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
+  private final List<SecurityScheme> securitySchemes = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   private TypeResolver typeResolver;
   private List<RequestHandler> handlerMappings;
@@ -82,7 +84,6 @@ public class DocumentationContextBuilder {
   private String groupName;
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
-  private List<? extends SecurityScheme> securitySchemes;
   private Comparator<ApiListingReference> listingReferenceOrdering;
   private Comparator<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
@@ -94,6 +95,7 @@ public class DocumentationContextBuilder {
   private Optional<String> pathMapping;
   private boolean isUrlTemplatesEnabled;
   private final List<RequestParameter> globalRequestParameters = new ArrayList<>();
+  private final List<Server> servers = new ArrayList<>();
 
   public DocumentationContextBuilder(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -158,7 +160,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder securitySchemes(List<? extends SecurityScheme> securitySchemes) {
-    this.securitySchemes = securitySchemes;
+    this.securitySchemes.addAll(nullToEmptyList(securitySchemes));
     return this;
   }
 
@@ -199,8 +201,8 @@ public class DocumentationContextBuilder {
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
     rules.addAll(ruleBuilders.stream()
-        .map(evaluator(typeResolver))
-        .collect(toList()));
+                             .map(evaluator(typeResolver))
+                             .collect(toList()));
     return this;
   }
 
@@ -306,7 +308,8 @@ public class DocumentationContextBuilder {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     Map<HttpMethod, List<Response>> responses = aggregateResponses();
     OrderComparator.sort(rules);
-    return new DocumentationContext(documentationType,
+    return new DocumentationContext(
+        documentationType,
         handlerMappings,
         apiInfo,
         groupName,
@@ -333,12 +336,18 @@ public class DocumentationContextBuilder {
         isUrlTemplatesEnabled,
         additionalModels,
         tags,
-        vendorExtensions);
+        vendorExtensions,
+        servers);
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
   evaluator(final TypeResolver typeResolver) {
 
     return input -> input.apply(typeResolver);
+  }
+
+  public DocumentationContextBuilder servers(List<Server> servers) {
+    this.servers.addAll(nullToEmptyList(servers));
+    return this;
   }
 }

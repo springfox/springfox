@@ -38,6 +38,7 @@ import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
@@ -86,6 +87,7 @@ public class Docket implements DocumentationPlugin {
   private final Set<String> consumes = new LinkedHashSet<>();
   private final Set<ResolvedType> additionalModels = new HashSet<>();
   private final Set<Tag> tags = new HashSet<>();
+  private final List<Server> servers = new ArrayList<>();
 
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
@@ -468,6 +470,19 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
+   * Method to add global tags to the docket
+   *
+   * @param first     - at least one tag is required to use this method
+   * @param remaining - remaining tags
+   * @return this Docket
+   */
+  public Docket servers(Server first, Server... remaining) {
+    servers.add(first);
+    servers.addAll(Arrays.stream(nullToEmptyArray(remaining)).collect(toSet()));
+    return this;
+  }
+
+  /**
    * Initiates a builder for api selection.
    *
    * @return api selection builder. To complete building the api selector, the build method of the api selector
@@ -512,6 +527,7 @@ public class Docket implements DocumentationPlugin {
         .additionalModels(additionalModels)
         .tags(tags)
         .vendorExtentions(vendorExtensions)
+        .servers(servers)
         .build();
   }
 
