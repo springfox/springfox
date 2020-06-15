@@ -67,12 +67,12 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
 
     where:
     property          | type
-    "complexTypes"    | new ArraySchema().items(new ObjectSchema().$ref("ComplexType"))
+    "complexTypes"    | new ArraySchema().items(new ObjectSchema().type(null).$ref("ComplexType"))
     "enums"           | new ArraySchema().items(new StringSchema()) //TODO: enum
     "aliasOfIntegers" | new ArraySchema().items(new IntegerSchema())
     "strings"         | new ArraySchema().items(new StringSchema())
     "objects"         | new ArraySchema().items(new ObjectSchema())
-    "substituted"     | new ArraySchema().items(new ObjectSchema().$ref("Substituted"))
+    "substituted"     | new ArraySchema().items(new ObjectSchema().type(null).$ref("Substituted"))
   }
 
   @Unroll
@@ -103,7 +103,7 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
 
     where:
     property          | type
-    "complexTypes"    | new ArraySchema().items(new ObjectSchema().$ref("ComplexType")).uniqueItems(true)
+    "complexTypes"    | new ArraySchema().items(new ObjectSchema().type(null).$ref("ComplexType")).uniqueItems(true)
     "enums"           | new ArraySchema().items(new StringSchema()).uniqueItems(true) //TODO: enum
     "aliasOfIntegers" | new ArraySchema().items(new IntegerSchema()).uniqueItems(true)
     "strings"         | new ArraySchema().items(new StringSchema()).uniqueItems(true)
@@ -137,13 +137,13 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
 
     where:
     property               | type
-    "complexTypes"         | new ArraySchema().items(new ObjectSchema().$ref("ComplexType"))
+    "complexTypes"         | new ArraySchema().items(new ObjectSchema().type(null).$ref("ComplexType"))
     "enums"                | new ArraySchema().items(new StringSchema()) //TODO: enum
     "aliasOfIntegers"      | new ArraySchema().items(new IntegerSchema())
     "strings"              | new ArraySchema().items(new StringSchema())
     "objects"              | new ArraySchema().items(new ObjectSchema())
     "bytes"                | new ByteArraySchema()
-    "substituted"          | new ArraySchema().items(new ObjectSchema().$ref("Substituted"))
+    "substituted"          | new ArraySchema().items(new ObjectSchema().type(null).$ref("Substituted"))
     "arrayOfArrayOfInts"   | new ArraySchema().items(new ArraySchema().items(new IntegerSchema()))
     "arrayOfListOfStrings" | new ArraySchema().items(new ArraySchema().items(new StringSchema()))
   }
@@ -177,13 +177,13 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
 
     where:
     property                       | type
-    "enumToSimpleType"             | new MapSchema().additionalProperties(new ObjectSchema().$ref("SimpleType"))
-    "stringToSimpleType"           | new MapSchema().additionalProperties(new ObjectSchema().$ref("SimpleType"))
-    "complexToSimpleType"          | new MapSchema().additionalProperties(new ObjectSchema().$ref("SimpleType"))
+    "enumToSimpleType"             | new MapSchema().additionalProperties(new ObjectSchema().type(null).$ref("SimpleType"))
+    "stringToSimpleType"           | new MapSchema().additionalProperties(new ObjectSchema().type(null).$ref("SimpleType"))
+    "complexToSimpleType"          | new MapSchema().additionalProperties(new ObjectSchema().type(null).$ref("SimpleType"))
     "complexToString"              | new MapSchema().additionalProperties(new StringSchema())
     "mapOfmapOfStringToSimpleType" | new MapSchema().additionalProperties(
         new MapSchema().additionalProperties(
-            new ObjectSchema().$ref("SimpleType")))
+            new ObjectSchema().type(null).$ref("SimpleType")))
   }
 }
                             

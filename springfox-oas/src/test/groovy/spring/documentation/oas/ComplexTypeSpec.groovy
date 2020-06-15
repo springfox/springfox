@@ -70,7 +70,7 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     property            | requestType                            | responseType
     "name"              | new StringSchema()                     | new StringSchema()
     "age"               | new IntegerSchema()                    | new IntegerSchema()
-    "category"          | new ObjectSchema().$ref("Category") | new ObjectSchema().$ref("Category")
+    "category"          | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
     "customType"        | new NumberSchema()                     | new NumberSchema()
   }
 
@@ -102,7 +102,7 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
 
     where:
     property | type
-    "parent" | new ObjectSchema().$ref("RecursiveType")
+    "parent" | new ObjectSchema().type(null).$ref("RecursiveType")
   }
 
   @Unroll
@@ -136,7 +136,7 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     property            | requestType                            | responseType
     "name"              | new StringSchema()                     | new StringSchema()
     "age"               | new IntegerSchema()                    | new IntegerSchema()
-    "category"          | new ObjectSchema().$ref("Category") | new ObjectSchema().$ref("Category")
+    "category"          | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
     "customType"        | new NumberSchema()                     | new NumberSchema()
     "inheritedProperty" | new StringSchema()                     | new StringSchema()
   }

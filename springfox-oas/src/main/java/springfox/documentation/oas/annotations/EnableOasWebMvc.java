@@ -45,5 +45,4 @@ import java.lang.annotation.Target;
             SpringfoxWebMvcConfiguration.class,
             OasDocumentationConfiguration.class })
 public @interface EnableOasWebMvc {
-
 }

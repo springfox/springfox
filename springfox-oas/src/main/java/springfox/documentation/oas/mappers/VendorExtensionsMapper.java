@@ -37,6 +37,9 @@ import static org.springframework.util.StringUtils.*;
 public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(Collection<VendorExtension> from) {
+    if (from == null) {
+      return new HashMap<>();
+    }
     Map<String, Object> extensions = new TreeMap<>();
     Iterable<ListVendorExtension> listExtensions = from.stream()
         .filter(ListVendorExtension.class::isInstance)

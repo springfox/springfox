@@ -22,8 +22,9 @@ public class ReferenceModelSpecificationToSchemaConverter implements Converter<R
         .equals(new QualifiedModelName("java.lang", "object"))) {
       return objectSchema;
     }
-    return objectSchema.$ref(
-        modelNamesRegistry.nameByKey(source.getKey())
+    return objectSchema
+        .type(null)
+        .$ref(modelNamesRegistry.nameByKey(source.getKey())
             .orElse("Error-" + source.getKey()
                 .getQualifiedModelName()));
   }

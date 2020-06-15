@@ -20,157 +20,74 @@
 package springfox.documentation.oas.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.Encoding;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.XML;
 import io.swagger.v3.oas.models.parameters.Parameter;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.tags.Tag;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
-
-import java.io.IOException;
-import java.util.regex.Pattern;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
 public class OpenApiJacksonModule extends SimpleModule implements JacksonModuleRegistrar {
 
-  public void maybeRegisterModule(ObjectMapper objectMapper) {
-    if (objectMapper.findMixInClassFor(OpenAPI.class) == null) {
-      objectMapper.registerModule(this);
-      objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+  public void maybeRegisterModule(ObjectMapper mapper) {
+    if (mapper.findMixInClassFor(OpenAPI.class) == null) {
+      mapper.registerModule(this);
+      mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+      mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+      mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+      mapper.setSerializationInclusion(Include.NON_NULL);
     }
   }
 
   @Override
   public void setupModule(SetupContext context) {
     super.setupModule(context);
-    context.setMixInAnnotations(OpenAPI.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Info.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(License.class, CustomizedSwaggerSerializer.class);
-//    context.setMixInAnnotations(Scheme.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(SecurityRequirement.class, CustomizedSwaggerSerializer.class);
-//    context.setMixInAnnotations(SecuritySchemeDefinition.class, CustomizedSwaggerSerializer.class);
-//    context.setMixInAnnotations(Model.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Operation.class, CustomizedSwaggerSerializer.class);
-//    context.setMixInAnnotations(Path.class, CustomizedSwaggerSerializer.class);
-//    context.setMixInAnnotations(Response.class, ResponseSerializer.class);
-    context.setMixInAnnotations(Parameter.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(OpenAPI.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Info.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(License.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Schema.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(PathItem.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Content.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(MediaType.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(SecurityScheme.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Operation.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(ApiResponses.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(ApiResponse.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Parameter.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(RequestBody.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Encoding.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Components.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Contact.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Server.class, NonEmptyMixin.class);
 //    context.setMixInAnnotations(ExternalDocs.class, CustomizedSwaggerSerializer.class);
-//    context.setMixInAnnotations(Xml.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Tag.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Contact.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(XML.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Tag.class, NonEmptyMixin.class);
+    context.setMixInAnnotations(Contact.class, NonEmptyMixin.class);
 
-//    context.setMixInAnnotations(Property.class, PropertyExampleSerializerMixin.class);
   }
 
   @JsonAutoDetect
   @JsonInclude(value = Include.NON_EMPTY)
-  private class CustomizedSwaggerSerializer {
+  private class NonEmptyMixin {
   }
-
-  @JsonAutoDetect
-  @JsonInclude(value = Include.NON_EMPTY)
-  @JsonIgnoreProperties("responseSchema")
-  private class ResponseSerializer {
-  }
-
-  @JsonAutoDetect
-  @JsonInclude(value = Include.NON_EMPTY)
-  private interface PropertyExampleSerializerMixin {
-
-    @JsonSerialize(using = PropertyExampleSerializer.class)
-    Object getExample();
-
-    class PropertyExampleSerializer extends StdSerializer<Object> {
-
-      private static final Pattern JSON_NUMBER_PATTERN =
-          Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
-
-      @SuppressWarnings({ "unused", "RedundantModifier" })
-      public PropertyExampleSerializer() {
-        this(Object.class);
-      }
-
-      PropertyExampleSerializer(Class<Object> t) {
-        super(t);
-      }
-
-      @Override
-      public void serialize(Object value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        if (canConvertToString(value)) {
-          String stringValue = (value instanceof String) ? ((String) value).trim() : value.toString().trim();
-          if (isStringLiteral(stringValue)) {
-            String cleanedUp = stringValue.replaceAll("^\"", "")
-                .replaceAll("\"$", "")
-                .replaceAll("^'", "")
-                .replaceAll("'$", "");
-            gen.writeString(cleanedUp);
-          } else if (isNotJsonString(stringValue)) {
-            gen.writeRawValue(stringValue);
-          } else {
-            gen.writeString(stringValue);
-          }
-        } else {
-          gen.writeObject(value);
-        }
-      }
-
-      private boolean canConvertToString(Object value) {
-        return value instanceof Boolean
-            || value instanceof Character
-            || value instanceof String
-            || value instanceof Byte
-            || value instanceof Short
-            || value instanceof Integer
-            || value instanceof Long
-            || value instanceof Float
-            || value instanceof Double
-            || value instanceof Void;
-      }
-
-      boolean isStringLiteral(String value) {
-        return (value.startsWith("\"") && value.endsWith("\""))
-            || (value.startsWith("'") && value.endsWith("'"));
-      }
-
-      boolean isNotJsonString(final String value) {
-        // strictly speaking, should also test for equals("null") since {"example": null} would be valid JSON
-        // but swagger2 does not support null values
-        // and an example value of "null" probably does not make much sense anyway
-        return value.startsWith("{")                          // object
-            || value.startsWith("[")                          // array
-            || "true".equals(value)                           // true
-            || "false".equals(value)                          // false
-            || JSON_NUMBER_PATTERN.matcher(value).matches();  // number
-      }
-
-      @Override
-      public boolean isEmpty(SerializerProvider provider, Object value) {
-        return internalIsEmpty(value);
-      }
-
-      @SuppressWarnings("deprecation")
-      @Override
-      public boolean isEmpty(Object value) {
-        return internalIsEmpty(value);
-      }
-
-      private boolean internalIsEmpty(Object value) {
-        return value == null || value.toString().trim().length() == 0;
-      }
-    }
-  }
-
 }

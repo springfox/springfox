@@ -23,154 +23,237 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.Encoding;
+import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.oas.models.servers.ServerVariables;
 import io.swagger.v3.oas.models.tags.Tag;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
+import org.slf4j.Logger;
 import org.springframework.http.HttpMethod;
-import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.CollectionElementFacet;
+import springfox.documentation.schema.ElementFacet;
+import springfox.documentation.schema.EnumerationFacet;
+import springfox.documentation.schema.NumericElementFacet;
+import springfox.documentation.schema.StringElementFacet;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
-import springfox.documentation.service.ContentSpecification;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.service.ModelNamesRegistry;
 import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.Representation;
 import springfox.documentation.service.RequestBody;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.SimpleParameterSpecification;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
+import static org.slf4j.LoggerFactory.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 @Mapper(componentModel = "spring",
-        uses = {
-            VendorExtensionsMapper.class,
-            LicenseMapper.class,
-            ExamplesMapper.class,
-            SecurityMapper.class,
-            SchemaMapper.class
-        })
+    uses = {
+        VendorExtensionsMapper.class,
+        LicenseMapper.class,
+        ExamplesMapper.class,
+        SecurityMapper.class,
+        SchemaMapper.class,
+        StyleEnumMapper.class,
+        SecuritySchemeMapper.class
+    })
 public abstract class ServiceModelToOasMapper {
+  private static final Logger LOGGER = getLogger(ServiceModelToOasMapper.class);
+
   @Mappings({
-                @Mapping(target = "openapi", constant = "3.0.0"),
-                @Mapping(target = "info", source = "resourceListing.info"),
-                @Mapping(target = "externalDocs", source = "documentationReference"),
-                @Mapping(target = "security", ignore = true),
-                @Mapping(target = "paths", source = "apiListings"),
-                @Mapping(target = "components", ignore = true),
-                @Mapping(target = "extensions", source = "vendorExtensions")
-            })
+      @Mapping(target = "openapi", constant = "3.0.1"),
+      @Mapping(target = "info", source = "resourceListing.info"),
+      @Mapping(target = "externalDocs", source = "documentationReference"),
+      @Mapping(target = "security", ignore = true),
+      @Mapping(target = "paths", source = "apiListings", qualifiedByName = { "PathsMapping" }),
+      @Mapping(target = "components.schemas", source = "apiListings", qualifiedByName = { "ModelsMapping" }),
+      @Mapping(target = "components.securitySchemes", source = "resourceListing.securitySchemes"),
+      @Mapping(target = "extensions", source = "vendorExtensions")
+  })
   public abstract OpenAPI mapDocumentation(Documentation from);
 
   @Mappings({
-                @Mapping(target = "operationId", source = "uniqueId"),
-                @Mapping(target = "security", source = "securityReferences"),
-                @Mapping(target = "responses", source = "responses"),
-                @Mapping(target = "extensions", source = "vendorExtensions"),
-                @Mapping(target = "parameters", source = "requestParameters"),
-                @Mapping(target = "requestBody", source = "body"),
-                @Mapping(target = "description", source = "notes"),
-                @Mapping(target = "callbacks", ignore = true),
-                @Mapping(target = "servers", ignore = true), //TODO
-                @Mapping(target = "externalDocs", ignore = true)
-            })
-  abstract Operation mapOperation(springfox.documentation.service.Operation from);
+      @Mapping(target = "operationId", source = "uniqueId"),
+      @Mapping(target = "security", source = "securityReferences"),
+      @Mapping(target = "extensions", source = "vendorExtensions"),
+      @Mapping(target = "parameters", source = "queryParameters"),
+      @Mapping(target = "requestBody", source = "body"),
+      @Mapping(target = "description", source = "notes"),
+      @Mapping(target = "callbacks", ignore = true),
+      @Mapping(target = "servers", ignore = true),
+      //TODO
+      @Mapping(target = "externalDocs", ignore = true)
+  })
+  abstract Operation mapOperation(
+      springfox.documentation.service.Operation from,
+      @Context ModelNamesRegistry modelNamesRegistry);
 
   @Mappings({
-                @Mapping(target = "schema", source = "parameterSpecification.query"),
-                @Mapping(target = "content", source = "parameterSpecification.content"),
-                @Mapping(target = "example", ignore = true),
-                @Mapping(target = "allowEmptyValue",
-                         expression =
-                             "java(from.getParameterSpecification().getQuery().map(q -> q.getAllowEmptyValue())"
-                                 + ".orElse(null))"),
-                @Mapping(target = "style",
-                         expression =
-                             "java(from.getParameterSpecification().getQuery().map(q -> mapStyle(q.getStyle())).orElse"
-                                 + "(null)"
-                                 + ")"),
-                @Mapping(target = "explode",
-                         expression = "java(from.getParameterSpecification().getQuery().map(q -> q.getExplode()).orElse"
-                             + "(null))"),
-                @Mapping(target = "allowReserved",
-                         expression =
-                             "java(from.getParameterSpecification().getQuery().map(q -> q.getAllowReserved()).orElse"
-                                 + "(null))"),
-                @Mapping(target = "$ref", ignore = true)
-            })
-  abstract Parameter mapParameter(springfox.documentation.service.RequestParameter from);
+      @Mapping(target = "schema", source = "parameterSpecification.query"),
+      @Mapping(target = "content", ignore = true),
+      @Mapping(target = "example", ignore = true),
+      @Mapping(target = "in", source = "in.in"),
+      @Mapping(target = "allowEmptyValue",
+          expression =
+              "java(from.getParameterSpecification().getQuery()"
+                  + ".map(q -> q.getAllowEmptyValue())"
+                  + ".orElse(null))"),
+      @Mapping(target = "style", expression = "java(from.getParameterSpecification().getQuery()"
+          + ".map(q -> parameterStyle(q.getStyle()))"
+          + ".orElse(null))"),
+      @Mapping(target = "explode",
+          expression = "java(from.getParameterSpecification().getQuery()"
+              + ".map(q -> q.getExplode())"
+              + ".orElse(null))"),
+      @Mapping(target = "allowReserved",
+          expression =
+              "java(from.getParameterSpecification().getQuery()"
+                  + ".map(q -> q.getAllowReserved())"
+                  + ".orElse(null))"),
+      @Mapping(target = "$ref", ignore = true)
+  })
+  abstract Parameter mapParameter(
+      RequestParameter from,
+      @Context ModelNamesRegistry modelNamesRegistry);
 
-  Parameter.StyleEnum mapStyle(ParameterStyle from) {
-    return Parameter.StyleEnum.valueOf(from.name());
+  @AfterMapping
+  public void afterMappingParameter(
+      RequestParameter from,
+      @MappingTarget Parameter target) {
+    if (from.getParameterSpecification().getQuery().isPresent()) {
+      for (ElementFacet facet : from.getParameterSpecification().getQuery().get().getFacets()) {
+        if (facet instanceof NumericElementFacet) {
+          target.getSchema().maximum(((NumericElementFacet) facet).getMaximum());
+          target.getSchema().minimum(((NumericElementFacet) facet).getMinimum());
+          target.getSchema().exclusiveMaximum(((NumericElementFacet) facet).getExclusiveMaximum());
+          target.getSchema().exclusiveMinimum(((NumericElementFacet) facet).getExclusiveMinimum());
+        } else if (facet instanceof EnumerationFacet) {
+          target.getSchema().setEnum(((EnumerationFacet) facet).getAllowedValues());
+        } else if (facet instanceof StringElementFacet) {
+          target.getSchema().setPattern(((StringElementFacet) facet).getPattern());
+          target.getSchema().setMaxLength(((StringElementFacet) facet).getMaxLength());
+          target.getSchema().setMinLength(((StringElementFacet) facet).getMinLength());
+        } else if (facet instanceof CollectionElementFacet) {
+          target.getSchema().minItems(((CollectionElementFacet) facet).getMinItems());
+          target.getSchema().maxItems(((CollectionElementFacet) facet).getMaxItems());
+          target.getSchema().uniqueItems(((CollectionElementFacet) facet).getUniqueItems());
+        }
+      }
+    }
   }
 
-  static Schema fromSimpleParameter(Optional<SimpleParameterSpecification> value) {
-    //TODO: Implement this mapping
+  protected Parameter.StyleEnum parameterStyle(ParameterStyle from) {
+    if (from != null) {
+      return Parameter.StyleEnum.valueOf(from.name());
+    }
     return null;
   }
 
-  static Content fromContent(Optional<ContentSpecification> value) {
-    //TODO: Implement this mapping
-    return null;
+  protected Schema fromSimpleParameter(
+      Optional<SimpleParameterSpecification> value,
+      @Context ModelNamesRegistry modelNamesRegistry) {
+    return value.map(s -> Mappers.getMapper(SchemaMapper.class)
+                                 .mapModel(s.getModel(), modelNamesRegistry))
+                .orElse(null);
   }
 
-  static Schema fromModelSpecification(ModelSpecification model) {
-    //TODO: Implement this mapping
-    return null;
+  protected ApiResponses map(
+      Set<springfox.documentation.service.Response> from,
+      @Context ModelNamesRegistry modelNamesRegistry) {
+    ApiResponses responses = new ApiResponses();
+    for (springfox.documentation.service.Response each : from) {
+      ApiResponse response = new ApiResponse()
+          .description(each.getDescription());
+      Content content = new Content();
+      for (Representation representation : each.getRepresentations()) {
+        content.addMediaType(
+            representation.getMediaType().toString(),
+            fromRepresentation(representation, modelNamesRegistry));
+      }
+      response.setContent(content);
+      response.setHeaders(fromHeaders(each.getHeaders(), modelNamesRegistry));
+      new VendorExtensionsMapper()
+          .mapExtensions(each.getVendorExtensions())
+          .forEach(response::addExtension);
+      responses.put(String.valueOf(each.getCode()), response);
+    }
+    return responses;
   }
 
-
-  static ApiResponses map(java.util.Set<springfox.documentation.service.Response> value) {
-    //TODO: Implement this mapping
-    return null;
+  protected io.swagger.v3.oas.models.parameters.RequestBody map(
+      RequestBody from,
+      @Context ModelNamesRegistry modelNamesRegistry) {
+    if (from == null) {
+      return null;
+    }
+    io.swagger.v3.oas.models.parameters.RequestBody mapped = new io.swagger.v3.oas.models.parameters.RequestBody();
+    Content content = new Content();
+    for (Representation representation : from.getRepresentations()) {
+      content.addMediaType(
+          representation.getMediaType().toString(),
+          fromRepresentation(representation, modelNamesRegistry));
+    }
+    mapped.content(content);
+    return mapped;
   }
 
-  static io.swagger.v3.oas.models.parameters.RequestBody map(RequestBody from) {
-    //TODO: Implement this mapping
-    return null;
-  }
-
+  @Named("PathsMapping")
   Paths mapPaths(Map<String, List<ApiListing>> apiListings) {
     Paths paths = new Paths();
     apiListings.values()
-        .stream()
-        .flatMap(Collection::stream)
-        .forEachOrdered(each -> {
-          for (ApiDescription api : each.getApis()) {
-            paths.addPathItem(
-                api.getPath(),
-                mapOperations(
-                    api,
-                    paths.get(api.getPath())));
-          }
-        });
+               .stream()
+               .flatMap(Collection::stream)
+               .forEachOrdered(each -> {
+                 for (ApiDescription api : each.getApis()) {
+                   paths.addPathItem(
+                       api.getPath(),
+                       mapOperations(
+                           api,
+                           paths.get(api.getPath()),
+                           each.getModelNamesRegistry()));
+                 }
+               });
     return paths;
   }
 
   private PathItem mapOperations(
       ApiDescription api,
-      PathItem existingPath) {
+      PathItem existingPath,
+      ModelNamesRegistry modelNamesRegistry) {
     PathItem path = existingPath;
     if (existingPath == null) {
       path = new PathItem();
     }
     for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
-      Operation operation = mapOperation(each);
+      LOGGER.info("Mapping operation {}", api.getPath());
+      Operation operation = mapOperation(each, modelNamesRegistry);
       path.operation(
           mapHttpMethod(each.getMethod()),
           operation);
@@ -180,77 +263,114 @@ public abstract class ServiceModelToOasMapper {
 
   abstract PathItem.HttpMethod mapHttpMethod(HttpMethod method);
 
-  static Content map(SortedSet<Representation> value) {
-    //TODO: Implement this mapping
-    return new Content();
+  private Content map(
+      SortedSet<Representation> value,
+      ModelNamesRegistry modelNamesRegistry) {
+    Content content = new Content();
+    for (Representation each : value) {
+      content.addMediaType(each.getMediaType().toString(), fromRepresentation(each, modelNamesRegistry));
+    }
+    return content;
   }
 
-//  ApiResponses mapApiResponses(Set<ResponseMessage> from) {
-//    ApiResponses responses = new ApiResponses();
-//    for (ResponseMessage responseMessage : from) {
-////      Property responseProperty;
-////      ModelReference modelRef = responseMessage.getResponseModel();
-////      responseProperty = modelRefToProperty(modelRef);
-//      ApiResponse response = new ApiResponse()
-//          .description(responseMessage.getMessage());
-//      Content content = new Content();
-//      Map<String, Example> examples = EXAMPLES_MAPPER
-//          .mapExamples(responseMessage.getExamples());
-//      MediaType item = new MediaType();
-//      item.examples(examples);
-//      item.encoding()
-//      content.addMediaType("application/json", item);
-//
-//      response.setHeaders(responseMessage.getHeaders().entrySet().stream().map(toPropertyEntry())
-//          .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
-//
-//      response.setExtensions();
-//      responses.put(String.valueOf(responseMessage.getCode()), response);
-//    }
-//    return responses;
-//  }
+  @Mappings({
+      @Mapping(target = "schema", source = "model", qualifiedByName = "ModelsMapping"),
+      @Mapping(target = "encoding", source = "encodings"),
+      @Mapping(target = "examples", source = "model.facets.examples"),
+      @Mapping(target = "example", ignore = true),
+      @Mapping(target = "extensions", source = "model.facets.extensions"),
+  })
+  protected abstract MediaType fromRepresentation(
+      Representation each,
+      @Context ModelNamesRegistry modelNamesRegistry);
+
+  protected Map<String, Encoding> fromEncodings(
+      Collection<springfox.documentation.service.Encoding> encodings,
+      @Context ModelNamesRegistry namesRegistry) {
+    return encodings.stream()
+                    .collect(Collectors.toMap(
+                        springfox.documentation.service.Encoding::getPropertyRef,
+                        e -> mapEncoding(e, namesRegistry)));
+  }
 
   @Mappings({
-                @Mapping(target = "license", source = "from",
-                         qualifiedBy = { LicenseMapper.LicenseTranslator.class, LicenseMapper.License.class }),
-                @Mapping(target = "contact", source = "from.contact"),
-                @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
-                @Mapping(target = "extensions", source = "vendorExtensions")
-            })
+      @Mapping(target = "style", source = "style", qualifiedByName = {
+          "StyleEnumSelector",
+          "EncodingStyleEnum" })
+  })
+  protected abstract Encoding mapEncoding(
+      springfox.documentation.service.Encoding from,
+      @Context ModelNamesRegistry modelNamesRegistry);
+
+  protected Map<String, Header> fromHeaders(
+      Collection<springfox.documentation.service.Header> headers,
+      @Context ModelNamesRegistry modelNamesRegistry) {
+    return headers.stream()
+                  .collect(Collectors.toMap(
+                      springfox.documentation.service.Header::getName,
+                      h -> mapHeader(h, modelNamesRegistry)));
+  }
+
+  //
+  @Mappings({
+      @Mapping(target = "style", ignore = true),
+      @Mapping(target = "deprecated", ignore = true),
+      @Mapping(target = "explode", ignore = true),
+      @Mapping(target = "schema", source = "modelSpecification"),
+      @Mapping(target = "required", source = "required"),
+      @Mapping(target = "examples", ignore = true),
+      @Mapping(target = "example", ignore = true),
+      @Mapping(target = "content", ignore = true),
+      @Mapping(target = "extensions", ignore = true),
+      @Mapping(target = "$ref", ignore = true),
+  })
+  protected abstract Header mapHeader(
+      springfox.documentation.service.Header from,
+      @Context ModelNamesRegistry modelNamesRegistry);
+
+  @Mappings({
+      @Mapping(target = "license", source = "from",
+          qualifiedBy = {
+              LicenseMapper.LicenseTranslator.class,
+              LicenseMapper.License.class }),
+      @Mapping(target = "contact", source = "from.contact"),
+      @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
+      @Mapping(target = "extensions", source = "vendorExtensions")
+  })
   protected abstract Info mapApiInfo(ApiInfo from);
 
   @Mappings({
-                @Mapping(target = "extensions", ignore = true)
-            })
+      @Mapping(target = "extensions", ignore = true)
+  })
   protected abstract Contact map(springfox.documentation.service.Contact from);
 
   @Mappings({
-                @Mapping(target = "externalDocs", ignore = true),
-                @Mapping(target = "extensions", source = "vendorExtensions"),
-            })
+      @Mapping(target = "externalDocs", ignore = true),
+      @Mapping(target = "extensions", source = "vendorExtensions"),
+  })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   @Mappings({
-                @Mapping(target = "extensions", source = "extensions")
-            })
+      @Mapping(target = "extensions", source = "extensions")
+  })
   protected abstract Server mapServer(springfox.documentation.service.Server from);
 
   protected ServerVariables serverVariableMap(
       Collection<springfox.documentation.service.ServerVariable> serverVariables) {
     ServerVariables variables = new ServerVariables();
     variables.putAll(serverVariables.stream()
-                         .collect(Collectors.toMap(
-                             springfox.documentation.service.ServerVariable::getName,
-                             this::mapServerVariable)));
+                                    .collect(Collectors.toMap(
+                                        springfox.documentation.service.ServerVariable::getName,
+                                        this::mapServerVariable)));
     return variables;
   }
 
   @Mappings({
-                @Mapping(target = "enum", source = "allowedValues"),
-                @Mapping(target = "default", source = "defaultValue"),
-                @Mapping(target = "_enum", ignore = true),
-                @Mapping(target = "_default", ignore = true)
-            })
+      @Mapping(target = "enum", source = "allowedValues"),
+      @Mapping(target = "default", source = "defaultValue"),
+      @Mapping(target = "_enum", ignore = true),
+      @Mapping(target = "_default", ignore = true)
+  })
   protected abstract ServerVariable mapServerVariable(springfox.documentation.service.ServerVariable from);
 
   protected abstract ExternalDocumentation mapExternalDocs(springfox.documentation.service.DocumentationReference from);
