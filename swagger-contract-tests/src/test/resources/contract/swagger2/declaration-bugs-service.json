@@ -26,8 +26,7 @@
         "/bugs/1162": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1162",
                 "operationId": "bug1162UsingPOST",
@@ -42,15 +41,13 @@
                             "format": "date"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1209": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1209",
                 "operationId": "bug1209UsingPOST",
@@ -76,15 +73,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1306{?paramMap}": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1306",
                 "operationId": "bug1306UsingPOST",
@@ -115,15 +110,13 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1376-bare": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "issue1376Bare",
                 "operationId": "issue1376BareUsingPOST",
@@ -137,15 +130,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1376-input-bare{?url}": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "issue1376Input",
                 "operationId": "issue1376InputUsingPOST",
@@ -165,15 +156,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1376-input-property{?url}": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "issue1376Input",
                 "operationId": "issue1376InputUsingPOST_1",
@@ -192,15 +181,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1376-property": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "issue1376Property",
                 "operationId": "issue1376PropertyUsingPOST",
@@ -214,15 +201,13 @@
                             "$ref": "#/definitions/Bug1376"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1420": {
             "get": {
                 "tags": [
                     "Bugs",
-                    "bugs-controller",
                     "foo"
                 ],
                 "summary": "issue1420",
@@ -234,15 +219,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1440": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "issue1440",
                 "operationId": "issue1440UsingGET",
@@ -253,15 +236,13 @@
                             "$ref": "#/definitions/EntityModel«string»"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1475": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "mapOfLists",
                 "operationId": "mapOfListsUsingGET",
@@ -278,15 +259,13 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1475-example": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "mapOfListOfExample",
                 "operationId": "mapOfListOfExampleUsingGET",
@@ -303,15 +282,13 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1605": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "byteArrayResponse",
                 "operationId": "byteArrayResponseUsingGET",
@@ -323,15 +300,13 @@
                             "format": "byte"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1627": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1627",
                 "operationId": "bug1627UsingGET",
@@ -350,15 +325,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1632": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "fileCustomType",
                 "operationId": "fileCustomTypeUsingGET",
@@ -377,15 +350,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1632s": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "filesCustomType",
                 "operationId": "filesCustomTypeUsingGET",
@@ -407,15 +378,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1676": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "apiModelProperty",
                 "operationId": "apiModelPropertyUsingGET",
@@ -434,15 +403,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1697": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "payloadWithByteBuffer",
                 "operationId": "payloadWithByteBufferUsingGET",
@@ -461,15 +428,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1722": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "Remove an apple from a user",
                 "description": "Remove an apple from a user. You must specify the user name and the apple name.",
@@ -497,15 +462,13 @@
                     "200": {
                         "description": "The apple is removed"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1734{?offset}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1734",
                 "operationId": "bug1734UsingGET",
@@ -517,23 +480,20 @@
                         "required": false,
                         "type": "integer",
                         "default": 0,
-                        "format": "int32",
-                        "allowEmptyValue": false
+                        "format": "int32"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1740": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1740",
                 "operationId": "bug1740UsingGET",
@@ -544,15 +504,13 @@
                             "$ref": "#/definitions/Bug1740"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1749{?ascending,companyName,email,like,pageNumber,pageSize,set,sortDirection,sortField}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "Retrieve all the companies",
                 "operationId": "getAllPagedUsingGET",
@@ -635,15 +593,13 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1750a": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1750a",
                 "operationId": "bug1750aUsingGET",
@@ -657,15 +613,13 @@
                     "204": {
                         "description": "no ids found"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1750b": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "1750b",
                 "operationId": "bug1750bUsingGET",
@@ -679,8 +633,7 @@
                     "204": {
                         "description": "no ids found"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1767": {
@@ -709,8 +662,7 @@
         "/bugs/1777": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1777",
                 "operationId": "bug1777UsingGET",
@@ -721,15 +673,13 @@
                             "$ref": "#/definitions/Bug1777"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1778{?e,s}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1778",
                 "operationId": "bug1778UsingGET",
@@ -751,15 +701,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1819a": {
             "put": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "modelWithListOfEnumsAsJson",
                 "operationId": "modelWithListOfEnumsAsJsonUsingPUT",
@@ -781,15 +729,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1819b{?enumTypes}": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "modelWithListOfEnumsAsModelAttribute",
                 "operationId": "modelWithListOfEnumsAsModelAttributeUsingPOST",
@@ -820,15 +766,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1841": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "method1",
                 "operationId": "method1UsingGET",
@@ -840,15 +784,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1864{?somename}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "test",
                 "operationId": "testUsingGET",
@@ -864,15 +806,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1881": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1881",
                 "operationId": "bug1881UsingGET",
@@ -894,15 +834,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1887/{env}/{list-id}/emails": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "1887 example",
                 "operationId": "addEmailsToListUsingPOST",
@@ -947,15 +885,13 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1894": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "cacheEvict1",
                 "operationId": "cacheEvict1UsingPOST",
@@ -966,15 +902,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1907": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "xmlPayload",
                 "operationId": "xmlPayloadUsingGET",
@@ -996,15 +930,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1926/filtered": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "filtered",
                 "operationId": "filteredUsingGET",
@@ -1030,15 +962,13 @@
                             ]
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1926/not-filtered": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "notFiltered",
                 "operationId": "notFilteredUsingGET",
@@ -1064,15 +994,13 @@
                             ]
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1939{?credential-source-id,password,username}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "authenticate a user using a given set of credentials, producing a JWT token that may be used for future API operations if successful",
                 "operationId": "authenticateUsingGET",
@@ -1109,15 +1037,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1965": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1965",
                 "operationId": "bug1965UsingPOST",
@@ -1137,11 +1063,6 @@
                                 "sfId"
                             ],
                             "properties": {
-                                "file": {
-                                    "type": "string",
-                                    "format": "binary",
-                                    "description": "file"
-                                },
                                 "paramMap": {
                                     "type": "object",
                                     "description": "paramMap",
@@ -1160,6 +1081,16 @@
                                 }
                             }
                         }
+                    },
+                    {
+                        "in": "body",
+                        "name": "file",
+                        "description": "file",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "binary"
+                        }
                     }
                 ],
                 "responses": {
@@ -1169,15 +1100,13 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/1965-form-data": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1965FormData",
                 "operationId": "bug1965FormDataUsingPOST",
@@ -1257,15 +1186,13 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2029{?name}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "测试RequesetParam",
                 "description": "测试RequesetParam",
@@ -1293,15 +1220,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2081{?a.importantField,b.importantField}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2081",
                 "operationId": "bug2081UsingGET",
@@ -1323,15 +1248,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2107/{someId}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "2107",
                 "operationId": "getSomeByIdUsingGET",
@@ -1345,8 +1268,7 @@
                         "description": "This is the description",
                         "required": true,
                         "type": "string",
-                        "default": "1f1f1f",
-                        "allowEmptyValue": false
+                        "default": "1f1f1f"
                     }
                 ],
                 "responses": {
@@ -1356,15 +1278,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2114{?clearIndex,siteSecret,stripHtmlTags,xmlUrl}": {
             "put": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2114",
                 "operationId": "bug2114UsingPUT",
@@ -1416,15 +1336,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2118": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2118",
                 "operationId": "bug2118UsingGET",
@@ -1446,15 +1364,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2161": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2161And2249and2469",
                 "operationId": "bug2161And2249and2469UsingGET",
@@ -1476,15 +1392,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2268{?$filter}": {
             "get": {
                 "tags": [
                     "Bugs",
-                    "bugs-controller",
                     "example"
                 ],
                 "summary": "Get all examples",
@@ -1499,8 +1413,7 @@
                         "in": "query",
                         "description": "Filter the list",
                         "required": false,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1519,22 +1432,14 @@
                         "petstore_auth": [
                             "read"
                         ]
-                    },
-                    {
-                        "user_auth": [
-                            "ADMIN",
-                            "USER"
-                        ]
                     }
-                ],
-                "deprecated": false
+                ]
             }
         },
         "/bugs/2368": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2368",
                 "operationId": "bug2368UsingGET",
@@ -1542,15 +1447,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2378": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "upperCaseField",
                 "operationId": "upperCaseFieldUsingPOST",
@@ -1572,15 +1475,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2391{?from_country_id}": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2391",
                 "operationId": "bug2391UsingPOST",
@@ -1600,15 +1501,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2415": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2415",
                 "operationId": "bug2415UsingPOST",
@@ -1630,15 +1529,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2415{?input}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2415",
                 "operationId": "bug2415UsingGET",
@@ -1661,15 +1558,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2423{?from,to}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2423",
                 "operationId": "bug2423UsingGET",
@@ -1691,15 +1586,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2479": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2479",
                 "operationId": "bug2479UsingPOST",
@@ -1721,15 +1614,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/2822": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2822",
                 "operationId": "bug2822UsingPOST",
@@ -1741,7 +1632,7 @@
                         "in": "body",
                         "name": "message",
                         "description": "message",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string",
                             "example": "exampleMessage"
@@ -1752,15 +1643,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "addBook",
                 "operationId": "addBookUsingGET",
@@ -1823,15 +1712,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug1944": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug1944",
                 "operationId": "bug1944UsingGET",
@@ -1842,15 +1729,13 @@
                     "404": {
                         "description": "No object was found with the given ID"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug2182": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "/bug2182",
                 "operationId": "bug2182UsingGET",
@@ -1861,15 +1746,13 @@
                             "$ref": "#/definitions/ProductVO"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug2203": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2203",
                 "operationId": "bug2203UsingGET",
@@ -1883,15 +1766,13 @@
                             "$ref": "#/definitions/Response«LanguageResponse»"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug2220": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2220",
                 "operationId": "bug2220UsingGET",
@@ -1908,15 +1789,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug2220/{bar}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2220",
                 "operationId": "bug2220UsingGET_1",
@@ -1933,15 +1812,13 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug2230": {
             "post": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "/bug2230",
                 "operationId": "bug2230UsingPOST",
@@ -1966,15 +1843,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/bug2282": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "/bug2282",
                 "operationId": "bug2282UsingGET",
@@ -1985,15 +1860,13 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/{bar}/2148{?year}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "bug2148",
                 "operationId": "bug2148UsingGET",
@@ -2022,15 +1895,13 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/bugs/{propertyKey}/{environmentKey}": {
             "get": {
                 "tags": [
-                    "Bugs",
-                    "bugs-controller"
+                    "Bugs"
                 ],
                 "summary": "getProperty",
                 "operationId": "getPropertyUsingGET",
@@ -2040,16 +1911,14 @@
                         "in": "path",
                         "description": "Key of the environment",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     },
                     {
                         "name": "propertyKey",
                         "in": "path",
                         "description": "Key of the property",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -2059,8 +1928,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

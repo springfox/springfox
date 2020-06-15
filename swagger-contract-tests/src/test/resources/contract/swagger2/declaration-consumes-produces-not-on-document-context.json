@@ -50,8 +50,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/with-operation-consumes-produces": {
@@ -82,8 +81,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/with-operation-produces": {
@@ -103,8 +101,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/without-operation-consumes": {
@@ -135,8 +132,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/without-operation-produces": {
@@ -156,8 +152,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

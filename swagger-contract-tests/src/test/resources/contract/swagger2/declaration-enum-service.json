@@ -48,8 +48,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/enums/entity": {
@@ -70,8 +69,7 @@
                             ]
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/enums/wrapped": {
@@ -88,8 +86,7 @@
                             "$ref": "#/definitions/EnumCollection"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

@@ -51,8 +51,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/foo/delete-t/{id}": {
@@ -81,8 +80,7 @@
                     "405": {
                         "description": "Invalid input"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/foo/get-t/{id}": {
@@ -111,8 +109,7 @@
                     "405": {
                         "description": "Invalid input"
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

@@ -40,8 +40,7 @@
                             "$ref": "#/definitions/GroovyModel"
                         }
                     }
-                },
-                "deprecated": false
+                }
             },
             "put": {
                 "tags": [
@@ -67,8 +66,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

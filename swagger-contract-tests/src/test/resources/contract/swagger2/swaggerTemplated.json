@@ -59,8 +59,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/api/store/search?x=TX": {
@@ -92,8 +91,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

@@ -53,8 +53,7 @@
                             "$ref": "#/definitions/FancyPet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1430-body": {
@@ -83,8 +82,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1430-query": {
@@ -111,8 +109,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1490/entity/{itemId}": {
@@ -138,8 +135,7 @@
                             "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1490/{itemId}": {
@@ -165,8 +161,7 @@
                             "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
-                },
-                "deprecated": false
+                }
             },
             "put": {
                 "tags": [
@@ -199,8 +194,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1570": {
@@ -227,8 +221,7 @@
                             "Example string": "The first name was invalid"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/2031": {
@@ -245,7 +238,7 @@
                     {
                         "in": "body",
                         "name": "contents",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/CustomTypeFor2031"
                         },
@@ -272,8 +265,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/addFiles": {
@@ -313,8 +305,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/allMethodsAllowed": {
@@ -328,8 +319,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "head": {
                 "tags": [
@@ -344,8 +334,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "post": {
                 "tags": [
@@ -360,8 +349,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "put": {
                 "tags": [
@@ -376,8 +364,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "delete": {
                 "tags": [
@@ -389,8 +376,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "options": {
                 "tags": [
@@ -405,8 +391,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "patch": {
                 "tags": [
@@ -421,8 +406,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/arrayOfArrays": {
@@ -470,8 +454,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/bare": {
@@ -575,8 +558,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/bigDecimal": {
@@ -603,8 +585,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/boolean": {
@@ -630,8 +611,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/date": {
@@ -658,8 +638,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/effective": {
@@ -676,8 +655,7 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/effectives": {
@@ -697,8 +675,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/enumObject": {
@@ -715,8 +692,7 @@
                             "$ref": "#/definitions/EnumObjectType"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/examples": {
@@ -746,8 +722,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/inheritance": {
@@ -776,8 +751,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/integers": {
@@ -808,8 +782,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/listOfMaps": {
@@ -832,8 +805,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/mapOfMapOfExample": {
@@ -856,8 +828,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/mapProperty": {
@@ -874,8 +845,7 @@
                             "$ref": "#/definitions/ModelWithMapProperty"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/modelAttributes": {
@@ -949,8 +919,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/propertyWithArrayOfArrays": {
@@ -978,8 +947,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/propertyWithObjectNode": {
@@ -1007,8 +975,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/status": {
@@ -1038,8 +1005,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/statuses": {
@@ -1077,8 +1043,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/{petId}": {
@@ -1098,7 +1063,6 @@
                         "type": "string",
                         "maxLength": 5,
                         "minLength": 1,
-                        "allowEmptyValue": false,
                         "x-example": "3"
                     }
                 ],
@@ -1110,7 +1074,6 @@
                         }
                     }
                 },
-                "deprecated": false,
                 "x-test1": "value1",
                 "x-test2": {
                     "name2": "value2"

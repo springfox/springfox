@@ -51,8 +51,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/same/get-same/{id}": {
@@ -81,8 +80,7 @@
                     "405": {
                         "description": "Invalid input"
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

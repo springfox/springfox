@@ -43,8 +43,7 @@
                         "in": "path",
                         "description": "ID of business",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -54,8 +53,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/byTypes": {
@@ -99,8 +97,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/demonstratesApiModelName": {
@@ -123,8 +120,7 @@
                             "$ref": "#/definitions/Biz"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/non-aliased/{businessId}": {
@@ -144,8 +140,7 @@
                         "in": "path",
                         "description": "ID of business",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -162,8 +157,7 @@
                             "scope"
                         ]
                     }
-                ],
-                "deprecated": false
+                ]
             }
         },
         "/businesses/responseEntity/{businessId}": {
@@ -193,8 +187,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/typeEcho": {
@@ -236,8 +229,7 @@
                             ]
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/vanilla/{businessId}": {
@@ -267,8 +259,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },
