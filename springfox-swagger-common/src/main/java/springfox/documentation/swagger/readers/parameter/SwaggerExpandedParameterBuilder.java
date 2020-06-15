@@ -107,8 +107,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
         .example(new ExampleBuilder().value(apiParam.example()).build())
         .precedence(SWAGGER_PLUGIN_ORDER)
         .simpleParameterBuilder()
-        .facetBuilder(EnumerationElementFacetBuilder.class)
-        .allowedValues(allowable);
+        .enumerationFacet(e -> e.allowedValues(allowable));
   }
 
   private void fromApiModelProperty(
@@ -138,8 +137,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
         .example(new ExampleBuilder().value(apiModelProperty.example()).build())
         .precedence(SWAGGER_PLUGIN_ORDER)
         .simpleParameterBuilder()
-        .facetBuilder(EnumerationElementFacetBuilder.class)
-        .allowedValues(allowable);
+        .enumerationFacet(e -> e.allowedValues(allowable));
   }
 
   private void maybeSetParameterName(

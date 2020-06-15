@@ -11,15 +11,6 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
   private Boolean exclusiveMinimum;
   private BigDecimal maximum;
   private Boolean exclusiveMaximum;
-  private final Object parentObject;
-
-  public NumericElementFacetBuilder() {
-    this(null);
-  }
-
-  public NumericElementFacetBuilder(Object parentObject) {
-    this.parentObject = parentObject;
-  }
 
   public NumericElementFacetBuilder multipleOf(BigDecimal multipleOf) {
     this.multipleOf = multipleOf;
@@ -44,12 +35,6 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
   public NumericElementFacetBuilder exclusiveMaximum(Boolean exclusiveMaximum) {
     this.exclusiveMaximum = exclusiveMaximum;
     return this;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public <T> T yield(Class<T> parentClazz) {
-    return (T) parentObject;
   }
 
   public NumericElementFacet build() {

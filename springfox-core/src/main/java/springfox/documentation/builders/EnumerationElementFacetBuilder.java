@@ -13,11 +13,6 @@ import java.util.Set;
 
 public class EnumerationElementFacetBuilder implements ElementFacetBuilder {
   private final Set<String> allowedValues = new HashSet<>();
-  private Object parent;
-
-  public EnumerationElementFacetBuilder(Object parent) {
-    this.parent = parent;
-  }
 
   public EnumerationElementFacetBuilder allowedValues(Collection<String> allowedValues) {
     this.allowedValues.addAll(allowedValues);
@@ -27,12 +22,6 @@ public class EnumerationElementFacetBuilder implements ElementFacetBuilder {
   public EnumerationElementFacetBuilder allowedValues(AllowableValues allowedValues) {
     this.allowedValues.addAll(from(allowedValues));
     return this;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public <T> T yield(Class<T> parentClazz) {
-    return (T) parent;
   }
 
   @Override

@@ -15,15 +15,13 @@ public class ElementFacets {
   }
 
   public static <T extends ElementFacetBuilder> Function<Class<?>, ElementFacetBuilder> builderFactory(
-      Object parent,
       Class<T> clazz) {
     return t -> {
       try {
-        Constructor<T> constructor = clazz.getConstructor(Object.class);
-        return constructor.newInstance(parent);
+        return clazz.newInstance();
       } catch (Exception e) {
         LOGGER.error("Unable to create builder of type {}", clazz);
-        return null;
+        throw new RuntimeException(String.format("Unable to create builder of type %s", clazz), e);
       }
     };
   }

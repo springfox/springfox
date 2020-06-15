@@ -74,8 +74,7 @@ public class OasParameterBuilder implements ParameterBuilderPlugin {
 
     context.requestParameterBuilder()
            .simpleParameterBuilder()
-           .facetBuilder(EnumerationElementFacetBuilder.class)
-           .allowedValues(allowedValues);
+           .enumerationFacet(e -> e.allowedValues(allowedValues));
     //TODO: Handle other facets
 
     if (parameterAnnotation.isPresent()) {

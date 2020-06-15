@@ -24,7 +24,6 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
-import springfox.documentation.builders.EnumerationElementFacetBuilder
 import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.SimpleParameterSpecificationBuilder
 import springfox.documentation.schema.ScalarType
@@ -120,13 +119,14 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
             .allowReserved(false)
             .defaultValue('testValue')
             .explode(false)
-            .facetBuilder(EnumerationElementFacetBuilder)
-              .allowedValues(['testValue'])
-              .yield(SimpleParameterSpecificationBuilder)
-            .model(new ModelSpecificationBuilder()
-                .scalarModel(ScalarType.STRING)
-                .name("test")
-                .build())
+            .enumerationFacet {e ->
+              e.allowedValues(['testValue'])
+            }
+            .model(
+                new ModelSpecificationBuilder()
+                    .scalarModel(ScalarType.STRING)
+                    .name("test")
+                    .build())
             .build(),
         null)
   }
@@ -146,7 +146,6 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     then:
     0 == operation.parameters.size()
     0 == operation.requestParameters.size()
-
   }
 
   def "Should ignore a parameter request condition expression that is already present in the parameters"() {

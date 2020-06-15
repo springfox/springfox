@@ -53,8 +53,7 @@ public class ExpandedParameterPatternAnnotationPlugin implements ExpandedParamet
       LOG.debug("@Pattern present: {}", pattern.get().regexp());
       context.getParameterBuilder().pattern(pattern.get().regexp());
       context.getRequestParameterBuilder().simpleParameterBuilder()
-          .facetBuilder(StringElementFacetBuilder.class)
-          .pattern(pattern.get().regexp());
+          .stringFacet(s -> s.pattern(pattern.get().regexp()));
     }
   }
 }

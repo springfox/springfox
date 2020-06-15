@@ -279,9 +279,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                  .in(ParameterType.FORM)
                  .simpleParameterBuilder()
                  .style(ParameterStyle.FORM)
-                 .facetBuilder(EnumerationElementFacetBuilder)
-                 .allowedValues(["FIRST", "SECOND"])
-                 .yield(SimpleParameterSpecificationBuilder)
+                 .enumerationFacet {e -> e.allowedValues(["FIRST", "SECOND"]) }
                  .model(
                      new ModelSpecificationBuilder()
                          .scalarModel(ScalarType.STRING)

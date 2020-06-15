@@ -2,6 +2,7 @@ package springfox.documentation.builders;
 
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.SimpleParameterSpecification;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -69,9 +71,33 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends ElementFacetBuilder> T facetBuilder(Class<T> clazz) {
-    this.facetBuilders.computeIfAbsent(clazz, builderFactory(this, clazz));
+  private <T extends ElementFacetBuilder> T facetBuilder(Class<T> clazz) {
+    this.facetBuilders.computeIfAbsent(clazz, builderFactory(clazz));
     return (T) this.facetBuilders.get(clazz);
+  }
+
+  public SimpleParameterSpecificationBuilder collectionFacet(
+      Consumer<CollectionElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(CollectionElementFacetBuilder.class));
+    return this;
+  }
+
+  public SimpleParameterSpecificationBuilder stringFacet(
+      Consumer<StringElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(StringElementFacetBuilder.class));
+    return this;
+  }
+
+  public SimpleParameterSpecificationBuilder numberFacet(
+      Consumer<NumericElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(NumericElementFacetBuilder.class));
+    return this;
+  }
+
+  public SimpleParameterSpecificationBuilder enumerationFacet(
+      Consumer<EnumerationElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(EnumerationElementFacetBuilder.class));
+    return this;
   }
 
   SimpleParameterSpecification build() {

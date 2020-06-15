@@ -68,8 +68,8 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
           values.getModern().map(NumericElementFacet::toString)
               .orElse("<empty>"));
       context.getRequestParameterBuilder()
-          .simpleParameterBuilder().facetBuilder(NumericElementFacetBuilder.class)
-          .copyOf(values.getModern().orElse(null));
+          .simpleParameterBuilder()
+             .collectionFacet(c -> c.copyOf(values.getModern().orElse(null)));
     }
   }
 

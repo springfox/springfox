@@ -7,15 +7,11 @@ import springfox.documentation.service.CollectionFormat;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class CollectionElementFacetBuilder implements ElementFacetBuilder {
-  private final Object parent;
   private Integer maxItems;
   private Integer minItems;
   private Boolean uniqueItems;
   private CollectionFormat collectionFormat;
 
-  public CollectionElementFacetBuilder(Object parent) {
-    this.parent = parent;
-  }
 
   public CollectionElementFacetBuilder collectionFormat(CollectionFormat collectionFormat) {
     this.collectionFormat = defaultIfAbsent(collectionFormat, this.collectionFormat);
@@ -35,12 +31,6 @@ public class CollectionElementFacetBuilder implements ElementFacetBuilder {
   public CollectionElementFacetBuilder uniqueItems(Boolean uniqueItems) {
     this.uniqueItems = defaultIfAbsent(uniqueItems, this.uniqueItems);
     return this;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public <T> T yield(Class<T> parentClazz) {
-    return (T) parent;
   }
 
   @Override

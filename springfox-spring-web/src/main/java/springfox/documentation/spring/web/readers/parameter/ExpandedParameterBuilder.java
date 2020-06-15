@@ -151,20 +151,18 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .parameterType(context.getParameterType())
         .order(DEFAULT_PRECEDENCE)
         .parameterAccess(null);
-    
+
+    AllowableValues finalAllowable = allowable;
     context.getRequestParameterBuilder()
-        .name(name)
-        .description(null)
-        .required(Boolean.FALSE)
-        .in(context.getParameterType())
-        .precedence(DEFAULT_PRECEDENCE)
-        .simpleParameterBuilder()
-        .collectionFormat(isContainerType(resolved) ? CollectionFormat.CSV : null)
-        .model(modelSpecification)
-        .facetBuilder(EnumerationElementFacetBuilder.class)
-        .allowedValues(allowable)
-        .yield(RequestParameterBuilder.class);
-    //TODO: figure out model
+           .name(name)
+           .description(null)
+           .required(Boolean.FALSE)
+           .in(context.getParameterType())
+           .precedence(DEFAULT_PRECEDENCE)
+           .simpleParameterBuilder()
+           .collectionFormat(isContainerType(resolved) ? CollectionFormat.CSV : null)
+           .model(modelSpecification)
+           .enumerationFacet(e -> e.allowedValues(finalAllowable));
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {

@@ -23,9 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.documentation.builders.SimpleParameterSpecificationBuilder;
-import springfox.documentation.builders.StringElementFacetBuilder;
-import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -60,15 +57,17 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
       values = new AllowableRangeValues(values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);
+      AllowableRangeValues finalValues = values;
       context.getRequestParameterBuilder()
-          .simpleParameterBuilder()
-          .facetBuilder(NumericElementFacetBuilder.class)
-          .minimum(safeBigDecimal(values.getMin()))
-          .maximum(safeBigDecimal(values.getMax()))
-          .yield(SimpleParameterSpecificationBuilder.class)
-          .facetBuilder(StringElementFacetBuilder.class)
-          .minLength(safeBigDecimal(values.getMin()).intValue())
-          .maxLength(safeBigDecimal(values.getMax()).intValue());
+             .simpleParameterBuilder()
+             .numberFacet(n -> {
+               n.minimum(safeBigDecimal(finalValues.getMin()));
+               n.maximum(safeBigDecimal(finalValues.getMax()));
+             })
+             .stringFacet(s -> {
+               s.minLength(safeBigDecimal(finalValues.getMin()).intValue());
+               s.maxLength(safeBigDecimal(finalValues.getMax()).intValue());
+             });
     }
   }
 

@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.documentation.builders.StringElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -56,9 +55,10 @@ public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
       LOG.debug("Adding allowable Values @Size: {} - {}", values.getMin(), values.getMax());
       context.parameterBuilder().allowableValues(values);
       context.requestParameterBuilder().simpleParameterBuilder()
-        .facetBuilder(StringElementFacetBuilder.class)
-        .minLength(tryGetInteger(values.getMin()).orElse(null))
-        .maxLength(tryGetInteger(values.getMax()).orElse(null));
+             .stringFacet(s -> {
+               s.minLength(tryGetInteger(values.getMin()).orElse(null));
+               s.maxLength(tryGetInteger(values.getMax()).orElse(null));
+             });
     }
   }
 

@@ -99,6 +99,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
       if (!isEmpty(paramValue)) {
         allowableValues = new AllowableListValues(singletonList(paramValue), "string");
       }
+      AllowableListValues finalAllowableValues = allowableValues;
       RequestParameter parameter = new RequestParameterBuilder()
           .name(expression.getName())
           .description(null)
@@ -108,9 +109,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
           .explode(false)
           .allowReserved(false)
           .defaultValue(paramValue)
-          .facetBuilder(EnumerationElementFacetBuilder.class)
-            .allowedValues(allowableValues)
-            .yield(SimpleParameterSpecificationBuilder.class)
+          .enumerationFacet(e -> e.allowedValues(finalAllowableValues))
           .model(new ModelSpecificationBuilder()
               .name(expression.getName())
               .scalarModel(ScalarType.STRING)

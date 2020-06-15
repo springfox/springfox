@@ -37,9 +37,9 @@ public class ApiDescriptionBuilder {
   private String summary;
   private String description;
   private List<Operation> operations;
-  private Comparator<Operation> operationOrdering;
   private Boolean hidden;
   private Function<String, String> pathDecorator = identity();
+  private final Comparator<Operation> operationOrdering;
 
   public ApiDescriptionBuilder(Comparator<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;

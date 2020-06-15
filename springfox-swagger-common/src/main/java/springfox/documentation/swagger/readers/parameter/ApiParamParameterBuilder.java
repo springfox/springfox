@@ -24,12 +24,10 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
@@ -44,12 +42,10 @@ import springfox.documentation.swagger.schema.ApiModelProperties;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
-import static org.springframework.util.StringUtils.isEmpty;
-import static springfox.documentation.swagger.common.SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER;
-import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
-import static springfox.documentation.swagger.readers.parameter.Examples.allExamples;
-import static springfox.documentation.swagger.readers.parameter.Examples.examples;
+import static java.util.Optional.*;
+import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
+import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
 @Component("swaggerParameterDescriptionReader")
 @Order(SWAGGER_PLUGIN_ORDER)
@@ -77,14 +73,12 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
 
     if (allowedValues instanceof AllowableListValues) {
       context.requestParameterBuilder()
-          .simpleParameterBuilder()
-          .facetBuilder(EnumerationElementFacetBuilder.class)
-          .allowedValues(allowedValues);
+             .simpleParameterBuilder()
+             .enumerationFacet(e -> e.allowedValues(allowedValues));
     } else if (allowedValues instanceof AllowableRangeValues) {
       context.requestParameterBuilder()
-          .simpleParameterBuilder()
-          .facetBuilder(NumericElementFacetBuilder.class)
-          .from((AllowableRangeValues) allowedValues);
+             .simpleParameterBuilder()
+             .numberFacet(n -> n.from((AllowableRangeValues) allowedValues));
     }
 
     if (apiParam.isPresent()) {

@@ -25,13 +25,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.CollectionElementFacetBuilder;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
-import springfox.documentation.builders.SimpleParameterSpecificationBuilder;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
@@ -131,12 +128,10 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .simpleParameterBuilder()
             .model(modelRef.getModern().orElse(null))
             .defaultValue(param.defaultValue())
-            .facetBuilder(EnumerationElementFacetBuilder.class)
-            .allowedValues(allowableValueFromString(param.allowableValues()))
-            .yield(SimpleParameterSpecificationBuilder.class)
-            .facetBuilder(CollectionElementFacetBuilder.class)
-            .collectionFormat(CollectionFormat.convert(param.collectionFormat()).orElse(null))
-            .yield(SimpleParameterSpecificationBuilder.class)
+            .enumerationFacet(e -> e.allowedValues(allowableValueFromString(param.allowableValues())))
+            .collectionFacet(c -> c.collectionFormat(
+                CollectionFormat.convert(param.collectionFormat())
+                                .orElse(null)))
             .yield()
             .precedence(SWAGGER_PLUGIN_ORDER)
             .example(new ExampleBuilder().value(param.example()).build())

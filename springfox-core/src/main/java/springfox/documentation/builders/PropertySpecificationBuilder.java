@@ -67,7 +67,6 @@ public class PropertySpecificationBuilder {
     this.facetBuilders.computeIfAbsent(
         clazz,
         builderFactory(
-            this,
             clazz));
     return (T) this.facetBuilders.get(clazz);
   }

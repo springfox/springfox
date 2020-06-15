@@ -54,7 +54,7 @@ public class ApiListingBuilder {
 
   private Set<String> produces = new TreeSet<>();
   private Set<String> consumes = new TreeSet<>();
-  private Set<String> protocol = new TreeSet<>();
+  private final Set<String> protocol = new TreeSet<>();
   private List<SecurityReference> securityReferences = new ArrayList<>();
   private List<ApiDescription> apis = new ArrayList<>();
 

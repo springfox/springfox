@@ -39,7 +39,7 @@ public class ApiInfoBuilder {
   private String license;
   private String licenseUrl;
   private String version;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Updates the api title
