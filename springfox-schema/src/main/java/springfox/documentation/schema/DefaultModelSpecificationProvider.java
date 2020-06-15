@@ -206,7 +206,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                             .withTitle(typeName)
                             .description("Key of type " + typeName)
                             .withNullable(false)
-                            .withDeprecated(false)
+                            .deprecated(false)
                             .build())
                     .yield()
                     .build());
