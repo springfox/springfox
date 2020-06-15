@@ -24,6 +24,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.RequestParameter
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -63,7 +64,10 @@ class ParameterReaderSpec
     then:
     parameterContext.parameterBuilder().build()."$resultProperty" == expected
     if (nestedSimpleProperty) {
-      parameterContext.requestParameterBuilder().build()
+      parameterContext.requestParameterBuilder()
+          .name("test")
+          .in(ParameterType.QUERY)
+          .build()
           .parameterSpecification
           .query
           ?.orElse(null)

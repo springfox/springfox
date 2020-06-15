@@ -24,6 +24,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -48,7 +49,10 @@ class ParameterRequiredReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().isRequired() == expected
-    parameterContext.requestParameterBuilder().build().required == expected
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().required == expected
 
     where:
     paramAnnotation             | expected
@@ -68,7 +72,10 @@ class ParameterRequiredReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().isHidden() == expected
-    parameterContext.requestParameterBuilder().build().hidden == expected
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().hidden == expected
 
     where:
     paramAnnotation           | expected

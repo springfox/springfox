@@ -17,6 +17,7 @@ dependencies {
   compile libs.core
   compile libs.spring
   compile libs.swagger2Core
+  compile "io.swagger.core.v3:swagger-annotations:${oasCore}"
 
   provided project(':springfox-spring-webmvc')
   provided libs.springProvided

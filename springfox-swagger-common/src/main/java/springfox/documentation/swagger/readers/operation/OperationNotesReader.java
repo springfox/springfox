@@ -20,6 +20,7 @@
 package springfox.documentation.swagger.readers.operation;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,8 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Optional;
+
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -47,8 +50,18 @@ public class OperationNotesReader implements OperationBuilderPlugin {
 
     Optional<ApiOperation> methodAnnotation = context.findAnnotation(ApiOperation.class);
     if (methodAnnotation.isPresent() && StringUtils.hasText(methodAnnotation.get().notes())) {
-      context.operationBuilder().notes(descriptions.resolve(methodAnnotation.get().notes()));
+      context.operationBuilder()
+             .notes(descriptions.resolve(methodAnnotation.get().notes()));
     }
+
+    Optional<Operation> operationAnnotation = context.findAnnotation(Operation.class);
+    operationAnnotation.ifPresent(a -> {
+      if (StringUtils.hasText(a.description())) {
+        context.operationBuilder()
+               .notes(descriptions.resolve(a.description()));
+      }
+      context.operationBuilder().summary(emptyToNull(a.summary()));
+    });
   }
 
   @Override

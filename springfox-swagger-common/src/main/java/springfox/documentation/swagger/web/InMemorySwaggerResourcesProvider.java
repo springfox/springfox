@@ -38,6 +38,8 @@ import static springfox.documentation.schema.ClassSupport.*;
 public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvider {
   private final String swagger1Url;
   private final String swagger2Url;
+  private final String oas3Url;
+  private final boolean oas3Available;
 
   private boolean swagger1Available;
   private boolean swagger2Available;
@@ -50,10 +52,12 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
       DocumentationCache documentationCache) {
     swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
     swagger2Url = environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs");
+    oas3Url = environment.getProperty("springfox.documentation.swagger.v3.path", "/v3/api-docs");
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
     swagger2Available =
         classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
         || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent();
+    oas3Available = classByName("springfox.documentation.oas.web.OasController").isPresent();
     this.documentationCache = documentationCache;
   }
 
@@ -72,6 +76,12 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
       if (swagger2Available) {
         SwaggerResource swaggerResource = resource(swaggerGroup, swagger2Url);
         swaggerResource.setSwaggerVersion("2.0");
+        resources.add(swaggerResource);
+      }
+
+      if (oas3Available) {
+        SwaggerResource swaggerResource = resource(swaggerGroup, oas3Url);
+        swaggerResource.setSwaggerVersion("3.0.1");
         resources.add(swaggerResource);
       }
     }

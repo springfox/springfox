@@ -24,6 +24,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -72,7 +73,9 @@ class ParameterNameReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().name == expectedName
-    parameterContext.requestParameterBuilder().build().name == expectedName
+    parameterContext.requestParameterBuilder()
+        .in(ParameterType.QUERY)
+        .build()?.name == expectedName
 
     where:
     apiParam                                            | paramType | expectedName

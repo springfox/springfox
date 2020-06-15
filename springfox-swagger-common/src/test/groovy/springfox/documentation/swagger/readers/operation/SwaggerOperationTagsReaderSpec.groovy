@@ -21,7 +21,6 @@ package springfox.documentation.swagger.readers.operation
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
-import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider
 
 class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   def "should have correct tags"() {
@@ -29,7 +28,7 @@ class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec implements
       OperationContext operationContext =
         operationContext(documentationContext(), handlerMethod)
     and:
-      SwaggerOperationTagsReader sut = new SwaggerOperationTagsReader(new DefaultTagsProvider())
+      SwaggerOperationTagsReader sut = new SwaggerOperationTagsReader()
 
     when:
       sut.apply(operationContext)
@@ -39,8 +38,8 @@ class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec implements
 
     where:
       handlerMethod                                        | tags
-      dummyHandlerMethod('methodWithConcreteResponseBody') | ["dummy-class"]
-      dummyControllerHandlerMethod()                       | ["dummy-controller"]
+      dummyHandlerMethod('methodWithConcreteResponseBody') | []
+      dummyControllerHandlerMethod()                       | []
       dummyOperationWithTags()                             | ["Tag1", "Tag2", "Tag3", "Tag4"]
   }
 }

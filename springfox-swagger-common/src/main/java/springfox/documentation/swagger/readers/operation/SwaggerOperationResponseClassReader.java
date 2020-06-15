@@ -65,7 +65,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
 
     ResolvedType returnType = context.alternateFor(context.getReturnType());
     returnType = context.findAnnotation(ApiOperation.class)
-        .map(resolvedTypeFromOperation(typeResolver, returnType))
+        .map(resolvedTypeFromApiOperation(typeResolver, returnType))
         .orElse(returnType);
     if (canSkip(context, returnType)) {
       return;

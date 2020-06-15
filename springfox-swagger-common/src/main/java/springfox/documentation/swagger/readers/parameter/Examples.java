@@ -20,6 +20,7 @@ package springfox.documentation.swagger.readers.parameter;
 
 
 import io.swagger.annotations.ExampleProperty;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
 
@@ -42,7 +43,7 @@ public class Examples {
       if (!isEmpty(each.value())) {
         examples.putIfAbsent(each.mediaType(), new LinkedList<>());
         examples.get(each.mediaType()).add(new ExampleBuilder()
-            .withMediaType(each.mediaType())
+            .mediaType(each.mediaType())
             .value(each.value())
             .build());
       }
@@ -55,9 +56,36 @@ public class Examples {
     for (ExampleProperty each : example.value()) {
       if (!isEmpty(each.value())) {
         examples.add(new ExampleBuilder()
-            .withMediaType(each.mediaType())
+            .mediaType(each.mediaType())
             .value(each.value())
             .build());
+      }
+    }
+    return examples;
+  }
+
+  public static Map<String, List<Example>> examples(String mediaType, ExampleObject[] exampleObjects) {
+    Map<String, List<Example>> examples = new HashMap<>();
+    for (ExampleObject each : exampleObjects) {
+      if (!isEmpty(each.value())) {
+        examples.putIfAbsent(mediaType, new LinkedList<>());
+        examples.get(mediaType).add(new ExampleBuilder()
+                                               .mediaType(mediaType)
+                                               .value(each.value())
+                                               .build());
+      }
+    }
+    return examples;
+  }
+
+  public static List<Example> allExamples(String mediaType, ExampleObject[] exampleObjects) {
+    List<Example> examples = new ArrayList<>();
+    for (ExampleObject each : exampleObjects) {
+      if (!isEmpty(each.value())) {
+        examples.add(new ExampleBuilder()
+                         .mediaType(mediaType)
+                         .value(each.value())
+                         .build());
       }
     }
     return examples;

@@ -106,7 +106,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
-        operationAnnotation.map(resolvedTypeFromOperation(
+        operationAnnotation.map(resolvedTypeFromApiOperation(
             typeResolver,
             defaultResponse));
     Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(ApiOperation::responseHeaders);
@@ -155,7 +155,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
             if (!isEmpty(exampleProperty.value())) {
               final String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
-              examples.add(new ExampleBuilder().withMediaType(mediaType).value(exampleProperty.value()).build());
+              examples.add(new ExampleBuilder().mediaType(mediaType).value(exampleProperty.value()).build());
             }
           }
           Map<String, Header> headers = new HashMap<>(defaultHeaders);

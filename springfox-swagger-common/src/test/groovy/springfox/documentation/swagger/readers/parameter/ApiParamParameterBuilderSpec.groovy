@@ -31,6 +31,7 @@ import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -69,7 +70,10 @@ class ApiParamParameterBuilderSpec
         )
     operationCommand.apply(parameterContext)
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
-    EnumerationFacet facet = parameterContext.requestParameterBuilder().build()
+    EnumerationFacet facet = parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
         .parameterSpecification
         .query
         .orElse(null)
@@ -109,7 +113,10 @@ class ApiParamParameterBuilderSpec
     operationCommand.apply(parameterContext)
 
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
-    EnumerationFacet facet = parameterContext.requestParameterBuilder().build()
+    EnumerationFacet facet = parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
         .parameterSpecification
         .query
         .orElse(null)
@@ -146,7 +153,10 @@ class ApiParamParameterBuilderSpec
     ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
     operationCommand.apply(parameterContext)
     AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
-    NumericElementFacet facet = parameterContext.requestParameterBuilder().build()
+    NumericElementFacet facet = parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
         .parameterSpecification
         .query
         .orElse(null)

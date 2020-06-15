@@ -19,9 +19,8 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
-import io.swagger.annotations.AuthorizationScope;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -35,6 +34,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +47,10 @@ import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 
 @Component
-@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-public class OperationAuthReader implements OperationBuilderPlugin {
+@Order(SwaggerPluginSupport.OAS_PLUGIN_ORDER)
+public class OasOperationAuthReader implements OperationBuilderPlugin {
 
-  private static final Logger LOG = LoggerFactory.getLogger(OperationAuthReader.class);
+  private static final Logger LOG = LoggerFactory.getLogger(OasOperationAuthReader.class);
 
   @Override
   public void apply(OperationContext context) {
@@ -64,32 +64,31 @@ public class OperationAuthReader implements OperationBuilderPlugin {
           each.securityForOperation(context).stream()
               .collect(toMap(byReferenceName(), identity())));
     }
-    maybeProcessApiOperation(context, securityReferences);
+    maybeAddOperationAnnotation(context, securityReferences);
     LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
     context.operationBuilder().authorizations(securityReferences.values());
   }
 
-  private void maybeProcessApiOperation(
+  private void maybeAddOperationAnnotation(
       OperationContext context,
       Map<String, SecurityReference> securityReferences) {
-    Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
+    Optional<Operation> operationAnnotation = context.findAnnotation(Operation.class);
 
-    apiOperationAnnotation.ifPresent(apiOp -> {
+    operationAnnotation.ifPresent(op -> {
+
       List<SecurityReference> securityReferenceOverrides = new ArrayList<>();
-      for (Authorization authorization : authorizationReferences(apiOperationAnnotation.get())) {
-        String value = authorization.value();
-        AuthorizationScope[] scopes = authorization.scopes();
+      for (SecurityRequirement each : securityRequirements(op)) {
+        String name = each.name();
+        String[] scopes = each.scopes();
         List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = new ArrayList<>();
-        for (AuthorizationScope authorizationScope : scopes) {
-          String description = authorizationScope.description();
-          String scope = authorizationScope.scope();
-          // @Authorization has a default blank authorization scope, which we need to
+        for (String eachScope : scopes) {
+          // @Authorization has a default blank each scope, which we need to
           // ignore in the case of api keys.
-          if (!isEmpty(scope)) {
+          if (!isEmpty(eachScope)) {
             authorizationScopeList.add(
                 new AuthorizationScopeBuilder()
-                    .scope(scope)
-                    .description(description)
+                    .scope(eachScope)
+                    .description("")
                     .build());
           }
         }
@@ -98,13 +97,14 @@ public class OperationAuthReader implements OperationBuilderPlugin {
             .toArray(new springfox.documentation.service.AuthorizationScope[0]);
         SecurityReference securityReference =
             SecurityReference.builder()
-                             .reference(value)
+                             .reference(name)
                              .scopes(authorizationScopes)
                              .build();
         securityReferenceOverrides.add(securityReference);
       }
-      securityReferences.putAll(securityReferenceOverrides.stream()
-                                                          .collect(toMap(byReferenceName(), identity())));
+      securityReferences.putAll(
+          securityReferenceOverrides.stream()
+                                    .collect(toMap(byReferenceName(), identity())));
     });
   }
 
@@ -112,9 +112,10 @@ public class OperationAuthReader implements OperationBuilderPlugin {
     return SecurityReference::getReference;
   }
 
-  private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
-    return Stream.of(apiOperationAnnotation.authorizations())
-                 .filter(input -> !isEmpty(input.value())).collect(toList());
+  private Collection<SecurityRequirement> securityRequirements(Operation operation) {
+    return Stream.of(operation.security())
+                 .filter(input -> !isEmpty(input.name()))
+                 .collect(toList());
   }
 
   @Override

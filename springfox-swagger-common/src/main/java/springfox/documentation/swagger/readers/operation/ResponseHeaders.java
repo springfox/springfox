@@ -19,6 +19,8 @@
 package springfox.documentation.swagger.readers.operation;
 
 import io.swagger.annotations.ResponseHeader;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.util.StringUtils;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
@@ -36,6 +38,7 @@ import springfox.documentation.service.Header;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -46,6 +49,21 @@ import static springfox.documentation.schema.Types.*;
 public class ResponseHeaders {
   private ResponseHeaders() {
     throw new UnsupportedOperationException();
+  }
+
+
+  public static Map<String, Header> headers(io.swagger.v3.oas.annotations.headers.Header[] responseHeaders) {
+    Map<String, Header> headers = new HashMap<>();
+    Stream.of(responseHeaders)
+          .filter(emptyOrVoidHeader().negate()).forEachOrdered(each -> {
+      headers.put(each.name(), new Header(
+          each.name(),
+          each.description(),
+          null,
+          headerModelSpecification(each),
+          each.required()));
+    });
+    return headers;
   }
 
   public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
@@ -98,6 +116,15 @@ public class ResponseHeaders {
     return null;
   }
 
+  private static Predicate<io.swagger.v3.oas.annotations.headers.Header> emptyOrVoidHeader() {
+    return input -> isEmpty(input.name()) ||
+        (isVoidImplementation(input) && StringUtils.isEmpty(input.schema().type()));
+  }
+
+  private static boolean isVoidImplementation(io.swagger.v3.oas.annotations.headers.Header input) {
+    return !Void.class.equals(input.schema().implementation()) && Void.TYPE.equals(input.schema().implementation());
+  }
+
   private static Predicate<ResponseHeader> emptyOrVoid() {
     return input -> isEmpty(input.name()) || Void.class.equals(input.response());
   }
@@ -111,5 +138,63 @@ public class ResponseHeaders {
       modelReference = new ModelRef(each.responseContainer(), new ModelRef(typeName));
     }
     return modelReference;
+  }
+
+  private static ModelSpecification headerModelSpecification(io.swagger.v3.oas.annotations.headers.Header each) {
+    ModelSpecification itemSpecification;
+    Class<?> type = each.schema().implementation();
+    if (emptyOrVoidHeader().test(each)) {
+      itemSpecification = new ModelSpecificationBuilder()
+          .scalarModel(ScalarType.STRING)
+          .facetsBuilder()
+            .deprecated(each.deprecated())
+            .yield()
+          .build();
+    } else if (scalarType(each.schema()).isPresent()) {
+      itemSpecification = new ModelSpecificationBuilder()
+          .scalarModel(scalarType(each.schema()).get())
+          .facetsBuilder()
+          .deprecated(each.deprecated())
+          .yield()
+          .build();
+    } else if (ScalarTypes.builtInScalarType(type).isPresent()) {
+      itemSpecification = new ModelSpecificationBuilder()
+          .scalarModel(ScalarTypes.builtInScalarType(type).get())
+          .facetsBuilder()
+            .deprecated(each.deprecated())
+            .yield()
+          .build();
+    } else {
+      itemSpecification = new ModelSpecificationBuilder()
+          .referenceModel(new ReferenceModelSpecification(
+              new ModelKeyBuilder()
+                  .qualifiedModelName(
+                      new QualifiedModelName(
+                          PackageNames.safeGetPackageName(type),
+                          type.getSimpleName()))
+                  .build()))
+          .facetsBuilder()
+          .deprecated(each.deprecated())
+          .yield()
+          .build();
+    }
+    if (each.schema().multipleOf() >  0) {
+      return new ModelSpecificationBuilder()
+          .collectionModel(new CollectionSpecification(
+              itemSpecification,
+              CollectionType.ARRAY))
+          .facetsBuilder()
+          .deprecated(each.deprecated())
+          .yield()
+          .build();
+    }
+    return itemSpecification;
+  }
+
+  private static Optional<ScalarType> scalarType(Schema schema) {
+    if (StringUtils.isEmpty(schema.type())) {
+      return Optional.empty();
+    }
+    return ScalarType.from(schema.type(), schema.format());
   }
 }

@@ -118,6 +118,7 @@ public final class ApiModelProperties {
         ApiModelProperty.class)));
   }
 
+
   static Function<ApiModelProperty, String> toExample() {
     return annotation -> {
       String example = "";

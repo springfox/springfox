@@ -33,7 +33,9 @@ import static java.util.Optional.*;
 
 @Controller
 @ApiIgnore
-@RequestMapping("/swagger-resources")
+@RequestMapping({
+    "/swagger-resources",
+    "oas-resources" })
 public class ApiResourceController {
 
 
