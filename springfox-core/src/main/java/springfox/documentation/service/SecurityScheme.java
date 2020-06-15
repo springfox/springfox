@@ -29,11 +29,24 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public abstract class SecurityScheme {
   private final String name;
   private final String type;
-  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final String description;
+  private final List<VendorExtension> extensions = new ArrayList<>();
 
-  protected SecurityScheme(String name, String type) {
-    this.type = type;
+  protected SecurityScheme(
+      String name,
+      String type) {
+    this(name, type, "", new ArrayList<>());
+  }
+
+  public SecurityScheme(
+      String name,
+      String type,
+      String description,
+      List<VendorExtension> extensions) {
     this.name = name;
+    this.type = type;
+    this.description = description;
+    this.extensions.addAll(extensions);
   }
 
   public String getType() {
@@ -44,13 +57,19 @@ public abstract class SecurityScheme {
     return name;
   }
 
+  public String getDescription() {
+    return description;
+  }
+
   public List<VendorExtension> getVendorExtensions() {
-    return unmodifiableList(vendorExtensions);
+    return unmodifiableList(extensions);
   }
 
   protected void addValidVendorExtensions(List<VendorExtension> vendorExtensions) {
-    this.vendorExtensions.addAll(nullToEmptyList(vendorExtensions).stream()
-        .filter(input -> input.getName().toLowerCase().startsWith("x-"))
-        .collect(toList()));
+    this.extensions.addAll(
+        nullToEmptyList(vendorExtensions).stream()
+                                         .filter(input -> input.getName().toLowerCase()
+                                                               .startsWith("x-"))
+                                         .collect(toList()));
   }
 }

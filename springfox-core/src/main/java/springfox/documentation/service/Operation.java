@@ -98,7 +98,7 @@ public class Operation implements Ordered {
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
     this.parameters = parameters.stream()
-        .sorted(byOrder().thenComparing(byParameterName())).collect(toList());
+                                .sorted(byOrder().thenComparing(byParameterName())).collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
     this.body = body;
@@ -110,9 +110,9 @@ public class Operation implements Ordered {
   }
 
   /**
+   * @return model reference
    * @deprecated @since 3.0.0
    * Use @see {@link Operation#getResponses()}
-   * @return model reference
    */
   @Deprecated
   public ModelReference getResponseModel() {
@@ -125,7 +125,9 @@ public class Operation implements Ordered {
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
     return securityReferences.stream()
-        .collect(toMap(SecurityReference::getReference, value -> new ArrayList<>(value.getScopes())));
+                             .collect(toMap(
+                                 SecurityReference::getReference,
+                                 value -> new ArrayList<>(value.getScopes())));
   }
 
   public HttpMethod getMethod() {
@@ -169,9 +171,9 @@ public class Operation implements Ordered {
   }
 
   /**
+   * @return model reference
    * @deprecated @since 3.0.0
    * Use @see {@link Operation#getResponses()}
-   * @return model reference
    */
   @Deprecated
   public Set<ResponseMessage> getResponseMessages() {
@@ -207,8 +209,26 @@ public class Operation implements Ordered {
     return requestParameters;
   }
 
+  public Set<RequestParameter> getQueryParameters() {
+    return requestParameters.stream()
+                            .filter(r -> !r.getParameterSpecification().getContent().isPresent())
+                            .collect(toSet());
+  }
+
   public RequestBody getBody() {
-    return body;
+    return requestParameters.stream()
+                            .filter(r -> r.getParameterSpecification().getContent().isPresent())
+                            .findFirst()
+                            .map(this::toBody)
+                            .orElse(body);
+  }
+
+  private RequestBody toBody(RequestParameter parameter) {
+    return new RequestBody(
+        parameter.getDescription(),
+        parameter.getParameterSpecification().getContent().get().getRepresentations(),
+        parameter.getRequired(),
+        parameter.getExtensions());
   }
 
   public ExternalDocumentation getExternalDocumentation() {

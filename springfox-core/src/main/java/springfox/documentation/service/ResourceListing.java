@@ -19,6 +19,8 @@
 
 package springfox.documentation.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ResourceListing {
@@ -26,16 +28,20 @@ public class ResourceListing {
   private final List<ApiListingReference> apis;
   private final List<SecurityScheme> securitySchemes;
   private final ApiInfo info;
+  private final List<Server> servers = new ArrayList<>();
 
-  public ResourceListing(String apiVersion,
-                         List<ApiListingReference> apis,
-                         List<SecurityScheme> securitySchemes,
-                         ApiInfo info) {
+  public ResourceListing(
+      String apiVersion,
+      List<ApiListingReference> apis,
+      List<SecurityScheme> securitySchemes,
+      ApiInfo info,
+      Collection<Server> servers) {
 
     this.apiVersion = apiVersion;
     this.apis = apis;
     this.securitySchemes = securitySchemes;
     this.info = info;
+    this.servers.addAll(servers);
   }
 
   public String getApiVersion() {
@@ -52,5 +58,9 @@ public class ResourceListing {
 
   public ApiInfo getInfo() {
     return info;
+  }
+
+  public List<Server> getServers() {
+    return servers;
   }
 }

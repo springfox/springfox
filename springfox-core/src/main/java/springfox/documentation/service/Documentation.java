@@ -116,4 +116,8 @@ public class Documentation {
   public DocumentationReference getDocumentationReference() {
     return documentationReference;
   }
+
+  public void addServer(Server inferredServer) {
+    servers.add(inferredServer);
+  }
 }

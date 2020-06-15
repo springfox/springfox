@@ -1,6 +1,9 @@
 package springfox.documentation.schema;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 public class ScalarType {
@@ -21,6 +24,25 @@ public class ScalarType {
   public static final ScalarType EMAIL = new ScalarType("string", "email");
   public static final ScalarType CURRENCY = new ScalarType("number", "bigdecimal");
 
+  public static final List<ScalarType> KNOWN_TYPES =
+      Arrays.asList(
+          INTEGER,
+          LONG,
+          DATE,
+          DATE_TIME,
+          STRING,
+          BYTE,
+          BINARY,
+          PASSWORD,
+          BOOLEAN,
+          DOUBLE,
+          FLOAT,
+          BIGINTEGER,
+          BIGDECIMAL,
+          UUID,
+          EMAIL,
+          CURRENCY);
+
   private String type;
   private String format;
 
@@ -33,6 +55,15 @@ public class ScalarType {
 
   ScalarType(String type) {
     this(type, "");
+  }
+
+  public static Optional<ScalarType> from(
+      String type,
+      String format) {
+
+    return KNOWN_TYPES.stream()
+                      .filter(k -> k.type.equals(type) && k.format.equals(format))
+                      .findFirst();
   }
 
   public String getType() {

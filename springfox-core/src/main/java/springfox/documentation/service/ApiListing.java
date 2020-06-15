@@ -48,7 +48,6 @@ public class ApiListing {
 //  private Map<String, Example> examples = null;
 //  private Map<String, RequestBody> requestBodies = null;
 //  private Map<String, Header> headers = null;
-//  private Map<String, SecurityScheme> securitySchemes = null;
 //  private Map<String, Link> links = null;
 //  private Map<String, Callback> callbacks = null;
   private final String description;

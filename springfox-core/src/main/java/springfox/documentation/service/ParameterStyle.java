@@ -7,7 +7,8 @@ public enum ParameterStyle {
   SIMPLE("simple"),
   SPACEDELIMITED("spaceDelimited"),
   PIPEDELIMITED("pipeDelimited"),
-  DEEPOBJECT("deepObject");
+  DEEPOBJECT("deepObject"),
+  DEFAULT("");
 
   private String value;
 
