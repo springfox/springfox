@@ -50,10 +50,12 @@ public class BuilderDefaults {
    * @param <T>          - Represents any type that is nullable
    * @return Coalesces the newValue and defaultValue to return a non-null value
    */
-  public static <T> T defaultIfAbsent(T newValue, T defaultValue) {
+  public static <T> T defaultIfAbsent(
+      T newValue,
+      T defaultValue) {
     return ofNullable(newValue)
         .orElse(ofNullable(defaultValue)
-        .orElse(null));
+                    .orElse(null));
   }
 
   /**
@@ -68,6 +70,21 @@ public class BuilderDefaults {
       return new ArrayList<>();
     }
     return new ArrayList<>(newValue);
+  }
+
+  /**
+   * Returns an empty list if the newValue is null
+   *
+   * @param newValues - an array
+   * @param <T>       - any type
+   * @return non-null list
+   */
+  public static <T> T[] nullToEmptyArray(T[] newValues) {
+    if (newValues == null) {
+      //noinspection unchecked
+      return (T[]) new Object[] {};
+    }
+    return newValues;
   }
 
   /**
@@ -124,7 +141,9 @@ public class BuilderDefaults {
    * @param defaultValue - default value
    * @return most specific resolved type
    */
-  public static ResolvedType replaceIfMoreSpecific(ResolvedType replacement, ResolvedType defaultValue) {
+  public static ResolvedType replaceIfMoreSpecific(
+      ResolvedType replacement,
+      ResolvedType defaultValue) {
     ResolvedType toReturn = defaultIfAbsent(replacement, defaultValue);
     if (isObject(replacement) && isNotObject(defaultValue)) {
       return defaultValue;
@@ -144,11 +163,14 @@ public class BuilderDefaults {
 
   /**
    * Retains current allowable values if then new value is null
+   *
    * @param newValue - new value
-   * @param current - existing values
+   * @param current  - existing values
    * @return the appropriate value
    */
-  public static AllowableValues emptyToNull(AllowableValues newValue, AllowableValues current) {
+  public static AllowableValues emptyToNull(
+      AllowableValues newValue,
+      AllowableValues current) {
     if (newValue != null) {
       if (newValue instanceof AllowableListValues) {
         return defaultIfAbsent(emptyListValuesToNull((AllowableListValues) newValue), current);
