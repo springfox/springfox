@@ -22,6 +22,7 @@ package springfox.documentation.swagger1.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -63,7 +64,9 @@ class ParameterNameReaderSpec
     sut.apply(parameterContext)
 
     then:
-    parameterContext.requestParameterBuilder().build().name == expectedName
+    parameterContext.requestParameterBuilder()
+        .in(ParameterType.BODY)
+        .build().name == expectedName
 
     where:
     apiParam                                                           | paramType | expectedName

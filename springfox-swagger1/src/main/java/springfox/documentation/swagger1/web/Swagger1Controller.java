@@ -105,8 +105,9 @@ public class Swagger1Controller {
     }
     Map<String, List<springfox.documentation.service.ApiListing>> apiListingMap = documentation.getApiListings();
     Map<String, Collection<ApiListing>> dtoApiListings
-        = apiListingMap.entrySet().stream().map(toApiListingDto(servletRequest, documentation.getHost(), mapper))
-            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+        = apiListingMap.entrySet().stream()
+                       .map(toApiListingDto(servletRequest, documentation.getHost(), mapper))
+                       .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);
     return mergedApiListing(apiListings)
