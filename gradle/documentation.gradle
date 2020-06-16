@@ -25,6 +25,7 @@ asciidoctor {
   asciidoctorj {
     version = '2.1.0'
   }
+  baseDir = file('docs/asciidoc')
   sourceDir = file('docs/asciidoc')
   logDocuments = true
   outputOptions {

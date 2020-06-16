@@ -41,7 +41,7 @@ public class Example {
   /**
    * @deprecated @since 3.0.0
    * Use @see {@link Example#Example(String, String, String, Object, String, String)}
-   * @param value
+   * @param value - example literal
    */
   @Deprecated
   public Example(Object value) {
@@ -56,7 +56,8 @@ public class Example {
   /**
    * @deprecated @since 3.0.0
    * Use @see {@link Example#Example(String, String, String, Object, String, String)}
-   * @param value
+   * @param mediaType - media type of the example
+   * @param value - example literal
    */
   @Deprecated
   public Example(

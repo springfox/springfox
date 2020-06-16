@@ -38,41 +38,27 @@ public interface UserApiDelegate {
     return Optional.empty();
   }
 
-  /**
-   * @see UserApi#createUser
-   */
+
   default ResponseEntity<Void> createUser(User user) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see UserApi#createUsersWithArrayInput
-   */
   default ResponseEntity<Void> createUsersWithArrayInput(java.util.List<User> user) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see UserApi#createUsersWithListInput
-   */
   default ResponseEntity<Void> createUsersWithListInput(java.util.List<User> user) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see UserApi#deleteUser
-   */
   default ResponseEntity<Void> deleteUser(String username) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see UserApi#getUserByName
-   */
   default ResponseEntity<User> getUserByName(String username) {
     getRequest().ifPresent(request -> {
       for (org.springframework.http.MediaType mediaType : org.springframework.http.MediaType
@@ -101,9 +87,6 @@ public interface UserApiDelegate {
 
   }
 
-  /**
-   * @see UserApi#loginUser
-   */
   default ResponseEntity<String> loginUser(
       String username,
       String password) {
@@ -111,22 +94,15 @@ public interface UserApiDelegate {
 
   }
 
-  /**
-   * @see UserApi#logoutUser
-   */
   default ResponseEntity<Void> logoutUser() {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see UserApi#updateUser
-   */
   default ResponseEntity<Void> updateUser(
       String username,
       User user) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
-
 }

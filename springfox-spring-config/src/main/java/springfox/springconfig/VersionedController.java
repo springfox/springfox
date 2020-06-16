@@ -33,5 +33,5 @@ public class VersionedController {
       @RequestParam("id") String id) {
     throw new UnsupportedOperationException();
   }
-  // tag::version-annotated-controller[]
+  // end::version-annotated-controller[]
 }

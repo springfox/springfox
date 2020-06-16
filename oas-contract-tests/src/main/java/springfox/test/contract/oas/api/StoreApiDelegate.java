@@ -38,25 +38,16 @@ public interface StoreApiDelegate {
     return Optional.empty();
   }
 
-  /**
-   * @see StoreApi#deleteOrder
-   */
   default ResponseEntity<Void> deleteOrder(Long orderId) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see StoreApi#getInventory
-   */
   default ResponseEntity<java.util.Map<String, Integer>> getInventory() {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see StoreApi#getOrderById
-   */
   default ResponseEntity<Order> getOrderById(Long orderId) {
     extract();
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
@@ -88,9 +79,6 @@ public interface StoreApiDelegate {
     });
   }
 
-  /**
-   * @see StoreApi#placeOrder
-   */
   default ResponseEntity<Order> placeOrder(Order order) {
     extract();
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);

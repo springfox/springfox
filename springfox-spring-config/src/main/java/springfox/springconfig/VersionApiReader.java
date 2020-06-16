@@ -67,4 +67,4 @@ public class VersionApiReader implements ParameterBuilderPlugin {
     return true; //<4>
   }
 }
-// tag::parameter-builder-plugin[]
+// end::parameter-builder-plugin[]

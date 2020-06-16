@@ -169,7 +169,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                                         .build()))
                          .build());
   }
-  // tag::api-listing-plugin[]
+  // end::api-listing-plugin[]
 
   @Override
   public boolean supports(DocumentationType delimiter) {

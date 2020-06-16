@@ -64,7 +64,7 @@ public class SpringDataRestConfiguration {
       }
     };
   }
-  // tag::alternate-type-rule-convention[]
+  // end::alternate-type-rule-convention[]
 
   // tag::alternate-type-builder[]
   private Type pageableMixin(RepositoryRestConfiguration restConfiguration) {
@@ -88,5 +88,5 @@ public class SpringDataRestConfiguration {
         .canRead(true)
         .canWrite(true);
   }
-  // tag::alternate-type-builder[]
+  // end::alternate-type-builder[]
 }

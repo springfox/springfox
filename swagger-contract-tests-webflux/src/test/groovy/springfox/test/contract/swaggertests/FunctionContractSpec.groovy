@@ -126,6 +126,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
     AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
       new JacksonSerializerConvention(resolver, "springfox.documentation.spring.web.dummy.models")
     }
-    // tag::alternate-type-rule-convention[]
+    // end::alternate-type-rule-convention[]
   }
 }

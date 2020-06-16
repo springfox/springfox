@@ -31,7 +31,7 @@ To explicitly state the extensibility points that are available:
 |Name| Description
 
 | `ApiListingScannerPlugin`
-| for adding custom api descriptions (see <<index.adoc#example-apilistingscannerplugin,example>>).
+| for adding custom api descriptions (see <<index.adoc#_example_apilistingscannerplugin,example>>).
 
 | `ApiListingBuilderPlugin`
 | for enriching api listings
@@ -52,7 +52,7 @@ To explicitly state the extensibility points that are available:
 | for providing additional models that you might load a different way
 
 | `ParameterBuilderPlugin`
-| for enriching parameters (see <<index.adoc#example-prameterbuilderplugin,example>>)
+| for enriching parameters (see <<index.adoc#_example_parameterbuilderplugin,example>>)
 |===
 
 
@@ -84,7 +84,7 @@ This example by https://github.com/koderman[@koderman]  is a custom extension fo
 Here is an example of how to add parameters by hand.
 
 Consider this controller, https://github.com/springfox/springfox/blob/master/springfox-spring-config/src/main/java/springfox/springconfig/VersionedController.java[VersionedController.java]
-[[parameter-building-plugin-example]]
+[[version-annotated-controller-example]]
 [source,java,linenums]
 ----
 include::../../springfox-spring-config/src/main/java/springfox/springconfig/VersionedController.java[tags=version-annotated-controller,indent=0]
@@ -156,7 +156,7 @@ representations. This is a limitation of the OAI Spec 2.0.
 Here is how we configure the `JacksonSerializerConvention`.
 
 https://github.com/springfox/springfox/blob/c48a8bb019371cb1e3c79d24c3db3791ac5025cc/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy#L201-L204[FunctionContractSpec.java]
-[[jackson-convention-example]]
+[[jackson-convention-example-1]]
 [source,java,linenums]
 ----
 include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy[tags=alternate-type-rule-convention,indent=0]
@@ -167,7 +167,7 @@ include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/sw
 Below is an example for creating a rule that automatically provides a convention for configuring `Pageable` type.
 
 https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L46-L64[SpringDataRestConfiguration.java]
-[[jackson-convention-example]]
+[[jackson-convention-example-2]]
 [source,java,linenums]
 ----
 include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java[tags=alternate-type-rule-convention,indent=0]

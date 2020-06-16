@@ -27,6 +27,7 @@ import springfox.test.contract.oas.model.ModelApiResponse;
 import springfox.test.contract.oas.model.Pet;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,16 +43,10 @@ public interface PetApiDelegate {
     return Optional.empty();
   }
 
-  /**
-   * @see PetApi#addPet
-   */
   default void addPet(Pet pet) {
 
   }
 
-  /**
-   * @see PetApi#deletePet
-   */
   default ResponseEntity<Void> deletePet(
       Long petId,
       String apiKey) {
@@ -59,9 +54,6 @@ public interface PetApiDelegate {
 
   }
 
-  /**
-   * @see PetApi#findPetsByStatus
-   */
   default ResponseEntity<java.util.List<Pet>> findPetsByStatus(java.util.List<String> status) {
     extract();
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
@@ -94,35 +86,23 @@ public interface PetApiDelegate {
     });
   }
 
-  /**
-   * @see PetApi#findPetsByTags
-   */
   default ResponseEntity<java.util.List<Pet>> findPetsByTags(java.util.List<String> tags) {
     extract();
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see PetApi#getPetById
-   */
   default ResponseEntity<Pet> getPetById(Long petId) {
     extract();
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see PetApi#updatePet(Pet)
-   */
   default ResponseEntity<Void> updatePet(Pet pet) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
   }
 
-  /**
-   * @see PetApi#updatePetWithForm(Long, String, String)
-   */
   default ResponseEntity<Void> updatePetWithForm(
       Long petId,
       String name,
@@ -131,10 +111,6 @@ public interface PetApiDelegate {
 
   }
 
-  /**
-   * @see PetApi#uploadFile(Long, String, MultipartFile)
-   *
-   */
   default ResponseEntity<ModelApiResponse> uploadFile(
       Long petId,
       String additionalMetadata,

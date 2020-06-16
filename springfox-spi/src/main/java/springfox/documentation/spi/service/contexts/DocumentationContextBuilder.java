@@ -211,7 +211,7 @@ public class DocumentationContextBuilder {
   /**
    * Used to populate the defaults
    *
-   * @param defaultResponseMessages
+   * @param defaultResponseMessages - default response messages
    * @return DocumentationContextBuilder
    * @deprecated @since 3.1.0
    * Use {@link DocumentationContextBuilder#defaultResponses} instead

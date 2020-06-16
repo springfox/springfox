@@ -131,6 +131,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
           resolver,
           "springfox.documentation.spring.web.dummy.models")
     }
-    // tag::alternate-type-rule-convention[]
+    // end::alternate-type-rule-convention[]
   }
 }

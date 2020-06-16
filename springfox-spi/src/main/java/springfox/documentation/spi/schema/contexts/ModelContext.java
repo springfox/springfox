@@ -190,11 +190,15 @@ public class ModelContext {
     return groupName;
   }
 
+
   /**
    * Convenience method to provide an new context for an input parameter
    *
+   * @param parameterId           - parameter id
    * @param group                 - group name of the docket
    * @param type                  - type
+   * @param view                  - view
+   * @param validationGroups      - validation groups
    * @param documentationType     - for documentation type
    * @param alternateTypeProvider - alternate type provider
    * @param genericNamingStrategy - how generic types should be named
@@ -229,8 +233,10 @@ public class ModelContext {
   /**
    * Convenience method to provide an new context for an return parameter
    *
+   * @param parameterId           - parameter id
    * @param groupName             - group name of the docket
    * @param type                  - type
+   * @param view                  - view
    * @param documentationType     - for documentation type
    * @param alternateTypeProvider - alternate type provider
    * @param genericNamingStrategy - how generic types should be named
@@ -313,7 +319,9 @@ public class ModelContext {
   }
 
   /**
-   * @since 3.0.0 {@link ModelContext#getModelSpecificationBuilder} instead
+   * Use {@link ModelContext#getModelSpecificationBuilder} instead
+   * @deprecated @since 3.0.0
+   * @return ModelBuilder
    */
   @Deprecated
   public ModelBuilder getBuilder() {

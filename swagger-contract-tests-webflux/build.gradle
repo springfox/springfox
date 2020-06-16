@@ -57,4 +57,4 @@ dependencies {
 //  systemProperty("contract.tests.root", "$projectDir/src/test/resources")
 //  systemProperty("contract.tests.update", true)
 //}
-// tag::update-contract-tests[]
+// end::update-contract-tests[]

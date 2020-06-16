@@ -118,7 +118,7 @@ public class Swagger2TestConfig {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("featureService")
         .useDefaultResponseMessages(false)
-        .additionalModels(resolver.resolve(FeatureDemonstrationService.CustomTypeFor2031.class))
+        .additionalModels(resolver.resolve(FeatureDemonstrationService.CustomTypeFor2031.class))  //<1>
         .securitySchemes(authorizationTypes)
         .produces(new HashSet<>(
             Arrays.asList(
@@ -129,6 +129,7 @@ public class Swagger2TestConfig {
             String.class))
         .select().paths(PathSelectors.regex("/features/.*"))
         .build();
+    // end::question-27-config[]
   }
 
   @Bean

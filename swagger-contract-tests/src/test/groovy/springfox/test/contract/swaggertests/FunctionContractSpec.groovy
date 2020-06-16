@@ -203,11 +203,11 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @TestConfiguration
   static class Config {
 
-    // tag::alternate-type-rule-convention[]
+// tag::alternate-type-rule-convention[]
     @Bean
     AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
       new JacksonSerializerConvention(resolver, "springfox.documentation.spring.web.dummy.models")
     }
-    // tag::alternate-type-rule-convention[]
+// end::alternate-type-rule-convention[]
   }
 }
