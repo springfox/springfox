@@ -102,40 +102,35 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
           .collectionModel(new CollectionSpecification(
               new ModelSpecificationBuilder()
                   .scalarModel(scalarModelSpecification)
-                  .facetsBuilder()
-                  .enumeration(new EnumerationElementFacetBuilder()
+                  .facets(f -> f.enumeration(new EnumerationElementFacetBuilder()
                       .allowedValues(Enums.allowableValues(elementType.getErasedType()))
-                      .build())
-                  .yield()
+                      .build()))
                   .build(),
               collectionType(resolved)))
-          .facetsBuilder()
-          .enumeration(new EnumerationElementFacetBuilder()
+          .facets(f -> f.enumeration(new EnumerationElementFacetBuilder()
               .allowedValues(Enums.allowableValues(elementType.getErasedType()))
-              .build())
-          .yield()
+              .build()))
           .build();
     } else if (enumTypeDeterminer.isEnum(resolved.getErasedType())) {
       typeName = "string";
+      ResolvedType finalResolved1 = resolved;
       modelSpecification = new ModelSpecificationBuilder()
                   .scalarModel(ScalarType.STRING)
-                  .facetsBuilder()
+                  .facets(f -> f
                   .enumeration(new EnumerationElementFacetBuilder()
-                      .allowedValues(Enums.allowableValues(resolved.getErasedType()))
-                      .build())
-                  .yield()
+                      .allowedValues(Enums.allowableValues(finalResolved1.getErasedType()))
+                      .build()))
                   .build();
     } else {
       ScalarModelSpecification scalarModelSpecification =
           new ScalarModelSpecification(ScalarTypes.builtInScalarType(resolved)
               .orElse(ScalarType.STRING));
+      ResolvedType finalResolved2 = resolved;
       modelSpecification = new ModelSpecificationBuilder()
           .scalarModel(scalarModelSpecification)
-          .facetsBuilder()
-          .enumeration(new EnumerationElementFacetBuilder()
-              .allowedValues(Enums.allowableValues(resolved.getErasedType()))
-              .build())
-          .yield()
+          .facets(f -> f.enumeration(new EnumerationElementFacetBuilder()
+              .allowedValues(Enums.allowableValues(finalResolved2.getErasedType()))
+              .build()))
           .build();
     }
     context.getParameterBuilder()

@@ -3,7 +3,6 @@ package springfox.documentation.spring.web.readers
 import org.springframework.http.MediaType
 import spock.lang.Specification
 import springfox.documentation.builders.ModelSpecificationBuilder
-import springfox.documentation.builders.RepresentationBuilder
 import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.schema.ModelKey
 import springfox.documentation.schema.ModelKeyBuilder
@@ -16,7 +15,21 @@ import springfox.documentation.service.ParameterType
 import springfox.documentation.service.RequestParameter
 import springfox.documentation.spring.web.readers.operation.ContentParameterAggregator
 
+import java.util.function.Consumer
+
+//import java.util.function.Function
+
 class MixedMultipartRequestParameterBuilderSpec extends Specification {
+//  def test() {
+//    given:
+//    def t = new Test()
+//
+//    when:
+//    def r = t.addOne(10).apply({i -> System.out.println(i)} as Consumer)
+//
+//    then:
+//    r == 11
+//  }
   /**
    * requestBody:
    *   content:
@@ -86,7 +99,8 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .accepts([MediaType.MULTIPART_FORM_DATA])
         .in(ParameterType.FORMDATA)
         .name("id")
-        .query {q ->
+        .query {q
+          ->
           q.model(
               new ModelSpecificationBuilder()
                   .scalarModel(ScalarType.UUID)
@@ -102,19 +116,23 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("address")
         .content {c
           ->
-          c.representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-           .modelSpecificationBuilder()
-           .referenceModel(
-               new ReferenceModelSpecification(
-                   new ModelKey(
-                       new QualifiedModelName(
-                           "io.springfox",
-                           "Address"),
-                       null,
-                       new ArrayList<>(),
-                       false)))
-           .yield(RequestParameterBuilder)
-           .yield()
+          c.representation(MediaType.MULTIPART_FORM_DATA)
+           .apply(
+               {r
+                 ->
+                 r.model {m
+                   ->
+                   m.referenceModel(
+                       new ReferenceModelSpecification(
+                           new ModelKey(
+                               new QualifiedModelName(
+                                   "io.springfox",
+                                   "Address"),
+                               null,
+                               new ArrayList<>(),
+                               false)))
+                 }
+               } as Consumer)
         }
         .build()
   }
@@ -126,31 +144,42 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("historyMetadata")
         .content {c
           ->
-          c.representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-           .modelSpecificationBuilder()
-           .compoundModelBuilder()
-           .modelKey(new ModelKeyBuilder().build())
-           .propertyBuilder("id")
-           .type(
-               new ModelSpecificationBuilder()
-                   .name("String")
-                   .scalarModel(ScalarType.STRING)
-                   .build())
-           .xml(new Xml().name("id").namespace("urn:io:springfox").prefix("sf"))
-           .yield()
-           .propertyBuilder("version")
-           .type(
-               new ModelSpecificationBuilder()
-                   .name("String")
-                   .scalarModel(ScalarType.BIGDECIMAL)
-                   .build())
-           .xml(new Xml().name("version").namespace("urn:io:springfox").prefix("sf"))
-           .yield()
-           .maxProperties(2)
-           .minProperties(2)
-           .yield()
-           .yield(RequestParameterBuilder)
-           .yield()
+          c.representation(MediaType.MULTIPART_FORM_DATA)
+           .apply(
+               {r
+                 ->
+                 r.model {m
+                   ->
+                   m.compoundModel {cm
+                     ->
+                     cm.modelKey(new ModelKeyBuilder().build())
+                       .property("id")
+                       .apply(
+                           {p
+                             ->
+                             p.type(
+                                 new ModelSpecificationBuilder()
+                                     .name("String")
+                                     .scalarModel(ScalarType.STRING)
+                                     .build())
+                              .xml(new Xml().name("id").namespace("urn:io:springfox").prefix("sf"))
+                           } as Consumer)
+                       .property("version")
+                       .apply(
+                           {p
+                             ->
+                             p.type(
+                                 new ModelSpecificationBuilder()
+                                     .name("String")
+                                     .scalarModel(ScalarType.BIGDECIMAL)
+                                     .build())
+                              .xml(new Xml().name("version").namespace("urn:io:springfox").prefix("sf"))
+                           } as Consumer)
+                       .maxProperties(2)
+                       .minProperties(2)
+                   }
+                 }
+               } as Consumer)
         }
         .build()
   }
@@ -162,24 +191,28 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("profileImage")
         .content {c
           ->
-          c.representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-           .modelSpecificationBuilder()
-           .scalarModel(ScalarType.BINARY)
-           .yield(RepresentationBuilder)
-           .encodingForProperty("profileImage")
-           .contentType("image/png, image/jpeg")
-           .headers(
-               [new Header(
-                   " X-Rate-Limit-Limit",
-                   "The number of allowed requests in the current period",
-                   null,
-                   new ModelSpecificationBuilder()
-                       .name("Integer")
-                       .scalarModel(ScalarType.INTEGER)
-                       .build()
-               )])
-           .yield()
-           .yield()
+          c.representation(MediaType.MULTIPART_FORM_DATA)
+           .apply(
+               {r
+                 ->
+                 r.model {
+                   m
+                     ->
+                     m.scalarModel(ScalarType.BINARY)
+                 }
+                  .encodingForProperty("profileImage")
+                  .contentType("image/png, image/jpeg")
+                  .headers(
+                      [new Header(
+                          " X-Rate-Limit-Limit",
+                          "The number of allowed requests in the current period",
+                          null,
+                          new ModelSpecificationBuilder()
+                              .name("Integer")
+                              .scalarModel(ScalarType.INTEGER)
+                              .build()
+                      )])
+               } as Consumer)
         }
         .build()
   }
@@ -191,50 +224,58 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("body")
         .content {c
           ->
-          c.representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-           .modelSpecificationBuilder()
-           .compoundModelBuilder()
-           .modelKey(new ModelKeyBuilder().build())
-           .propertyBuilder("id")
-           .type(
-               new ModelSpecificationBuilder()
-                   .scalarModel(ScalarType.STRING)
-                   .build())
-           .yield()
-           .propertyBuilder("address")
-           .type(
-               new ModelSpecificationBuilder()
-                   .referenceModel(
-                       new ReferenceModelSpecification(
-                           new ModelKey(
-                               new QualifiedModelName(
-                                   "123",
-                                   "abc"),
-                               null,
-                               new ArrayList<>(),
-                               true)))
-                   .build())
-           .yield()
-           .propertyBuilder("historyMetadata")
-           .yield()
-           .propertyBuilder("profileImage")
-           .yield()
-           .yield()
-           .yield(RepresentationBuilder)
-           .encodingForProperty("profileImage")
-           .contentType("image/png, image/jpeg")
-           .headers(
-               [new Header(
-                   " X-Rate-Limit-Limit",
-                   "The number of allowed requests in the current period",
-                   null,
-                   new ModelSpecificationBuilder()
-                       .name("Integer")
-                       .scalarModel(ScalarType.INTEGER)
-                       .build()
-               )])
-           .yield()
-           .yield()
+          c.representation(MediaType.MULTIPART_FORM_DATA)
+           .apply({r
+             ->
+             r.model {
+               m
+                 ->
+                 m.compoundModel {cm
+                   ->
+                   cm.modelKey(new ModelKeyBuilder().build())
+                     .property("id")
+                     .apply({p
+                       ->
+                       p
+                           .type(
+                               new ModelSpecificationBuilder()
+                                   .scalarModel(ScalarType.STRING)
+                                   .build())
+                     } as Consumer)
+                     .property("address")
+                     .apply({p
+                       ->
+                       p
+                           .type(
+                               new ModelSpecificationBuilder()
+                                   .referenceModel(
+                                       new ReferenceModelSpecification(
+                                           new ModelKey(
+                                               new QualifiedModelName(
+                                                   "123",
+                                                   "abc"),
+                                               null,
+                                               new ArrayList<>(),
+                                               true)))
+                                   .build())
+                     } as Consumer)
+                     .property("historyMetadata").apply({p ->  } as Consumer)
+                     .property("profileImage").apply({p ->  } as Consumer)
+                 }
+             }
+              .encodingForProperty("profileImage")
+              .contentType("image/png, image/jpeg")
+              .headers(
+                  [new Header(
+                      " X-Rate-Limit-Limit",
+                      "The number of allowed requests in the current period",
+                      null,
+                      new ModelSpecificationBuilder()
+                          .name("Integer")
+                          .scalarModel(ScalarType.INTEGER)
+                          .build()
+                  )])
+           } as Consumer)
         }
         .build()
   }

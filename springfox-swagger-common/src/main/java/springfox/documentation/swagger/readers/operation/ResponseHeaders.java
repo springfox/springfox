@@ -146,24 +146,17 @@ public class ResponseHeaders {
     if (emptyOrVoidHeader().test(each)) {
       itemSpecification = new ModelSpecificationBuilder()
           .scalarModel(ScalarType.STRING)
-          .facetsBuilder()
-            .deprecated(each.deprecated())
-            .yield()
+          .facets(f -> f.deprecated(each.deprecated()))
           .build();
     } else if (scalarType(each.schema()).isPresent()) {
       itemSpecification = new ModelSpecificationBuilder()
           .scalarModel(scalarType(each.schema()).get())
-          .facetsBuilder()
-          .deprecated(each.deprecated())
-          .yield()
+          .facets(f -> f.deprecated(each.deprecated()))
           .build();
     } else if (ScalarTypes.builtInScalarType(type).isPresent()) {
       itemSpecification = new ModelSpecificationBuilder()
           .scalarModel(ScalarTypes.builtInScalarType(type).get())
-          .facetsBuilder()
-            .deprecated(each.deprecated())
-            .yield()
-          .build();
+          .facets(f -> f.deprecated(each.deprecated())).build();
     } else {
       itemSpecification = new ModelSpecificationBuilder()
           .referenceModel(new ReferenceModelSpecification(
@@ -173,9 +166,7 @@ public class ResponseHeaders {
                           PackageNames.safeGetPackageName(type),
                           type.getSimpleName()))
                   .build()))
-          .facetsBuilder()
-          .deprecated(each.deprecated())
-          .yield()
+          .facets(f -> f.deprecated(each.deprecated()))
           .build();
     }
     if (each.schema().multipleOf() >  0) {
@@ -183,9 +174,7 @@ public class ResponseHeaders {
           .collectionModel(new CollectionSpecification(
               itemSpecification,
               CollectionType.ARRAY))
-          .facetsBuilder()
-          .deprecated(each.deprecated())
-          .yield()
+          .facets(f -> f.deprecated(each.deprecated()))
           .build();
     }
     return itemSpecification;

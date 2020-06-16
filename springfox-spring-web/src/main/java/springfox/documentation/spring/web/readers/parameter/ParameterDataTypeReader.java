@@ -87,7 +87,9 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     return true;
   }
 
-  @SuppressWarnings({ "CyclomaticComplexity", "NPathComplexity" })
+  @SuppressWarnings({
+      "CyclomaticComplexity",
+      "NPathComplexity" })
   @Override
   public void apply(ParameterContext context) {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
@@ -122,7 +124,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     if (!methodParameter.hasParameterAnnotations()) {
       String typeName = typeNameFor(parameterType.getErasedType());
       ScalarTypes.builtInScalarType(parameterType.getErasedType())
-          .ifPresent(model::scalarModel);
+                 .ifPresent(model::scalarModel);
       if (isBaseType(typeName)) {
         modelRef = new ModelRef(typeName);
       } else {
@@ -137,29 +139,29 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     }
     ViewProviderPlugin viewProvider = pluginsManager
         .viewProvider(context.getDocumentationContext()
-                          .getDocumentationType());
+                             .getDocumentationType());
 
     ModelContext modelContext = context.getOperationContext()
-        .operationModelsBuilder()
-        .addInputParam(
-            parameterType,
-            viewProvider.viewFor(
-                methodParameter),
-            new HashSet<>());
+                                       .operationModelsBuilder()
+                                       .addInputParam(
+                                           parameterType,
+                                           viewProvider.viewFor(
+                                               methodParameter),
+                                           new HashSet<>());
 
     context.parameterBuilder()
-        .type(parameterType)
-        .modelRef(Optional.ofNullable(modelRef)
-                      .orElse(modelRefFactory(
-                          modelContext,
-                          enumTypeDeterminer,
-                          nameExtractor).apply(parameterType)));
+           .type(parameterType)
+           .modelRef(Optional.ofNullable(modelRef)
+                             .orElse(modelRefFactory(
+                                 modelContext,
+                                 enumTypeDeterminer,
+                                 nameExtractor).apply(parameterType)));
     ModelSpecification parameterModel = models.create(
         modelContext,
         parameterType);
     if (isRequestBody) {
       Set<MediaType> consumes = new HashSet<>(context.getOperationContext()
-                                                  .consumes());
+                                                     .consumes());
       if (consumes.isEmpty()) {
         consumes.add(MediaType.ALL);
       }
@@ -167,9 +169,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
           .forEach(mediaType ->
                        context.requestParameterBuilder()
                               .content(c -> c.requestBody(true)
-                                             .representationBuilderFor(mediaType)
-                                             .modelSpecificationBuilder()
-                                             .copyOf(parameterModel)));
+                                             .representation(mediaType)
+                                             .apply(r -> r.model(m -> m.copyOf(parameterModel)))));
     } else {
       context.requestParameterBuilder()
              .query(q -> q.model(parameterModel));

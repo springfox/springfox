@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.PropertySpecificationBuilder;
-import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.PropertySpecification;
@@ -33,7 +32,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
         "Aggregating content parameters from parameters: {}",
         parameters.stream()
                   .map(RequestParameter::getName)
-                .collect(Collectors.joining(", ")));
+                  .collect(Collectors.joining(", ")));
 
     MediaType contentMediaType = MediaType.MULTIPART_FORM_DATA;
     ParameterType in = ParameterType.FORMDATA;
@@ -53,10 +52,9 @@ public class ContentParameterAggregator implements ParameterAggregator {
             .in(aggregateIn)
             .content(q -> q
                 .requestBody(true)
-                .representationBuilderFor(aggregateMediaType)
-                  .modelSpecificationBuilder()
-                  .compoundModelBuilder()
-                    .modelKey(new ModelKeyBuilder()
+                .representation(aggregateMediaType)
+                .apply(r -> r.model(m -> m.compoundModel(cm -> cm
+                                .modelKey(new ModelKeyBuilder()
                                   .qualifiedModelName(
                                       new QualifiedModelName("io.springfox",
                                                              each.getName() + "Aggregate"))
@@ -64,13 +62,10 @@ public class ContentParameterAggregator implements ParameterAggregator {
                                   .validationGroupDiscriminators(new ArrayList<>())
                                   .isResponse(false)
                                   .build())
-                    .properties(properties(each))
-                    .yield()
-                  .yield(RepresentationBuilder.class)
+                    .properties(properties(each))))
                   .encodingForProperty(each.getName())
                   .copyOf(encoding(each, MediaType.TEXT_PLAIN))
-                .yield())
-            .build());
+            .build())));
 
     parameters.stream()
         .filter(p -> p.getIn() == ParameterType.FORMDATA
@@ -86,22 +81,17 @@ public class ContentParameterAggregator implements ParameterAggregator {
             .in(aggregateIn)
             .content(c -> c
               .requestBody(true)
-              .representationBuilderFor(aggregateMediaType)
-                .modelSpecificationBuilder()
-                  .compoundModelBuilder()
-                    .modelKey(new ModelKeyBuilder()
+              .representation(aggregateMediaType)
+              .apply(r -> r.model(m -> m.compoundModel(cm -> cm.modelKey(new ModelKeyBuilder()
                                   .qualifiedModelName(
                                       new QualifiedModelName("io.springfox",
                                                              each.getName() + "Aggregate"))
                                   .viewDiscriminator(null)
                                   .validationGroupDiscriminators(new ArrayList<>())
                                   .isResponse(false).build())
-                    .properties(properties(each))
-                    .yield()
-                  .yield(RepresentationBuilder.class)
+                    .properties(properties(each))))
                 .encodingForProperty(each.getName())
-                .copyOf(encoding(each, aggregateMediaType))
-                .yield())
+                .copyOf(encoding(each, aggregateMediaType))))
             .build());
     RequestParameter content = builder.build();
     // @formatter:on
@@ -117,8 +107,8 @@ public class ContentParameterAggregator implements ParameterAggregator {
     LOGGER.info(
         "Post content aggregation parameters: {}",
         requestParameters.stream()
-                  .map(RequestParameter::getName)
-                  .collect(Collectors.joining(", ")));
+                         .map(RequestParameter::getName)
+                         .collect(Collectors.joining(", ")));
     return requestParameters;
   }
 

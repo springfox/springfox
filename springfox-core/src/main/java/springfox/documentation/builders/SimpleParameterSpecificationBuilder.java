@@ -124,10 +124,6 @@ public class SimpleParameterSpecificationBuilder {
     );
   }
 
-  public RequestParameterBuilder yield() {
-    return owner;
-  }
-
   public SimpleParameterSpecificationBuilder copyOf(SimpleParameterSpecification simple) {
     for (ElementFacet each :
         simple.getFacets()) {

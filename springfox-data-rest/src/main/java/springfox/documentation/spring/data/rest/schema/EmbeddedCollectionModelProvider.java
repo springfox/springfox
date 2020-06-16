@@ -77,18 +77,18 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     String name = typeNameExtractor.typeName(context);
     return context.getBuilder()
-        .description(String.format(
-            "Embedded collection of %s",
-            type.getSimpleName()))
-        .name(name)
-        .qualifiedType(type.getName())
-        .type(typeParameters.get(0))
-        .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
-        .xml(new Xml()
-                 .wrapped(true)
-                 .name("content")
-            )
-        .build();
+                  .description(String.format(
+                      "Embedded collection of %s",
+                      type.getSimpleName()))
+                  .name(name)
+                  .qualifiedType(type.getName())
+                  .type(typeParameters.get(0))
+                  .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
+                  .xml(new Xml()
+                           .wrapped(true)
+                           .name("content")
+                      )
+                  .build();
   }
 
   @Override
@@ -116,26 +116,23 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     String name = typeNameExtractor.typeName(context);
     return context.getModelSpecificationBuilder()
-        .name(name)
-        .facetsBuilder()
-        .description(String.format(
-            "Embedded collection of %s",
-            type.getSimpleName()))
-        .xml(new Xml()
-                 .wrapped(true)
-                 .name("content"))
-        .yield()
-        .compoundModelBuilder()
-        .properties(propertySpecifications(context))
-        .modelKey(new ModelKeyBuilder()
-                      .isResponse(context.isReturnType())
-                      .qualifiedModelName(
-                          new QualifiedModelName(
-                              "springfox.documentation.spring.data.rest.schema",
-                              name))
-                      .build())
-        .yield()
-        .build();
+                  .name(name)
+                  .facets(f -> f.description(String.format(
+                      "Embedded collection of %s",
+                      type.getSimpleName()))
+                                .xml(new Xml()
+                                         .wrapped(true)
+                                         .name("content")))
+                  .compoundModel(cm ->
+                                     cm.properties(propertySpecifications(context))
+                                       .modelKey(new ModelKeyBuilder()
+                                                     .isResponse(context.isReturnType())
+                                                     .qualifiedModelName(
+                                                         new QualifiedModelName(
+                                                             "springfox.documentation.spring.data.rest.schema",
+                                                             name))
+                                                     .build()))
+                  .build();
   }
 
   @Override

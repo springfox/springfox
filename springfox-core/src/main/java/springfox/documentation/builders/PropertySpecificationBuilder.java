@@ -154,10 +154,6 @@ public class PropertySpecificationBuilder {
     return this;
   }
 
-  public CompoundModelSpecificationBuilder yield() {
-    return parent;
-  }
-
   public PropertySpecification build() {
     List<ElementFacet> facets = facetBuilders.values()
         .stream()

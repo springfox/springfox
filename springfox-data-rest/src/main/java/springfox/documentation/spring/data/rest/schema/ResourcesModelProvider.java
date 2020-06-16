@@ -47,7 +47,6 @@ import java.util.stream.Stream;
 import static java.util.function.Function.*;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.property.PackageNames.*;
 
 class ResourcesModelProvider implements SyntheticModelProviderPlugin {
 
@@ -74,20 +73,20 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     String name = typeNameExtractor.typeName(context);
     return context.getBuilder()
-        .description(String.format(
-            "Resources of %s",
-            type.getSimpleName()))
-        .name(name)
-        .qualifiedType(type.getName())
-        .type(typeParameters.get(0))
-        .properties(properties(context).stream().collect(toMap(
-            ModelProperty::getName,
-            identity())))
-        .xml(new Xml()
-                 .name("entities")
-                 .wrapped(false)
-                 .attribute(false))
-        .build();
+                  .description(String.format(
+                      "Resources of %s",
+                      type.getSimpleName()))
+                  .name(name)
+                  .qualifiedType(type.getName())
+                  .type(typeParameters.get(0))
+                  .properties(properties(context).stream().collect(toMap(
+                      ModelProperty::getName,
+                      identity())))
+                  .xml(new Xml()
+                           .name("entities")
+                           .wrapped(false)
+                           .attribute(false))
+                  .build();
   }
 
   @Override
@@ -129,7 +128,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
                 enumTypeDeterminer,
                 typeNameExtractor))
                     )
-        .collect(toList());
+                 .collect(toList());
   }
 
   @Override
@@ -139,27 +138,24 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     String name = typeNameExtractor.typeName(context);
     return context.getModelSpecificationBuilder()
-        .name(name)
-        .facetsBuilder()
-        .description(String.format(
-            "Resources of %s",
-            type.getSimpleName()))
-        .xml(new Xml()
-                 .name("entities")
-                 .wrapped(false)
-                 .attribute(false))
-        .yield()
-        .compoundModelBuilder()
-        .properties(propertySpecifications(context))
-        .modelKey(new ModelKeyBuilder()
-                      .isResponse(context.isReturnType())
-                      .qualifiedModelName(
-                          new QualifiedModelName(
-                              "org.springframework.hateoas",
-                              name))
-                      .build())
-        .yield()
-        .build();
+                  .name(name)
+                  .facets(f -> f.description(String.format(
+                      "Resources of %s",
+                      type.getSimpleName()))
+                                .xml(new Xml()
+                                         .name("entities")
+                                         .wrapped(false)
+                                         .attribute(false)))
+                  .compoundModel(cm -> cm
+                      .properties(propertySpecifications(context))
+                      .modelKey(new ModelKeyBuilder()
+                                    .isResponse(context.isReturnType())
+                                    .qualifiedModelName(
+                                        new QualifiedModelName(
+                                            "org.springframework.hateoas",
+                                            name))
+                                    .build()))
+                  .build();
   }
 
   @Override
@@ -190,7 +186,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
             .isHidden(false)
             .description("Link collection")
             .build())
-        .collect(toList());
+                 .collect(toList());
   }
 
   @Override
@@ -211,8 +207,8 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
   public boolean supports(ModelContext delimiter) {
     return CollectionModel.class.equals(resourceType(delimiter.getType()).getErasedType())
         && (delimiter.getDocumentationType() == DocumentationType.SWAGGER_2
-        || delimiter.getDocumentationType() == DocumentationType.OAS_30
-        || delimiter.getDocumentationType() == DocumentationType.SPRING_WEB);
+                || delimiter.getDocumentationType() == DocumentationType.OAS_30
+                || delimiter.getDocumentationType() == DocumentationType.SPRING_WEB);
   }
 
   private ResolvedType resourceType(Type type) {

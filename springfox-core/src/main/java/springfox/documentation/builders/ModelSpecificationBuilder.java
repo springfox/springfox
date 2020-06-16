@@ -11,13 +11,13 @@ import springfox.documentation.schema.ScalarType;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import static org.slf4j.LoggerFactory.*;
 
 public class ModelSpecificationBuilder {
   private static final Logger LOGGER = getLogger(ModelSpecificationBuilder.class);
-  private final Object parent;
-  private final ModelFacetsBuilder facetsBuilder = new ModelFacetsBuilder(this);
+  private final ModelFacetsBuilder facetsBuilder = new ModelFacetsBuilder();
   private String name;
   private ScalarModelSpecification scalar;
   private CollectionSpecification collection;
@@ -25,22 +25,14 @@ public class ModelSpecificationBuilder {
   private ReferenceModelSpecification reference;
   private CompoundModelSpecificationBuilder compoundModelBuilder;
 
-  public ModelSpecificationBuilder() {
-    this(null);
-  }
-
-  public ModelSpecificationBuilder(
-      Object parent) {
-    this.parent = parent;
-  }
-
   public ModelSpecificationBuilder name(String name) {
     this.name = name;
     return this;
   }
 
-  public ModelFacetsBuilder facetsBuilder() {
-    return facetsBuilder;
+  public ModelSpecificationBuilder facets(Consumer<ModelFacetsBuilder> facets) {
+    facets.accept(facetsBuilder);
+    return this;
   }
 
   public ModelSpecificationBuilder scalarModel(ScalarType type) {
@@ -57,11 +49,16 @@ public class ModelSpecificationBuilder {
     return this;
   }
 
-  public CompoundModelSpecificationBuilder compoundModelBuilder() {
+  private CompoundModelSpecificationBuilder compoundModelBuilder() {
     if (compoundModelBuilder == null) {
       this.compoundModelBuilder = new CompoundModelSpecificationBuilder(this);
     }
     return compoundModelBuilder;
+  }
+
+  public ModelSpecificationBuilder compoundModel(Consumer<CompoundModelSpecificationBuilder> compound) {
+    compound.accept(compoundModelBuilder());
+    return this;
   }
 
   public ModelSpecificationBuilder collectionModel(CollectionSpecification collection) {
@@ -115,13 +112,10 @@ public class ModelSpecificationBuilder {
       this.name(other.getName())
           .scalarModel(scalar)
           .referenceModel(reference)
-          .compoundModelBuilder()
-          .copyOf(compound)
-          .yield()
+          .compoundModel(cm -> cm.copyOf(compound))
           .collectionModel(collection)
           .mapModel(map)
-          .facetsBuilder()
-          .copyOf(other.getFacets());
+          .facets(f -> f.copyOf(other.getFacets()));
     }
     return this;
   }
@@ -129,8 +123,8 @@ public class ModelSpecificationBuilder {
   private void ensureValidSpecification(
       Object... specs) {
     long specCount = Arrays.stream(specs)
-        .filter(Objects::nonNull)
-        .count();
+                           .filter(Objects::nonNull)
+                           .count();
     if (specCount == 0) {
       LOGGER.error(
           "Error building model {}",
@@ -143,9 +137,5 @@ public class ModelSpecificationBuilder {
           name);
       throw new IllegalArgumentException("Only one of the specifications should be non null");
     }
-  }
-
-  public <T> T yield(Class<T> clazz) {
-    return (T) parent;
   }
 }

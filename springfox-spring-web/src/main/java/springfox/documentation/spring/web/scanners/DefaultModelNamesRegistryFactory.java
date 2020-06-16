@@ -141,9 +141,7 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
           value,
           new ModelSpecificationBuilder()
               .copyOf(modelRegistry.modelSpecificationFor(key))
-              .facetsBuilder()
-              .withTitle(value)
-              .yield()
+              .facets(f -> f.title(value))
               .build()));
       return map;
     }

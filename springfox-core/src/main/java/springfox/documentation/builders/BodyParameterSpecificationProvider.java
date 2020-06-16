@@ -27,56 +27,52 @@ public class BodyParameterSpecificationProvider implements ParameterSpecificatio
     Collection<MediaType> accepts = new HashSet<>(context.getAccepts());
     if (contentParameter != null) {
       accepts.addAll(contentParameter.getRepresentations().stream()
-                         .map(Representation::getMediaType)
-                         .collect(Collectors.toSet()));
+                                     .map(Representation::getMediaType)
+                                     .collect(Collectors.toSet()));
     }
     if (accepts.isEmpty()) {
       accepts.add(MediaType.ALL);
     }
 
     accepts.stream()
-        .filter(mediaType -> !mediaType.equalsTypeAndSubtype(MediaType.APPLICATION_FORM_URLENCODED))
-        .forEach(
-            each -> {
-              if (simpleParameter != null && simpleParameter.getModel() != null) {
-                context.getContentSpecificationBuilder()
-                    .copyOf(contentParameter)
-                    .requestBody(true)
-                    .representationBuilderFor(each)
-                      .modelSpecificationBuilder()
-                      .copyOf(simpleParameter.getModel())
-                      .yield(RepresentationBuilder.class)
-                    .encodings(null);
-              } else if (contentParameter != null) {
-                Optional<Representation> mediaType = contentParameter.representationFor(each);
-                context.getContentSpecificationBuilder()
-                    .copyOf(contentParameter)
-                    .requestBody(true)
-                    .representationBuilderFor(each)
-                    .modelSpecificationBuilder()
-                      .copyOf(mediaType
-                        .map(Representation::getModel)
-                        .orElse(new ModelSpecificationBuilder()
-                            .name(context.getName())
-                            .scalarModel(ScalarType.STRING)
-                            .build()))
-                      .yield(RepresentationBuilder.class)
-                    .encodings(null);
+           .filter(mediaType -> !mediaType.equalsTypeAndSubtype(MediaType.APPLICATION_FORM_URLENCODED))
+           .forEach(
+               each -> {
+                 if (simpleParameter != null && simpleParameter.getModel() != null) {
+                   context.getContentSpecificationBuilder()
+                          .copyOf(contentParameter)
+                          .requestBody(true)
+                          .representation(each)
+                          .apply(r -> r
+                              .model(m -> m.copyOf(simpleParameter.getModel()))
+                              .encodings(null));
+                 } else if (contentParameter != null) {
+                   Optional<Representation> mediaType = contentParameter.representationFor(each);
+                   context.getContentSpecificationBuilder()
+                          .copyOf(contentParameter)
+                          .requestBody(true)
+                          .representation(each)
+                          .apply(r -> r.model(m -> m.copyOf(mediaType
+                                                                .map(Representation::getModel)
+                                                                .orElse(new ModelSpecificationBuilder()
+                                                                            .name(context.getName())
+                                                                            .scalarModel(ScalarType.STRING)
+                                                                            .build())))
+                                       .encodings(null));
 
-              } else {
-                LOGGER.warn("Parameter should either be a simple or a content type");
-                context.getContentSpecificationBuilder()
-                    .requestBody(true)
-                    .representationBuilderFor(each)
-                    .modelSpecificationBuilder()
-                      .copyOf(new ModelSpecificationBuilder()
-                        .name(context.getName())
-                        .scalarModel(ScalarType.STRING)
-                        .build())
-                      .yield(RepresentationBuilder.class)
-                    .encodings(null);
-              }
-            });
+                 } else {
+                   LOGGER.warn("Parameter should either be a simple or a content type");
+                   context.getContentSpecificationBuilder()
+                          .requestBody(true)
+                          .representation(each)
+                          .apply(r -> r.model(m -> m
+                              .copyOf(new ModelSpecificationBuilder()
+                                          .name(context.getName())
+                                          .scalarModel(ScalarType.STRING)
+                                          .build()))
+                                       .encodings(null));
+                 }
+               });
     return new ParameterSpecification(null, context.getContentSpecificationBuilder().build());
   }
 }

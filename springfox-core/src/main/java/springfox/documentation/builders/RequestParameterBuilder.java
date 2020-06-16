@@ -90,7 +90,7 @@ public class RequestParameterBuilder {
 
   private ContentSpecificationBuilder contentBuilder() {
     if (contentSpecificationBuilder == null) {
-      contentSpecificationBuilder = new ContentSpecificationBuilder(this);
+      contentSpecificationBuilder = new ContentSpecificationBuilder();
     }
     return contentSpecificationBuilder;
   }
@@ -154,7 +154,7 @@ public class RequestParameterBuilder {
             simpleParameterBuilder != null ? simpleParameterBuilder.build() : null,
             contentSpecificationBuilder != null ? contentSpecificationBuilder.build() : null,
             new SimpleParameterSpecificationBuilder(this),
-            new ContentSpecificationBuilder(this)));
+            new ContentSpecificationBuilder()));
 
     return new RequestParameter(
         name,

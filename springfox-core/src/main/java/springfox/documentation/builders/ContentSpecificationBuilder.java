@@ -6,18 +6,15 @@ import springfox.documentation.service.Representation;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ContentSpecificationBuilder {
-  private final RequestParameterBuilder parent;
   private static final org.springframework.http.MediaType DEFAULT_MEDIA_TYPE =
       new org.springframework.http.MediaType("application", "springfox");
   private Map<org.springframework.http.MediaType, RepresentationBuilder> representations = new HashMap<>();
   private boolean requestBody = false;
-
-  ContentSpecificationBuilder(RequestParameterBuilder parent) {
-    this.parent = parent;
-  }
 
   public ContentSpecificationBuilder representations(Collection<Representation> representations) {
     this.representations.putAll(representations.stream()
@@ -30,8 +27,16 @@ public class ContentSpecificationBuilder {
 
   public RepresentationBuilder representationBuilderFor(org.springframework.http.MediaType mediaType) {
     return this.representations.computeIfAbsent(mediaType,
-        m -> new RepresentationBuilder(this)
+        m -> new RepresentationBuilder()
             .mediaType(m));
+  }
+
+  public Function<Consumer<RepresentationBuilder>, ContentSpecificationBuilder> representation(
+      org.springframework.http.MediaType mediaType) {
+    return content -> {
+      content.accept(representationBuilderFor(mediaType));
+      return this;
+    };
   }
 
   public ContentSpecificationBuilder requestBody(boolean requestBody) {
@@ -46,10 +51,6 @@ public class ContentSpecificationBuilder {
             .stream()
             .map(RepresentationBuilder::build)
             .collect(Collectors.toSet()));
-  }
-
-  public RequestParameterBuilder yield() {
-    return parent;
   }
 
   public ContentSpecificationBuilder copyOf(ContentSpecification contentParameter) {

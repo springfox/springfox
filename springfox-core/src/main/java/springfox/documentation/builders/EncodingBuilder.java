@@ -78,10 +78,6 @@ public class EncodingBuilder {
         && vendorExtensions.isEmpty();
   }
 
-  public RepresentationBuilder yield() {
-    return parent;
-  }
-
   public EncodingBuilder copyOf(Encoding other) {
     if (other != null) {
       this.propertyRef(other.getPropertyRef())

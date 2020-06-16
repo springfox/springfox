@@ -65,7 +65,7 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
   public void apply(ModelContext context) {
     ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
     if (annotation != null) {
-      List<ModelReference> modelRefs = new ArrayList<ModelReference>();
+      List<ModelReference> modelRefs = new ArrayList<>();
       List<ReferenceModelSpecification> subclassKeys = new ArrayList<>();
       for (Class<?> each : annotation.subTypes()) {
         modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)
@@ -73,17 +73,16 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
         subclassKeys.add(modelSpecifications.create(
             context,
             typeResolver.resolve(each)).getReference()
-                             .orElse(null));
+                                            .orElse(null));
       }
       context.getBuilder()
-          .description(annotation.description())
-          .discriminator(annotation.discriminator())
-          .subTypes(modelRefs);
+             .description(annotation.description())
+             .discriminator(annotation.discriminator())
+             .subTypes(modelRefs);
       context.getModelSpecificationBuilder()
-          .facetsBuilder()
-          .description(annotation.description())
-          .yield().compoundModelBuilder().discriminator(annotation.discriminator())
-          .subclassReferences(subclassKeys);
+             .facets(f -> f.description(annotation.description()))
+             .compoundModel(cm -> cm.discriminator(annotation.discriminator())
+                                    .subclassReferences(subclassKeys));
     }
   }
 

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelFacetsBuilder {
-  private final ModelSpecificationBuilder parent;
   private ModelKey modelKey;
   private String title;
   private String description;
@@ -24,16 +23,12 @@ public class ModelFacetsBuilder {
   private final List<VendorExtension> extensions = new ArrayList<>();
   private Xml xml;
 
-  public ModelFacetsBuilder(ModelSpecificationBuilder parent) {
-    this.parent = parent;
-  }
-
-  public ModelFacetsBuilder withModelKey(ModelKey modelKey) {
+  public ModelFacetsBuilder modelKey(ModelKey modelKey) {
     this.modelKey = modelKey;
     return this;
   }
 
-  public ModelFacetsBuilder withTitle(String title) {
+  public ModelFacetsBuilder title(String title) {
     this.title = title;
     return this;
   }
@@ -43,7 +38,7 @@ public class ModelFacetsBuilder {
     return this;
   }
 
-  public ModelFacetsBuilder withNullable(Boolean nullable) {
+  public ModelFacetsBuilder nullable(Boolean nullable) {
     this.nullable = nullable;
     return this;
   }
@@ -53,17 +48,17 @@ public class ModelFacetsBuilder {
     return this;
   }
 
-  public ModelFacetsBuilder withExternalDocumentation(DocumentationReference externalDocumentation) {
+  public ModelFacetsBuilder externalDocumentation(DocumentationReference externalDocumentation) {
     this.externalDocumentation = externalDocumentation;
     return this;
   }
 
-  public ModelFacetsBuilder withExamples(List<Example> examples) {
+  public ModelFacetsBuilder examples(List<Example> examples) {
     this.examples.addAll(examples);
     return this;
   }
 
-  public ModelFacetsBuilder withExtensions(List<VendorExtension> extensions) {
+  public ModelFacetsBuilder extensions(List<VendorExtension> extensions) {
     this.extensions.addAll(extensions);
     return this;
   }
@@ -76,10 +71,6 @@ public class ModelFacetsBuilder {
   public ModelFacetsBuilder xml(Xml xml) {
     this.xml = xml;
     return this;
-  }
-
-  public ModelSpecificationBuilder yield() {
-    return parent;
   }
 
   public ModelFacets build() {
@@ -97,15 +88,15 @@ public class ModelFacetsBuilder {
   }
 
   public ModelFacetsBuilder copyOf(ModelFacets other) {
-    return this.withModelKey(other.getModelKey())
-        .withTitle(other.getTitle())
+    return this.modelKey(other.getModelKey())
+        .title(other.getTitle())
         .description(other.getDescription())
-        .withNullable(other.getNullable())
+        .nullable(other.getNullable())
         .deprecated(other.getDeprecated())
         .enumeration(other.getEnumerationFacet())
-        .withExtensions(other.getExtensions())
-        .withExternalDocumentation(other.getExternalDocumentation())
-        .withExamples(other.getExamples())
+        .extensions(other.getExtensions())
+        .externalDocumentation(other.getExternalDocumentation())
+        .examples(other.getExamples())
         .xml(other.getXml());
   }
 }

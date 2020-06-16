@@ -73,18 +73,17 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
 
     if (!modelRefs.isEmpty()) {
       context.getBuilder()
-          .discriminator(discriminator(context))
-          .subTypes(modelRefs.stream()
-                        .filter(c -> c.getLegacy().isPresent())
-                        .map(c -> c.getLegacy().get())
-                        .collect(Collectors.toList()));
+             .discriminator(discriminator(context))
+             .subTypes(modelRefs.stream()
+                                .filter(c -> c.getLegacy().isPresent())
+                                .map(c -> c.getLegacy().get())
+                                .collect(Collectors.toList()));
       context.getModelSpecificationBuilder()
-          .compoundModelBuilder()
-          .discriminator(discriminator(context))
-          .subclassReferences(modelRefs.stream()
-                                  .filter(c -> c.getModern().isPresent())
-                                  .map(c -> c.getModern().get())
-                                  .collect(Collectors.toList()));
+             .compoundModel(cm -> cm.discriminator(discriminator(context))
+                                    .subclassReferences(modelRefs.stream()
+                                                                 .filter(c -> c.getModern().isPresent())
+                                                                 .map(c -> c.getModern().get())
+                                                                 .collect(Collectors.toList())));
     }
     //TODO: Handle sub types for model specifications
   }
@@ -105,7 +104,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
                 modelSpecifications.create(
                     context,
                     resolvedSubType).getReference()
-                    .orElse(null)));
+                                   .orElse(null)));
       }
     }
     return modelRefs;
@@ -116,7 +115,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
         return ofNullable(typeInfo.property()).filter(((Predicate<String>) String::isEmpty).negate())
-            .orElse(typeInfo.use().getDefaultPropertyName());
+                                              .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }
     return "";

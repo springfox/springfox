@@ -7,23 +7,24 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class RepresentationBuilder {
-  private final ContentSpecificationBuilder parent;
   private org.springframework.http.MediaType mediaType;
   private ModelSpecificationBuilder modelBuilder;
   private final Map<String, EncodingBuilder> encodings = new HashMap<>();
 
-  public RepresentationBuilder(ContentSpecificationBuilder parent) { //TODO: Fix this to not take parent
-    this.parent = parent;
-  }
-
-  public ModelSpecificationBuilder modelSpecificationBuilder() {
+  private ModelSpecificationBuilder modelSpecificationBuilder() {
     if (modelBuilder == null) {
-      this.modelBuilder = new ModelSpecificationBuilder(this);
+      this.modelBuilder = new ModelSpecificationBuilder();
     }
     return modelBuilder;
+  }
+
+  public RepresentationBuilder model(Consumer<ModelSpecificationBuilder> model) {
+    model.accept(modelSpecificationBuilder());
+    return this;
   }
 
   public RepresentationBuilder mediaType(String mediaType) {
@@ -67,17 +68,12 @@ public class RepresentationBuilder {
             .collect(Collectors.toSet()));
   }
 
-  public ContentSpecificationBuilder yield() {
-    return parent;
-  }
-
   public RepresentationBuilder copyOf(Representation other) {
     if (other != null) {
       other.getEncodings().forEach(e -> this.encodingForProperty(e.getPropertyRef())
           .copyOf(e));
       this.mediaType(other.getMediaType())
-          .modelSpecificationBuilder()
-          .copyOf(other.getModel());
+          .model(m -> m.copyOf(other.getModel()));
     }
     return this;
   }

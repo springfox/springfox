@@ -79,14 +79,13 @@ public class ModelSpecificationFactory {
                 .build());
       }
     }
+    EnumerationFacet finalEnumerationFacet = enumerationFacet;
     return new ModelSpecificationBuilder()
         .scalarModel(scalar.orElse(null))
         .referenceModel(reference)
         .collectionModel(collectionSpecification)
         .mapModel(mapSpecification)
-        .facetsBuilder()
-        .enumeration(enumerationFacet)
-        .yield()
+        .facets(f -> f.enumeration(finalEnumerationFacet))
         .build();
   }
 

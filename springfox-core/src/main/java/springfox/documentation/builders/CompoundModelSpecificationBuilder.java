@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CompoundModelSpecificationBuilder {
@@ -25,10 +27,17 @@ public class CompoundModelSpecificationBuilder {
     this.parent = parent;
   }
 
-  public PropertySpecificationBuilder propertyBuilder(String name) {
+  private PropertySpecificationBuilder propertyBuilder(String name) {
     return properties.computeIfAbsent(
         name,
         n -> new PropertySpecificationBuilder(n, this));
+  }
+
+  public Function<Consumer<PropertySpecificationBuilder>, CompoundModelSpecificationBuilder> property(String name) {
+    return property -> {
+      property.accept(propertyBuilder(name));
+      return this;
+    };
   }
 
   public CompoundModelSpecificationBuilder modelKey(ModelKey modelKey) {
@@ -46,15 +55,11 @@ public class CompoundModelSpecificationBuilder {
     return this;
   }
 
-  public ModelSpecificationBuilder yield() {
-    return parent;
-  }
-
   public CompoundModelSpecification build() {
     List<PropertySpecification> properties
         = this.properties.values().stream()
-        .map(PropertySpecificationBuilder::build)
-        .collect(Collectors.toList());
+                         .map(PropertySpecificationBuilder::build)
+                         .collect(Collectors.toList());
     if (modelKey != null) {
       return new CompoundModelSpecification(
           modelKey,
@@ -81,25 +86,26 @@ public class CompoundModelSpecificationBuilder {
 
   public CompoundModelSpecificationBuilder properties(Collection<PropertySpecification> properties) {
     properties.forEach(each -> {
-      PropertySpecificationBuilder propertyBuilder
-          = this.propertyBuilder(each.getName())
-          .type(each.getType())
-          .allowEmptyValue(each.getAllowEmptyValue())
-          .defaultValue(each.getDefaultValue())
-          .deprecated(each.getDeprecated())
-          .description(each.getDescription())
-          .example(each.getExample())
-          .isHidden(each.getHidden())
-          .nullable(each.getNullable())
-          .position(each.getPosition())
-          .readOnly(each.getReadOnly())
-          .required(each.getRequired())
-          .vendorExtensions(each.getVendorExtensions())
-          .xml(each.getXml())
-          .writeOnly(each.getWriteOnly());
-      each.getFacets()
-          .forEach(f -> propertyBuilder.facetBuilder(f.facetBuilder())
-              .copyOf(f));
+      this.property(each.getName())
+          .apply(p -> {
+            p.type(each.getType())
+             .allowEmptyValue(each.getAllowEmptyValue())
+             .defaultValue(each.getDefaultValue())
+             .deprecated(each.getDeprecated())
+             .description(each.getDescription())
+             .example(each.getExample())
+             .isHidden(each.getHidden())
+             .nullable(each.getNullable())
+             .position(each.getPosition())
+             .readOnly(each.getReadOnly())
+             .required(each.getRequired())
+             .vendorExtensions(each.getVendorExtensions())
+             .xml(each.getXml())
+             .writeOnly(each.getWriteOnly());
+            each.getFacets()
+                .forEach(f -> p.facetBuilder(f.facetBuilder())
+                               .copyOf(f));
+          });
     });
     return this;
   }

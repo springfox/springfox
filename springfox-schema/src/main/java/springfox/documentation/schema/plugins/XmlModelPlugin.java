@@ -48,15 +48,13 @@ public class XmlModelPlugin implements ModelBuilderPlugin {
     if (annotation != null) {
       context.getBuilder().xml(buildXml(annotation));
       context.getModelSpecificationBuilder()
-          .facetsBuilder()
-          .xml(buildXml(annotation));
+          .facets(f -> f.xml(buildXml(annotation)));
     }
     XmlRootElement root = AnnotationUtils.findAnnotation(forClass(context), XmlRootElement.class);
     if (root != null) {
       context.getBuilder().xml(buildXml(root));
       context.getModelSpecificationBuilder()
-          .facetsBuilder()
-          .xml(buildXml(root));
+          .facets(f -> f.xml(buildXml(root)));
     }
   }
 

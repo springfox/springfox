@@ -135,19 +135,17 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         propertiesHost));
     modelContext.getModelSpecificationBuilder()
                 .name(typeName)
-                .compoundModelBuilder()
-                .modelKey(new ModelKeyBuilder()
-                              .qualifiedModelName(new QualifiedModelName(
-                                  safeGetPackageName(propertiesHost),
-                                  typeName))
-                              .viewDiscriminator(modelContext.getView().orElse(null))
-                              .validationGroupDiscriminators(modelContext.getValidationGroups())
-                              .isResponse(modelContext.isReturnType())
-                              .build())
-                .properties(properties.values())
-                .maxProperties(properties.size())
-                .minProperties(properties.size())
-                .yield();
+                .compoundModel(cm -> cm.modelKey(new ModelKeyBuilder()
+                                                     .qualifiedModelName(new QualifiedModelName(
+                                                         safeGetPackageName(propertiesHost),
+                                                         typeName))
+                                                     .viewDiscriminator(modelContext.getView().orElse(null))
+                                                     .validationGroupDiscriminators(modelContext.getValidationGroups())
+                                                     .isResponse(modelContext.isReturnType())
+                                                     .build())
+                                       .properties(properties.values())
+                                       .maxProperties(properties.size())
+                                       .minProperties(properties.size()));
     return schemaPluginsManager.modelSpecification(modelContext);
   }
 
@@ -192,10 +190,9 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                             modelSpecifications.create(
                                 valueContext,
                                 valueType)))
-                    .facetsBuilder()
-                    .copyOf(
-                        new ModelFacetsBuilder(null)
-                            .withModelKey(new ModelKeyBuilder()
+                    .facets(f -> f.copyOf(
+                        new ModelFacetsBuilder()
+                            .modelKey(new ModelKeyBuilder()
                                               .qualifiedModelName(new QualifiedModelName(
                                                   safeGetPackageName(resolvedType),
                                                   typeName))
@@ -203,12 +200,11 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                                               .validationGroupDiscriminators(mapContext.getValidationGroups())
                                               .isResponse(mapContext.isReturnType())
                                               .build())
-                            .withTitle(typeName)
+                            .title(typeName)
                             .description("Key of type " + typeName)
-                            .withNullable(false)
+                            .nullable(false)
                             .deprecated(false)
-                            .build())
-                    .yield()
+                            .build()))
                     .build());
     }
     return empty();

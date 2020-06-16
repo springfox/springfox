@@ -29,49 +29,43 @@ public class MultipartFormDataParameterSpecificationProvider implements Paramete
         contentSpecificationBuilder
             .copyOf(contentParameter)
             .requestBody(true)
-            .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-            .modelSpecificationBuilder()
-            .copyOf(simpleParameter.getModel())
-            .yield(RepresentationBuilder.class)
-            .encodings(Collections.singletonList(
-                new EncodingBuilder(null)
-                    .propertyRef(context.getName())
-                    .contentType(MediaType.TEXT_PLAIN_VALUE)
-                    .build()));
+            .representation(MediaType.MULTIPART_FORM_DATA)
+            .apply(r -> r.model(m -> m.copyOf(simpleParameter.getModel()))
+                         .encodings(Collections.singletonList(
+                             new EncodingBuilder(null)
+                                 .propertyRef(context.getName())
+                                 .contentType(MediaType.TEXT_PLAIN_VALUE)
+                                 .build())));
       } else if (contentParameter != null) {
         for (Representation each : contentParameter.getRepresentations()) {
           Optional<Representation> mediaType = contentParameter.representationFor(each.getMediaType());
           contentSpecificationBuilder
               .copyOf(contentParameter)
               .requestBody(true)
-              .representationBuilderFor(each.getMediaType())
-              .modelSpecificationBuilder()
-              .copyOf(
+              .representation(each.getMediaType())
+              .apply(r -> r.model(m -> m.copyOf(
                   mediaType.map(Representation::getModel)
                            .orElse(new ModelSpecificationBuilder()
                                        .name(context.getName())
                                        .scalarModel(ScalarType.STRING)
-                                       .build()))
-              .yield(RepresentationBuilder.class)
-              .encodings(contentParameter.getRepresentations().stream()
-                                         .flatMap(r -> r.getEncodings().stream())
-                                         .collect(Collectors.toList()));
+                                       .build())))
+                           .encodings(contentParameter.getRepresentations().stream()
+                                                      .flatMap(rep -> rep.getEncodings().stream())
+                                                      .collect(Collectors.toList())));
         }
       } else {
         LOGGER.warn("Parameter should either be a simple or a content type");
         contentSpecificationBuilder
             .requestBody(true)
-            .representationBuilderFor(MediaType.TEXT_PLAIN)
-            .modelSpecificationBuilder()
-            .copyOf(new ModelSpecificationBuilder()
-                        .name(context.getName())
-                        .scalarModel(ScalarType.STRING)
-                        .build())
-            .yield(RepresentationBuilder.class)
-            .encodings(null);
+            .representation(MediaType.TEXT_PLAIN)
+            .apply(r -> r.model(m -> m.copyOf(new ModelSpecificationBuilder()
+                                                  .name(context.getName())
+                                                  .scalarModel(ScalarType.STRING)
+                                                  .build()))
+                         .encodings(null));
       }
     }
-    
+
     return new ParameterSpecification(
         null,
         contentSpecificationBuilder.build());
