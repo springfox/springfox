@@ -35,8 +35,8 @@ import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 /**
- * @deprecated
- * @since 3.0.0 use {@link ModelSpecificationBuilder} instead
+ * @deprecated @since 3.0.0
+ * use {@link ModelSpecificationBuilder} instead
  */
 @Deprecated
 public class ModelBuilder {
@@ -170,21 +170,6 @@ public class ModelBuilder {
     if (subTypes != null) {
       this.subTypes = new ArrayList<>(subTypes);
     }
-    return this;
-  }
-
-  /**
-   * Updates the Example for the model
-   *
-   * @param example - example of the model
-   * @return this
-   * @deprecated @since 2.8.1 Use the one which takes in an Object instead
-   */
-  @Deprecated
-  public ModelBuilder example(String example) {
-    this.example = defaultIfAbsent(
-        example,
-        this.example);
     return this;
   }
 

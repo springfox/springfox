@@ -74,9 +74,8 @@ class ResponseMessageBuilderSpec extends Specification {
     def sut = new ResponseMessageBuilder()
 
     when:
-    sut.headers(headers("header1", "header2"))
-    sut.headersWithDescription(headers("header3"))
-    sut.headers(null)
+    sut.headersWithDescription(headersWithEmptyDescription("header1", "header2"))
+    sut.headersWithDescription(headersWithEmptyDescription("header3"))
     sut.headersWithDescription(null)
 
     and:

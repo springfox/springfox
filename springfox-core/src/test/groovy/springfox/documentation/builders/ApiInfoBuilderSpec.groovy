@@ -33,13 +33,13 @@ class ApiInfoBuilderSpec extends Specification {
     and:
       def built = sut.build()
     and:
-      sut.contact("Some contact")
+      sut.contact(new Contact("Some contact", "urn:test", "some@contact.com"))
       def buildWithContactString = sut.build()
     then:
       built."$property" == value
       buildWithContactString.contact.name == "Some contact"
-      buildWithContactString.contact.email == ""
-      buildWithContactString.contact.url == ""
+      buildWithContactString.contact.email == "some@contact.com"
+      buildWithContactString.contact.url == "urn:test"
 
     where:
       builderMethod       | value                      | property

@@ -108,18 +108,6 @@ public class ModelPropertyBuilder {
    * Updates the example
    * @param example - example value
    * @return this
-   * @deprecated @since 2.8.1 Use the one with Object as parameter
-   */
-  @Deprecated
-  public ModelPropertyBuilder example(String example) {
-    this.example = defaultIfAbsent(example, this.example);
-    return this;
-  }
-
-  /**
-   * Updates the example
-   * @param example - example value
-   * @return this
    * @since 2.8.1
    */
   public ModelPropertyBuilder example(Object example) {

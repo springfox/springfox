@@ -90,19 +90,6 @@ public class ApiInfoBuilder {
    *
    * @param contact - contact information
    * @return this
-   * @deprecated @since 2.4.0. Use the overload that takes in a contact instead
-   */
-  @Deprecated
-  public ApiInfoBuilder contact(String contact) {
-    this.contact = new Contact(contact, "", "");
-    return this;
-  }
-
-  /**
-   * Updates contact information for the person responsible for this API
-   *
-   * @param contact - contact information
-   * @return this
    */
   public ApiInfoBuilder contact(Contact contact) {
     this.contact = contact;

@@ -24,7 +24,7 @@ public class ExampleBuilder {
 
   /**
    * @see ExampleBuilder#id(String)
-   * @deprecated @since 3.0
+   * @deprecated @since 3.0.0
    * @param id - id
    * @return ExampleBuilder
    */
@@ -36,7 +36,7 @@ public class ExampleBuilder {
 
   /**
    * @see ExampleBuilder#summary(String)
-   * @deprecated @since 3.0
+   * @deprecated @since 3.0.0
    * @param summary - summary
    * @return ExampleBuilder
    */
@@ -48,7 +48,7 @@ public class ExampleBuilder {
 
   /**
    * @see ExampleBuilder#description(String)
-   * @deprecated @since 3.0
+   * @deprecated @since 3.0.0
    * @param description - description
    * @return ExampleBuilder
    */
@@ -60,7 +60,7 @@ public class ExampleBuilder {
 
   /**
    * @see ExampleBuilder#externalValue(String)
-   * @deprecated @since 3.0
+   * @deprecated @since 3.0.0
    * @param externalValue - externalValue
    * @return ExampleBuilder
    */

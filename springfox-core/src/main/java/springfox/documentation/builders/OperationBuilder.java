@@ -212,7 +212,8 @@ public class OperationBuilder {
    *
    * @param parameters - input parameter definitions
    * @return this
-   * @deprecated - Use @see {@link OperationBuilder#requestParameters(Collection)}
+   * @deprecated @since 3.0.0
+   * Use @see {@link OperationBuilder#requestParameters(Collection)}
    */
   @Deprecated
   public OperationBuilder parameters(List<Parameter> parameters) {
