@@ -17,19 +17,8 @@ import springfox.documentation.spring.web.readers.operation.ContentParameterAggr
 
 import java.util.function.Consumer
 
-//import java.util.function.Function
-
 class MixedMultipartRequestParameterBuilderSpec extends Specification {
-//  def test() {
-//    given:
-//    def t = new Test()
-//
-//    when:
-//    def r = t.addOne(10).apply({i -> System.out.println(i)} as Consumer)
-//
-//    then:
-//    r == 11
-//  }
+
   /**
    * requestBody:
    *   content:
