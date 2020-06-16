@@ -19,7 +19,6 @@ import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.builders.ElementFacets.*;
 
-//TODO: Change builders to not have with
 public class PropertySpecificationBuilder {
 
   private final String name;

@@ -78,7 +78,6 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
     sut.supports(DocumentationType.SWAGGER_2)
   }
 
-  //TODO: write a new test
   @Unroll
   def "Parameter types #paramType"() {
     given:

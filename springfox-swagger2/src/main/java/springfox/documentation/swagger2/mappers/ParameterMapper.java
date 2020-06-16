@@ -120,8 +120,6 @@ public class ParameterMapper {
         parameter.addExample(each.getKey(), String.valueOf(example.get().getValue()));
       }
     }
-
-    //TODO: swagger-core Body parameter does not have an enum property
     return parameter;
   }
 

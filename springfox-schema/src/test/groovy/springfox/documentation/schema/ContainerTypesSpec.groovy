@@ -414,7 +414,6 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
     retItem.itemType == itemType
     retItem.collection
 
-    //TODO List<String[]>
     where:
     property               | type          | itemType      | itemQualifiedType
     "complexTypes"         | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"

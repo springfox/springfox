@@ -85,7 +85,7 @@ public class ModelSpecificationFactory {
         .referenceModel(reference)
         .collectionModel(collectionSpecification)
         .mapModel(mapSpecification)
-        .facets(f -> f.enumeration(finalEnumerationFacet))
+        .facets(f -> f.enumerationFacet(e -> e.copyOf(finalEnumerationFacet)))
         .build();
   }
 

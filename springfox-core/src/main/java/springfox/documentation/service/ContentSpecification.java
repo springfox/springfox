@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -23,12 +22,11 @@ public class ContentSpecification {
       Set<Representation> representations) {
     this.requestBody = requestBody;
     this.representations.putAll(representations.stream()
-        .collect(Collectors.toMap(Representation::getMediaType, m -> m)));
+                                               .collect(Collectors.toMap(Representation::getMediaType, m -> m)));
   }
 
-  //TODO: Use collection here
-  public SortedSet<Representation> getRepresentations() {
-    TreeSet<Representation> representations = new TreeSet<>(Comparator.comparing(Representation::getMediaType));
+  public Set<Representation> getRepresentations() {
+    Set<Representation> representations = new TreeSet<>(Comparator.comparing(Representation::getMediaType));
     representations.addAll(this.representations.values());
     return representations;
   }

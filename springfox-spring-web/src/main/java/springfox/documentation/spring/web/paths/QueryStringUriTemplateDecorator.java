@@ -36,7 +36,6 @@ import java.util.function.Predicate;
 import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 
-//TODO: Modernize this class
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 60)
 class QueryStringUriTemplateDecorator implements PathDecorator {

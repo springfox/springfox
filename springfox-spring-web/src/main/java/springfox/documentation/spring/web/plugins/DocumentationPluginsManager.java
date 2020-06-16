@@ -43,7 +43,6 @@ import springfox.documentation.spi.service.ModelNamesRegistryFactoryPlugin;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
-import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.ResponseBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
@@ -54,7 +53,6 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spi.service.contexts.ResponseContext;
-import springfox.documentation.spring.web.SpringGroupingStrategy;
 import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
 import springfox.documentation.spring.web.scanners.DefaultModelNamesRegistryFactory;
 
@@ -85,9 +83,6 @@ public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("operationBuilderPluginRegistry")
   private PluginRegistry<OperationBuilderPlugin, DocumentationType> operationBuilderPlugins;
-  @Autowired
-  @Qualifier("resourceGroupingStrategyRegistry")
-  private PluginRegistry<ResourceGroupingStrategy, DocumentationType> resourceGroupingStrategies;
   @Autowired
   @Qualifier("operationModelsProviderPluginRegistry")
   private PluginRegistry<OperationModelsProviderPlugin, DocumentationType> operationModelsProviders;
@@ -163,11 +158,6 @@ public class DocumentationPluginsManager {
     }
     return context.operationModelsBuilder().build();
   }
-
-  public ResourceGroupingStrategy resourceGroupingStrategy(DocumentationType documentationType) {
-    return resourceGroupingStrategies.getPluginOrDefaultFor(documentationType, new SpringGroupingStrategy());
-  }
-
   public ModelNamesRegistryFactoryPlugin modelNamesGeneratorFactory(DocumentationType documentationType) {
     return modelNameRegistryFactoryPlugins.getPluginOrDefaultFor(
         documentationType,
@@ -182,8 +172,7 @@ public class DocumentationPluginsManager {
       DocumentationType documentationType,
       DefaultsProviderPlugin defaultConfiguration) {
     return defaultsProviders.getPluginOrDefaultFor(documentationType, defaultConfiguration)
-        .create(documentationType)
-        .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));
+        .create(documentationType);
   }
 
   public Function<String, String> decorator(final PathContext context) {

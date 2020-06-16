@@ -35,7 +35,6 @@ public class SimpleParameterSpecificationBuilder {
 
   public SimpleParameterSpecificationBuilder style(ParameterStyle style) {
     this.style = style;
-//    this.explode(style == ParameterStyle.FORM); //TODO: Is this needed
     return this;
   }
 
@@ -111,7 +110,6 @@ public class SimpleParameterSpecificationBuilder {
         && model.getCollection().isPresent()) {
       model = model.getCollection().get().getModel();
     }
-
     return new SimpleParameterSpecification(
         style,
         collectionFormat,

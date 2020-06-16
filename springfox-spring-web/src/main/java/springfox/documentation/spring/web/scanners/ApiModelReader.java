@@ -56,8 +56,8 @@ import java.util.stream.Collectors;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 
-@SuppressWarnings("deprecation") //TODO: Remove after release
 @Component
+@Deprecated
 public class ApiModelReader {
   private static final Logger LOG = LoggerFactory.getLogger(ApiModelReader.class);
   private final ModelProvider modelProvider;
@@ -118,7 +118,6 @@ public class ApiModelReader {
       if (pModel.isPresent()) {
         LOG.debug(
             "Generated parameter model id: {}, name: {}",
-            // TODO: resolve this, schema: {} models",
             pModel.get().getId(),
             pModel.get().getName());
         modelBranch.put(pModel.get().getId(), pModel.get());

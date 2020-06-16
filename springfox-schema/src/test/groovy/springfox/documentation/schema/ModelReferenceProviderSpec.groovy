@@ -51,7 +51,6 @@ class ModelReferenceProviderSpec extends Specification implements AlternateTypes
             resolver.resolve(String),
             resolver.resolve(Map, String, Foo)))
     then:
-    //TODO: Elaborate this test
     sut.itemModel().isPresent()
   }
 

@@ -30,7 +30,7 @@ import springfox.documentation.spi.service.DocumentationPlugin
 import springfox.documentation.spi.service.ModelNamesRegistryFactoryPlugin
 import springfox.documentation.spi.service.OperationBuilderPlugin
 import springfox.documentation.spi.service.ParameterBuilderPlugin
-import springfox.documentation.spi.service.ResourceGroupingStrategy
+
 import springfox.documentation.spring.web.paths.OperationPathDecorator
 import springfox.documentation.spring.web.paths.PathMappingDecorator
 import springfox.documentation.spring.web.paths.PathSanitizer
@@ -63,7 +63,6 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
     )])
     plugins.parameterPlugins = of([new ParameterNameReader()])
     plugins.operationBuilderPlugins = of([])
-    plugins.resourceGroupingStrategies = of([])
     plugins.operationModelsProviders = of([new OperationModelsProvider(defaultSchemaPlugins())])
     plugins.defaultsProviders = of([])
     plugins.apiListingScanners = of([])
@@ -79,7 +78,6 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
 
   DocumentationPluginsManager customWebPlugins(
       List<DocumentationPlugin> documentationPlugins = [],
-      List<ResourceGroupingStrategy> groupingStrategyPlugins = [],
       List<OperationBuilderPlugin> operationPlugins = [],
       List<ParameterBuilderPlugin> paramPlugins = [],
       List<DefaultsProviderPlugin> defaultProviderPlugins = [],
@@ -101,7 +99,6 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
     )])
     plugins.parameterPlugins = of(paramPlugins)
     plugins.operationBuilderPlugins = of(operationPlugins)
-    plugins.resourceGroupingStrategies = of(groupingStrategyPlugins)
     plugins.operationModelsProviders = of([new OperationModelsProvider(defaultSchemaPlugins())])
     plugins.defaultsProviders = of(defaultProviderPlugins)
     plugins.pathDecorators = of(pathDecorators)

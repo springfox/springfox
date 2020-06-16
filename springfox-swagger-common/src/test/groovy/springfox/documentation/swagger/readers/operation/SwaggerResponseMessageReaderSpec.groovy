@@ -177,15 +177,6 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
             headersMatch(r.headers, headers)
     }
 
-    //TODO: add headers
-//    and:
-//    responses.size() == 0 || responses.inject(true) {
-//      soFar, r ->
-//        soFar &&
-//            r.headers.size() == headers.size() &&
-//            r.headers == headers
-//    }
-
     where:
     methodName             | headers
     "noAnnotationHeaders"  | []

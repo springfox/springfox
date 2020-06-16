@@ -27,12 +27,12 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DocumentationPlugin
 import springfox.documentation.spi.service.OperationBuilderPlugin
 import springfox.documentation.spi.service.ParameterBuilderPlugin
-import springfox.documentation.spi.service.ResourceGroupingStrategy
+
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spi.service.contexts.PathContext
-import springfox.documentation.spring.web.SpringGroupingStrategy
+
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -49,15 +49,6 @@ class DocumentationPluginsManagerSpec extends Specification implements ServicePl
     sut.documentationPlugins().size() == 1
   }
 
-  def "Resource grouping strategy is defaulted to use SpringResourceGroupingStrategy"() {
-    given:
-    def sut = defaultWebPlugins()
-
-    expect:
-    sut.resourceGroupingStrategy(DocumentationType.SPRING_WEB) instanceof SpringGroupingStrategy
-    sut.resourceGroupingStrategy(DocumentationType.SWAGGER_12) instanceof SpringGroupingStrategy
-  }
-
   def "When documentation plugins are explicitly defined"() {
     given:
     def mockPlugin = Mock(DocumentationPlugin)
@@ -69,19 +60,6 @@ class DocumentationPluginsManagerSpec extends Specification implements ServicePl
     expect:
     sut.documentationPlugins.size() == 1
     sut.documentationPlugins().first() == mockPlugin
-  }
-
-  def "When resource grouping strategy has been defined"() {
-    given:
-    def mockStrategy = Mock(ResourceGroupingStrategy)
-
-    and:
-    def sut = customWebPlugins([], [mockStrategy])
-    mockStrategy.supports(_) >> true
-
-    expect:
-    sut.resourceGroupingStrategy(DocumentationType.SPRING_WEB) == mockStrategy
-    sut.resourceGroupingStrategy(DocumentationType.SWAGGER_12) == mockStrategy
   }
 
   def "Even when no operation plugins are applied an empty operation is returned"() {

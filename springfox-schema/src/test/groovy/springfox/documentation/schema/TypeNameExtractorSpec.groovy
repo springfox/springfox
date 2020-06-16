@@ -120,6 +120,4 @@ class TypeNameExtractorSpec extends SchemaSpecification {
     def nameReturnAdjusted = typeNameExtractor.typeName(contextReturn, knownNames)
     nameReturnAdjusted == "GenericType_4«ResponseEntityAlternative«SimpleType_2»»"
   }
-
-  //TODO: test cases for parent (withAndWithout)
 }

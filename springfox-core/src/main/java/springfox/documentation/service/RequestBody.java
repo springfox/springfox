@@ -1,24 +1,27 @@
 package springfox.documentation.service;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @since 3.0.0
  */
 public class RequestBody {
   private final String description;
-  private final SortedSet<Representation> representations;
+  private final Set<Representation> representations = new TreeSet<>(Comparator.comparing(Representation::getMediaType));
   private final Boolean required;
   private final List<VendorExtension> extensions;
 
   public RequestBody(
       String description,
-      SortedSet<Representation> representations,
+      Set<Representation> representations,
       Boolean required,
       List<VendorExtension> extensions) {
     this.description = description;
-    this.representations = representations;
+    this.representations.addAll(representations);
     this.required = required;
     this.extensions = extensions;
   }
@@ -27,7 +30,7 @@ public class RequestBody {
     return description;
   }
 
-  public SortedSet<Representation> getRepresentations() {
+  public Collection<Representation> getRepresentations() {
     return representations;
   }
 

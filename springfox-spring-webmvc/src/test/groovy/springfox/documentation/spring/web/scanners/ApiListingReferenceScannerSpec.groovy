@@ -23,7 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spring.web.SpringGroupingStrategy
+
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
@@ -50,7 +50,6 @@ class ApiListingReferenceScannerSpec
   def setup() {
     requestHandlers = [Mock(RequestHandler)]
     contextBuilder.requestHandlers(requestHandlers)
-            .withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
             .pathProvider(new DefaultPathProvider())
             .select()
@@ -71,9 +70,9 @@ class ApiListingReferenceScannerSpec
     then:
       documentationContext().groupName == "default"
     where:
-      handlerMappings              | resourceGroupingStrategy     | groupName | message
-      [requestMappingInfo("path")] | null                         | null      | "resourceGroupingStrategy is required"
-      [requestMappingInfo("path")] | new SpringGroupingStrategy() | null      | "groupName is required"
+      handlerMappings              | groupName | message
+      [requestMappingInfo("path")] | null      | "resourceGroupingStrategy is required"
+      [requestMappingInfo("path")] | null      | "groupName is required"
   }
 
 
@@ -95,7 +94,6 @@ class ApiListingReferenceScannerSpec
 
     when:
       contextBuilder.requestHandlers(requestHandlers)
-      contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
       plugin.configure(contextBuilder)
     and:
       ApiListingReferenceScanResult result = sut.scan(documentationContext())

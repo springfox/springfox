@@ -1,9 +1,10 @@
 package springfox.documentation.schema;
 
-import springfox.documentation.service.DocumentationReference;
+import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,7 @@ public class ModelFacets implements ElementFacetSource {
   private final Boolean nullable;
   private final Boolean deprecated;
   private final Set<ElementFacet> elementFacets = new HashSet<>();
-  private final DocumentationReference externalDocumentation; //TODO: change to external documentation or otherwise
+  private final ExternalDocumentation externalDocumentation;
   private final Xml xml;
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
@@ -29,18 +30,16 @@ public class ModelFacets implements ElementFacetSource {
       String description,
       Boolean nullable,
       Boolean deprecated,
-      EnumerationFacet enumerationFacet,
+      Collection<ElementFacet> facets,
       Xml xml,
-      DocumentationReference externalDocumentation,
+      ExternalDocumentation externalDocumentation,
       List<Example> examples,
       List<VendorExtension> extensions) {
     this.modelKey = modelKey;
     this.title = title;
     this.nullable = nullable;
     this.deprecated = deprecated;
-    if (enumerationFacet != null) { //TODO: Fix this when its not an individual facet
-      this.elementFacets.add(enumerationFacet);
-    }
+    this.elementFacets.addAll(facets);
     this.xml = xml;
     this.externalDocumentation = externalDocumentation;
     this.description = description;
@@ -64,7 +63,7 @@ public class ModelFacets implements ElementFacetSource {
     return deprecated;
   }
 
-  public DocumentationReference getExternalDocumentation() {
+  public ExternalDocumentation getExternalDocumentation() {
     return externalDocumentation;
   }
 
@@ -80,28 +79,25 @@ public class ModelFacets implements ElementFacetSource {
     return extensions;
   }
 
-  //TODO: Fix this to accept other element facets
-  public EnumerationFacet getEnumerationFacet() {
-    return elementFacets.stream()
-        .filter(e -> e instanceof EnumerationFacet)
-        .map(EnumerationFacet.class::cast)
-        .findFirst()
-        .orElse(null);
+  public Collection<ElementFacet> getFacets() {
+    return elementFacets;
   }
 
   @Override
   public <T extends ElementFacet> Optional<T> elementFacet(Class<T> clazz) {
     return elementFacets.stream()
-        .filter(e -> e != null && e.getClass().isAssignableFrom(clazz))
-        .map(clazz::cast)
-        .findFirst();
+                        .filter(e -> e != null && e.getClass().isAssignableFrom(clazz))
+                        .map(clazz::cast)
+                        .findFirst();
   }
 
   public Xml getXml() {
     return xml;
   }
 
-  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
+  @SuppressWarnings({
+      "CyclomaticComplexity",
+      "NPathComplexity" })
   @Override
   public boolean equals(Object o) {
     if (this == o) {

@@ -214,8 +214,12 @@ public class RequestParameterMapper {
       RequestParameter source,
       ModelNamesRegistry namesRegistry) {
     return source.getParameterSpecification().getContent()
-        .map(c -> Mappers.getMapper(ModelSpecificationMapper.class)
-            .mapModels(c.getRepresentations().first().getModel(), namesRegistry))
-        .orElse(null);
+                 .map(c -> Mappers.getMapper(ModelSpecificationMapper.class)
+                                  .mapModels(
+                                      c.getRepresentations().stream().findFirst()
+                                       .map(Representation::getModel)
+                                       .orElse(null),
+                                      namesRegistry))
+                 .orElse(null);
   }
 }

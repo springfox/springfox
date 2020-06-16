@@ -23,14 +23,13 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.schema.ModelSpecification
-import springfox.documentation.schema.ModelSpecificationProvider
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.SpringGroupingStrategy
+
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.Bug2219ListingScanner
 import springfox.documentation.spring.web.dummy.DummyClass
@@ -68,7 +67,6 @@ class ApiListingScannerSpec
         .forPaths(regex('/anyPath.*'))
         .build()
 
-    contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
         .securityContexts(singletonList(securityContext))
         .configure(contextBuilder)
@@ -137,7 +135,6 @@ class ApiListingScannerSpec
             [],
             [],
             [],
-            [],
             [additionalListingsScanner()]
         ))
 
@@ -161,7 +158,6 @@ class ApiListingScannerSpec
         apiModelReader,
         specificationReader,
         customWebPlugins(
-            [],
             [],
             [],
             [],

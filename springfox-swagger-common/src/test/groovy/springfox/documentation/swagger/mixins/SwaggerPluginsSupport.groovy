@@ -46,7 +46,7 @@ import springfox.documentation.swagger.readers.operation.SwaggerOperationModelsP
 import springfox.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
 import springfox.documentation.swagger.schema.ApiModelBuilder
 import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
-import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
+
 import springfox.documentation.swagger.web.SwaggerApiListingReader
 
 import java.util.stream.Stream
@@ -104,7 +104,6 @@ trait SwaggerPluginsSupport {
     plugins.parameterPlugins = of([new ParameterNameReader(),
                                        new ParameterNameReader()])
     plugins.operationBuilderPlugins = of([])
-    plugins.resourceGroupingStrategies = of([new ClassOrApiAnnotationResourceGrouping()])
     plugins.apiListingScanners = of([])
     plugins.operationModelsProviders = of([
         new OperationModelsProvider(swaggerSchemaPlugins()),

@@ -134,7 +134,6 @@ class OperationParameterReaderSpec
     'required'      | false
     'allowMultiple' | false
     'paramType'     | null
-    //TODO: add more properties and readers
   }
 
   def "Should expand ModelAttribute request params"() {

@@ -90,7 +90,7 @@ public abstract class ServiceModelToOasMapper {
   @Mappings({
       @Mapping(target = "openapi", constant = "3.0.1"),
       @Mapping(target = "info", source = "resourceListing.info"),
-      @Mapping(target = "externalDocs", source = "documentationReference"),
+      @Mapping(target = "externalDocs", source = "externalDocumentation"),
       @Mapping(target = "security", ignore = true),
       @Mapping(target = "paths", source = "apiListings", qualifiedByName = { "PathsMapping" }),
       @Mapping(target = "components.schemas", source = "apiListings", qualifiedByName = { "ModelsMapping" }),
@@ -108,7 +108,6 @@ public abstract class ServiceModelToOasMapper {
       @Mapping(target = "description", source = "notes"),
       @Mapping(target = "callbacks", ignore = true),
       @Mapping(target = "servers", ignore = true),
-      //TODO
       @Mapping(target = "externalDocs", ignore = true)
   })
   abstract Operation mapOperation(
@@ -373,5 +372,5 @@ public abstract class ServiceModelToOasMapper {
   })
   protected abstract ServerVariable mapServerVariable(springfox.documentation.service.ServerVariable from);
 
-  protected abstract ExternalDocumentation mapExternalDocs(springfox.documentation.service.DocumentationReference from);
+  protected abstract ExternalDocumentation mapExternalDocs(springfox.documentation.common.ExternalDocumentation from);
 }

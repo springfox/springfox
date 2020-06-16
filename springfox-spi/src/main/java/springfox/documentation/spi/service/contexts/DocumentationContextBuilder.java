@@ -42,7 +42,6 @@ import springfox.documentation.service.Tags;
 import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -82,7 +81,6 @@ public class DocumentationContextBuilder {
   private List<RequestHandler> handlerMappings;
   private ApiInfo apiInfo;
   private String groupName;
-  private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
   private Comparator<ApiListingReference> listingReferenceOrdering;
   private Comparator<ApiDescription> apiDescriptionOrdering;
@@ -135,17 +133,6 @@ public class DocumentationContextBuilder {
 
   public DocumentationContextBuilder additionalOperationParameters(List<Parameter> globalRequestParameters) {
     this.globalOperationParameters.addAll(nullToEmptyList(globalRequestParameters));
-    return this;
-  }
-
-  /**
-   * @param resourceGroupingStrategy - custom resource grouping strategy
-   * @return this
-   * @deprecated @since 2.2.0 - only here for backward compatibility
-   */
-  @Deprecated
-  public DocumentationContextBuilder withResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
-    this.resourceGroupingStrategy = resourceGroupingStrategy;
     return this;
   }
 
@@ -319,7 +306,6 @@ public class DocumentationContextBuilder {
         globalOperationParameters,
         globalRequestParameters,
         responses,
-        resourceGroupingStrategy,
         pathProvider,
         securityContexts,
         securitySchemes,

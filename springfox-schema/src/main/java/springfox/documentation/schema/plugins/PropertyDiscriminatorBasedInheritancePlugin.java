@@ -85,7 +85,6 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
                                                                  .map(c -> c.getModern().get())
                                                                  .collect(Collectors.toList())));
     }
-    //TODO: Handle sub types for model specifications
   }
 
   private List<Compatibility<ModelReference, ReferenceModelSpecification>> subclassReferences(ModelContext context) {

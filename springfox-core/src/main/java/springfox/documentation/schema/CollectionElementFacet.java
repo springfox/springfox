@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 
-//TODO: add tests to excercise this facet
 public class CollectionElementFacet implements ElementFacet {
   private final Integer maxItems;
   private final Integer minItems;

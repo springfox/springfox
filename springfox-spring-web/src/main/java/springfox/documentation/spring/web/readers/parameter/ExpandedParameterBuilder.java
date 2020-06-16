@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.Enums;
@@ -75,8 +74,8 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     AllowableValues allowable = allowableValues(context.getFieldType().getErasedType());
 
     String name = isEmpty(context.getParentName())
-        ? context.getFieldName()
-        : String.format("%s.%s", context.getParentName(), context.getFieldName());
+                  ? context.getFieldName()
+                  : String.format("%s.%s", context.getParentName(), context.getFieldName());
 
     String typeName = context.getDataTypeName();
     ModelReference itemModel = null;
@@ -89,7 +88,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
       AllowableValues itemAllowables = null;
       ScalarModelSpecification scalarModelSpecification =
           new ScalarModelSpecification(ScalarTypes.builtInScalarType(elementType)
-              .orElse(ScalarType.STRING));
+                                                  .orElse(ScalarType.STRING));
       if (enumTypeDeterminer.isEnum(elementType.getErasedType())) {
 
         allowable = itemAllowables = Enums.allowableValues(elementType.getErasedType());
@@ -102,49 +101,48 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
           .collectionModel(new CollectionSpecification(
               new ModelSpecificationBuilder()
                   .scalarModel(scalarModelSpecification)
-                  .facets(f -> f.enumeration(new EnumerationElementFacetBuilder()
-                      .allowedValues(Enums.allowableValues(elementType.getErasedType()))
-                      .build()))
+                  .facets(f -> f.enumerationFacet(
+                      e -> e.allowedValues(Enums.allowableValues(elementType.getErasedType()))
+                            .build()))
                   .build(),
               collectionType(resolved)))
-          .facets(f -> f.enumeration(new EnumerationElementFacetBuilder()
-              .allowedValues(Enums.allowableValues(elementType.getErasedType()))
-              .build()))
+          .facets(f -> f.enumerationFacet(
+              e -> e.allowedValues(Enums.allowableValues(elementType.getErasedType()))
+                    .build()))
           .build();
     } else if (enumTypeDeterminer.isEnum(resolved.getErasedType())) {
       typeName = "string";
       ResolvedType finalResolved1 = resolved;
       modelSpecification = new ModelSpecificationBuilder()
-                  .scalarModel(ScalarType.STRING)
-                  .facets(f -> f
-                  .enumeration(new EnumerationElementFacetBuilder()
-                      .allowedValues(Enums.allowableValues(finalResolved1.getErasedType()))
-                      .build()))
-                  .build();
+          .scalarModel(ScalarType.STRING)
+          .facets(f -> f.enumerationFacet(
+              e -> e.allowedValues(Enums.allowableValues(finalResolved1.getErasedType()))
+                    .build()))
+          .build();
     } else {
       ScalarModelSpecification scalarModelSpecification =
           new ScalarModelSpecification(ScalarTypes.builtInScalarType(resolved)
-              .orElse(ScalarType.STRING));
+                                                  .orElse(ScalarType.STRING));
       ResolvedType finalResolved2 = resolved;
       modelSpecification = new ModelSpecificationBuilder()
           .scalarModel(scalarModelSpecification)
-          .facets(f -> f.enumeration(new EnumerationElementFacetBuilder()
-              .allowedValues(Enums.allowableValues(finalResolved2.getErasedType()))
-              .build()))
+          .facets(f -> f.enumerationFacet(
+              e -> e.allowedValues(Enums.allowableValues(finalResolved2.getErasedType()))
+                    .build()))
           .build();
     }
     context.getParameterBuilder()
-        .name(name)
-        .description(null)
-        .defaultValue(null)
-        .required(Boolean.FALSE)
-        .allowMultiple(isContainerType(resolved))
-        .type(resolved)
-        .modelRef(new ModelRef(typeName, itemModel))
-        .allowableValues(allowable)
-        .parameterType(context.getParameterType())
-        .order(DEFAULT_PRECEDENCE)
-        .parameterAccess(null);
+           .name(name)
+           .description(null)
+           .defaultValue(null)
+           .required(Boolean.FALSE)
+           .allowMultiple(isContainerType(resolved))
+           .type(resolved)
+           .modelRef(new ModelRef(typeName, itemModel))
+           .allowableValues(allowable)
+           .parameterType(context.getParameterType())
+           .order(DEFAULT_PRECEDENCE)
+           .parameterAccess(null);
 
     AllowableValues finalAllowable = allowable;
     ResolvedType finalResolved = resolved;
@@ -180,7 +178,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
 
   private List<String> getEnumValues(final Class<?> subject) {
     return Stream.of(subject.getEnumConstants())
-        .map((Function<Object, String>) Object::toString)
-        .collect(toList());
+                 .map((Function<Object, String>) Object::toString)
+                 .collect(toList());
   }
 }

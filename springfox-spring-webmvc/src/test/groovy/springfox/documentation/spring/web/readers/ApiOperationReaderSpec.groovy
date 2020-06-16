@@ -54,7 +54,7 @@ class ApiOperationReaderSpec
         .forPaths(PathSelectors.regex(".*"))
         .build()
     plugin.securityContexts(singletonList(securityContext))
-    sut = new ApiOperationReader(customWebPlugins([], [], [new DefaultOperationReader()]), new CachingOperationNameGenerator())
+    sut = new ApiOperationReader(customWebPlugins([], [new DefaultOperationReader()]), new CachingOperationNameGenerator())
   }
 
   def "Should generate default operation on handler method without swagger annotations"() {

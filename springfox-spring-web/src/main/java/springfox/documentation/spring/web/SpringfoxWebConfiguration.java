@@ -53,7 +53,6 @@ import java.util.List;
     ParameterBuilderPlugin.class,
     ResponseBuilderPlugin.class,
     ExpandedParameterBuilderPlugin.class,
-    ResourceGroupingStrategy.class,
     OperationModelsProviderPlugin.class,
     DefaultsProviderPlugin.class,
     PathDecorator.class,

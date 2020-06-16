@@ -30,7 +30,6 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,7 +47,6 @@ public class DocumentationContext {
   private final List<Parameter> globalOperationParameters;
   private final List<Server> servers = new ArrayList<>();
   private final List<RequestParameter> globalParameters = new ArrayList<>();
-  private final ResourceGroupingStrategy resourceGroupingStrategy;
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
   private final List<? extends SecurityScheme> securitySchemes;
@@ -78,7 +76,6 @@ public class DocumentationContext {
       List<Parameter> globalOperationParameter,
       List<RequestParameter> globalRequestParameters,
       Map<HttpMethod, List<Response>> globalResponses,
-      ResourceGroupingStrategy resourceGroupingStrategy,
       PathProvider pathProvider,
       List<SecurityContext> securityContexts,
       List<? extends SecurityScheme> securitySchemes,
@@ -108,7 +105,6 @@ public class DocumentationContext {
     this.globalOperationParameters = globalOperationParameter;
     this.servers.addAll(servers);
     this.globalParameters.addAll(globalRequestParameters);
-    this.resourceGroupingStrategy = resourceGroupingStrategy;
     this.pathProvider = pathProvider;
     this.securityContexts = securityContexts;
     this.securitySchemes = securitySchemes;
@@ -166,14 +162,6 @@ public class DocumentationContext {
     return globalOperationParameters;
   }
 
-  /**
-   * @return resource grouping strategy
-   * @deprecated @since 2.2.0 - only here for backward compatibility
-   */
-  @Deprecated
-  public ResourceGroupingStrategy getResourceGroupingStrategy() {
-    return resourceGroupingStrategy;
-  }
 
   public PathProvider getPathProvider() {
     return pathProvider;
