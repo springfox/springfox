@@ -39,10 +39,10 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
           final HandlerMethod handler = new HandlerMethod(context.getRepositoryInstance(), mapping.getMethod());
 
           return entityAction(context, handler)
-              .withPath(String.format("%s%s/search%s",
-                  context.basePath(),
-                  context.resourcePath(),
-                  mapping.getPath()))
+              .path(String.format("%s%s/search%s",
+                                  context.basePath(),
+                                  context.resourcePath(),
+                                  mapping.getPath()))
               .supportsMethod(GET)
               .build()
               .map(get -> new SpringDataRestRequestHandler(context, get));

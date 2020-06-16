@@ -38,11 +38,11 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
         .ifPresent(handler -> {
 
           entityAction(context, handler)
-              .withPath(String.format("%s%s/{id}",
-                  context.basePath(),
-                  context.resourcePath()))
+              .path(String.format("%s%s/{id}",
+                                  context.basePath(),
+                                  context.resourcePath()))
               .supportsMethod(DELETE)
-              .withParameterType(ParameterType.ID)
+              .parameterType(ParameterType.ID)
               .build()
               .map(get -> new SpringDataRestRequestHandler(context, get))
               .ifPresent(handlers::add);
