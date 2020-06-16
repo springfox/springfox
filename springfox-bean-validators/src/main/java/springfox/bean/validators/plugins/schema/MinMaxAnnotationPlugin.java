@@ -26,7 +26,6 @@ import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.NumericElementFacet;
-import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -57,18 +56,19 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
     // add support for @Min/@Max
     Compatibility<AllowableRangeValues, NumericElementFacet> values = allowableRange(min, max);
-    LOGGER.debug(String.format("Adding allowable Values: %s",
+    LOGGER.debug(String.format(
+        "Adding allowable Values: %s",
         values.getLegacy().map(AllowableRangeValues::toString).orElse("<none>")));
     context.getBuilder()
-        .allowableValues(
-            values.getLegacy()
-                .orElse(null));
-    LOGGER.debug(String.format("Adding numeric element facet : %s",
+           .allowableValues(
+               values.getLegacy()
+                     .orElse(null));
+    LOGGER.debug(String.format(
+        "Adding numeric element facet : %s",
         values.getModern().map(NumericElementFacet::toString).orElse("<none>")));
     values.getModern()
-        .ifPresent(facet -> context.getSpecificationBuilder()
-            .facetBuilder(NumericElementFacetBuilder.class)
-            .copyOf(facet));
+          .ifPresent(facet -> context.getSpecificationBuilder()
+                                     .numericFacet(n -> n.copyOf(facet)));
 
   }
 

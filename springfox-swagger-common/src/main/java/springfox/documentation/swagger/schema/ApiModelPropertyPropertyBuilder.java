@@ -23,8 +23,6 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
-import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.DocumentationType;
@@ -60,7 +58,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     if (context.getAnnotatedElement().isPresent()) {
       annotation =
           annotation.map(Optional::of)
-              .orElse(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
+                    .orElse(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
     }
     if (context.getBeanPropertyDefinition().isPresent()) {
       annotation = annotation.map(Optional::of).orElse(findPropertyAnnotation(
@@ -76,28 +74,27 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
             }
             return null;
           })
-              .orElse(null);
+                    .orElse(null);
+      Optional<ApiModelProperty> finalAnnotation = annotation;
       context.getSpecificationBuilder()
-          .description(annotation.map(toDescription(descriptions)).orElse(null))
-          .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
-          .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
-          .type(modelSpecification)
-          .position(annotation.map(ApiModelProperty::position).orElse(0))
-          .required(annotation.map(ApiModelProperty::required).orElse(false))
-          .example(annotation.map(toExample()).orElse(null))
-          .facetBuilder(EnumerationElementFacetBuilder.class)
-            .allowedValues(annotation.map(toAllowableValues()).orElse(null))
-          .yield(ModelSpecificationBuilder.class);
+             .description(annotation.map(toDescription(descriptions)).orElse(null))
+             .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
+             .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
+             .type(modelSpecification)
+             .position(annotation.map(ApiModelProperty::position).orElse(0))
+             .required(annotation.map(ApiModelProperty::required).orElse(false))
+             .example(annotation.map(toExample()).orElse(null))
+             .enumerationFacet(e -> e.allowedValues(finalAnnotation.map(toAllowableValues()).orElse(null)));
 
       context.getBuilder()
-          .allowableValues(annotation.map(toAllowableValues()).orElse(null))
-          .required(annotation.map(ApiModelProperty::required).orElse(false))
-          .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
-          .description(annotation.map(toDescription(descriptions)).orElse(null))
-          .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
-          .type(annotation.map(toType(context.getResolver())).orElse(null))
-          .position(annotation.map(ApiModelProperty::position).orElse(0))
-          .example(annotation.map(toExample()).orElse(null));
+             .allowableValues(annotation.map(toAllowableValues()).orElse(null))
+             .required(annotation.map(ApiModelProperty::required).orElse(false))
+             .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
+             .description(annotation.map(toDescription(descriptions)).orElse(null))
+             .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
+             .type(annotation.map(toType(context.getResolver())).orElse(null))
+             .position(annotation.map(ApiModelProperty::position).orElse(0))
+             .example(annotation.map(toExample()).orElse(null));
     }
   }
 

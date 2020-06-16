@@ -27,7 +27,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.ModelRef;
@@ -104,14 +103,14 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
               new ModelSpecificationBuilder()
                   .scalarModel(scalarModelSpecification)
                   .facetsBuilder()
-                  .enumeration(new EnumerationElementFacetBuilder(null)
+                  .enumeration(new EnumerationElementFacetBuilder()
                       .allowedValues(Enums.allowableValues(elementType.getErasedType()))
                       .build())
                   .yield()
                   .build(),
               collectionType(resolved)))
           .facetsBuilder()
-          .enumeration(new EnumerationElementFacetBuilder(null)
+          .enumeration(new EnumerationElementFacetBuilder()
               .allowedValues(Enums.allowableValues(elementType.getErasedType()))
               .build())
           .yield()
@@ -121,7 +120,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
       modelSpecification = new ModelSpecificationBuilder()
                   .scalarModel(ScalarType.STRING)
                   .facetsBuilder()
-                  .enumeration(new EnumerationElementFacetBuilder(null)
+                  .enumeration(new EnumerationElementFacetBuilder()
                       .allowedValues(Enums.allowableValues(resolved.getErasedType()))
                       .build())
                   .yield()
@@ -133,7 +132,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
       modelSpecification = new ModelSpecificationBuilder()
           .scalarModel(scalarModelSpecification)
           .facetsBuilder()
-          .enumeration(new EnumerationElementFacetBuilder(null)
+          .enumeration(new EnumerationElementFacetBuilder()
               .allowedValues(Enums.allowableValues(resolved.getErasedType()))
               .build())
           .yield()
@@ -153,16 +152,16 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .parameterAccess(null);
 
     AllowableValues finalAllowable = allowable;
+    ResolvedType finalResolved = resolved;
     context.getRequestParameterBuilder()
            .name(name)
            .description(null)
            .required(Boolean.FALSE)
            .in(context.getParameterType())
            .precedence(DEFAULT_PRECEDENCE)
-           .simpleParameterBuilder()
-           .collectionFormat(isContainerType(resolved) ? CollectionFormat.CSV : null)
-           .model(modelSpecification)
-           .enumerationFacet(e -> e.allowedValues(finalAllowable));
+           .query(q -> q.collectionFormat(isContainerType(finalResolved) ? CollectionFormat.CSV : null)
+                        .model(modelSpecification)
+                        .enumerationFacet(e -> e.allowedValues(finalAllowable)));
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {

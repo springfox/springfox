@@ -55,11 +55,10 @@ public class VersionApiReader implements ParameterBuilderPlugin {
       parameterContext.requestParameterBuilder()
           .in(ParameterType.HEADER)
           .name("v")
-          .simpleParameterBuilder()
-          .style(ParameterStyle.SIMPLE)
+          .query(q -> q.style(ParameterStyle.SIMPLE)
                       .model(new ModelSpecificationBuilder()
                                  .scalarModel(ScalarType.STRING)
-                                 .build());
+                                 .build()));
     }
   }
 

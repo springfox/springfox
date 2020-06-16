@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
-import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.DocumentationType;
@@ -67,9 +65,7 @@ public class OasSchemaPropertyBuilder implements ModelPropertyBuilderPlugin {
              .position(0)
              .required(annotation.required())
              .example(annotation.example())
-             .facetBuilder(EnumerationElementFacetBuilder.class)
-             .allowedValues(Arrays.asList(annotation.allowableValues()))
-             .yield(ModelSpecificationBuilder.class);
+             .enumerationFacet(e -> e.allowedValues(Arrays.asList(annotation.allowableValues())));
 
     }
   }

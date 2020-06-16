@@ -59,14 +59,15 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
       context.getParameterBuilder().allowableValues(values);
       AllowableRangeValues finalValues = values;
       context.getRequestParameterBuilder()
-             .simpleParameterBuilder()
-             .numberFacet(n -> {
-               n.minimum(safeBigDecimal(finalValues.getMin()));
-               n.maximum(safeBigDecimal(finalValues.getMax()));
-             })
-             .stringFacet(s -> {
-               s.minLength(safeBigDecimal(finalValues.getMin()).intValue());
-               s.maxLength(safeBigDecimal(finalValues.getMax()).intValue());
+             .query(q -> {
+               q.numericFacet(n -> {
+                 n.minimum(safeBigDecimal(finalValues.getMin()));
+                 n.maximum(safeBigDecimal(finalValues.getMax()));
+               });
+               q.stringFacet(s -> {
+                 s.minLength(safeBigDecimal(finalValues.getMin()).intValue());
+                 s.maxLength(safeBigDecimal(finalValues.getMax()).intValue());
+               });
              });
     }
   }

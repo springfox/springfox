@@ -88,7 +88,7 @@ public class SimpleParameterSpecificationBuilder {
     return this;
   }
 
-  public SimpleParameterSpecificationBuilder numberFacet(
+  public SimpleParameterSpecificationBuilder numericFacet(
       Consumer<NumericElementFacetBuilder> facet) {
     facet.accept(facetBuilder(NumericElementFacetBuilder.class));
     return this;

@@ -73,12 +73,10 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
 
     if (allowedValues instanceof AllowableListValues) {
       context.requestParameterBuilder()
-             .simpleParameterBuilder()
-             .enumerationFacet(e -> e.allowedValues(allowedValues));
+             .query(q -> q.enumerationFacet(e -> e.allowedValues(allowedValues)));
     } else if (allowedValues instanceof AllowableRangeValues) {
       context.requestParameterBuilder()
-             .simpleParameterBuilder()
-             .numberFacet(n -> n.from((AllowableRangeValues) allowedValues));
+             .query(q -> q.numericFacet(n -> n.from((AllowableRangeValues) allowedValues)));
     }
 
     if (apiParam.isPresent()) {
@@ -109,26 +107,24 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .collectionFormat(annotation.collectionFormat())
           .order(SWAGGER_PLUGIN_ORDER);
       context.requestParameterBuilder()
-          .name(
-              annotation.name().isEmpty()
-                  ? null
-                  : annotation.name())
-          .description(ofNullable(descriptions.resolve(annotation.value()))
-              .filter(desc -> !desc.isEmpty())
-              .orElse(null))
-          .required(annotation.required())
-          .hidden(annotation.hidden())
-          .precedence(SWAGGER_PLUGIN_ORDER)
-          .simpleParameterBuilder()
-          .collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
-          .defaultValue(
-              annotation.defaultValue().isEmpty()
-                  ? null
-                  : annotation.defaultValue())
-          .allowEmptyValue(annotation.allowEmptyValue())
-          .yield()
-          .example(example)
-          .examples(allExamples(annotation.examples()));
+             .name(
+                 annotation.name().isEmpty()
+                 ? null
+                 : annotation.name())
+             .description(ofNullable(descriptions.resolve(annotation.value()))
+                              .filter(desc -> !desc.isEmpty())
+                              .orElse(null))
+             .required(annotation.required())
+             .hidden(annotation.hidden())
+             .precedence(SWAGGER_PLUGIN_ORDER)
+             .query(q -> q.collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
+                          .defaultValue(
+                              annotation.defaultValue().isEmpty()
+                              ? null
+                              : annotation.defaultValue())
+                          .allowEmptyValue(annotation.allowEmptyValue()))
+             .example(example)
+             .examples(allExamples(annotation.examples()));
     }
   }
 

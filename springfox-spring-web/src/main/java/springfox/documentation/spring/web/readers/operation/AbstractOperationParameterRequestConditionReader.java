@@ -20,11 +20,9 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
-import springfox.documentation.builders.SimpleParameterSpecificationBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
@@ -104,17 +102,15 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
           .name(expression.getName())
           .description(null)
           .required(true)
-          .simpleParameterBuilder()
-          .style(ParameterStyle.SIMPLE)
-          .explode(false)
-          .allowReserved(false)
-          .defaultValue(paramValue)
-          .enumerationFacet(e -> e.allowedValues(finalAllowableValues))
-          .model(new ModelSpecificationBuilder()
-              .name(expression.getName())
-              .scalarModel(ScalarType.STRING)
-              .build())
-          .yield()
+          .query(q -> q.style(ParameterStyle.SIMPLE)
+                       .explode(false)
+                       .allowReserved(false)
+                       .defaultValue(paramValue)
+                       .enumerationFacet(e -> e.allowedValues(finalAllowableValues))
+                       .model(new ModelSpecificationBuilder()
+                                  .name(expression.getName())
+                                  .scalarModel(ScalarType.STRING)
+                                  .build()))
           .in(parameterType)
           .precedence(DEFAULT_PRECEDENCE)
           .build();

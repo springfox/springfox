@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.documentation.builders.StringElementFacetBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
@@ -52,8 +51,8 @@ public class ExpandedParameterPatternAnnotationPlugin implements ExpandedParamet
     if (pattern.isPresent()) {
       LOG.debug("@Pattern present: {}", pattern.get().regexp());
       context.getParameterBuilder().pattern(pattern.get().regexp());
-      context.getRequestParameterBuilder().simpleParameterBuilder()
-          .stringFacet(s -> s.pattern(pattern.get().regexp()));
+      context.getRequestParameterBuilder()
+             .query(q -> q.stringFacet(s -> s.pattern(pattern.get().regexp())));
     }
   }
 }

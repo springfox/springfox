@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.AllowableListValues;
@@ -73,8 +72,7 @@ public class OasParameterBuilder implements ParameterBuilderPlugin {
            .allowableValues(allowedValues);
 
     context.requestParameterBuilder()
-           .simpleParameterBuilder()
-           .enumerationFacet(e -> e.allowedValues(allowedValues));
+           .query(q -> q.enumerationFacet(e -> e.allowedValues(allowedValues)));
     //TODO: Handle other facets
 
     if (parameterAnnotation.isPresent()) {
@@ -96,16 +94,14 @@ public class OasParameterBuilder implements ParameterBuilderPlugin {
              .required(annotation.required())
              .hidden(annotation.hidden())
              .precedence(OAS_PLUGIN_ORDER)
-             .simpleParameterBuilder()
-//             .collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
-             .defaultValue(
+             .query(q -> q.defaultValue(
                  annotation.schema().defaultValue().isEmpty()
                  ? null
                  : annotation.schema().defaultValue())
-             .allowEmptyValue(annotation.allowEmptyValue())
-             .explode(translateExplodeOption(annotation.explode()))
-             .style(translateStyle(annotation.style()))
-             .yield()
+//             .collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
+                          .allowEmptyValue(annotation.allowEmptyValue())
+                          .explode(translateExplodeOption(annotation.explode()))
+                          .style(translateStyle(annotation.style())))
              .example(example)
              .examples(allExamples("", annotation.examples()))
              .examples(contentExamples(annotation.content()));

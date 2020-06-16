@@ -24,7 +24,6 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
@@ -88,26 +87,25 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
     maybeSetParameterName(context, apiParam.name());
     context.getParameterBuilder()
-        .description(descriptions.resolve(apiParam.value()))
-        .defaultValue(apiParam.defaultValue())
-        .required(apiParam.required())
-        .allowMultiple(apiParam.allowMultiple())
-        .allowableValues(allowable)
-        .parameterAccess(apiParam.access())
-        .hidden(apiParam.hidden())
-        .scalarExample(apiParam.example())
-        .complexExamples(examples(apiParam.examples()))
-        .order(SWAGGER_PLUGIN_ORDER)
-        .build();
+           .description(descriptions.resolve(apiParam.value()))
+           .defaultValue(apiParam.defaultValue())
+           .required(apiParam.required())
+           .allowMultiple(apiParam.allowMultiple())
+           .allowableValues(allowable)
+           .parameterAccess(apiParam.access())
+           .hidden(apiParam.hidden())
+           .scalarExample(apiParam.example())
+           .complexExamples(examples(apiParam.examples()))
+           .order(SWAGGER_PLUGIN_ORDER)
+           .build();
 
     context.getRequestParameterBuilder()
-        .description(descriptions.resolve(apiParam.value()))
-        .required(apiParam.required())
-        .hidden(apiParam.hidden())
-        .example(new ExampleBuilder().value(apiParam.example()).build())
-        .precedence(SWAGGER_PLUGIN_ORDER)
-        .simpleParameterBuilder()
-        .enumerationFacet(e -> e.allowedValues(allowable));
+           .description(descriptions.resolve(apiParam.value()))
+           .required(apiParam.required())
+           .hidden(apiParam.hidden())
+           .example(new ExampleBuilder().value(apiParam.example()).build())
+           .precedence(SWAGGER_PLUGIN_ORDER)
+           .query(q -> q.enumerationFacet(e -> e.allowedValues(allowable)));
   }
 
   private void fromApiModelProperty(
@@ -121,23 +119,22 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
     maybeSetParameterName(context, apiModelProperty.name());
     context.getParameterBuilder()
-        .description(descriptions.resolve(apiModelProperty.value()))
-        .required(apiModelProperty.required())
-        .allowableValues(allowable)
-        .parameterAccess(apiModelProperty.access())
-        .hidden(apiModelProperty.hidden())
-        .scalarExample(apiModelProperty.example())
-        .order(SWAGGER_PLUGIN_ORDER)
-        .build();
+           .description(descriptions.resolve(apiModelProperty.value()))
+           .required(apiModelProperty.required())
+           .allowableValues(allowable)
+           .parameterAccess(apiModelProperty.access())
+           .hidden(apiModelProperty.hidden())
+           .scalarExample(apiModelProperty.example())
+           .order(SWAGGER_PLUGIN_ORDER)
+           .build();
 
     context.getRequestParameterBuilder()
-        .description(descriptions.resolve(apiModelProperty.value()))
-        .required(apiModelProperty.required())
-        .hidden(apiModelProperty.hidden())
-        .example(new ExampleBuilder().value(apiModelProperty.example()).build())
-        .precedence(SWAGGER_PLUGIN_ORDER)
-        .simpleParameterBuilder()
-        .enumerationFacet(e -> e.allowedValues(allowable));
+           .description(descriptions.resolve(apiModelProperty.value()))
+           .required(apiModelProperty.required())
+           .hidden(apiModelProperty.hidden())
+           .example(new ExampleBuilder().value(apiModelProperty.example()).build())
+           .precedence(SWAGGER_PLUGIN_ORDER)
+           .query(q -> q.enumerationFacet(e -> e.allowedValues(allowable)));
   }
 
   private void maybeSetParameterName(
@@ -164,7 +161,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private List<String> getEnumValues(final Class<?> subject) {
     return Stream.of(subject.getEnumConstants())
-        .map((Function<Object, String>) Object::toString)
-        .collect(toList());
+                 .map((Function<Object, String>) Object::toString)
+                 .collect(toList());
   }
 }

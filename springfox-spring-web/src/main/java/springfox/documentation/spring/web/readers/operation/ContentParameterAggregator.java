@@ -51,7 +51,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
         .forEach(each -> builder
             .name("body")
             .in(aggregateIn)
-            .contentSpecificationBuilder()
+            .content(q -> q
                 .requestBody(true)
                 .representationBuilderFor(aggregateMediaType)
                   .modelSpecificationBuilder()
@@ -69,9 +69,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
                   .yield(RepresentationBuilder.class)
                   .encodingForProperty(each.getName())
                   .copyOf(encoding(each, MediaType.TEXT_PLAIN))
-                .yield()
-              .yield()
-            .yield()
+                .yield())
             .build());
 
     parameters.stream()
@@ -86,7 +84,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
         .forEach(each -> builder
             .name("body")
             .in(aggregateIn)
-            .contentSpecificationBuilder()
+            .content(c -> c
               .requestBody(true)
               .representationBuilderFor(aggregateMediaType)
                 .modelSpecificationBuilder()
@@ -103,9 +101,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
                   .yield(RepresentationBuilder.class)
                 .encodingForProperty(each.getName())
                 .copyOf(encoding(each, aggregateMediaType))
-                .yield()
-              .yield()
-            .yield()
+                .yield())
             .build());
     RequestParameter content = builder.build();
     // @formatter:on

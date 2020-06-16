@@ -22,7 +22,6 @@ package springfox.bean.validators.plugins.schema;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.documentation.builders.StringElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -51,9 +50,11 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
     size.ifPresent(size1 -> {
       AllowableRangeValues allowableRangeValues = stringLengthRange(size1);
       context.getBuilder().allowableValues(allowableRangeValues);
-      context.getSpecificationBuilder().facetBuilder(StringElementFacetBuilder.class)
-          .minLength(tryGetInteger(allowableRangeValues.getMin()).orElse(null))
-          .maxLength(tryGetInteger(allowableRangeValues.getMax()).orElse(null));
+      context.getSpecificationBuilder()
+             .stringFacet(s -> {
+               s.minLength(tryGetInteger(allowableRangeValues.getMin()).orElse(null));
+               s.maxLength(tryGetInteger(allowableRangeValues.getMax()).orElse(null));
+             });
     });
   }
 

@@ -10,7 +10,6 @@ import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
 import springfox.documentation.builders.AuthorizationScopeBuilder
 import springfox.documentation.builders.DocumentationBuilder
-import springfox.documentation.builders.EnumerationElementFacetBuilder
 import springfox.documentation.builders.ModelBuilder
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.builders.ModelSpecificationBuilder
@@ -20,7 +19,6 @@ import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.builders.ResourceListingBuilder
 import springfox.documentation.builders.ResponseBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
-import springfox.documentation.builders.SimpleParameterSpecificationBuilder
 import springfox.documentation.schema.Example
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.ModelReference
@@ -277,14 +275,17 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                  .name("order")
                  .description("Chose first or second")
                  .in(ParameterType.FORM)
-                 .simpleParameterBuilder()
-                 .style(ParameterStyle.FORM)
-                 .enumerationFacet {e -> e.allowedValues(["FIRST", "SECOND"]) }
-                 .model(
-                     new ModelSpecificationBuilder()
-                         .scalarModel(ScalarType.STRING)
-                         .build())
-                 .yield()
+                 .query {q ->
+                   q.style(ParameterStyle.FORM)
+                    .enumerationFacet {e
+                      ->
+                      e.allowedValues(["FIRST", "SECOND"])
+                    }
+                    .model(
+                        new ModelSpecificationBuilder()
+                            .scalarModel(ScalarType.STRING)
+                            .build())
+                 }
                  .build()])
         .position(1)
         .codegenMethodNameStem("")

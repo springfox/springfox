@@ -51,8 +51,7 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
     if (!isSkip) {
       context.parameterBuilder().defaultValue(defaultValue);
       context.requestParameterBuilder()
-          .simpleParameterBuilder()
-          .defaultValue(defaultValue);
+             .query(q -> q.defaultValue(defaultValue));
     }
   }
 

@@ -95,11 +95,10 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                     .name("description")
                                     .required(true)
                                     .in(ParameterType.QUERY)
-                                    .simpleParameterBuilder() //<5b>
-                                      .model(new ModelSpecificationBuilder()
-                                          .scalarModel(ScalarType.STRING)
-                                          .build())
-                                      .yield()
+                                    .query(q -> q.model(
+                                        new ModelSpecificationBuilder() //<5b>
+                                                                        .scalarModel(ScalarType.STRING)
+                                                                        .build()))
                                     .build()))
                         .responseMessages(responseMessages()) //<6>
                         .responseModel(new ModelRef("string")) //<7>

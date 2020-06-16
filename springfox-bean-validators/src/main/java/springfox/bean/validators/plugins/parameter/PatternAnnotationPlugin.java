@@ -53,8 +53,7 @@ public class PatternAnnotationPlugin implements ParameterBuilderPlugin {
       LOG.debug("@Pattern present: {}", pattern.get().regexp());
       context.parameterBuilder().pattern(pattern.get().regexp());
       context.requestParameterBuilder()
-             .simpleParameterBuilder()
-             .stringFacet(s -> s.pattern(pattern.get().regexp()));
+             .query(q -> q.stringFacet(s -> s.pattern(pattern.get().regexp())));
     }
   }
 }

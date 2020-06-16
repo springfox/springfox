@@ -32,9 +32,9 @@ class AlternateTypePropertyBuilderSpec extends Specification {
 
   AlternateTypePropertyBuilder property(propertyName, canRead, canWrite) {
     new AlternateTypePropertyBuilder()
-        .withName(propertyName)
-        .withType(String)
-        .withCanRead(canRead)
-        .withCanWrite(canWrite)
+        .name(propertyName)
+        .type(String)
+        .canRead(canRead)
+        .canWrite(canWrite)
   }
 }

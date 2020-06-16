@@ -83,10 +83,10 @@ public class SpringDataRestConfiguration {
 
   private AlternateTypePropertyBuilder property(Class<?> type, String name) {
     return new AlternateTypePropertyBuilder()
-        .withName(name)
-        .withType(type)
-        .withCanRead(true)
-        .withCanWrite(true);
+        .name(name)
+        .type(type)
+        .canRead(true)
+        .canWrite(true);
   }
   // tag::alternate-type-builder[]
 }

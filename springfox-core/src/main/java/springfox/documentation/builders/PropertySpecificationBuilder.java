@@ -2,6 +2,7 @@ package springfox.documentation.builders;
 
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.service.VendorExtension;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.springframework.util.StringUtils.*;
@@ -64,13 +66,33 @@ public class PropertySpecificationBuilder {
 
   @SuppressWarnings("unchecked")
   public <T extends ElementFacetBuilder> T facetBuilder(Class<T> clazz) {
-    this.facetBuilders.computeIfAbsent(
-        clazz,
-        builderFactory(
-            clazz));
+    this.facetBuilders.computeIfAbsent(clazz, builderFactory(clazz));
     return (T) this.facetBuilders.get(clazz);
   }
 
+  public PropertySpecificationBuilder collectionFacet(
+      Consumer<CollectionElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(CollectionElementFacetBuilder.class));
+    return this;
+  }
+
+  public PropertySpecificationBuilder stringFacet(
+      Consumer<StringElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(StringElementFacetBuilder.class));
+    return this;
+  }
+
+  public PropertySpecificationBuilder numericFacet(
+      Consumer<NumericElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(NumericElementFacetBuilder.class));
+    return this;
+  }
+
+  public PropertySpecificationBuilder enumerationFacet(
+      Consumer<EnumerationElementFacetBuilder> facet) {
+    facet.accept(facetBuilder(EnumerationElementFacetBuilder.class));
+    return this;
+  }
 
   public PropertySpecificationBuilder nullable(Boolean nullable) {
     this.nullable = nullable;

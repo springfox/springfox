@@ -2,7 +2,6 @@ package springfox.documentation.builders;
 
 import org.slf4j.Logger;
 
-import java.lang.reflect.Constructor;
 import java.util.function.Function;
 
 import static org.slf4j.LoggerFactory.*;

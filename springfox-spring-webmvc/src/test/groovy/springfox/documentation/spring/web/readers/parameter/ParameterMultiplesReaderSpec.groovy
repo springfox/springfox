@@ -24,7 +24,6 @@ import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import spock.lang.Unroll
 import springfox.documentation.service.CollectionFormat
-import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -66,8 +65,10 @@ class ParameterMultiplesReaderSpec
     
     then:
     parameterContext.parameterBuilder().build().isAllowMultiple() == (expected != null)
-    parameterContext.requestParameterBuilder().simpleParameterBuilder().collectionFormat == expected
-
+    parameterContext.requestParameterBuilder()
+                    .query { q ->
+                        assert q.collectionFormat == expected
+                    }
 
     where:
     apiParamAnnotation                        | paramType                       | expected

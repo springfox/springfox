@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.NumericElementFacet;
-import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -56,20 +55,21 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 
     if (min.isPresent() || max.isPresent()) {
       Compatibility<AllowableRangeValues, NumericElementFacet> values = allowableRange(min, max);
-      LOG.debug("Adding allowable range: min({}) - max({}}",
+      LOG.debug(
+          "Adding allowable range: min({}) - max({}}",
           values.getLegacy().map(AllowableRangeValues::getMin)
-              .orElse("<empty>"),
+                .orElse("<empty>"),
           values.getLegacy().map(AllowableRangeValues::getMax)
-              .orElse("<empty>"));
+                .orElse("<empty>"));
       context.getParameterBuilder()
-          .allowableValues(values.getLegacy().orElse(null));
+             .allowableValues(values.getLegacy().orElse(null));
 
-      LOG.debug("Adding numeric element facet: {}",
+      LOG.debug(
+          "Adding numeric element facet: {}",
           values.getModern().map(NumericElementFacet::toString)
-              .orElse("<empty>"));
+                .orElse("<empty>"));
       context.getRequestParameterBuilder()
-          .simpleParameterBuilder()
-             .collectionFacet(c -> c.copyOf(values.getModern().orElse(null)));
+             .query(q -> q.numericFacet(c -> c.copyOf(values.getModern().orElse(null))));
     }
   }
 

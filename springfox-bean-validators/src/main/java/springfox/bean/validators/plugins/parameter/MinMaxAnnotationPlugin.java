@@ -61,8 +61,7 @@ public class MinMaxAnnotationPlugin implements ParameterBuilderPlugin {
           "Adding numeric element facet : %s",
           values.getModern().map(NumericElementFacet::toString).orElse("<none>")));
       context.requestParameterBuilder()
-             .simpleParameterBuilder()
-             .numberFacet(n -> n.copyOf(values.getModern().orElse(null)));
+             .query(q -> q.numericFacet(n -> n.copyOf(values.getModern().orElse(null))));
     }
   }
 

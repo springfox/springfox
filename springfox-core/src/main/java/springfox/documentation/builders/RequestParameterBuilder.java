@@ -12,6 +12,7 @@ import springfox.documentation.service.VendorExtension;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.builders.NoopValidator.*;
@@ -44,13 +45,11 @@ public class RequestParameterBuilder {
   public RequestParameterBuilder in(ParameterType in) {
     this.in = defaultIfAbsent(in, this.in);
     if (this.in == ParameterType.QUERY || this.in == ParameterType.COOKIE) {
-      this.simpleParameterBuilder()
-          .style(ParameterStyle.FORM)
-          .allowReserved(in == ParameterType.QUERY);
+      this.query(q -> q.style(ParameterStyle.FORM)
+                       .allowReserved(in == ParameterType.QUERY));
     } else if (this.in == ParameterType.HEADER || this.in == ParameterType.PATH) {
-      this.simpleParameterBuilder()
-          .style(ParameterStyle.SIMPLE)
-          .allowReserved(false);
+      this.query(q -> q.style(ParameterStyle.SIMPLE)
+                       .allowReserved(false));
     }
     return this;
   }
@@ -77,18 +76,28 @@ public class RequestParameterBuilder {
     return this;
   }
 
-  public SimpleParameterSpecificationBuilder simpleParameterBuilder() {
+  private SimpleParameterSpecificationBuilder queryBuilder() {
     if (simpleParameterBuilder == null) {
       simpleParameterBuilder = new SimpleParameterSpecificationBuilder(this);
     }
     return simpleParameterBuilder;
   }
 
-  public ContentSpecificationBuilder contentSpecificationBuilder() {
+  public RequestParameterBuilder query(Consumer<SimpleParameterSpecificationBuilder> parameter) {
+    parameter.accept(queryBuilder());
+    return this;
+  }
+
+  private ContentSpecificationBuilder contentBuilder() {
     if (contentSpecificationBuilder == null) {
       contentSpecificationBuilder = new ContentSpecificationBuilder(this);
     }
     return contentSpecificationBuilder;
+  }
+
+  public RequestParameterBuilder content(Consumer<ContentSpecificationBuilder> parameter) {
+    parameter.accept(contentBuilder());
+    return this;
   }
 
   public RequestParameterBuilder extensions(List<VendorExtension> extensions) {
@@ -163,26 +172,24 @@ public class RequestParameterBuilder {
 
   public RequestParameterBuilder copyOf(RequestParameter source) {
     source.getParameterSpecification()
-        .getQuery()
-        .map(simple -> {
-          this.simpleParameterBuilder()
-              .copyOf(simple);
-          return simple;
-        });
+          .getQuery()
+          .map(simple -> {
+            this.query(q -> q.copyOf(simple));
+            return simple;
+          });
     source.getParameterSpecification()
-        .getContent()
-        .map(content -> this.contentSpecificationBuilder()
-            .copyOf(content));
+          .getContent()
+          .map(content -> this.content(c -> c.copyOf(content)));
     return this.in(source.getIn())
-        .required(source.getRequired())
-        .hidden(source.getHidden())
-        .deprecated(source.getDeprecated())
-        .extensions(source.getExtensions())
-        .name(source.getName())
-        .description(source.getDescription())
-        .precedence(source.getPrecedence())
-        .example(source.getScalarExample())
-        .examples(source.getExamples());
+               .required(source.getRequired())
+               .hidden(source.getHidden())
+               .deprecated(source.getDeprecated())
+               .extensions(source.getExtensions())
+               .name(source.getName())
+               .description(source.getDescription())
+               .precedence(source.getPrecedence())
+               .example(source.getScalarExample())
+               .examples(source.getExamples());
   }
 
 }

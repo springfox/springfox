@@ -61,9 +61,9 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
     Compatibility<AllowableValues, NumericElementFacet> values =
         facetFromDecimalMinMaxForNumbers(min, max);
     context.getBuilder().allowableValues(values.getLegacy().orElse(null));
-    values.getModern().ifPresent(facet -> context.getSpecificationBuilder()
-        .facetBuilder(NumericElementFacetBuilder.class)
-        .copyOf(facet));
+    values.getModern()
+          .ifPresent(facet -> context.getSpecificationBuilder()
+                                     .numericFacet(n -> n.copyOf(facet)));
 
   }
 

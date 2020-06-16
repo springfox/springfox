@@ -63,9 +63,20 @@ public class AlternateTypePropertyBuilder {
   }
 
   /**
+   * @param clazz - name of the type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypePropertyBuilder#type(Class)  instead
+   * @deprecated @since 3.0.0
+   */
+  public AlternateTypePropertyBuilder withType(Class<?> clazz) {
+    this.clazz = clazz;
+    return this;
+  }
+
+  /**
    * @param name - name of the type
    * @return AlternateTypeBuilder
-   * @see AlternateTypePropertyBuilder#name instead
+   * @see AlternateTypePropertyBuilder#name(String)  instead
    * @deprecated @since 3.0.0
    */
   public AlternateTypePropertyBuilder withName(String name) {
@@ -76,7 +87,7 @@ public class AlternateTypePropertyBuilder {
   /**
    * @param canRead - properties for the alternate type
    * @return AlternateTypeBuilder
-   * @see AlternateTypePropertyBuilder#canRead instead
+   * @see AlternateTypePropertyBuilder#canRead(boolean)  instead
    * @deprecated @since 3.0.0
    */
   public AlternateTypePropertyBuilder withCanRead(boolean canRead) {
@@ -87,7 +98,7 @@ public class AlternateTypePropertyBuilder {
   /**
    * @param canWrite - properties for the alternate type
    * @return AlternateTypeBuilder
-   * @see AlternateTypePropertyBuilder#canWrite instead
+   * @see AlternateTypePropertyBuilder#canWrite(boolean)  instead
    * @deprecated @since 3.0.0
    */
   public AlternateTypePropertyBuilder withCanWrite(boolean canWrite) {
@@ -98,7 +109,7 @@ public class AlternateTypePropertyBuilder {
   /**
    * @param annotations - properties for the alternate type
    * @return AlternateTypeBuilder
-   * @see AlternateTypePropertyBuilder#annotations instead
+   * @see AlternateTypePropertyBuilder#annotations(List)  instead
    * @deprecated @since 3.0.0
    */
   public AlternateTypePropertyBuilder withAnnotations(List<Annotation> annotations) {
