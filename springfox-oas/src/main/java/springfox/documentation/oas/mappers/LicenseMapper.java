@@ -27,7 +27,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", implementationName = "OasLicenceMapper")
 public class LicenseMapper {
 
   @License

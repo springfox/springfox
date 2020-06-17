@@ -41,12 +41,12 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
                    .apply(r -> {
                      r.model(m -> m.copyOf(simpleParameter.getModel()));
                      if (finalMediaType == MediaType.APPLICATION_FORM_URLENCODED) {
-                       r.encodings(null).build();
+                       r.encodings(null);
                      } else {
-                       r.encodingForProperty(context.getName())
-                        .contentType(MediaType.TEXT_PLAIN_VALUE)
-                        .style(ParameterStyle.SIMPLE)
-                        .build();
+                       r.encoding(context.getName())
+                           .apply(e ->
+                               e.contentType(MediaType.TEXT_PLAIN_VALUE)
+                                   .style(ParameterStyle.SIMPLE));
                      }
                    })
                    .build();

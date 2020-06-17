@@ -27,6 +27,7 @@ dependencies {
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
   
   provided libs.springProvided
+  provided "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
   provided libs.clientProvided
 
   testCompile project(':springfox-core').sourceSets.test.output

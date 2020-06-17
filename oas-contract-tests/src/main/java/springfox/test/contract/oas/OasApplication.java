@@ -23,19 +23,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.oas.annotations.EnableOasWebMvc;
-import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
 
 @SpringBootApplication
 @SuppressWarnings("HideUtilityClassConstructor")
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
-@EnableOasWebMvc
 @Import(value = {
-    SpringDataRestConfiguration.class,
     SecuritySupport.class,
-    OpenApiTestConfig.class,
-    BeanValidatorPluginsConfiguration.class })
+    OpenApiTestConfig.class})
 public class OasApplication {
   public static void main(String[] args) {
     SpringApplication.run(

@@ -57,7 +57,7 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec implements Reques
             resolvedMethodParameter,
             documentationContext(),
             Mock(GenericTypeNamingStrategy),
-            operationContext)
+            operationContext, 0)
 
     when:
     def operationCommand = new ParameterTypeReader()

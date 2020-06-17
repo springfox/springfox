@@ -25,7 +25,6 @@ import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ParameterType
-import springfox.documentation.service.RequestParameter
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -55,7 +54,7 @@ class ParameterReaderSpec
             new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
-        documentationContext(), genericNamingStrategy, Mock(OperationContext))
+        documentationContext(), genericNamingStrategy, Mock(OperationContext), 0)
     def sut = stubbedParamBuilder()
 
     when:

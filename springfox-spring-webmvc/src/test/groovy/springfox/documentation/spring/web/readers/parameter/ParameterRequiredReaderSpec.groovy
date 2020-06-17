@@ -72,7 +72,7 @@ class ParameterRequiredReaderSpec
             ,
             documentationContext(),
             Mock(GenericTypeNamingStrategy),
-            operation)
+            operation, 0)
     and:
     def springVersion = Mock(SpringVersion.class);
     springVersion.getVersion() >> Version.parse(version)
@@ -140,7 +140,7 @@ class ParameterRequiredReaderSpec
         ,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     def operationCommand = new ParameterRequiredReader(description) {

@@ -22,6 +22,7 @@ package springfox.test.contract.oas
 import com.fasterxml.classmate.TypeResolver
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -55,11 +56,14 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @LocalServerPort
   int port
 
+  @Value('${springfox.documentation.resources.baseUrl}')
+  String baseUrl;
+
   @Unroll
   def 'should honor open api 3.0 resource listing #groupName'() {
     given:
     RequestEntity<Void> request = RequestEntity.get(
-        new URI("http://localhost:$port/v3/api-docs?group=$groupName"))
+        new URI("http://localhost:$port$baseUrl/v3/api-docs?group=$groupName"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
     String contract = fileContents("/contracts/$contractFile")
@@ -96,7 +100,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
   def "should list swagger resources for open api 3.0"() {
     given:
-    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/oas-resources"))
+    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port$baseUrl/swagger-resources"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
 
@@ -111,12 +115,12 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     result.find {
       it.name == 'petstore' &&
-          it.url == '/v3/api-docs?group=petstore' &&
+          it.url == "$baseUrl/v3/api-docs?group=petstore" &&
           it.swaggerVersion == '3.0.1'
     }
     result.find {
       it.name == 'default' &&
-          it.url == '/v3/api-docs' &&
+          it.url == "$baseUrl/v3/api-docs" &&
           it.swaggerVersion == '3.0.1'
     }
   }

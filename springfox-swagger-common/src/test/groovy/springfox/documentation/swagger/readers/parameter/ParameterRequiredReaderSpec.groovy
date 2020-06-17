@@ -96,7 +96,7 @@ class ParameterRequiredReaderSpec
         ,
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
   }
 
   def stubbedParamBuilder() {

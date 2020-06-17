@@ -12,6 +12,7 @@ import java.util.Objects;
  */
 public class RequestParameter {
   private final String name;
+  private final int parameterIndex;
   private final ParameterType in;
   private final String description;
   private final Boolean required;
@@ -35,7 +36,8 @@ public class RequestParameter {
       Example scalarExample,
       Collection<Example> examples,
       int precedence,
-      List<VendorExtension> extensions) {
+      List<VendorExtension> extensions,
+      int parameterIndex) {
 
     this.name = name;
     this.in = in;
@@ -45,6 +47,7 @@ public class RequestParameter {
     this.hidden = hidden;
     this.parameterSpecification = parameterSpecification;
     this.precedence = precedence;
+    this.parameterIndex = parameterIndex;
     this.extensions.addAll(extensions);
     this.scalarExample = scalarExample;
     this.examples.addAll(examples);
@@ -97,7 +100,16 @@ public class RequestParameter {
   public boolean isRequestBody() {
     return false;
   }
-  
+
+  public int getParameterIndex() {
+    return parameterIndex;
+  }
+
+  public Boolean getHidden() {
+    return hidden;
+  }
+
+  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -107,16 +119,51 @@ public class RequestParameter {
       return false;
     }
     RequestParameter that = (RequestParameter) o;
-    return Objects.equals(name, that.name) &&
-        in == that.in;
+    return parameterIndex == that.parameterIndex &&
+        Objects.equals(name, that.name) &&
+        in == that.in &&
+        Objects.equals(description, that.description) &&
+        Objects.equals(required, that.required) &&
+        Objects.equals(deprecated, that.deprecated) &&
+        Objects.equals(hidden, that.hidden) &&
+        Objects.equals(parameterSpecification, that.parameterSpecification) &&
+        Objects.equals(precedence, that.precedence) &&
+        Objects.equals(scalarExample, that.scalarExample) &&
+        Objects.equals(examples, that.examples) &&
+        Objects.equals(extensions, that.extensions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, in);
+    return Objects.hash(name,
+        parameterIndex,
+        in,
+        description,
+        required,
+        deprecated,
+        hidden,
+        parameterSpecification,
+        precedence,
+        scalarExample,
+        examples,
+        extensions);
   }
 
-  public Boolean getHidden() {
-    return hidden;
+  @Override
+  public String toString() {
+    return "RequestParameter{" +
+        "name='" + name + '\'' +
+        ", parameterIndex=" + parameterIndex +
+        ", in=" + in +
+        ", description='" + description + '\'' +
+        ", required=" + required +
+        ", deprecated=" + deprecated +
+        ", hidden=" + hidden +
+        ", parameterSpecification=" + parameterSpecification +
+        ", precedence=" + precedence +
+        ", scalarExample=" + scalarExample +
+        ", examples=" + examples +
+        ", extensions=" + extensions +
+        '}';
   }
 }

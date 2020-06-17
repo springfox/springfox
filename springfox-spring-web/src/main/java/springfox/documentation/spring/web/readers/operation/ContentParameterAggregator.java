@@ -63,8 +63,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
                                   .isResponse(false)
                                   .build())
                     .properties(properties(each))))
-                  .encodingForProperty(each.getName())
-                  .copyOf(encoding(each, MediaType.TEXT_PLAIN))
+                  .encoding(each.getName()).apply(e -> e.copyOf(encoding(each, MediaType.TEXT_PLAIN)))
             .build())));
 
     parameters.stream()
@@ -90,8 +89,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
                                   .validationGroupDiscriminators(new ArrayList<>())
                                   .isResponse(false).build())
                     .properties(properties(each))))
-                .encodingForProperty(each.getName())
-                .copyOf(encoding(each, aggregateMediaType))))
+                .encoding(each.getName()).apply(e -> e.copyOf(encoding(each, aggregateMediaType)))))
             .build());
     RequestParameter content = builder.build();
     // @formatter:on

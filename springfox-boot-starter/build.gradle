@@ -1,0 +1,15 @@
+group = 'io.springfox'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile project(':springfox-oas')
+	compile project(':springfox-data-rest')
+	compile project(':springfox-bean-validators')
+	compile project(':springfox-swagger2')
+	compile project(':springfox-swagger-ui')
+	provided 'org.springframework.boot:spring-boot-autoconfigure'
+}

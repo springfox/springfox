@@ -65,7 +65,7 @@ class ParameterNameReaderSpec
         resolvedMethodParameter,
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     def sut = nameReader()

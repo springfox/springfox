@@ -43,11 +43,13 @@ public class ParameterContext {
       ResolvedMethodParameter resolvedMethodParameter,
       DocumentationContext documentationContext,
       GenericTypeNamingStrategy genericNamingStrategy,
-      OperationContext operationContext) {
+      OperationContext operationContext,
+      int parameterIndex) {
 
     this.parameterBuilder = new ParameterBuilder();
     this.requestParameterBuilder = new RequestParameterBuilder()
-        .accepts(nullToEmptyList(operationContext.consumes()));
+        .accepts(nullToEmptyList(operationContext.consumes()))
+        .parameterIndex(parameterIndex);
     this.resolvedMethodParameter = resolvedMethodParameter;
     this.documentationContext = documentationContext;
     this.genericNamingStrategy = genericNamingStrategy;

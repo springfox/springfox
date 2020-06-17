@@ -7,11 +7,10 @@ public class OpenIdConnectScheme extends SecurityScheme {
 
   public OpenIdConnectScheme(
       String name,
-      String type,
       String description,
       List<VendorExtension> extensions,
       String openIdConnectUrl) {
-    super(name, type, description, extensions);
+    super(name, "openIdConnect", description, extensions);
     this.openIdConnectUrl = openIdConnectUrl;
   }
 

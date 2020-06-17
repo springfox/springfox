@@ -57,7 +57,7 @@ class ParameterNameReaderSpec
     operationContext.consumes() >> []
     and: "documentationContext is setup"
     ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
-        documentationContext(), genericNamingStrategy, operationContext)
+        documentationContext(), genericNamingStrategy, operationContext, 0)
 
     when:
     def sut = nameReader(apiParam)

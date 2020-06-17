@@ -22,20 +22,18 @@ package springfox.documentation.swagger.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
 import static java.util.Optional.*;
 
-@Controller
+@RestController
 @ApiIgnore
 @RequestMapping({
-    "/swagger-resources",
-    "oas-resources" })
+    "${springfox.documentation.resources.baseUrl:}/swagger-resources"})
 public class ApiResourceController {
 
 
@@ -47,26 +45,24 @@ public class ApiResourceController {
   private final SwaggerResourcesProvider swaggerResources;
 
   @Autowired
-  public ApiResourceController(SwaggerResourcesProvider swaggerResources) {
+  public ApiResourceController(
+      SwaggerResourcesProvider swaggerResources) {
     this.swaggerResources = swaggerResources;
   }
 
   @RequestMapping(value = "/configuration/security")
-  @ResponseBody
   public ResponseEntity<SecurityConfiguration> securityConfiguration() {
     return new ResponseEntity<>(
         ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/configuration/ui")
-  @ResponseBody
   public ResponseEntity<UiConfiguration> uiConfiguration() {
     return new ResponseEntity<>(
         ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping
-  @ResponseBody
   public ResponseEntity<List<SwaggerResource>> swaggerResources() {
     return new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK);
   }

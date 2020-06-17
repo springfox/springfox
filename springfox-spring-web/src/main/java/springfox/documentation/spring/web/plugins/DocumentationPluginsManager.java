@@ -102,7 +102,7 @@ public class DocumentationPluginsManager {
   @Qualifier("modelNamesRegistryFactoryPluginRegistry")
   private PluginRegistry<ModelNamesRegistryFactoryPlugin, DocumentationType> modelNameRegistryFactoryPlugins;
 
-  public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
+  public Collection<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
     ensureNoDuplicateGroups(plugins);
     if (plugins.isEmpty()) {

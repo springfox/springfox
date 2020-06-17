@@ -37,7 +37,7 @@ import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 })
 public class OasDocumentationConfiguration {
   @Bean
-  public JacksonModuleRegistrar swagger2Module() {
+  public JacksonModuleRegistrar oasModule() {
     return new OpenApiJacksonModule();
   }
 

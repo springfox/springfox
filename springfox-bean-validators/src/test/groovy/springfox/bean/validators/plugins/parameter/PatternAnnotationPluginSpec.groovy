@@ -49,7 +49,7 @@ class PatternAnnotationPluginSpec extends Specification implements AnnotationsSu
         ,
         Mock(DocumentationContext),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     sut.apply(context)

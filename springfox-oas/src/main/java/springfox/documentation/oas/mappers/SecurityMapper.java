@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", implementationName = "OasSecurityMapperImpl")
 public class SecurityMapper {
 
   public List<SecurityRequirement> mapFrom(Map<String, List<AuthorizationScope>> authorizationScopes) {

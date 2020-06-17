@@ -36,6 +36,7 @@ public class RequestParameterBuilder {
   private int precedence;
   private final List<MediaType> accepts = new ArrayList<>();
   private Validator<RequestParameterBuilder> validator = new NoopValidator<>();
+  private int parameterIndex;
 
   public RequestParameterBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -46,10 +47,10 @@ public class RequestParameterBuilder {
     this.in = defaultIfAbsent(in, this.in);
     if (this.in == ParameterType.QUERY || this.in == ParameterType.COOKIE) {
       this.query(q -> q.style(ParameterStyle.FORM)
-                       .allowReserved(in == ParameterType.QUERY));
+          .allowReserved(in == ParameterType.QUERY));
     } else if (this.in == ParameterType.HEADER || this.in == ParameterType.PATH) {
       this.query(q -> q.style(ParameterStyle.SIMPLE)
-                       .allowReserved(false));
+          .allowReserved(false));
     }
     return this;
   }
@@ -141,6 +142,11 @@ public class RequestParameterBuilder {
     return this;
   }
 
+  public RequestParameterBuilder parameterIndex(int parameterIndex) {
+    this.parameterIndex = parameterIndex;
+    return this;
+  }
+
   public RequestParameter build() {
     List<ValidationResult> results = validator.validate(this);
     if (logProblems(results).size() > 0) {
@@ -167,29 +173,31 @@ public class RequestParameterBuilder {
         scalarExample,
         examples,
         precedence,
-        extensions);
+        extensions,
+        parameterIndex);
   }
 
   public RequestParameterBuilder copyOf(RequestParameter source) {
     source.getParameterSpecification()
-          .getQuery()
-          .map(simple -> {
-            this.query(q -> q.copyOf(simple));
-            return simple;
-          });
+        .getQuery()
+        .map(simple -> {
+          this.query(q -> q.copyOf(simple));
+          return simple;
+        });
     source.getParameterSpecification()
-          .getContent()
-          .map(content -> this.content(c -> c.copyOf(content)));
+        .getContent()
+        .map(content -> this.content(c -> c.copyOf(content)));
     return this.in(source.getIn())
-               .required(source.getRequired())
-               .hidden(source.getHidden())
-               .deprecated(source.getDeprecated())
-               .extensions(source.getExtensions())
-               .name(source.getName())
-               .description(source.getDescription())
-               .precedence(source.getPrecedence())
-               .example(source.getScalarExample())
-               .examples(source.getExamples());
+        .required(source.getRequired())
+        .hidden(source.getHidden())
+        .deprecated(source.getDeprecated())
+        .extensions(source.getExtensions())
+        .name(source.getName())
+        .description(source.getDescription())
+        .precedence(source.getPrecedence())
+        .example(source.getScalarExample())
+        .examples(source.getExamples())
+        .parameterIndex(source.getParameterIndex());
   }
 
 }

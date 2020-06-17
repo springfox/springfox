@@ -50,7 +50,7 @@ class SizeAnnotationPluginSpec extends Specification implements AnnotationsSuppo
         resolvedMethodParameter,
         Mock(DocumentationContext),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     sut.apply(context)

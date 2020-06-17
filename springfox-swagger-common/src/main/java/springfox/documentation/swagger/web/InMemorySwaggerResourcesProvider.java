@@ -23,8 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,15 +51,25 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   @Autowired
   public InMemorySwaggerResourcesProvider(
       Environment environment,
-      DocumentationCache documentationCache) {
+      DocumentationCache documentationCache,
+      DocumentationPluginsManager pluginsManager) {
+    boolean oas3DocketsPresent = pluginsManager.documentationPlugins().stream()
+        .anyMatch(d -> d.supports(DocumentationType.OAS_30));
+    boolean swagger2DocketsPresent = pluginsManager.documentationPlugins().stream()
+        .anyMatch(d -> d.supports(DocumentationType.SWAGGER_2));
     swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
     swagger2Url = environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs");
-    oas3Url = environment.getProperty("springfox.documentation.swagger.v3.path", "/v3/api-docs");
+    oas3Url = environment.getProperty("springfox.documentation.oas.v3.path",
+        String.format("%s%s",
+            environment.getProperty("springfox.documentation.resources.baseUrl", ""),
+            "/v3/api-docs"));
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
     swagger2Available =
-        classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
-        || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent();
-    oas3Available = classByName("springfox.documentation.oas.web.OasController").isPresent();
+        (classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
+        || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent())
+      && swagger2DocketsPresent;
+    oas3Available = classByName("springfox.documentation.oas.web.OasControllerWeb").isPresent()
+      && oas3DocketsPresent;
     this.documentationCache = documentationCache;
   }
 

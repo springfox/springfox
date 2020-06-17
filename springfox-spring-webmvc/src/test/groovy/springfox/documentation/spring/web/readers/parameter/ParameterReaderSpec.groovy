@@ -27,8 +27,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.builders.RequestParameterBuilder
-import springfox.documentation.service.Parameter
 import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -55,7 +53,7 @@ class ParameterReaderSpec
         resolvedMethodParameter,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     parameterPlugin.apply(parameterContext)
@@ -93,7 +91,7 @@ class ParameterReaderSpec
         resolvedMethodParameter,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     parameterPlugin.apply(parameterContext)

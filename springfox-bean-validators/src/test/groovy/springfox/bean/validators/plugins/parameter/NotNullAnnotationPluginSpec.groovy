@@ -48,7 +48,7 @@ class NotNullAnnotationPluginSpec extends Specification implements AnnotationsSu
         resolvedMethodParameter,
         Mock(DocumentationContext),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     sut.apply(context)

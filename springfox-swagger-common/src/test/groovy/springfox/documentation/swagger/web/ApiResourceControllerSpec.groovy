@@ -29,7 +29,11 @@ import spock.lang.Specification
 import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.ResourceListing
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.DocumentationCache
+import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -118,7 +122,12 @@ class ApiResourceControllerSpec extends Specification {
   }
 
   def inMemorySwaggerResources() {
-    def resources = new InMemorySwaggerResourcesProvider(mockEnvironment(), documentationCache())
+    def pluginsManager = Mock(DocumentationPluginsManager)
+    pluginsManager.documentationPlugins() >> [new Docket(DocumentationType.SWAGGER_2)]
+    def resources = new InMemorySwaggerResourcesProvider(
+        mockEnvironment(),
+        documentationCache(),
+        pluginsManager)
     resources.swagger1Available = true
     resources.swagger2Available = true
     resources

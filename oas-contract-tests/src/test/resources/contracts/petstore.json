@@ -102,7 +102,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -110,7 +110,7 @@
                                     }
                                 }
                             },
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -277,7 +277,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -285,7 +285,7 @@
                                     }
                                 }
                             },
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -334,7 +334,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -342,7 +342,7 @@
                                     }
                                 }
                             },
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -492,15 +492,6 @@
                 "operationId": "deletePetUsingDELETE",
                 "parameters": [
                     {
-                        "name": "api_key",
-                        "in": "header",
-                        "description": "api_key",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "petId",
                         "in": "path",
                         "description": "Pet id to delete",
@@ -509,6 +500,15 @@
                         "schema": {
                             "type": "integer",
                             "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "api_key",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -539,16 +539,6 @@
                 "operationId": "uploadFileUsingPOST",
                 "parameters": [
                     {
-                        "name": "additionalMetadata",
-                        "in": "query",
-                        "description": "Additional Metadata",
-                        "required": false,
-                        "style": "form",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "petId",
                         "in": "path",
                         "description": "ID of pet to update",
@@ -557,6 +547,16 @@
                         "schema": {
                             "type": "integer",
                             "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "additionalMetadata",
+                        "in": "query",
+                        "description": "Additional Metadata",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -901,9 +901,9 @@
                 "operationId": "loginUserUsingGET",
                 "parameters": [
                     {
-                        "name": "password",
+                        "name": "username",
                         "in": "query",
-                        "description": "The password for login in clear text",
+                        "description": "The user name for login",
                         "required": true,
                         "style": "form",
                         "schema": {
@@ -911,9 +911,9 @@
                         }
                     },
                     {
-                        "name": "username",
+                        "name": "password",
                         "in": "query",
-                        "description": "The user name for login",
+                        "description": "The password for login in clear text",
                         "required": true,
                         "style": "form",
                         "schema": {

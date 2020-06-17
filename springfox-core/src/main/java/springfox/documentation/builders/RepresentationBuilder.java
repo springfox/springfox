@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RepresentationBuilder {
@@ -41,21 +42,26 @@ public class RepresentationBuilder {
     if (encodings == null) {
       this.encodings.clear();
     } else {
-      encodings.forEach(e -> this.encodings.put(
-          e.getPropertyRef(),
-          encodingForProperty(e.getPropertyRef())
-              .copyOf(e)));
+      encodings.forEach(encoding -> this.encoding(encoding.getPropertyRef())
+          .apply(e -> e.copyOf(encoding)));
     }
     return this;
   }
 
   public EncodingBuilder encodingForProperty(String property) {
-    //noinspection unchecked
     return this.encodings.computeIfAbsent(
         property,
         p -> new EncodingBuilder(this)
             .propertyRef(p));
   }
+
+  public Function<Consumer<EncodingBuilder>, RepresentationBuilder> encoding(String property) {
+    return encoding -> {
+      encoding.accept(encodingForProperty(property));
+      return this;
+    };
+  }
+
 
   public Representation build() {
     return new Representation(
@@ -70,8 +76,8 @@ public class RepresentationBuilder {
 
   public RepresentationBuilder copyOf(Representation other) {
     if (other != null) {
-      other.getEncodings().forEach(e -> this.encodingForProperty(e.getPropertyRef())
-          .copyOf(e));
+      other.getEncodings().forEach(e -> this.encoding(e.getPropertyRef())
+          .apply(encoding -> encoding.copyOf(e)));
       this.mediaType(other.getMediaType())
           .model(m -> m.copyOf(other.getModel()));
     }

@@ -73,7 +73,7 @@ public class SpringDataRestConfiguration {
             String.format("%s.generated.%s",
                 Pageable.class.getPackage().getName(),
                 Pageable.class.getSimpleName()))
-        .withProperties(Stream.of(
+        .properties(Stream.of(
             property(Integer.class, restConfiguration.getPageParamName()),
             property(Integer.class, restConfiguration.getLimitParamName()),
             property(String.class, restConfiguration.getSortParamName())

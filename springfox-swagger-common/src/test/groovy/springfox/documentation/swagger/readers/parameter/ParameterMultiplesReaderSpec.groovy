@@ -54,7 +54,7 @@ class ParameterMultiplesReaderSpec
     ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
-        documentationContext(), genericNamingStrategy, Mock(OperationContext))
+        documentationContext(), genericNamingStrategy, Mock(OperationContext), 0)
 
     when:
     def operationCommand = stubbedParamBuilder();

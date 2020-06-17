@@ -39,7 +39,9 @@ public class SecurityMapper {
   private Map<String, SecuritySchemeFactory> factories = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>("oauth2", new OAuth2AuthFactory()),
       new AbstractMap.SimpleEntry<>("apiKey", new ApiKeyAuthFactory()),
-      new AbstractMap.SimpleEntry<>("basicAuth", new BasicAuthFactory()))
+      new AbstractMap.SimpleEntry<>("basicAuth", new BasicAuthFactory()),
+      new AbstractMap.SimpleEntry<>("http", new HttpAuthenticationSchemeFactory()),
+      new AbstractMap.SimpleEntry<>("openIdConnect", new OpenIdConnectSchemeFactory()))
       .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {

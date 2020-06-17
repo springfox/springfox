@@ -72,8 +72,8 @@ public class AbstractDocumentationPluginsBootstrapper {
   }
 
   protected void bootstrapDocumentationPlugins() {
-    List<DocumentationPlugin> plugins = StreamSupport.stream(documentationPluginsManager.documentationPlugins()
-        .spliterator(), false)
+    List<DocumentationPlugin> plugins = documentationPluginsManager.documentationPlugins()
+        .stream()
         .sorted(pluginOrdering())
         .collect(toList());
     LOGGER.info("Found {} custom documentation plugin(s)", plugins.size());

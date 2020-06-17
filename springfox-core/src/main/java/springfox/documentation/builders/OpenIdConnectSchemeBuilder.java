@@ -10,18 +10,12 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OpenIdConnectSchemeBuilder {
   private String name;
-  private String type;
   private String description;
   private final List<VendorExtension> extensions = new ArrayList<>();
   private String openIdConnectUrl;
 
   public OpenIdConnectSchemeBuilder name(String name) {
     this.name = name;
-    return this;
-  }
-
-  public OpenIdConnectSchemeBuilder type(String type) {
-    this.type = type;
     return this;
   }
 
@@ -40,7 +34,7 @@ public class OpenIdConnectSchemeBuilder {
     return this;
   }
 
-  public OpenIdConnectScheme createOpenIdConnectScheme() {
-    return new OpenIdConnectScheme(name, type, description, extensions, openIdConnectUrl);
+  public OpenIdConnectScheme build() {
+    return new OpenIdConnectScheme(name, description, extensions, openIdConnectUrl);
   }
 }

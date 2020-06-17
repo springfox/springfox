@@ -91,7 +91,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
-            })
+            }, 0)
 
     when:
     sut.apply(parameterContext)
@@ -154,7 +154,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
-            })
+            }, 0)
 
     when:
     sut.apply(parameterContext)
@@ -178,7 +178,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
-            })
+            }, 0)
 
 
     when:

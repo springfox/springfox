@@ -31,7 +31,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.StringJoiner;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -98,7 +101,8 @@ public class Operation implements Ordered {
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
     this.parameters = parameters.stream()
-                                .sorted(byOrder().thenComparing(byParameterName())).collect(toList());
+        .sorted(byOrder().thenComparing(byParameterName()))
+        .collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
     this.body = body;
@@ -125,9 +129,9 @@ public class Operation implements Ordered {
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
     return securityReferences.stream()
-                             .collect(toMap(
-                                 SecurityReference::getReference,
-                                 value -> new ArrayList<>(value.getScopes())));
+        .collect(toMap(
+            SecurityReference::getReference,
+            value -> new ArrayList<>(value.getScopes())));
   }
 
   public HttpMethod getMethod() {
@@ -209,18 +213,19 @@ public class Operation implements Ordered {
     return requestParameters;
   }
 
-  public Set<RequestParameter> getQueryParameters() {
+  public SortedSet<RequestParameter> getQueryParameters() {
     return requestParameters.stream()
-                            .filter(r -> !r.getParameterSpecification().getContent().isPresent())
-                            .collect(toSet());
+        .filter(r -> !r.getParameterSpecification().getContent().isPresent())
+        .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(RequestParameter::getParameterIndex)
+            .thenComparing(RequestParameter::getName))));
   }
 
   public RequestBody getBody() {
     return requestParameters.stream()
-                            .filter(r -> r.getParameterSpecification().getContent().isPresent())
-                            .findFirst()
-                            .map(this::toBody)
-                            .orElse(body);
+        .filter(r -> r.getParameterSpecification().getContent().isPresent())
+        .findFirst()
+        .map(this::toBody)
+        .orElse(body);
   }
 
   private RequestBody toBody(RequestParameter parameter) {

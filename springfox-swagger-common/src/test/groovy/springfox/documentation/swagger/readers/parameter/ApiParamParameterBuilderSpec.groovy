@@ -60,7 +60,7 @@ class ApiParamParameterBuilderSpec
         resolvedMethodParameter,
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     ApiParamParameterBuilder operationCommand =
@@ -106,7 +106,7 @@ class ApiParamParameterBuilderSpec
             resolvedMethodParameter,
             documentationContext(),
             genericNamingStrategy,
-            Mock(OperationContext))
+            Mock(OperationContext), 0)
 
     when:
     ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
@@ -147,7 +147,7 @@ class ApiParamParameterBuilderSpec
         resolvedMethodParameter,
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     ApiParamParameterBuilder operationCommand = stubbedParamBuilder()

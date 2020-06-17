@@ -53,4 +53,13 @@ public class Representation {
   public int hashCode() {
     return Objects.hash(mediaType, model, encodings);
   }
+
+  @Override
+  public String toString() {
+    return "Representation{" +
+        "mediaType=" + mediaType +
+        ", model=" + model +
+        ", encodings=" + encodings +
+        '}';
+  }
 }

@@ -48,7 +48,7 @@ class NotBlankAnnotationPluginSpec extends Specification implements AnnotationsS
         resolvedMethodParameter,
         Mock(DocumentationContext),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     sut.apply(context)

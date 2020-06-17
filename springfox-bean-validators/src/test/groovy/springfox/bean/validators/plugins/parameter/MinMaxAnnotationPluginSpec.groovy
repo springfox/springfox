@@ -33,7 +33,7 @@ class MinMaxAnnotationPluginSpec extends Specification implements AnnotationsSup
         resolvedMethodParameter,
         Mock(DocumentationContext),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     sut.apply(context)

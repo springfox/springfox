@@ -58,7 +58,7 @@ class ParameterMultiplesReaderSpec
         resolvedMethodParameter,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     sut.apply(parameterContext)

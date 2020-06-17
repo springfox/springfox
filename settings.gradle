@@ -17,6 +17,7 @@ include 'springfox-data-rest'
 include 'springfox-swagger-ui'
 include 'springfox-petstore'
 include 'springfox-petstore-webflux'
+include 'springfox-boot-starter'
 
 // Auxiliary projects that are not published
 include 'springfox-spring-config'
