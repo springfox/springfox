@@ -44,7 +44,9 @@ public class WebFluxObjectMapperConfigurer implements BeanPostProcessor, Applica
   private ApplicationEventPublisher applicationEventPublisher;
 
   @Override
-  public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+  public Object postProcessBeforeInitialization(
+      Object bean,
+      String beanName) throws BeansException {
     if (bean instanceof Jackson2CodecSupport) {
       Jackson2CodecSupport encoder = (Jackson2CodecSupport) bean;
       fireObjectMapperConfiguredEvent(encoder.getObjectMapper());
@@ -75,7 +77,9 @@ public class WebFluxObjectMapperConfigurer implements BeanPostProcessor, Applica
   }
 
   @Override
-  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+  public Object postProcessAfterInitialization(
+      Object bean,
+      String beanName) throws BeansException {
     return bean;
   }
 

@@ -20,7 +20,7 @@
 package springfox.documentation.oas.annotations;
 
 import org.springframework.context.annotation.Import;
-import springfox.documentation.oas.configuration.OasDocumentationConfiguration;
+import springfox.documentation.oas.configuration.OpenApiDocumentationConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 
@@ -43,6 +43,6 @@ import java.lang.annotation.Target;
 @Import({
             SpringfoxWebConfiguration.class,
             SpringfoxWebMvcConfiguration.class,
-            OasDocumentationConfiguration.class })
+            OpenApiDocumentationConfiguration.class })
 public @interface EnableOasWebMvc {
 }

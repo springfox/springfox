@@ -33,18 +33,11 @@ import springfox.documentation.swagger2.web.Swagger2ControllerWebFlux;
 @Configuration
 @ConditionalOnClass(name = "org.springframework.web.reactive.BindingContext")
 @Import({
-            SpringfoxWebConfiguration.class,
             SpringfoxWebFluxConfiguration.class,
-            SwaggerCommonConfiguration.class,
             Swagger2ControllerWebFlux.class
         })
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.mappers"
 })
 public class Swagger2DocumentationWebFluxConfiguration {
-  @Bean
-  public JacksonModuleRegistrar swagger2Module() {
-    return new Swagger2JacksonModule();
-  }
-
 }

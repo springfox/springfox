@@ -18,7 +18,9 @@ dependencies {
   compile project(':springfox-spi')
   compile project(':springfox-schema')
   compile project(':springfox-core')
+  compile project(':springfox-spring-web')
   compile project(':springfox-spring-webmvc')
+  compile project(':springfox-spring-webflux')
   compile project(':springfox-swagger-common')
   compile libs.core
   compile libs.spring

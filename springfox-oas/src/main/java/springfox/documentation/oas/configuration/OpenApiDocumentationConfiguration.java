@@ -19,26 +19,23 @@
 
 package springfox.documentation.oas.configuration;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import springfox.documentation.spring.web.SpringfoxWebFluxConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 
 @Configuration
 @Import({
     SpringfoxWebMvcConfiguration.class,
-    SwaggerCommonConfiguration.class })
+    SpringfoxWebFluxConfiguration.class,
+    SwaggerCommonConfiguration.class,
+    OpenApiMappingConfiguration.class
+})
 @ComponentScan(basePackages = {
     "springfox.documentation.oas.web",
     "springfox.documentation.oas.mappers"
 })
-public class OasDocumentationConfiguration {
-  @Bean
-  public JacksonModuleRegistrar oasModule() {
-    return new OpenApiJacksonModule();
-  }
-
+public class OpenApiDocumentationConfiguration {
 }

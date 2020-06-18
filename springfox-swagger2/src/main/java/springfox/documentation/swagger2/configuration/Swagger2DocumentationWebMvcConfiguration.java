@@ -30,7 +30,6 @@ import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
@@ -39,18 +38,13 @@ import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 @Configuration
 @ConditionalOnClass(name = "springfox.documentation.spring.web.SpringfoxWebMvcConfiguration")
 @Import({
-            SpringfoxWebConfiguration.class,
-            SpringfoxWebMvcConfiguration.class,
-            SwaggerCommonConfiguration.class
-        })
+    SpringfoxWebConfiguration.class,
+    SpringfoxWebMvcConfiguration.class,
+})
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.mappers"
 })
 public class Swagger2DocumentationWebMvcConfiguration {
-  @Bean
-  public JacksonModuleRegistrar swagger2Module() {
-    return new Swagger2JacksonModule();
-  }
 
   @Bean
   public HandlerMapping swagger2ControllerMapping(

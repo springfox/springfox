@@ -21,6 +21,7 @@ package springfox.documentation.swagger2.annotations;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Import;
+import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
 import springfox.documentation.swagger2.configuration.Swagger2DocumentationWebMvcConfiguration;
 
 import java.lang.annotation.Documented;
@@ -39,7 +40,10 @@ import java.lang.annotation.Target;
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = { java.lang.annotation.ElementType.TYPE })
 @Documented
-@Import({Swagger2DocumentationWebMvcConfiguration.class})
+@Import({
+    Swagger2DocumentationWebMvcConfiguration.class,
+    Swagger2DocumentationConfiguration.class
+})
 @ConditionalOnWebApplication
 public @interface EnableSwagger2WebMvc {
 }
