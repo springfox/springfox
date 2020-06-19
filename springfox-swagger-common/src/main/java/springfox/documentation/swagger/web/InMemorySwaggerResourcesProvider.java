@@ -22,6 +22,7 @@ package springfox.documentation.swagger.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -58,19 +59,31 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
     boolean swagger2DocketsPresent = pluginsManager.documentationPlugins().stream()
         .anyMatch(d -> d.supports(DocumentationType.SWAGGER_2));
     swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
-    swagger2Url = environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs");
-    oas3Url = environment.getProperty("springfox.documentation.oas.v3.path",
+    swagger2Url = fixup(
         String.format("%s%s",
             environment.getProperty("springfox.documentation.resources.baseUrl", ""),
-            "/v3/api-docs"));
+            environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs")));
+    oas3Url = fixup(
+        String.format("%s%s",
+            environment.getProperty("springfox.documentation.resources.baseUrl", ""),
+            environment.getProperty("springfox.documentation.oas.v3.path", "/v3/api-docs")));
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
     swagger2Available =
         (classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
-        || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent())
-      && swagger2DocketsPresent;
+            || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent())
+            && swagger2DocketsPresent;
     oas3Available = classByName("springfox.documentation.oas.web.OasControllerWeb").isPresent()
-      && oas3DocketsPresent;
+        && oas3DocketsPresent;
     this.documentationCache = documentationCache;
+  }
+
+  private String fixup(String path) {
+    if (StringUtils.isEmpty(path)
+        || "/".equals(path)
+        || "//".equals(path)) {
+      return "/";
+    }
+    return StringUtils.trimTrailingCharacter(path.replace("//", "/"), '/');
   }
 
   @Override
@@ -101,14 +114,18 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
     return resources;
   }
 
-  private SwaggerResource resource(String swaggerGroup, String baseUrl) {
+  private SwaggerResource resource(
+      String swaggerGroup,
+      String baseUrl) {
     SwaggerResource swaggerResource = new SwaggerResource();
     swaggerResource.setName(swaggerGroup);
     swaggerResource.setUrl(swaggerLocation(baseUrl, swaggerGroup));
     return swaggerResource;
   }
 
-  private String swaggerLocation(String swaggerUrl, String swaggerGroup) {
+  private String swaggerLocation(
+      String swaggerUrl,
+      String swaggerGroup) {
     String base = of(swaggerUrl).get();
     if (Docket.DEFAULT_GROUP_NAME.equals(swaggerGroup)) {
       return base;

@@ -165,7 +165,7 @@ public class DocumentationPluginsManager {
   }
 
   private DocumentationPlugin defaultDocumentationPlugin() {
-    return new Docket(DocumentationType.SWAGGER_2);
+    return new Docket(DocumentationType.OAS_30);
   }
 
   public DocumentationContextBuilder createContextBuilder(

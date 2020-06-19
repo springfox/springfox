@@ -1,7 +1,6 @@
 package springfox.documentation.oas.web;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import springfox.documentation.builders.ServerBuilder;
@@ -29,8 +28,7 @@ public class OasControllerWeb {
       DocumentationCache documentationCache,
       ServiceModelToOasMapper mapper,
       JsonSerializer jsonSerializer,
-      @Value("${springfox.documentation.resources.baseUrl:}${springfox.documentation.oas.v3.path:/v3/api-docs}")
-          String oasPath) {
+      String oasPath) {
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
