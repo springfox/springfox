@@ -184,8 +184,9 @@ public class Operation implements Ordered {
     return responseMessages;
   }
 
-  public Set<Response> getResponses() {
-    return responses;
+  public SortedSet<Response> getResponses() {
+    return responses.stream()
+        .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Response::getCode))));
   }
 
   public String getDeprecated() {

@@ -20,22 +20,18 @@
 package springfox.documentation.swagger2.configuration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebFluxConfiguration;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
-import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger2.web.Swagger2ControllerWebFlux;
 
 @Configuration
 @ConditionalOnClass(name = "org.springframework.web.reactive.BindingContext")
 @Import({
-            SpringfoxWebFluxConfiguration.class,
-            Swagger2ControllerWebFlux.class
-        })
+    SpringfoxWebFluxConfiguration.class,
+    Swagger2ControllerWebFlux.class
+})
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.mappers"
 })

@@ -31,6 +31,7 @@ ext {
 
 dependencies {
   compile("org.springframework.boot:spring-boot-starter-web")
+  compile("org.springframework.boot:spring-boot-starter-webflux")
   compile "org.codehaus.groovy:groovy-all:$groovy"
   compile 'org.slf4j:slf4j-simple:1.6.1'
 

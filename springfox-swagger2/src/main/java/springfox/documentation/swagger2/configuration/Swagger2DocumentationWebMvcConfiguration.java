@@ -31,7 +31,6 @@ import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.json.JsonSerializer;
-import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 

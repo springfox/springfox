@@ -53,8 +53,8 @@ dependencies {
 }
 // tag::update-contract-tests[]
 // NOTE: Uncomment to bulk update contracts
-//test {
-//  systemProperty("contract.tests.root", "$projectDir/src/test/resources")
-//  systemProperty("contract.tests.update", true)
-//}
+test {
+  systemProperty("contract.tests.root", "$projectDir/src/test/resources")
+  systemProperty("contract.tests.update", true)
+}
 // end::update-contract-tests[]

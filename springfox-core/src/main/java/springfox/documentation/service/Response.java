@@ -4,10 +4,14 @@ import springfox.documentation.schema.Example;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * @since 3.0.0
@@ -38,8 +42,9 @@ public class Response {
     this.examples.addAll(examples);
   }
 
-  public Set<Representation> getRepresentations() {
-    return representations;
+  public SortedSet<Representation> getRepresentations() {
+    return representations.stream()
+        .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Representation::getMediaType))));
   }
 
   public List<Header> getHeaders() {
