@@ -102,11 +102,11 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private List<Compatibility<Parameter, RequestParameter>> readParameters(OperationContext context) {
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
     List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
-    LOGGER.info("Reading parameters for method {} at path {}", context.getName(), context.requestMappingPattern());
+    LOGGER.debug("Reading parameters for method {} at path {}", context.getName(), context.requestMappingPattern());
 
     int index = 0;
     for (ResolvedMethodParameter methodParameter : methodParameters) {
-      LOGGER.info("Processing parameter {}", methodParameter.defaultName().orElse("<unknown>"));
+      LOGGER.debug("Processing parameter {}", methodParameter.defaultName().orElse("<unknown>"));
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
       if (!shouldIgnore(methodParameter, alternate, context.getIgnorableParameterTypes())) {
 

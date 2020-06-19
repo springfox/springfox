@@ -40,18 +40,13 @@ public class CrossOriginFilter implements Filter {
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossOriginFilter.class);
 
   @Override
-  public void init(FilterConfig filterConfig) {
-
-  }
-
-  @Override
   public void doFilter(
       ServletRequest req,
       ServletResponse resp,
       FilterChain chain) throws IOException,
       ServletException {
 
-    LOGGER.info("Applying CORS filter");
+    LOGGER.debug("Applying CORS filter");
     HttpServletResponse response = (HttpServletResponse) resp;
     response.setHeader(
         "Access-Control-Allow-Origin",
@@ -65,10 +60,5 @@ public class CrossOriginFilter implements Filter {
     chain.doFilter(
         req,
         resp);
-  }
-
-  @Override
-  public void destroy() {
-
   }
 }

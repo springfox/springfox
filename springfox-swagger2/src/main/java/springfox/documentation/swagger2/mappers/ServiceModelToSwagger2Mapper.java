@@ -244,7 +244,7 @@ public abstract class ServiceModelToSwagger2Mapper {
         .flatMap(Collection::stream)
         .forEachOrdered(each -> {
           for (ApiDescription api : each.getApis()) {
-            LOGGER.info("Mapping operation with path {}", api.getPath());
+            LOGGER.debug("Mapping operation with path {}", api.getPath());
             paths.put(
                 api.getPath(),
                 mapOperations(api, ofNullable(paths.get(api.getPath())), each.getModelNamesRegistry()));

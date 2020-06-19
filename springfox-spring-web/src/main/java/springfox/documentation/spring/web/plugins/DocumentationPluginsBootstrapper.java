@@ -90,7 +90,7 @@ public class DocumentationPluginsBootstrapper
   @Override
   public void start() {
     if (initialized.compareAndSet(false, true)) {
-      LOGGER.info("Documentation plugins bootstrapped");
+      LOGGER.debug("Documentation plugins bootstrapped");
       super.bootstrapDocumentationPlugins();
     }
   }

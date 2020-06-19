@@ -28,7 +28,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
     if (parameters.size() == 0) {
       return new ArrayList<>();
     }
-    LOGGER.info(
+    LOGGER.debug(
         "Aggregating content parameters from parameters: {}",
         parameters.stream()
                   .map(RequestParameter::getName)
@@ -102,7 +102,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
     if (content != null && content.getIn() != null) {
       requestParameters.add(content);
     }
-    LOGGER.info(
+    LOGGER.debug(
         "Post content aggregation parameters: {}",
         requestParameters.stream()
                          .map(RequestParameter::getName)

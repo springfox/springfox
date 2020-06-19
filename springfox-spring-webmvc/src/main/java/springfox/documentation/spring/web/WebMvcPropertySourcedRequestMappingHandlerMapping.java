@@ -62,11 +62,11 @@ public class WebMvcPropertySourcedRequestMappingHandlerMapping extends RequestMa
           HandlerMethod handlerMethod = createHandlerMethod(handler, method);
           String mappingPath = mappingPath(mapper);
           if (mappingPath != null) {
-            logger.info(String.format("Mapped URL path [%s] onto method [%s]", mappingPath, handlerMethod.toString()));
+            logger.debug(String.format("Mapped URL path [%s] onto method [%s]", mappingPath, handlerMethod.toString()));
             handlerMethods.put(mappingPath, handlerMethod);
           } else {
             for (String path : mapping.getPatternsCondition().getPatterns()) {
-              logger.info(String.format("Mapped URL path [%s] onto method [%s]", path, handlerMethod.toString()));
+              logger.debug(String.format("Mapped URL path [%s] onto method [%s]", path, handlerMethod.toString()));
               handlerMethods.put(path, handlerMethod);
             }
           }

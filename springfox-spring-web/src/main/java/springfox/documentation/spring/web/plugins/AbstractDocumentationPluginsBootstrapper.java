@@ -76,13 +76,13 @@ public class AbstractDocumentationPluginsBootstrapper {
         .stream()
         .sorted(pluginOrdering())
         .collect(toList());
-    LOGGER.info("Found {} custom documentation plugin(s)", plugins.size());
+    LOGGER.debug("Found {} custom documentation plugin(s)", plugins.size());
     for (DocumentationPlugin each : plugins) {
       DocumentationType documentationType = each.getDocumentationType();
       if (each.isEnabled()) {
         scanDocumentation(buildContext(each));
       } else {
-        LOGGER.info("Skipping initializing disabled plugin bean {} v{}",
+        LOGGER.debug("Skipping initializing disabled plugin bean {} v{}",
             documentationType.getName(), documentationType.getVersion());
       }
     }
