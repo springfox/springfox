@@ -23,7 +23,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
     Swagger2DocumentationConfiguration.class
 })
 public class OpenApiAutoConfiguration {
-  @Value("${springfox.documentation.ui.baseUrl:}")
+  @Value("${springfox.documentation.swagger-ui.baseUrl:}")
   private String swaggerBaseUrl;
 
   @Bean

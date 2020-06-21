@@ -33,7 +33,7 @@ import static java.util.Optional.*;
 @RestController
 @ApiIgnore
 @RequestMapping({
-    "${springfox.documentation.ui.baseUrl:}/swagger-resources"})
+    "${springfox.documentation.swagger-ui.baseUrl:}/swagger-resources"})
 public class ApiResourceController {
 
 

@@ -40,7 +40,7 @@ class InMemorySwaggerResourcesProviderSpec extends Specification {
   def mockEnv(baseUrl, oasPath) {
     MockEnvironment env = new MockEnvironment()
     if (baseUrl != null) {
-      env.withProperty("springfox.documentation.ui.baseUrl", baseUrl)
+      env.withProperty("springfox.documentation.swagger-ui.baseUrl", baseUrl)
     }
     if (oasPath != null) {
       env.withProperty("springfox.documentation.open-api.v3.path", oasPath)
