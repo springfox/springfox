@@ -1,15 +1,14 @@
 package springfox.boot.starter.autoconfigure;
 
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.resource.ResourceTransformer;
+import org.springframework.web.reactive.config.ResourceHandlerRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.resource.ResourceTransformer;
 
-public class SwaggerUiConfigurer implements WebMvcConfigurer {
-
+public class SwaggerUiWebFluxConfigurer implements WebFluxConfigurer {
   private final String baseUrl;
   private final ResourceTransformer transformer;
 
-  public SwaggerUiConfigurer(
+  public SwaggerUiWebFluxConfigurer(
       String baseUrl,
       ResourceTransformer transformer) {
     this.baseUrl = baseUrl;
