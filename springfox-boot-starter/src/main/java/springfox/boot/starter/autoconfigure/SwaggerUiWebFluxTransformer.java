@@ -8,6 +8,7 @@ import org.springframework.web.reactive.resource.ResourceTransformer;
 import org.springframework.web.reactive.resource.ResourceTransformerChain;
 import org.springframework.web.reactive.resource.TransformedResource;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.Exceptions;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
@@ -33,22 +34,19 @@ public class SwaggerUiWebFluxTransformer implements ResourceTransformer {
       ServerWebExchange exchange,
       Resource resource,
       ResourceTransformerChain transformerChain) {
-    AntPathMatcher antPathMatcher = new AntPathMatcher();
-    try {
-      boolean match = antPathMatcher.match("**/springfox.js", resource.getURL().toString());
-      if (!match) {
-        return Mono.just(resource);
-      }
-    } catch (IOException e) {
-      LOGGER.error("Unable to determine if resource needs transformation", e);
-    }
+
     return Mono.just(resource)
         .map(r -> {
+          AntPathMatcher antPathMatcher = new AntPathMatcher();
           try {
-            String html = replaceBaseUrl(StreamUtils.copyToString(r.getInputStream(), StandardCharsets.UTF_8));
-            return (Resource) new TransformedResource(resource, html.getBytes());
+            boolean match = antPathMatcher.match("**/springfox.js", resource.getURL().toString());
+            if (match) {
+              String html = replaceBaseUrl(StreamUtils.copyToString(r.getInputStream(), StandardCharsets.UTF_8));
+              return new TransformedResource(resource, html.getBytes());
+            }
+            return r;
           } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw Exceptions.propagate(e);
           }
         })
         .onErrorResume(e -> {
