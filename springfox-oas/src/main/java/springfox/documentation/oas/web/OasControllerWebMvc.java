@@ -36,19 +36,21 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.util.MimeTypeUtils.*;
+import static springfox.documentation.oas.web.OasControllerWebMvc.*;
 
 @ApiIgnore
 @RestController
-@RequestMapping("${springfox.documentation.swagger-ui.baseUrl:}${springfox.documentation.open-api.v3.path:/v3/api-docs}")
+@RequestMapping(OPEN_API_SPECIFICATION_PATH)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class OasControllerWebMvc extends OasControllerWeb {
+
 
   @Autowired
   public OasControllerWebMvc(
       DocumentationCache documentationCache,
       ServiceModelToOasMapper mapper,
       JsonSerializer jsonSerializer,
-      @Value("${springfox.documentation.swagger-ui.baseUrl:}${springfox.documentation.open-api.v3.path:/v3/api-docs}")
+      @Value(OPEN_API_SPECIFICATION_PATH)
           String oasPath) {
     super(documentationCache, mapper, jsonSerializer, oasPath);
   }

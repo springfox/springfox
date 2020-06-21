@@ -61,11 +61,11 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
     swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
     swagger2Url = fixup(
         String.format("%s%s",
-            environment.getProperty("springfox.documentation.swagger-ui.baseUrl", ""),
+            environment.getProperty("springfox.documentation.swagger-ui.base-url", ""),
             environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs")));
     oas3Url = fixup(
         String.format("%s%s",
-            environment.getProperty("springfox.documentation.swagger-ui.baseUrl", ""),
+            environment.getProperty("springfox.documentation.swagger-ui.base-url", ""),
             environment.getProperty("springfox.documentation.open-api.v3.path", "/v3/api-docs")));
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
     swagger2Available =

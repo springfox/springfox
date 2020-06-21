@@ -3,6 +3,7 @@ package springfox.boot.starter.autoconfigure;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -15,6 +16,7 @@ import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfi
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 @Configuration
+@EnableConfigurationProperties(SpringfoxConfigurationProperties.class)
 @ConditionalOnProperty(value = "springfox.documentation.enabled", havingValue = "true", matchIfMissing = true)
 @Import({
     OpenApiDocumentationConfiguration.class,
@@ -23,33 +25,45 @@ import static springfox.documentation.builders.BuilderDefaults.*;
     Swagger2DocumentationConfiguration.class
 })
 public class OpenApiAutoConfiguration {
-  @Value("${springfox.documentation.swagger-ui.baseUrl:}")
+  @Value("${springfox.documentation.swagger-ui.base-url:}")
   private String swaggerBaseUrl;
 
   @Bean
   @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-  @ConditionalOnProperty(value = "springfox.documentation.ui.enabled", havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(
+      value = "springfox.documentation.swagger-ui.enabled",
+      havingValue = "true",
+      matchIfMissing = true)
   public SwaggerUiWebFluxConfigurer swaggerUiWebfluxConfigurer(SwaggerUiWebFluxTransformer transformer) {
     return new SwaggerUiWebFluxConfigurer(fixup(swaggerBaseUrl), transformer);
   }
 
   @Bean
   @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-  @ConditionalOnProperty(value = "springfox.documentation.ui.enabled", havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(
+      value = "springfox.documentation.swagger-ui.enabled",
+      havingValue = "true",
+      matchIfMissing = true)
   public SwaggerUiWebFluxTransformer swaggerUiWebFluxTransformer() {
     return new SwaggerUiWebFluxTransformer(fixup(swaggerBaseUrl));
   }
 
   @Bean
   @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-  @ConditionalOnProperty(value = "springfox.documentation.ui.enabled", havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(
+      value = "springfox.documentation.swagger-ui.enabled",
+      havingValue = "true",
+      matchIfMissing = true)
   public SwaggerUiWebMvcConfigurer swaggerUiConfigurer(SwaggerUiWebMvcTransformer transformer) {
     return new SwaggerUiWebMvcConfigurer(fixup(swaggerBaseUrl), transformer);
   }
 
   @Bean
   @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-  @ConditionalOnProperty(value = "springfox.documentation.ui.enabled", havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(
+      value = "springfox.documentation.swagger-ui.enabled",
+      havingValue = "true",
+      matchIfMissing = true)
   public SwaggerUiWebMvcTransformer swaggerUiTransformer() {
     return new SwaggerUiWebMvcTransformer(fixup(swaggerBaseUrl));
   }

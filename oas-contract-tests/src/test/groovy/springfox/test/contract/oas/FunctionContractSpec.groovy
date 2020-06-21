@@ -55,7 +55,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @LocalServerPort
   int port
 
-  @Value('${springfox.documentation.swagger-ui.baseUrl}')
+  @Value('${springfox.documentation.swagger-ui.base-url}')
   String baseUrl;
 
   @Unroll

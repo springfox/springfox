@@ -15,7 +15,7 @@ import java.util.TreeMap;
 @Mapper(componentModel = "spring")
 public abstract class CompatibilityModelMapper {
   @Autowired
-  @Value("${springfox.documentation.swagger.use-model-v3:true}")
+  @Value("${springfox.documentation.swagger.v2.use-model-v3:true}")
   private boolean useModelV3;
 
   Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
