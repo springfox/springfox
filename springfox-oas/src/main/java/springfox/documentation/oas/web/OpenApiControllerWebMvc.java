@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.oas.mappers.ServiceModelToOasMapper;
+import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
@@ -36,19 +36,18 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.util.MimeTypeUtils.*;
-import static springfox.documentation.oas.web.OasControllerWebMvc.*;
+import static springfox.documentation.oas.web.OpenApiControllerWebMvc.*;
 
 @ApiIgnore
 @RestController
 @RequestMapping(OPEN_API_SPECIFICATION_PATH)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class OasControllerWebMvc extends OasControllerWeb {
-
+public class OpenApiControllerWebMvc extends OpenApiControllerWeb {
 
   @Autowired
-  public OasControllerWebMvc(
+  public OpenApiControllerWebMvc(
       DocumentationCache documentationCache,
-      ServiceModelToOasMapper mapper,
+      ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
       @Value(OPEN_API_SPECIFICATION_PATH)
           String oasPath) {

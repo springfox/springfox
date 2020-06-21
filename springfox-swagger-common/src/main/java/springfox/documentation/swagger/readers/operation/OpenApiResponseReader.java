@@ -33,13 +33,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.Representation;
 import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -65,23 +63,17 @@ import static springfox.documentation.swagger.readers.operation.ResponseHeaders.
 @Component
 //@Conditional(OasPresentCondition.class)
 @Order(SwaggerPluginSupport.OAS_PLUGIN_ORDER)
-public class OasResponseReader implements OperationBuilderPlugin {
+public class OpenApiResponseReader implements OperationBuilderPlugin {
 
-  private final EnumTypeDeterminer enumTypeDeterminer;
-  private final TypeNameExtractor typeNameExtractor;
   private final TypeResolver typeResolver;
   private final ModelSpecificationFactory modelSpecifications;
   private final DocumentationPluginsManager documentationPlugins;
 
   @Autowired
-  public OasResponseReader(
-      EnumTypeDeterminer enumTypeDeterminer,
-      TypeNameExtractor typeNameExtractor,
+  public OpenApiResponseReader(
       TypeResolver typeResolver,
       ModelSpecificationFactory modelSpecifications,
       DocumentationPluginsManager documentationPlugins) {
-    this.enumTypeDeterminer = enumTypeDeterminer;
-    this.typeNameExtractor = typeNameExtractor;
     this.typeResolver = typeResolver;
     this.modelSpecifications = modelSpecifications;
     this.documentationPlugins = documentationPlugins;
@@ -101,7 +93,7 @@ public class OasResponseReader implements OperationBuilderPlugin {
 
   @SuppressWarnings({
       "CyclomaticComplexity",
-      "NPathComplexity" })
+      "NPathComplexity"})
   protected Set<Response> read(OperationContext context) {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<Operation> operationAnnotation = context.findAnnotation(Operation.class);
@@ -110,10 +102,10 @@ public class OasResponseReader implements OperationBuilderPlugin {
     List<ApiResponse> allApiResponses
         = Stream.concat(
         operationAnnotation.map(fromOperationAnnotation())
-                           .orElse(new ArrayList<>()).stream(),
+            .orElse(new ArrayList<>()).stream(),
         responsesAnnotation.map(fromApiResponsesAnnotation())
-                           .orElse(new ArrayList<>()).stream())
-                .collect(Collectors.toList());
+            .orElse(new ArrayList<>()).stream())
+        .collect(Collectors.toList());
     responseAnnotation.ifPresent(allApiResponses::add);
 
     Set<Response> responses = new HashSet<>();
@@ -133,14 +125,14 @@ public class OasResponseReader implements OperationBuilderPlugin {
           continue;
         }
         ModelContext modelContext = context.operationModelsBuilder()
-                                           .addReturn(
-                                               typeResolver.resolve(each.schema().implementation()),
-                                               Optional.empty());
+            .addReturn(
+                typeResolver.resolve(each.schema().implementation()),
+                Optional.empty());
         for (ExampleObject eachExample : each.examples()) {
           if (!isEmpty(eachExample.value())) {
             examples.add(new ExampleBuilder()
-                             .mediaType(each.mediaType())
-                             .value(eachExample.value()).build());
+                .mediaType(each.mediaType())
+                .value(eachExample.value()).build());
           }
         }
         headers.putAll(headers(apiResponse.headers()));
@@ -150,7 +142,7 @@ public class OasResponseReader implements OperationBuilderPlugin {
             new Representation(
                 each.mediaType().isEmpty() ? MediaType.ALL : MediaType.valueOf(each.mediaType()),
                 finalType.map(t -> modelSpecifications.create(modelContext, t))
-                         .orElse(null),
+                    .orElse(null),
                 new HashSet<>()));
 
       }
@@ -161,11 +153,11 @@ public class OasResponseReader implements OperationBuilderPlugin {
           context);
 
       responseContext.responseBuilder()
-                     .representations(representations)
-                     .examples(examples)
-                     .description(apiResponse.description())
-                     .headers(headers.values())
-                     .code(apiResponse.responseCode());
+          .representations(representations)
+          .examples(examples)
+          .description(apiResponse.description())
+          .headers(headers.values())
+          .code(apiResponse.responseCode());
       responses.add(documentationPlugins.response(responseContext));
     }
     return responses;

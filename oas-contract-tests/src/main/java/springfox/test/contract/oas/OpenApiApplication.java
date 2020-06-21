@@ -30,10 +30,10 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 @Import(value = {
     SecuritySupport.class,
     OpenApiTestConfig.class})
-public class OasApplication {
+public class OpenApiApplication {
   public static void main(String[] args) {
     SpringApplication.run(
-        OasApplication.class,
+        OpenApiApplication.class,
         args);
   }
 }

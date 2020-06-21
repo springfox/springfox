@@ -41,7 +41,7 @@ import static springfox.documentation.service.Tags.*;
 
 @Component
 @Order(SwaggerPluginSupport.OAS_PLUGIN_ORDER)
-public class OasOperationTagsReader implements OperationBuilderPlugin {
+public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {

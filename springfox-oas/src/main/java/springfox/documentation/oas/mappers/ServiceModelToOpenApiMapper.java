@@ -84,8 +84,8 @@ import static springfox.documentation.builders.BuilderDefaults.*;
         StyleEnumMapper.class,
         SecuritySchemeMapper.class
     })
-public abstract class ServiceModelToOasMapper {
-  private static final Logger LOGGER = getLogger(ServiceModelToOasMapper.class);
+public abstract class ServiceModelToOpenApiMapper {
+  private static final Logger LOGGER = getLogger(ServiceModelToOpenApiMapper.class);
 
   @Mappings({
       @Mapping(target = "openapi", constant = "3.0.1"),

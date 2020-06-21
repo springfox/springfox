@@ -72,7 +72,8 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
         (classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
             || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent())
             && swagger2DocketsPresent;
-    oas3Available = classByName("springfox.documentation.oas.web.OasControllerWeb").isPresent()
+    oas3Available = (classByName("springfox.documentation.oas.web.OpenApiControllerWebFlux").isPresent()
+        || classByName("springfox.documentation.oas.web.OpenApiControllerWebMvc").isPresent())
         && oas3DocketsPresent;
     this.documentationCache = documentationCache;
   }

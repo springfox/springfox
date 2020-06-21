@@ -4,7 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import springfox.documentation.builders.ServerBuilder;
-import springfox.documentation.oas.mappers.ServiceModelToOasMapper;
+import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.Server;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -17,18 +17,18 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public class OasControllerWeb {
+public class OpenApiControllerWeb {
   public static final String OPEN_API_SPECIFICATION_PATH
       = "${springfox.documentation.swagger-ui.base-url:}${springfox.documentation.open-api.v3.path:/v3/api-docs}";
   protected static final String HAL_MEDIA_TYPE = "application/hal+json";
   private final DocumentationCache documentationCache;
-  private final ServiceModelToOasMapper mapper;
+  private final ServiceModelToOpenApiMapper mapper;
   private final JsonSerializer jsonSerializer;
   private final String oasPath;
 
-  public OasControllerWeb(
+  public OpenApiControllerWeb(
       DocumentationCache documentationCache,
-      ServiceModelToOasMapper mapper,
+      ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
       String oasPath) {
     this.documentationCache = documentationCache;

@@ -47,12 +47,12 @@ import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
 @Order(OAS_PLUGIN_ORDER)
 @Component
-public class OasParameterBuilder implements ParameterBuilderPlugin {
+public class OpenApiParameterBuilder implements ParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
   private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public OasParameterBuilder(
+  public OpenApiParameterBuilder(
       DescriptionResolver descriptions,
       EnumTypeDeterminer enumTypeDeterminer) {
     this.descriptions = descriptions;

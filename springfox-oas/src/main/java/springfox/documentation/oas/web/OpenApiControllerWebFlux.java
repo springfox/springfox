@@ -29,24 +29,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.oas.mappers.ServiceModelToOasMapper;
+import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 
 import static org.springframework.util.MimeTypeUtils.*;
-import static springfox.documentation.oas.web.OasControllerWeb.*;
+import static springfox.documentation.oas.web.OpenApiControllerWeb.*;
 
 @ApiIgnore
 @RestController
 @RequestMapping(OPEN_API_SPECIFICATION_PATH)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-public class OasControllerWebFlux extends OasControllerWeb {
+public class OpenApiControllerWebFlux extends OpenApiControllerWeb {
 
   @Autowired
-  public OasControllerWebFlux(
+  public OpenApiControllerWebFlux(
       DocumentationCache documentationCache,
-      ServiceModelToOasMapper mapper,
+      ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
       @Value(OPEN_API_SPECIFICATION_PATH) String oasPath) {
     super(documentationCache, mapper, jsonSerializer, oasPath);

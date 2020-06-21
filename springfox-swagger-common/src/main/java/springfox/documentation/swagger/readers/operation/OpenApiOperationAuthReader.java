@@ -48,9 +48,9 @@ import static org.springframework.util.StringUtils.*;
 
 @Component
 @Order(SwaggerPluginSupport.OAS_PLUGIN_ORDER)
-public class OasOperationAuthReader implements OperationBuilderPlugin {
+public class OpenApiOperationAuthReader implements OperationBuilderPlugin {
 
-  private static final Logger LOG = LoggerFactory.getLogger(OasOperationAuthReader.class);
+  private static final Logger LOG = LoggerFactory.getLogger(OpenApiOperationAuthReader.class);
 
   @Override
   public void apply(OperationContext context) {

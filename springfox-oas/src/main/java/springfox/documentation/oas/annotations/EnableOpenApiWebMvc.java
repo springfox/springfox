@@ -44,5 +44,5 @@ import java.lang.annotation.Target;
             SpringfoxWebConfiguration.class,
             SpringfoxWebMvcConfiguration.class,
             OpenApiDocumentationConfiguration.class })
-public @interface EnableOasWebMvc {
+public @interface EnableOpenApiWebMvc { //TODO: Fix this to be unified
 }

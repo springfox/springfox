@@ -28,12 +28,12 @@ import static springfox.documentation.schema.Types.*;
 
 @Component
 @Order(SwaggerPluginSupport.OAS_PLUGIN_ORDER)
-public class OasSchemaPropertyBuilder implements ModelPropertyBuilderPlugin {
+public class OpenApiSchemaPropertyBuilder implements ModelPropertyBuilderPlugin {
   private final DescriptionResolver descriptions;
   private final ModelSpecificationFactory modelSpecifications;
 
   @Autowired
-  public OasSchemaPropertyBuilder(
+  public OpenApiSchemaPropertyBuilder(
       DescriptionResolver descriptions,
       ModelSpecificationFactory modelSpecifications) {
     this.descriptions = descriptions;
@@ -43,11 +43,10 @@ public class OasSchemaPropertyBuilder implements ModelPropertyBuilderPlugin {
   @Override
   public void apply(ModelPropertyContext context) {
     Schema annotation = context.getAnnotatedElement()
-                               .flatMap(OasSchemaPropertyBuilder::findSchemaAnnotation)
+                               .flatMap(OpenApiSchemaPropertyBuilder::findSchemaAnnotation)
                                .orElse(context.getBeanPropertyDefinition()
                                               .flatMap(b -> findPropertyAnnotation(b, Schema.class))
                                               .orElse(null));
-
 
     if (annotation != null) {
       ModelSpecification modelSpecification = null;
