@@ -24,6 +24,7 @@ allprojects {
 subprojects {
 
   //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
+  apply plugin: 'java-library' //gradle groovy plugin extends the java plugin
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
   apply plugin: 'idea'
   apply plugin: 'checkstyle'
@@ -48,11 +49,6 @@ subprojects {
   }
 
   checkstyleMain.source = "src/main/java"
-
-  configurations {
-    provided
-    compile.extendsFrom provided
-  }
 
   sourceCompatibility = 1.8
   targetCompatibility = 1.8

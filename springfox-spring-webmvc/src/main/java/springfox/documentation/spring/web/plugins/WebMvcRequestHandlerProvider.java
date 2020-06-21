@@ -20,6 +20,7 @@ package springfox.documentation.spring.web.plugins;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -45,6 +46,7 @@ import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
   private final List<RequestMappingInfoHandlerMapping> handlerMappings;
   private final HandlerMethodResolver methodResolver;

@@ -1,9 +1,9 @@
 dependencies {
-  compile libs.spring
-  compile libs.springProvided
-  compile libs.swagger2Core
-  compile libs.core
-  compile project(':springfox-spi')
-  compile project(':springfox-core')
-  compile project(':springfox-spring-webmvc')
+  implementation libs.spring
+  implementation libs.springProvided
+  implementation libs.swagger2Core
+  implementation libs.core
+  implementation project(':springfox-spi')
+  implementation project(':springfox-core')
+  implementation project(':springfox-spring-webmvc')
 }

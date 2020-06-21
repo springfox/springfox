@@ -14,28 +14,30 @@ ext {
 }
 
 dependencies {
-  compile libs.oasCore
-  compile project(':springfox-spi')
-  compile project(':springfox-schema')
-  compile project(':springfox-core')
-  compile project(':springfox-spring-web')
-  compile project(':springfox-spring-webmvc')
-  compile project(':springfox-spring-webflux')
-  compile project(':springfox-swagger-common')
-  compile libs.core
-  compile libs.spring
+  api libs.oasCore
+  api project(':springfox-spi')
+  api project(':springfox-schema')
+  api project(':springfox-core')
+  api project(':springfox-spring-web')
+  api project(':springfox-spring-webmvc')
+  api project(':springfox-spring-webflux')
+  api project(':springfox-swagger-common')
+  api libs.core
+  api libs.spring
+  implementation libs.clientProvided
 
-  compile "org.mapstruct:mapstruct:$mapstruct"
+  implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
   
-  provided libs.springProvided
-  provided "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
-  provided libs.clientProvided
+  compileOnly libs.springProvidedWithMvc
+  compileOnly "org.springframework:spring-webflux:$spring"
+  compileOnly "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
-  testCompile project(':springfox-core').sourceSets.test.output
-  testCompile project(':springfox-schema').sourceSets.test.output
-  testCompile project(':springfox-spring-web').sourceSets.test.output
+  testImplementation project(':springfox-core').sourceSets.test.output
+  testImplementation project(':springfox-schema').sourceSets.test.output
+  testImplementation project(':springfox-spring-web').sourceSets.test.output
 
-  testCompile libs.test
-  testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
+  testImplementation libs.test
+  testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"
 }

@@ -19,11 +19,13 @@
 
 package springfox.documentation.spring.web;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @SuppressWarnings("HideUtilityClassConstructor")
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class SpringfoxWebFluxConfiguration {
 
   @Bean

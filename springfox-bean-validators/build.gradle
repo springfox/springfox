@@ -24,12 +24,13 @@ ext {
 }
 
 dependencies {
-  compile libs.core
-  compile libs.spring
-  compile project(':springfox-spring-web')
+  api libs.core
+  api libs.spring
+  api project(':springfox-spring-web')
 
-  provided libs.springProvided
-  provided "javax.validation:validation-api:$validationApiVersion"
+  implementation "javax.validation:validation-api:$validationApiVersion"
+  implementation libs.springProvided
+  implementation libs.clientProvided
 
-  testCompile libs.test
+  testImplementation libs.test
 }

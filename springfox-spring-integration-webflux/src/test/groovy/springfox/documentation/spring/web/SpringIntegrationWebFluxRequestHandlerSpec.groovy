@@ -23,32 +23,23 @@ import com.fasterxml.classmate.ResolvedType
 import io.swagger.annotations.Api
 import org.springframework.integration.http.inbound.BaseHttpInboundEndpoint
 import org.springframework.integration.webflux.inbound.WebFluxInboundEndpoint
-import org.springframework.util.ReflectionUtils
-import org.springframework.web.HttpRequestHandler
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.reactive.result.method.RequestMappingInfo
 import spock.lang.Specification
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spring.web.dummy.DummyClass
+import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.plugins.SpringIntegrationParametersProvider
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-
 class SpringIntegrationWebFluxRequestHandlerSpec extends Specification {
-
-  def method = ReflectionUtils.findMethod(
-      HttpRequestHandler.class,
-      "handleRequest",
-      HttpServletRequest.class,
-      HttpServletResponse.class)
 
   def methodResolver = Mock(HandlerMethodResolver)
   def requestMappingInfo = RequestMappingInfo.paths("/foo").build()
   def inboundEndpoint = Mock(BaseHttpInboundEndpoint)
   def handlerMethod = Mock(HandlerMethod) {
     getBean() >> inboundEndpoint
-    getMethod() >> method
+    getMethod() >> method()
   }
   def resolvedMethodParameter = Mock(ResolvedMethodParameter)
   def parametersProvider = Mock(SpringIntegrationParametersProvider) {
@@ -110,5 +101,8 @@ class SpringIntegrationWebFluxRequestHandlerSpec extends Specification {
     then:
     parameters.size() == 1
 
+  }
+  def method() {
+    Example.methods.find { it.name == "getFoo" }
   }
 }

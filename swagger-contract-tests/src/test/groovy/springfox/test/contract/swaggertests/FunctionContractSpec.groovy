@@ -44,7 +44,10 @@ import static java.nio.charset.StandardCharsets.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = SwaggerApplication)
+@SpringBootTest(
+    webEnvironment = WebEnvironment.RANDOM_PORT,
+    classes = SwaggerApplication
+)
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared

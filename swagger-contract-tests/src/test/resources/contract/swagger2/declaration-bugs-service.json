@@ -507,7 +507,7 @@
                 }
             }
         },
-        "/bugs/1749{?ascending,companyName,email,like,pageNumber,pageSize,set,sortDirection,sortField}": {
+        "/bugs/1749{?ascending,companyName,email,headerNames,like,pageNumber,pageSize,set,sortDirection,sortField,status}": {
             "get": {
                 "tags": [
                     "Bugs"
@@ -534,6 +534,16 @@
                         "description": "email",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "headerNames",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv"
                     },
                     {
                         "name": "like",
@@ -581,6 +591,13 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "responses": {

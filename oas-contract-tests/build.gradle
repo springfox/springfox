@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    springBootVersion = '2.2.2.RELEASE'
+    springBootVersion = '2.3.1.RELEASE'
   }
   repositories {
     mavenCentral()
@@ -30,18 +30,21 @@ ext {
 }
 
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter-web")
-  compile("org.springframework.boot:spring-boot-starter-webflux")
-  compile "org.codehaus.groovy:groovy-all:$groovy"
-  compile 'org.slf4j:slf4j-simple:1.6.1'
+  implementation "org.springframework.boot:spring-boot-starter-web"
+  implementation "org.springframework.boot:spring-boot-starter-webflux"
+  implementation "org.springframework.boot:spring-boot-starter-data-rest"
+  implementation "org.codehaus.groovy:groovy-all:$groovy"
+  implementation 'org.slf4j:slf4j-simple:1.6.1'
+  implementation "javax.validation:validation-api:$validationApiVersion"
 
-  testCompile libs.test
-  testCompile "org.skyscreamer:jsonassert:$jsonAssert"
-  testCompile("org.springframework.boot:spring-boot-starter-test")
 
-  compile project(':springfox-boot-starter')
+  testImplementation libs.test
+  testImplementation "org.skyscreamer:jsonassert:$jsonAssert"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
 
-  compile(project(path: ':springfox-swagger-ui')) {
+  implementation project(':springfox-boot-starter')
+
+  implementation(project(path: ':springfox-swagger-ui')) {
     exclude group: 'org.springframework',
         module: 'spring-web'
   }

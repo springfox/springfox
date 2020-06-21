@@ -25,79 +25,6 @@ ext {
   shouldSyncWithMavenCentral = project.hasProperty('ossSync') ?
       project.property('ossSync') :
       System.getenv('SONATYPE_SYNC')
-
-  pomMetaData = {
-    resolveStrategy = Closure.DELEGATE_FIRST
-    name "${project.name}"
-    url "https://github.com/springfox/springfox"
-    description "JSON API documentation for spring based applications"
-
-    scm {
-      url "scm:git:git@github.com:springfox/springfox.git"
-      connection 'scm:git:git@github.com:springfox/springfox.git'
-      developerConnection 'scm:git:git@github.com:springfox/springfox.git'
-    }
-
-    licenses {
-      license {
-        name "The Apache Software License, Version 2.0"
-        url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-        distribution "repo"
-      }
-    }
-    developers {
-      developer {
-        id "martypitt@me.com"
-        name "Marty Pitt"
-        organization "The Mango Factory"
-        email "martypitt@me.com"
-      }
-      developer {
-        id "dilipkrish"
-        name "Dilip Krishnan"
-        organization "The Container Store"
-        email "dilipkrish_subscriptions@yahoo.com"
-      }
-      developer {
-        id "adrianbk"
-        name "Adrian Kelly"
-        organization "DiUS Computing"
-        email "adrianbkelly+swagger@gmail.com"
-      }
-    }
-  }
-
-  // TODO - findout if this has been fixed in gradle and remove this hack if do
-  // Gradle's maven-publish plugin does not yet handle pom generation correctly. Fix expected in 2.1
-  springfoxPomConfig = {
-    def root = asNode()
-    def dependencies = root.dependencies
-    def allDependencies = dependencies.'*'
-
-    allDependencies.findAll() {
-      project.configurations.provided.allDependencies.find { dep ->
-        dep.name == it.artifactId.text()
-      }
-    }.each() {
-      it.scope*.value = 'provided'
-    }
-
-    //Fix issue with maven-publish plugin setting compile deps to runtime
-    allDependencies.findAll() {
-      it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-        dep.name == it.artifactId.text()
-      }
-    }.each() {
-      it.scope*.value = 'compile'
-    }
-
-    allDependencies
-        .findAll { it.artifactId.text() == 'groovy-all' }
-        .each { it.scope*.value = 'test' }
-
-
-    root.children().last() + pomMetaData
-  }
 }
 
 apply plugin: 'maven-publish'
@@ -121,13 +48,13 @@ jar {
 def generatedSources = "$buildDir/generated/source/apt/main"
 
 task packageSources(type: Jar) {
-  classifier = 'sources'
+  archiveClassifier = 'sources'
   from sourceSets.main.allSource
   from generatedSources
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-  classifier = 'javadoc'
+  archiveClassifier = 'javadoc'
   from javadoc.destinationDir
 }
 
@@ -146,7 +73,51 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
-      pom.withXml springfoxPomConfig
+      versionMapping {
+        usage('java-api') {
+          fromResolutionOf('runtimeClasspath')
+        }
+        usage('java-runtime') {
+          fromResolutionResult()
+        }
+      }
+      pom {
+        name = "${project.name}"
+        url = "https://github.com/springfox/springfox"
+        description = "JSON API documentation for spring based applications"
+
+        scm {
+          url = "scm:git:git@github.com:springfox/springfox.git"
+          connection = 'scm:git:git@github.com:springfox/springfox.git'
+          developerConnection = 'scm:git:git@github.com:springfox/springfox.git'
+        }
+
+        licenses {
+          license {
+            name = "The Apache Software License, Version 2.0"
+            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution = "repo"
+          }
+        }
+        developers {
+          developer {
+            id = "martypitt@me.com"
+            name = "Marty Pitt"
+            organization = "The Mango Factory"
+            email = "martypitt@me.com"
+          }
+          developer {
+            id = "dilipkrish"
+            name = "Dilip Krishnan"
+            email = "dilipkrish_subscriptions@yahoo.com"
+          }
+          developer {
+            id = "adrianbk"
+            name = "Adrian Kelly"
+            email = "adrianbkelly+swagger@gmail.com"
+          }
+        }
+      }
       artifact packageSources
       artifact javadocJar
     }

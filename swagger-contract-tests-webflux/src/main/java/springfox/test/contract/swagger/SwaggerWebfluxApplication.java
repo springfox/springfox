@@ -21,9 +21,11 @@ package springfox.test.contract.swagger;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
 
 @SpringBootApplication
 @SuppressWarnings("HideUtilityClassConstructor")
+@EnableSwagger2WebFlux
 public class SwaggerWebfluxApplication {
   public static void main(String[] args) {
     SpringApplication.run(SwaggerWebfluxApplication.class, args);

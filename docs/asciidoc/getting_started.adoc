@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.springfox:springfox-swagger2:{releaseVersion}"
+    implementation "io.springfox:springfox-swagger2:{releaseVersion}"
 }
 ----
 
@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.springfox:springfox-swagger2:{snapshotVersion}"
+    implementation "io.springfox:springfox-swagger2:{snapshotVersion}"
 }
 ----
 
@@ -178,7 +178,7 @@ In order to use it
 [subs="verbatim,attributes"]
 ----
 dependencies {
-    compile "io.springfox:springfox-data-rest:{releaseVersion}"
+    implementation "io.springfox:springfox-data-rest:{releaseVersion}"
 }
 ----
 
@@ -225,7 +225,7 @@ In order to use it
 [subs="verbatim,attributes"]
 ----
 dependencies {
-    compile "io.springfox:springfox-bean-validators:{releaseVersion}"
+    implementation "io.springfox:springfox-bean-validators:{releaseVersion}"
 }
 ----
 

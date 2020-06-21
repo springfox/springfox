@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger2.configuration;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,6 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 
 @Configuration
-@ConditionalOnClass(name = "springfox.documentation.spring.web.SpringfoxWebMvcConfiguration")
 @Import({
     SpringfoxWebConfiguration.class,
     SpringfoxWebMvcConfiguration.class,
@@ -46,6 +45,7 @@ import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 public class Swagger2DocumentationWebMvcConfiguration {
 
   @Bean
+  @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
   public HandlerMapping swagger2ControllerMapping(
       Environment environment,
       DocumentationCache documentationCache,

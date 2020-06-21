@@ -10,17 +10,19 @@ ext {
 }
 
 dependencies {
-  compile libs.core
-  compile libs.spring
-  compile project(':springfox-spi')
-  compile project(':springfox-core')
-  compile project(':springfox-spring-webmvc')
+  api libs.core
+  api libs.spring
+  api project(':springfox-spi')
+  api project(':springfox-core')
+  api project(':springfox-spring-webmvc')
 
-  compile "org.springframework.data:spring-data-rest-webmvc:$springDataRest"
-  compile "org.springframework.hateoas:spring-hateoas:${springHateoas}"
+  implementation "org.springframework.data:spring-data-rest-webmvc:$springDataRest"
+  implementation "org.springframework.hateoas:spring-hateoas:${springHateoas}"
+  implementation libs.springBootProvided
+  
+  compileOnly libs.springProvidedWithMvc
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
-  provided libs.springProvidedWithMvc
-
-  testCompile libs.test
+  testImplementation libs.test
 }
 

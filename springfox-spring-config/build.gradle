@@ -1,6 +1,7 @@
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter-web:${springBoot}")
-  compile(project(path: ':springfox-swagger1'))
-  compile(project(path: ':springfox-petstore'))
-  compile(project(path: ':springfox-swagger2'))
+  implementation "org.springframework.boot:spring-boot-starter-web:${springBoot}"
+  implementation libs.clientProvided
+  implementation project(':springfox-swagger1')
+  implementation project(':springfox-petstore')
+  implementation project(':springfox-swagger2')
 }

@@ -39,11 +39,6 @@ import springfox.documentation.service.Operation;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -325,21 +320,19 @@ public class Defaults {
 
     boolean exists = true;
 
+    classFor("javax.servlet.ServletRequest").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.ServletResponse").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.HttpServletRequest").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.HttpServletResponse").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.ServletContext").ifPresent(it -> ignored.add(it));
+  }
+
+  Optional<Class> classFor(String className) {
     try {
-      Class.forName("javax.servlet.ServletContext", false, this.getClass().getClassLoader());
+      return Optional.of(Class.forName(className, false, this.getClass().getClassLoader()));
     } catch (ClassNotFoundException e) {
-      exists = false;
+      return Optional.empty();
     }
-
-    if (exists) {
-      ignored.add(ServletRequest.class);
-      ignored.add(ServletResponse.class);
-      ignored.add(HttpServletRequest.class);
-      ignored.add(HttpServletResponse.class);
-      ignored.add(ServletContext.class);
-    }
-
-
   }
 
   private void initResponseMessages() {

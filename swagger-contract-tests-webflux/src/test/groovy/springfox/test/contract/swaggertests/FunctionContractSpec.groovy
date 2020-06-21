@@ -22,6 +22,7 @@ package springfox.test.contract.swaggertests
 import com.fasterxml.classmate.TypeResolver
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -32,18 +33,20 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.reactive.function.client.WebClient
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
+import springfox.test.contract.swagger.SecuritySupport
+import springfox.test.contract.swagger.SwaggerWebfluxApplication
 
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = Config)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = SwaggerWebfluxApplication)
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared
@@ -77,7 +80,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
     contractFile                                                  | groupName
     'swagger.json'                                                | 'petstore'
     'swaggerTemplated.json'                                       | 'petstoreTemplated'
-    'declaration-groovy-service.json'                             | 'groovyService'
   }
 
   def "should list swagger resources for swagger 2.0"() {
@@ -103,29 +105,5 @@ class FunctionContractSpec extends Specification implements FileAccess {
           it.url == '/v2/api-docs?group=petstoreTemplated' &&
           it.swaggerVersion == '2.0'
     }
-    result.find {
-      it.name == 'groovyService' &&
-          it.url == '/v2/api-docs?group=groovyService' &&
-          it.swaggerVersion == '2.0'
-    }
-  }
-
-  @Configuration
-  @ComponentScan([
-      "springfox.documentation.spring.web.dummy.controllers",
-      "springfox.test.contract.swagger",
-      "springfox.petstore.webflux.controller"
-  ])
-  @Import([
-      SecuritySupport,
-      Swagger2TestConfig])
-  static class Config {
-
-    // tag::alternate-type-rule-convention[]
-    @Bean
-    AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
-      new JacksonSerializerConvention(resolver, "springfox.documentation.spring.web.dummy.models")
-    }
-    // end::alternate-type-rule-convention[]
   }
 }

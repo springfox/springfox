@@ -1,9 +1,13 @@
 dependencies {
-  compile libs.spring
-  compile libs.springProvided
-  compile libs.swagger2Core
-  compile libs.core
-  compile project(':springfox-spi')
-  compile project(':springfox-core')
-  compile project(':springfox-spring-webflux')
+  implementation libs.core
+  implementation libs.spring
+  implementation libs.springProvidedWithMvc
+  compileOnly "org.springframework:spring-webflux:$spring"
+
+  implementation libs.swagger2Core
+
+  implementation project(':springfox-spi')
+  implementation project(':springfox-core')
+  implementation project(':springfox-spring-web')
+  implementation project(':springfox-spring-webflux')
 }

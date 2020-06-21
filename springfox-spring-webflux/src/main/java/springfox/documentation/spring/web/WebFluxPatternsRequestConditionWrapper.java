@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class WebFluxPatternsRequestConditionWrapper
     implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
-  private PatternsRequestCondition wrapped;
+  private final PatternsRequestCondition wrapped;
 
   public WebFluxPatternsRequestConditionWrapper(PatternsRequestCondition wrapped) {
     this.wrapped = wrapped;

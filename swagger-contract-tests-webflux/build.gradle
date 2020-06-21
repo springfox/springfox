@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    springBootVersion = '2.2.2.RELEASE'
+    springBootVersion = '2.3.1.RELEASE'
   }
   repositories {
     mavenCentral()
@@ -16,9 +16,6 @@ apply plugin: 'io.spring.dependency-management'
 configurations {
   //Logback causing spring boot errors
   all*.exclude group: 'ch.qos.logback'
-  //Making sure we don't clash on the classpath as two controllers would be loaded
-  all*.exclude group: 'org.springframework', module: 'spring-webmvc'
-  all*.exclude group: 'io.springfox', module: 'springfox-spring-webmvc'
 }
 
 ext['groovy.version'] = '2.5.4'
@@ -34,22 +31,19 @@ ext {
 }
 
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter-webflux")
-  compile("org.springframework.boot:spring-boot-starter-data-jpa")
-  compile("com.h2database:h2")
+  implementation "org.springframework.boot:spring-boot-starter-webflux"
+  implementation project(':springfox-swagger2')
+  implementation project(':springfox-petstore-webflux')
+  implementation project(':springfox-spring-webflux')
+  implementation libs.clientProvided
 
-  testCompile libs.testNoHateoas
-  testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
-  testCompile("org.springframework.boot:spring-boot-starter-test")
-
-  compile project(':springfox-swagger2')
-  compile project(':springfox-petstore-webflux')
-  compile project(':springfox-spring-webflux').sourceSets.test.output
-
-
-  compile(project(path: ':springfox-swagger-ui')) {
+  implementation(project(path: ':springfox-swagger-ui')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
+
+  testImplementation libs.testNoHateoas
+  testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
 // tag::update-contract-tests[]
 // NOTE: Uncomment to bulk update contracts

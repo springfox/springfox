@@ -98,12 +98,6 @@ ext {
           "com.fasterxml.jackson.core:jackson-databind:${jackson}",
           "joda-time:joda-time:$joda"
       ],
-      clientProvidedServlet              : [
-          "com.fasterxml.jackson.core:jackson-core:${jackson}",
-          "com.fasterxml.jackson.core:jackson-databind:${jackson}",
-          "joda-time:joda-time:$joda",
-          "javax.servlet:javax.servlet-api:$servlet",
-      ],
       core                               : [
           "com.fasterxml:classmate:${classmate}",
           "org.slf4j:slf4j-api:${slf4j}",

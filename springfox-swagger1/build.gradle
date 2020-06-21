@@ -30,32 +30,33 @@ task integrationTest(type: Test) {
 }
 
 dependencies {
-  compile project(':springfox-spi')
-  compile project(':springfox-schema')
-  compile project(':springfox-core')
-  compile project(':springfox-swagger-common')
-  compile libs.core
-  compile libs.spring
-  compile libs.swagger2Core
+  api project(':springfox-spi')
+  api project(':springfox-schema')
+  api project(':springfox-core')
+  api project(':springfox-spring-web')
+  api project(':springfox-spring-webmvc')
+  api project(':springfox-swagger-common')
 
+  api libs.core
+  api libs.spring
+  api libs.swagger2Core
+  implementation libs.springProvidedWithMvc
+  implementation libs.clientProvided
+  implementation "javax.servlet:javax.servlet-api:$servlet"
 
-  provided libs.springProvided
-  provided libs.clientProvided
-  provided project(':springfox-spring-webmvc')
-
-  compile "org.mapstruct:mapstruct:$mapstruct"
+  implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
 
-  testCompile project(':springfox-core').sourceSets.test.output
-  testCompile project(':springfox-schema').sourceSets.test.output
-  testCompile project(':springfox-swagger-common').sourceSets.test.output
-  testCompile project(':springfox-spring-web').sourceSets.test.output
-  testCompile project(':springfox-spring-webmvc').sourceSets.test.output
-  testCompile libs.test
+  testImplementation project(':springfox-core').sourceSets.test.output
+  testImplementation project(':springfox-schema').sourceSets.test.output
+  testImplementation project(':springfox-swagger-common').sourceSets.test.output
+  testImplementation project(':springfox-spring-web').sourceSets.test.output
+  testImplementation project(':springfox-spring-webmvc').sourceSets.test.output
+  testImplementation libs.test
 
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output
-  integrationTestCompile configurations.testCompile
+  integrationTestCompile configurations.testImplementation
   integrationTestRuntime configurations.testRuntime
 }
 

@@ -44,7 +44,7 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 public class SpringIntegrationWebFluxRequestHandlerProvider implements RequestHandlerProvider {
   private final List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings;
   private final HandlerMethodResolver methodResolver;
-  private SpringIntegrationParametersProvider parametersProvider;
+  private final SpringIntegrationParametersProvider parametersProvider;
 
   @Autowired
   public SpringIntegrationWebFluxRequestHandlerProvider(

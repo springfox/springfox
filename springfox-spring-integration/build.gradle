@@ -22,13 +22,13 @@ dependencies {
   compileOnly libs.springProvidedWithSpringIntegration
   compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.4.RELEASE"
 
-  provided libs.clientProvidedServlet
+  compileOnly libs.clientProvided
 
-  testCompile libs.test
-  testCompile libs.swagger2Core
-  testCompile libs.springProvidedWithSpringIntegration
-  testCompile project(':springfox-spring-web').sourceSets.test.output
-  testCompile project(':springfox-core').sourceSets.test.output
-  testCompile project(':springfox-schema').sourceSets.test.output
-  testCompile "javax.validation:validation-api:$validationApiVersion"
+  testImplementation libs.test
+  testImplementation libs.swagger2Core
+  testImplementation libs.springProvidedWithSpringIntegration
+  testImplementation project(':springfox-spring-web').sourceSets.test.output
+  testImplementation project(':springfox-core').sourceSets.test.output
+  testImplementation project(':springfox-schema').sourceSets.test.output
+  testImplementation "javax.validation:validation-api:$validationApiVersion"
 }

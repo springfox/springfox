@@ -19,6 +19,7 @@
 package springfox.documentation.spring.data.rest.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +43,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 @Configuration
 @ComponentScan(basePackages = "springfox.documentation.spring.data.rest")
 @Incubating("2.5.0")
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SpringDataRestConfiguration {
 
   // tag::alternate-type-rule-convention[]

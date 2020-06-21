@@ -1,15 +1,22 @@
 group = 'io.springfox'
-sourceCompatibility = '1.8'
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	compile project(':springfox-oas')
-	compile project(':springfox-data-rest')
-	compile project(':springfox-bean-validators')
-	compile project(':springfox-swagger2')
-	compile project(':springfox-swagger-ui')
-	provided 'org.springframework.boot:spring-boot-autoconfigure'
+  api project(':springfox-oas')
+  api project(':springfox-data-rest')
+  api project(':springfox-bean-validators')
+  api project(':springfox-swagger2')
+  api project(':springfox-swagger-ui')
+  api libs.core
+  api libs.spring
+
+  compileOnly libs.springProvidedWithMvc
+  compileOnly "org.springframework:spring-webflux:$spring"
+  compileOnly libs.springBootProvided
+  compileOnly libs.clientProvided
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
+
 }

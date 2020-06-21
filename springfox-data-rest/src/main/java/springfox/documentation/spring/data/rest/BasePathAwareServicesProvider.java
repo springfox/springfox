@@ -38,7 +38,6 @@ import java.util.Map;
 
 import static springfox.documentation.spring.web.paths.Paths.*;
 
-
 @Component
 public class BasePathAwareServicesProvider implements RequestHandlerProvider {
   private final BasePathAwareHandlerMapping basePathAwareMappings;
@@ -55,7 +54,7 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
     this.methodResolver = methodResolver;
     basePathAwareMappings.setApplicationContext(applicationContext);
     basePathAwareMappings.afterPropertiesSet();
-    contextPath = contextPath(servletContext);
+    contextPath = contextPath(servletContext.getContextPath());
   }
 
   private static boolean isEntitySchemaService(HandlerMethod input) {
