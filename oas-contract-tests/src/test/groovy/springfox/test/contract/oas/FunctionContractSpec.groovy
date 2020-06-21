@@ -33,7 +33,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.http.converter.StringHttpMessageConverter
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -56,7 +55,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @LocalServerPort
   int port
 
-  @Value('${springfox.documentation.resources.baseUrl}')
+  @Value('${springfox.documentation.ui.baseUrl}')
   String baseUrl;
 
   @Unroll
@@ -105,8 +104,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
         .build()
 
     when:
-    def response = http.
-        exchange(
+    def response = http.exchange(
             request,
             String)
     def slurper = new JsonSlurper()
