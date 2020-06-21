@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class SwaggerUiTransformer implements ResourceTransformer {
+public class SwaggerUiWebMvcTransformer implements ResourceTransformer {
   private final String baseUrl;
 
-  public SwaggerUiTransformer(String baseUrl) {
+  public SwaggerUiWebMvcTransformer(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 

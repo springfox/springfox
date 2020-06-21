@@ -4,12 +4,12 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.ResourceTransformer;
 
-public class SwaggerUiConfigurer implements WebMvcConfigurer {
+public class SwaggerUiWebMvcConfigurer implements WebMvcConfigurer {
 
   private final String baseUrl;
   private final ResourceTransformer transformer;
 
-  public SwaggerUiConfigurer(
+  public SwaggerUiWebMvcConfigurer(
       String baseUrl,
       ResourceTransformer transformer) {
     this.baseUrl = baseUrl;
