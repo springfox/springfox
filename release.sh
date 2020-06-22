@@ -6,4 +6,4 @@ echo  "Using GITHUB_TOKEN=$GITHUB_TOKEN, "\
   -PgithubToken=$GITHUB_TOKEN \
   -PbintrayUsername=$BINTRAY_USER_NAME \
   -PbintrayPassword=$BINTRAY_PASSWORD \
-  -PdryRun=$DRYRUN-i -x check
+  -PdryRun=$DRYRUN -i -x check
