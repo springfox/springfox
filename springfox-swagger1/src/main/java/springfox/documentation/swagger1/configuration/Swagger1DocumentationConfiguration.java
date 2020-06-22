@@ -24,14 +24,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
-import org.springframework.web.servlet.HandlerMapping;
 import springfox.documentation.PathProvider;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
-import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
@@ -40,7 +37,7 @@ import springfox.documentation.swagger1.web.Swagger1Controller;
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration;
 
 @Configuration
-@Import({ SpringfoxWebConfiguration.class, SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
+@Import({SpringfoxWebConfiguration.class, SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class})
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger1.readers.parameter",
     "springfox.documentation.swagger1.mappers"
@@ -53,14 +50,11 @@ public class Swagger1DocumentationConfiguration {
   }
 
   @Bean
-  public HandlerMapping swagger1ControllerMapping(
-      Environment environment,
+  public Swagger1Controller swagger1ControllerMapping(
       DocumentationCache documentationCache,
       ServiceModelToSwaggerMapper mapper,
       JsonSerializer jsonSerializer) {
-    return new WebMvcPropertySourcedRequestMappingHandlerMapping(
-        environment,
-        new Swagger1Controller(documentationCache, mapper, jsonSerializer));
+    return new Swagger1Controller(documentationCache, mapper, jsonSerializer);
   }
 
   @Bean

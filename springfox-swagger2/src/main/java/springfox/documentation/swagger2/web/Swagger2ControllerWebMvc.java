@@ -23,20 +23,19 @@ import io.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.PropertySourcedMapping;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -48,13 +47,16 @@ import static java.util.Optional.*;
 import static org.springframework.util.MimeTypeUtils.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
+import static springfox.documentation.swagger2.web.Swagger2ControllerWebMvc.*;
 
-@Controller
-@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
 @ApiIgnore
+@RestController
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@RequestMapping(SWAGGER2_SPECIFICATION_PATH)
 public class Swagger2ControllerWebMvc {
+  public static final String SWAGGER2_SPECIFICATION_PATH
+      = "${springfox.documentation.swagger-ui.base-url:}${springfox.documentation.swagger.v2.path:/v2/api-docs}";
 
-  private static final String DEFAULT_URL = "/v2/api-docs";
   private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2ControllerWebMvc.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
@@ -62,6 +64,9 @@ public class Swagger2ControllerWebMvc {
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
   private final JsonSerializer jsonSerializer;
+
+  @Value(SWAGGER2_SPECIFICATION_PATH)
+  private String path;
 
   @Autowired
   public Swagger2ControllerWebMvc(
@@ -80,13 +85,8 @@ public class Swagger2ControllerWebMvc {
   }
 
   @RequestMapping(
-      value = DEFAULT_URL,
       method = RequestMethod.GET,
-      produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
-  @PropertySourcedMapping(
-      value = "${springfox.documentation.swagger.v2.path}",
-      propertyKey = "springfox.documentation.swagger.v2.path")
-  @ResponseBody
+      produces = {APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE})
   public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {

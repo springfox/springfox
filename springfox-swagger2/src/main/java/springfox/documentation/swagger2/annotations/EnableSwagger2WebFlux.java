@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.annotations;
 
 import org.springframework.context.annotation.Import;
 import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
-import springfox.documentation.swagger2.configuration.Swagger2DocumentationWebFluxConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -40,8 +39,7 @@ import java.lang.annotation.Target;
 @Target(value = { java.lang.annotation.ElementType.TYPE })
 @Documented
 @Import({
-    Swagger2DocumentationWebFluxConfiguration.class,
-    Swagger2DocumentationConfiguration.class
+    Swagger2DocumentationConfiguration.class,
 })
 public @interface EnableSwagger2WebFlux {
 }

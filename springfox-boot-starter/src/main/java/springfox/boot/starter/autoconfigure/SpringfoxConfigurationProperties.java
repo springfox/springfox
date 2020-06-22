@@ -62,6 +62,15 @@ public class SpringfoxConfigurationProperties {
   public static class Swagger2Configuration {
     private boolean enabled = false;
     private boolean useModelV3 = true;
+    private String host;
+
+    public String getHost() {
+      return host;
+    }
+
+    public void setHost(String host) {
+      this.host = host;
+    }
 
     public boolean isEnabled() {
       return enabled;
@@ -71,7 +80,7 @@ public class SpringfoxConfigurationProperties {
       this.enabled = enabled;
     }
 
-    public boolean getUseModelV3() {
+    public boolean isUseModelV3() {
       return useModelV3;
     }
 
