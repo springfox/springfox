@@ -20,3 +20,4 @@ node_modules/
 package-lock.json
 .eclipse/
 bin/
+.envrc
