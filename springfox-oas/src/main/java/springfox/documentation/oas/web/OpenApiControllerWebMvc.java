@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UrlPathHelper;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -61,11 +62,8 @@ public class OpenApiControllerWebMvc extends OpenApiControllerWeb {
   public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
-    String requestUrl = decodedRequestUrl(servletRequest);
-    return toJsonResponse(swaggerGroup, requestUrl);
-  }
-
-  protected String decodedRequestUrl(HttpServletRequest request) {
-    return decode(request.getRequestURL().toString());
+    ForwardedHeaderExtractingRequest filter
+        = new ForwardedHeaderExtractingRequest(servletRequest, new UrlPathHelper());
+    return toJsonResponse(swaggerGroup, decode(filter.adjustedRequestURL()));
   }
 }

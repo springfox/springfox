@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.adapter.ForwardedHeaderTransformer;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -59,7 +60,7 @@ public class OpenApiControllerWebFlux extends OpenApiControllerWeb {
   public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       ServerHttpRequest serverRequest) {
-    String requestUrl = decodedRequestUrl(serverRequest);
+    String requestUrl = decodedRequestUrl(new ForwardedHeaderTransformer().apply(serverRequest));
     return toJsonResponse(swaggerGroup, requestUrl);
   }
 

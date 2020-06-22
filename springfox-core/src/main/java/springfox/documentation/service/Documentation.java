@@ -120,6 +120,8 @@ public class Documentation {
   }
 
   public void addServer(Server inferredServer) {
-    servers.add(inferredServer);
+    if (!servers.contains(inferredServer)) {
+      servers.add(inferredServer);
+    }
   }
 }
