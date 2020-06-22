@@ -24,7 +24,7 @@ ext {
   springDataRest = "3.3.0.RELEASE"
   springPluginVersion = "2.0.0.RELEASE"
   swagger2Core = "1.5.20"
-  springBoot = "2.3.0.RELEASE"
+  springBoot = "2.3.1.RELEASE"
   springfoxRfc6570Version = "1.0.0"
   undercouch = "4.0.4"
   validationApiVersion = '2.0.1.Final'

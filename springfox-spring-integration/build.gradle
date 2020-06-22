@@ -10,18 +10,17 @@ ext {
 }
 
 dependencies {
-  compile libs.core
-  compile libs.spring
-  
-  compile project(':springfox-spi')
-  compile project(':springfox-core')
-  compile project(':springfox-spring-web')
-  compile project(':springfox-schema')
+  api libs.core
+  api libs.spring
 
-  compile "com.athaydes.rawhttp:rawhttp-core:2.2.1"
+  api project(':springfox-spi')
+  api project(':springfox-core')
+  api project(':springfox-spring-web')
+  api project(':springfox-schema')
+
+  implementation "com.athaydes.rawhttp:rawhttp-core:2.2.1"
   compileOnly libs.springProvidedWithSpringIntegration
   compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.4.RELEASE"
-
   compileOnly libs.clientProvided
 
   testImplementation libs.test

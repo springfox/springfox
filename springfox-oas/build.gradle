@@ -28,7 +28,7 @@ dependencies {
 
   implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
-  
+
   compileOnly libs.springProvidedWithMvc
   compileOnly "org.springframework:spring-webflux:$spring"
   compileOnly "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
