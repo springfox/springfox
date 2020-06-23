@@ -40,9 +40,9 @@ public class CachingModelDependencyProvider implements ModelDependencyProvider {
   private final Map<ModelContext, Set<ResolvedType>> cache;
   private final Function<ModelContext, Set<ResolvedType>> lookup;
   @Autowired
-  public CachingModelDependencyProvider(@Qualifier("default") final ModelDependencyProvider delegate) {
+  public CachingModelDependencyProvider(@Qualifier("default") ModelDependencyProvider delegate) {
     cache = new HashMap<>();
-    lookup = (key) -> delegate.dependentModels(key);
+    lookup = delegate::dependentModels;
   }
 
   @Override

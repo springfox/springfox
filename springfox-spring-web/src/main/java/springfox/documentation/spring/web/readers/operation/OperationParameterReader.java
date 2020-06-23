@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -28,8 +29,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.common.Compatibility;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -41,12 +43,12 @@ import springfox.documentation.spring.web.readers.parameter.ExpansionContext;
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
+import static org.slf4j.LoggerFactory.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.Types.*;
@@ -54,8 +56,10 @@ import static springfox.documentation.schema.Types.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterReader implements OperationBuilderPlugin {
+  private static final Logger LOGGER = getLogger(OperationParameterReader.class);
   private final ModelAttributeParameterExpander expander;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  private final ParameterAggregator aggregator;
 
   @Autowired
   private DocumentationPluginsManager pluginsManager;
@@ -63,15 +67,31 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   @Autowired
   public OperationParameterReader(
       ModelAttributeParameterExpander expander,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      ParameterAggregator aggregator) {
     this.expander = expander;
     this.enumTypeDeterminer = enumTypeDeterminer;
+    this.aggregator = aggregator;
   }
 
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder().parameters(context.getGlobalOperationParameters());
-    context.operationBuilder().parameters(readParameters(context));
+    List<Compatibility<Parameter, RequestParameter>> compatibilities = readParameters(context);
+    context.operationBuilder().parameters(
+        compatibilities.stream()
+            .map(Compatibility::getLegacy)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList()));
+    context.operationBuilder().requestParameters(new HashSet<>(context.getRequestParameters()));
+    Collection<RequestParameter> requestParameters = compatibilities.stream()
+        .map(Compatibility::getModern)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(toSet());
+    context.operationBuilder()
+        .requestParameters(aggregator.aggregate(requestParameters));
   }
 
   @Override
@@ -79,20 +99,22 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     return true;
   }
 
-  private List<Parameter> readParameters(final OperationContext context) {
-
+  private List<Compatibility<Parameter, RequestParameter>> readParameters(OperationContext context) {
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
-    List<Parameter> parameters = new ArrayList<>();
+    List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
+    LOGGER.debug("Reading parameters for method {} at path {}", context.getName(), context.requestMappingPattern());
 
+    int index = 0;
     for (ResolvedMethodParameter methodParameter : methodParameters) {
+      LOGGER.debug("Processing parameter {}", methodParameter.defaultName().orElse("<unknown>"));
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
       if (!shouldIgnore(methodParameter, alternate, context.getIgnorableParameterTypes())) {
 
         ParameterContext parameterContext = new ParameterContext(methodParameter,
-            new ParameterBuilder(),
             context.getDocumentationContext(),
             context.getGenericsNamingStrategy(),
-            context);
+            context,
+            index++);
 
         if (shouldExpand(methodParameter, alternate)) {
           parameters.addAll(
@@ -103,7 +125,15 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         }
       }
     }
-    return parameters.stream().filter(((Predicate<Parameter>) Parameter::isHidden).negate()).collect(toList());
+    return parameters.stream()
+        .filter(hiddenParameter().negate())
+        .collect(toList());
+  }
+
+  private Predicate<Compatibility<Parameter, RequestParameter>> hiddenParameter() {
+    return c -> c.getLegacy()
+        .map(Parameter::isHidden)
+        .orElse(false);
   }
 
   private boolean shouldIgnore(
@@ -129,7 +159,6 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         && !enumTypeDeterminer.isEnum(resolvedParamType.getErasedType())
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);
-
   }
 
 }

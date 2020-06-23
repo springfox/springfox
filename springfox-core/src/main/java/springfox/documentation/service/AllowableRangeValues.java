@@ -20,6 +20,7 @@
 package springfox.documentation.service;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class AllowableRangeValues implements AllowableValues {
   private final String min;
@@ -89,5 +90,15 @@ public class AllowableRangeValues implements AllowableValues {
         && Objects.equals(max, that.max)
         && Objects.equals(exclusiveMin, that.exclusiveMin)
         && Objects.equals(exclusiveMax, that.exclusiveMax);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", AllowableRangeValues.class.getSimpleName() + "[", "]")
+        .add("min='" + min + "'")
+        .add("max='" + max + "'")
+        .add("exclusiveMin=" + exclusiveMin)
+        .add("exclusiveMax=" + exclusiveMax)
+        .toString();
   }
 }

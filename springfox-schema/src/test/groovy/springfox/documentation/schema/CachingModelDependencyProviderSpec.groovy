@@ -19,6 +19,7 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
@@ -27,11 +28,14 @@ import springfox.documentation.spi.schema.AlternateTypeProvider
 import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(TypesForTestingSupport)
-class CachingModelDependencyProviderSpec extends Specification {
+class CachingModelDependencyProviderSpec extends Specification implements TypesForTestingSupport {
+  @Shared
+  def resolver = new TypeResolver()
+
   def "Implementation caches the invocations"() {
     given:
-    def context = inputParam("0_0",
+    def context = inputParam(
+        "0_0",
         "group",
         resolver.resolve(complexType()),
         Optional.empty(),
@@ -43,15 +47,18 @@ class CachingModelDependencyProviderSpec extends Specification {
     def mock = Mock(ModelDependencyProvider) {
       dependentModels(context) >> singleton(aResolvedType())
     }
+
     when:
     def sut = new CachingModelDependencyProvider(mock)
+
     then:
     sut.dependentModels(context) == sut.dependentModels(context)
   }
 
   def "Cache misses are handled correctly"() {
     given:
-    def context = inputParam("0_0",
+    def context = inputParam(
+        "0_0",
         "group",
         resolver.resolve(complexType()),
         Optional.empty(),
@@ -61,10 +68,16 @@ class CachingModelDependencyProviderSpec extends Specification {
         new CodeGenGenericTypeNamingStrategy(),
         emptySet())
     def mock = Mock(ModelDependencyProvider) {
-      dependentModels(context) >> { throw new NullPointerException() }
+      // @formatter:off
+      dependentModels(context) >> {
+        throw new NullPointerException()
+      }
+      // @formatter:on
     }
+
     when:
     def sut = new CachingModelDependencyProvider(mock)
+
     then:
     sut.dependentModels(context).size() == 0
   }

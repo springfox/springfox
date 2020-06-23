@@ -10,23 +10,24 @@ ext {
 }
 
 dependencies {
-  compile libs.core
-  compile libs.spring
+  api libs.core
+  api libs.spring
+
+  api project(':springfox-spi')
+  api project(':springfox-core')
+  api project(':springfox-spring-web')
+  api project(':springfox-schema')
+
+  implementation "com.athaydes.rawhttp:rawhttp-core:2.2.1"
   compileOnly libs.springProvidedWithSpringIntegration
-  compile project(':springfox-spi')
-  compile project(':springfox-schema').sourceSets.main.output
-  compile project(':springfox-spring-web')
-  compile "com.athaydes.rawhttp:rawhttp-core:2.0"
-  compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE"
+  compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.4.RELEASE"
+  compileOnly libs.clientProvided
 
-  provided libs.clientProvidedServlet
-
-  testCompile "javax.validation:validation-api:$validationApiVersion"
-  testCompile project(':springfox-core')
-  testCompile project(':springfox-spring-web').sourceSets.test.output
-  testCompile libs.test
-  testCompile libs.swagger2Core
-  testCompile libs.springProvidedWithSpringIntegration
-  testCompile project(':springfox-core').sourceSets.test.output
-  testCompile project(':springfox-schema').sourceSets.test.output
+  testImplementation libs.test
+  testImplementation libs.swagger2Core
+  testImplementation libs.springProvidedWithSpringIntegration
+  testImplementation project(':springfox-spring-web').sourceSets.test.output
+  testImplementation project(':springfox-core').sourceSets.test.output
+  testImplementation project(':springfox-schema').sourceSets.test.output
+  testImplementation "javax.validation:validation-api:$validationApiVersion"
 }

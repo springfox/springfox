@@ -27,22 +27,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Mapper
+@Mapper(componentModel = "spring", implementationName = "OasLicenceMapper")
 public class LicenseMapper {
 
   @License
-  public io.swagger.oas.models.info.License apiInfoToLicense(ApiInfo from) {
+  public io.swagger.v3.oas.models.info.License apiInfoToLicense(ApiInfo from) {
     if (from.getLicense() == null && from.getLicenseUrl() == null) {
       return null;
     }
-    return new io.swagger.oas.models.info.License().name(from.getLicense()).url(from.getLicenseUrl());
+    return new io.swagger.v3.oas.models.info.License().name(from.getLicense()).url(from.getLicenseUrl());
   }
 
 
   @Qualifier
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.SOURCE)
-  public @interface LicenseTranslator {
+  @interface LicenseTranslator {
   }
 
   @Qualifier

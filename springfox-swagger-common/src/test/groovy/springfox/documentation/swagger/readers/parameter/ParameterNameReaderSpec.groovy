@@ -21,9 +21,10 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
-import springfox.documentation.builders.ParameterBuilder
+import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -33,8 +34,12 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterNameReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ParameterNameReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ApiParamAnnotationSupport,
+        ModelProviderForServiceSupport {
+
   def descriptions = new DescriptionResolver(new MockEnvironment())
   def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
 
@@ -50,6 +55,7 @@ class ParameterNameReaderSpec extends DocumentationContextSpec implements ApiPar
     sut.supports(DocumentationType.SWAGGER_2)
   }
 
+  @Unroll
   def "param required"() {
     given:
     def resolvedMethodParameter =
@@ -57,15 +63,20 @@ class ParameterNameReaderSpec extends DocumentationContextSpec implements ApiPar
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
-        new ParameterBuilder(),
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
+
     when:
     def sut = nameReader()
     sut.apply(parameterContext)
+
     then:
     parameterContext.parameterBuilder().build().name == expectedName
+    parameterContext.requestParameterBuilder()
+        .in(ParameterType.QUERY)
+        .build()?.name == expectedName
+
     where:
     apiParam                                            | paramType | expectedName
     apiParamWithNameAndValue("bodyParam", "body Param") | "body"    | "bodyParam"

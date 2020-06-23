@@ -25,6 +25,7 @@ import org.springframework.plugin.metadata.SimplePluginMetadata;
 public class DocumentationType extends SimplePluginMetadata {
   public static final DocumentationType SWAGGER_12 = new DocumentationType("swagger", "1.2");
   public static final DocumentationType SWAGGER_2 = new DocumentationType("swagger", "2.0");
+  public static final DocumentationType OAS_30 = new DocumentationType("openApi", "3.0");
   public static final DocumentationType SPRING_WEB = new DocumentationType("spring-web", "1.0");
   private final MediaType mediaType;
 

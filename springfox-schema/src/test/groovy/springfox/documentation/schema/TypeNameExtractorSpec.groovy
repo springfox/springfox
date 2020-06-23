@@ -19,13 +19,11 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class TypeNameExtractorSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
   TypeResolver resolver = new TypeResolver()
@@ -122,6 +120,4 @@ class TypeNameExtractorSpec extends SchemaSpecification {
     def nameReturnAdjusted = typeNameExtractor.typeName(contextReturn, knownNames)
     nameReturnAdjusted == "GenericType_4«ResponseEntityAlternative«SimpleType_2»»"
   }
-
-  //TODO: test cases for parent (withAndWithout)
 }

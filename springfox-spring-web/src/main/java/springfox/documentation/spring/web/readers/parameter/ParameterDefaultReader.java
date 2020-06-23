@@ -50,6 +50,8 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
     boolean isSkip = ValueConstants.DEFAULT_NONE.equals(defaultValue);
     if (!isSkip) {
       context.parameterBuilder().defaultValue(defaultValue);
+      context.requestParameterBuilder()
+             .query(q -> q.defaultValue(defaultValue));
     }
   }
 

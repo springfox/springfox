@@ -21,8 +21,8 @@ package springfox.documentation.swagger1.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -31,38 +31,47 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterNameReaderSpec extends DocumentationContextSpec {
+class ParameterNameReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ModelProviderForServiceSupport {
 
   def "Should support only swagger 1 documentation types"() {
     given:
-      def sut = new ParameterNameReader()
+    def sut = new ParameterNameReader()
+
     expect:
-      !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      !sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    !sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "param required"() {
     given:
-      def operationContext = Mock(OperationContext)
-      def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParam], new TypeResolver().resolve(Object.class))
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    def operationContext = Mock(OperationContext)
+    def resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "", [apiParam], new TypeResolver().resolve(Object.class))
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+
     and: "mocks are setup"
-      operationContext.consumes() >> []
+    operationContext.consumes() >> []
     and: "documentationContext is setup"
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          documentationContext(), genericNamingStrategy, operationContext)
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
+        documentationContext(), genericNamingStrategy, operationContext, 0)
+
     when:
-      def sut = nameReader(apiParam)
-      sut.apply(parameterContext)
+    def sut = nameReader(apiParam)
+    sut.apply(parameterContext)
+
     then:
-      parameterContext.parameterBuilder().build().name == expectedName
+    parameterContext.requestParameterBuilder()
+        .in(ParameterType.BODY)
+        .build().name == expectedName
+
     where:
-      apiParam                                                            | paramType | expectedName
-      [name: { -> "bodyParam" }, value: { -> "body Param"}] as ApiParam   | "body"    | "body"
-      null                                                                | "body"    | "body"
+    apiParam                                                           | paramType | expectedName
+    [name: { -> "bodyParam" }, value: { -> "body Param" }] as ApiParam | "body"    | "body"
+    null                                                               | "body"    | "body"
   }
 
   def nameReader(annotation) {

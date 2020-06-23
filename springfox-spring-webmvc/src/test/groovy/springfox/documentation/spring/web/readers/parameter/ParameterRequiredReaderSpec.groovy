@@ -25,9 +25,9 @@ import org.springframework.mock.env.MockEnvironment
 import org.springframework.web.bind.annotation.PathVariable
 import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.common.SpringVersion
 import springfox.documentation.common.Version
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -39,10 +39,11 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import java.lang.annotation.Annotation
 
-import static org.springframework.web.bind.annotation.ValueConstants.*
+import static org.springframework.web.bind.annotation.ValueConstants.DEFAULT_NONE
 
-@Mixin([RequestMappingSupport])
-class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ParameterAnnotationSupport {
+class ParameterRequiredReaderSpec
+    extends DocumentationContextSpec
+    implements ParameterAnnotationSupport, RequestMappingSupport {
   @Shared
   def description = new DescriptionResolver(new MockEnvironment())
 
@@ -67,11 +68,11 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
             new TypeResolver().resolve(Object.class))
     ParameterContext parameterContext =
         new ParameterContext(
-            resolvedMethodParameter,
-            new ParameterBuilder(),
+            resolvedMethodParameter
+            ,
             documentationContext(),
             Mock(GenericTypeNamingStrategy),
-            operation)
+            operation, 0)
     and:
     def springVersion = Mock(SpringVersion.class);
     springVersion.getVersion() >> Version.parse(version)
@@ -82,6 +83,10 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
 
     then:
     parameterContext.parameterBuilder().build().isRequired() == expected
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().required == expected
 
     where:
     paramAnnotations                                        | version         | requestPattern           | expected
@@ -131,11 +136,11 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
         paramAnnotations,
         new TypeResolver().resolve(Object.class))
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter,
-        new ParameterBuilder(),
+        resolvedMethodParameter
+        ,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     def operationCommand = new ParameterRequiredReader(description) {
@@ -148,6 +153,10 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
 
     then:
     !parameterContext.parameterBuilder().build().isRequired()
+    !parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().required
 
     where:
     paramAnnotations << [

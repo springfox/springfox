@@ -72,17 +72,17 @@ public class AbstractDocumentationPluginsBootstrapper {
   }
 
   protected void bootstrapDocumentationPlugins() {
-    List<DocumentationPlugin> plugins = StreamSupport.stream(documentationPluginsManager.documentationPlugins()
-        .spliterator(), false)
+    List<DocumentationPlugin> plugins = documentationPluginsManager.documentationPlugins()
+        .stream()
         .sorted(pluginOrdering())
         .collect(toList());
-    LOGGER.info("Found {} custom documentation plugin(s)", plugins.size());
+    LOGGER.debug("Found {} custom documentation plugin(s)", plugins.size());
     for (DocumentationPlugin each : plugins) {
       DocumentationType documentationType = each.getDocumentationType();
       if (each.isEnabled()) {
         scanDocumentation(buildContext(each));
       } else {
-        LOGGER.info("Skipping initializing disabled plugin bean {} v{}",
+        LOGGER.debug("Skipping initializing disabled plugin bean {} v{}",
             documentationType.getName(), documentationType.getVersion());
       }
     }

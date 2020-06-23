@@ -51,12 +51,13 @@ import java.util.List;
     ApiListingBuilderPlugin.class,
     OperationBuilderPlugin.class,
     ParameterBuilderPlugin.class,
+    ResponseBuilderPlugin.class,
     ExpandedParameterBuilderPlugin.class,
-    ResourceGroupingStrategy.class,
     OperationModelsProviderPlugin.class,
     DefaultsProviderPlugin.class,
     PathDecorator.class,
-    ApiListingScannerPlugin.class
+    ApiListingScannerPlugin.class,
+    ModelNamesRegistryFactoryPlugin.class
 })
 public class SpringfoxWebConfiguration {
 

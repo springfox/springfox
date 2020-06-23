@@ -20,15 +20,16 @@ package springfox.documentation.swagger.readers.parameter;
 
 
 import io.swagger.annotations.ExampleProperty;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
-import static java.util.Optional.*;
 import static org.springframework.util.StringUtils.*;
 
 public class Examples {
@@ -41,9 +42,50 @@ public class Examples {
     for (ExampleProperty each : example.value()) {
       if (!isEmpty(each.value())) {
         examples.putIfAbsent(each.mediaType(), new LinkedList<>());
-        examples.get(each.mediaType()).add(new Example(ofNullable(each.mediaType())
-            .filter(((Predicate<String>) String::isEmpty).negate())
-            .orElse(null), each.value()));
+        examples.get(each.mediaType()).add(new ExampleBuilder()
+            .mediaType(each.mediaType())
+            .value(each.value())
+            .build());
+      }
+    }
+    return examples;
+  }
+
+  public static List<Example> allExamples(io.swagger.annotations.Example example) {
+    List<Example> examples = new ArrayList<>();
+    for (ExampleProperty each : example.value()) {
+      if (!isEmpty(each.value())) {
+        examples.add(new ExampleBuilder()
+            .mediaType(each.mediaType())
+            .value(each.value())
+            .build());
+      }
+    }
+    return examples;
+  }
+
+  public static Map<String, List<Example>> examples(String mediaType, ExampleObject[] exampleObjects) {
+    Map<String, List<Example>> examples = new HashMap<>();
+    for (ExampleObject each : exampleObjects) {
+      if (!isEmpty(each.value())) {
+        examples.putIfAbsent(mediaType, new LinkedList<>());
+        examples.get(mediaType).add(new ExampleBuilder()
+                                               .mediaType(mediaType)
+                                               .value(each.value())
+                                               .build());
+      }
+    }
+    return examples;
+  }
+
+  public static List<Example> allExamples(String mediaType, ExampleObject[] exampleObjects) {
+    List<Example> examples = new ArrayList<>();
+    for (ExampleObject each : exampleObjects) {
+      if (!isEmpty(each.value())) {
+        examples.add(new ExampleBuilder()
+                         .mediaType(mediaType)
+                         .value(each.value())
+                         .build());
       }
     }
     return examples;

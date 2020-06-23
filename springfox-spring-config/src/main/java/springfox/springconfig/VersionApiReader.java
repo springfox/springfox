@@ -21,6 +21,10 @@ package springfox.springconfig;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.service.ParameterStyle;
+import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -48,6 +52,13 @@ public class VersionApiReader implements ParameterBuilderPlugin {
           .parameterType("header")
           .name("v")
           .type(resolver.resolve(String.class)); //<3>
+      parameterContext.requestParameterBuilder()
+          .in(ParameterType.HEADER)
+          .name("v")
+          .query(q -> q.style(ParameterStyle.SIMPLE)
+                      .model(new ModelSpecificationBuilder()
+                                 .scalarModel(ScalarType.STRING)
+                                 .build()));
     }
   }
 
@@ -56,4 +67,4 @@ public class VersionApiReader implements ParameterBuilderPlugin {
     return true; //<4>
   }
 }
-// tag::parameter-builder-plugin[]
+// end::parameter-builder-plugin[]

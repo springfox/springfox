@@ -32,25 +32,22 @@ public interface ViewProviderPlugin extends Plugin<DocumentationType> {
 
   /**
    * Finds a active view for the parameter type
-   * @param type - resolved type to provide view for
-   * @param parameter - resolved method parameter to take additional information from, if needed 
+   * @param parameter - resolved method parameter to take additional information from, if needed
    * @return resolved view name, if found
    */
-  Optional<ResolvedType> viewFor(ResolvedType type, ResolvedMethodParameter parameter);
+  Optional<ResolvedType> viewFor(ResolvedMethodParameter parameter);
 
   /**
    * Finds a active view for the  return type
-   * @param type - resolved type to provide view for
-   * @param context - method context to take additional information from, if needed 
+   * @param context - method context to take additional information from, if needed
    * @return resolved view name, if found
    */
-  Optional<ResolvedType> viewFor(ResolvedType type, RequestMappingContext context);
+  Optional<ResolvedType> viewFor(RequestMappingContext context);
   
   /**
    * Finds a active view for the  return type
-   * @param type - resolved type to provide view for
-   * @param context - operation context to take additional information from, if needed 
+   * @param context - operation context to take additional information from, if needed
    * @return resolved view name, if found
    */
-  Optional<ResolvedType> viewFor(ResolvedType type, OperationContext context);
+  Optional<ResolvedType> viewFor(OperationContext context);
 }

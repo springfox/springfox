@@ -74,9 +74,8 @@ class ResponseMessageBuilderSpec extends Specification {
     def sut = new ResponseMessageBuilder()
 
     when:
-    sut.headers(headers("header1", "header2"))
-    sut.headersWithDescription(headers("header3"))
-    sut.headers(null)
+    sut.headersWithDescription(headersWithEmptyDescription("header1", "header2"))
+    sut.headersWithDescription(headersWithEmptyDescription("header3"))
     sut.headersWithDescription(null)
 
     and:
@@ -106,7 +105,12 @@ class ResponseMessageBuilderSpec extends Specification {
 
   def headersWithDescription(String description, String... names) {
     def map = new HashMap<>()
-    names.collect({ map.put(it, new Header(it, description, new ModelRef("string"))) })
+    names.collect({ map.put(it, new Header(
+        it,
+        description,
+        new ModelRef("string"),
+        null
+    )) })
     map
   }
 }

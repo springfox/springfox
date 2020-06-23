@@ -21,18 +21,21 @@ package springfox.documentation.builders;
 
 
 import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
+import springfox.documentation.service.ModelNamesRegistry;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static java.util.function.Function.*;
@@ -49,16 +52,18 @@ public class ApiListingBuilder {
   private String host;
   private int position;
 
-  private Set<String> produces = new HashSet<>();
-  private Set<String> consumes = new HashSet<>();
-  private Set<String> protocol = new HashSet<>();
+  private Set<String> produces = new TreeSet<>();
+  private Set<String> consumes = new TreeSet<>();
+  private final Set<String> protocol = new TreeSet<>();
   private List<SecurityReference> securityReferences = new ArrayList<>();
   private List<ApiDescription> apis = new ArrayList<>();
 
   private final Set<Tag> tags = new TreeSet<>(tagComparator());
-  private final Set<String> tagNames = new HashSet<>();
-  private final Map<String, Model> models = new HashMap<>();
-  private final Map<String, Tag> tagLookup = new HashMap<>();
+  private final Set<String> tagNames = new TreeSet<>();
+  private final Map<String, Model> models = new TreeMap<>();
+  private final Map<String, Tag> tagLookup = new TreeMap<>();
+  private final Map<String, ModelSpecification> modelSpecifications = new TreeMap<>();
+  private ModelNamesRegistry modelNamesRegistry;
 
   /**
    * Update the sorting order for api descriptions
@@ -76,7 +81,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder apiVersion(String apiVersion) {
-    this.apiVersion = defaultIfAbsent(apiVersion, this.apiVersion);
+    this.apiVersion = defaultIfAbsent(
+        apiVersion,
+        this.apiVersion);
     return this;
   }
 
@@ -87,7 +94,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder basePath(String basePath) {
-    this.basePath = defaultIfAbsent(basePath, this.basePath);
+    this.basePath = defaultIfAbsent(
+        basePath,
+        this.basePath);
     return this;
   }
 
@@ -98,7 +107,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder resourcePath(String resourcePath) {
-    this.resourcePath = defaultIfAbsent(resourcePath, this.resourcePath);
+    this.resourcePath = defaultIfAbsent(
+        resourcePath,
+        this.resourcePath);
     return this;
   }
 
@@ -135,7 +146,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder appendProduces(List<String> produces) {
-    this.produces.addAll(nullToEmptyList(produces));
+    this.produces.addAll(nullToEmptyList(produces).stream()
+                                                  .filter(Objects::nonNull)
+                                                  .collect(toSet()));
     return this;
   }
 
@@ -146,7 +159,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder appendConsumes(List<String> consumes) {
-    this.consumes.addAll(nullToEmptyList(consumes));
+    this.consumes.addAll(nullToEmptyList(consumes).stream()
+                                                  .filter(Objects::nonNull)
+                                                  .collect(toSet()));
     return this;
   }
 
@@ -158,7 +173,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder host(String host) {
-    this.host = defaultIfAbsent(host, this.host);
+    this.host = defaultIfAbsent(
+        host,
+        this.host);
     return this;
   }
 
@@ -212,13 +229,26 @@ public class ApiListingBuilder {
   }
 
   /**
+   * Adds to the models collection
+   *
+   * @param models - model entries by name
+   * @return this
+   */
+  public ApiListingBuilder modelSpecifications(Map<String, ModelSpecification> models) {
+    this.modelSpecifications.putAll(nullToEmptyMap(models));
+    return this;
+  }
+
+  /**
    * Updates the description
    *
    * @param description - description of the api listing
    * @return this
    */
   public ApiListingBuilder description(String description) {
-    this.description = defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(
+        description,
+        this.description);
     return this;
   }
 
@@ -240,7 +270,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder tagNames(Set<String> tagNames) {
-    this.tagNames.addAll(nullToEmptySet(tagNames));
+    this.tagNames.addAll(nullToEmptySet(tagNames).stream()
+                                                 .filter(Objects::nonNull)
+                                                 .collect(toSet()));
     return this;
   }
 
@@ -258,19 +290,30 @@ public class ApiListingBuilder {
 
   /**
    * Globally configured tags
+   *
    * @param availableTags - tags available for services and operations
    * @return this
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
-    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(Tag::getName, identity())));
+    this.tagLookup.putAll(nullToEmptySet(availableTags).stream()
+                                                       .collect(toMap(
+                                                           Tag::getName,
+                                                           identity())));
+    return this;
+  }
+
+  public ApiListingBuilder modelNamesRegistry(ModelNamesRegistry modelNamesRegistry) {
+    this.modelNamesRegistry = modelNamesRegistry;
     return this;
   }
 
   public ApiListing build() {
     this.tags.addAll(tagNames.stream()
-        .filter(emptyTags())
-        .map(toTag(descriptor(tagLookup, description)))
-        .collect(toSet()));
+                             .filter(emptyTags())
+                             .map(toTag(descriptor(
+                                 tagLookup,
+                                 description)))
+                             .collect(toSet()));
     return new ApiListing(
         apiVersion,
         basePath,
@@ -282,6 +325,8 @@ public class ApiListingBuilder {
         securityReferences,
         apis,
         models,
+        modelSpecifications,
+        modelNamesRegistry,
         description,
         position,
         tags);

@@ -34,11 +34,12 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class ApiDescriptionBuilder {
   private String groupName;
   private String path;
+  private String summary;
   private String description;
   private List<Operation> operations;
-  private Comparator<Operation> operationOrdering;
   private Boolean hidden;
   private Function<String, String> pathDecorator = identity();
+  private final Comparator<Operation> operationOrdering;
 
   public ApiDescriptionBuilder(Comparator<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
@@ -107,10 +108,16 @@ public class ApiDescriptionBuilder {
     return this;
   }
 
+  public ApiDescriptionBuilder summary(String summary) {
+    this.summary = summary;
+    return this;
+  }
+
   public ApiDescription build() {
     return new ApiDescription(
         groupName,
         pathDecorator.apply(path),
+        summary,
         description,
         operations,
         hidden);

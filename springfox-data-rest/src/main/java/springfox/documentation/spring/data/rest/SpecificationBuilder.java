@@ -75,7 +75,7 @@ abstract class SpecificationBuilder {
     return new AssociationActionSpecificationBuilder(context, path);
   }
 
-  SpecificationBuilder withPath(String path) {
+  SpecificationBuilder path(String path) {
     this.path = path;
     return this;
   }
@@ -95,7 +95,7 @@ abstract class SpecificationBuilder {
     return this;
   }
 
-  SpecificationBuilder withParameter(ResolvedMethodParameter parameter) {
+  SpecificationBuilder parameter(ResolvedMethodParameter parameter) {
     this.parameters.add(parameter);
     return this;
   }
@@ -124,7 +124,7 @@ abstract class SpecificationBuilder {
     this.path = path;
   }
 
-  abstract SpecificationBuilder withParameterType(ParameterType parameterType);
+  abstract SpecificationBuilder parameterType(ParameterType parameterType);
 
   abstract Optional<ActionSpecification> build();
 
@@ -147,20 +147,20 @@ abstract class SpecificationBuilder {
     }
 
     @Override
-    SpecificationBuilder withParameterType(ParameterType parameterType) {
+    SpecificationBuilder parameterType(ParameterType parameterType) {
 
       int index = this.getParameters().size();
 
       switch (parameterType) {
         case ID:
-          return withParameter(new ResolvedMethodParameter(
+          return parameter(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id"),
               resolveType(context.getEntityContext(), RepositoryMetadata::getIdType)));
 
         case RESOURCE:
-          return withParameter(new ResolvedMethodParameter(
+          return parameter(new ResolvedMethodParameter(
               0,
               "body",
               bodyAnnotations(),
@@ -169,7 +169,7 @@ abstract class SpecificationBuilder {
               : context.getEntityContext().getTypeResolver().resolve(String.class)));
 
         case ASSOCIATION:
-          return withParameter(new ResolvedMethodParameter(
+          return parameter(new ResolvedMethodParameter(
               index,
               propertyIdentifierName(property),
               pathAnnotations(propertyIdentifierName(property)),
@@ -245,18 +245,18 @@ abstract class SpecificationBuilder {
     }
 
     @Override
-    SpecificationBuilder withParameterType(ParameterType parameterType) {
+    SpecificationBuilder parameterType(ParameterType parameterType) {
 
       switch (parameterType) {
         case ID:
-          return withParameter(new ResolvedMethodParameter(
+          return parameter(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id", handlerMethod),
               resolveType(context, RepositoryMetadata::getIdType)));
 
         case RESOURCE:
-          return withParameter(new ResolvedMethodParameter(
+          return parameter(new ResolvedMethodParameter(
               0,
               "body",
               bodyAnnotations(handlerMethod),
@@ -268,19 +268,19 @@ abstract class SpecificationBuilder {
           TypeResolver typeResolver = context.getTypeResolver();
 
           //noinspection unchecked
-          withParameter(new ResolvedMethodParameter(
+          parameter(new ResolvedMethodParameter(
               0,
               configuration.getPageParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(Integer.class)));
           //noinspection unchecked
-          withParameter(new ResolvedMethodParameter(
+          parameter(new ResolvedMethodParameter(
               1,
               configuration.getLimitParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(Integer.class)));
           //noinspection unchecked
-          withParameter(new ResolvedMethodParameter(
+          parameter(new ResolvedMethodParameter(
               2,
               configuration.getSortParamName(),
               Collections.EMPTY_LIST,

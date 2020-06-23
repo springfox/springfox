@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/petgrooming/voidMethod/{input}": {
@@ -32,10 +32,10 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_3",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -50,8 +50,7 @@
                     "200": {
                         "description": "Just testing"
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

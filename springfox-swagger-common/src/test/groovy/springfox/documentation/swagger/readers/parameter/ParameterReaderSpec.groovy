@@ -22,9 +22,9 @@ package springfox.documentation.swagger.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -34,8 +34,11 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ParameterReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ApiParamAnnotationSupport,
+        ModelProviderForServiceSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
   def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
 
@@ -44,10 +47,14 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
     given:
     def nonNullAnnotations = [apiParamAnnotation, reqParamAnnot].findAll { it != null }
     def resolvedMethodParameter =
-        new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
+        new ResolvedMethodParameter(
+            0,
+            "default",
+            nonNullAnnotations,
+            new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        documentationContext(), genericNamingStrategy, Mock(OperationContext))
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
+        documentationContext(), genericNamingStrategy, Mock(OperationContext), 0)
     def sut = stubbedParamBuilder()
 
     when:
@@ -55,19 +62,35 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
 
     then:
     parameterContext.parameterBuilder().build()."$resultProperty" == expected
+    if (nestedSimpleProperty) {
+      parameterContext.requestParameterBuilder()
+          .name("test")
+          .in(ParameterType.QUERY)
+          .build()
+          .parameterSpecification
+          .query
+          ?.orElse(null)
+          ?."$resultProperty" == expected
+    } else if (!nestedSimpleProperty) {
+      def built = parameterContext.requestParameterBuilder().build()
+      if (built.hasProperty("$resultProperty")) {
+        built."$resultProperty" == expected
+      }
+    }
 
     and:
     !sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.OAS_30)
 
     where:
-    resultProperty | apiParamAnnotation                     | reqParamAnnot | expected
-    'description'  | null                                   | null          | null
-    'name'         | apiParamWithNameAndValue("AnDesc", "") | null          | 'AnDesc'
-    'description'  | apiParamWithNameAndValue("", "AnDesc") | null          | 'AnDesc'
-    'defaultValue' | apiParamWithDefault('defl')            | null          | 'defl'
-    'paramAccess'  | apiParamWithAccess('myAccess')         | null          | 'myAccess'
+    resultProperty | nestedSimpleProperty | apiParamAnnotation                     | reqParamAnnot | expected
+    'description'  | false                | null                                   | null          | null
+    'name'         | false                | apiParamWithNameAndValue("AnDesc", "") | null          | 'AnDesc'
+    'description'  | false                | apiParamWithNameAndValue("", "AnDesc") | null          | 'AnDesc'
+    'defaultValue' | true                 | apiParamWithDefault('defl')            | null          | 'defl'
+    'paramAccess'  | null                 | apiParamWithAccess('myAccess')         | null          | 'myAccess'
   }
 
   def stubbedParamBuilder() {

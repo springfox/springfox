@@ -22,52 +22,84 @@ package springfox.documentation.spi.schema.contexts;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import springfox.documentation.builders.ModelPropertyBuilder;
+import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.spi.DocumentationType;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.Optional;
 
-import static java.util.Optional.*;
-
 public class ModelPropertyContext {
   private final ModelPropertyBuilder builder;
+  private final PropertySpecificationBuilder specificationBuilder;
   private final TypeResolver resolver;
-  private final Optional<BeanPropertyDefinition> beanPropertyDefinition;
-  private final Optional<AnnotatedElement> annotatedElement;
-  private final DocumentationType documentationType;
+  private final BeanPropertyDefinition beanPropertyDefinition;
+  private final AnnotatedElement annotatedElement;
+
+  private final ModelContext owner;
 
   public ModelPropertyContext(
       ModelPropertyBuilder builder,
+      PropertySpecificationBuilder specificationBuilder,
       AnnotatedElement annotatedElement,
       TypeResolver resolver,
-      DocumentationType documentationType) {
+      ModelContext owner) {
+    this(
+        builder,
+        specificationBuilder,
+        resolver,
+        null,
+        annotatedElement,
+        owner);
 
-    this.builder = builder;
-    this.resolver = resolver;
-    this.annotatedElement = ofNullable(annotatedElement);
-    this.beanPropertyDefinition = empty();
-    this.documentationType = documentationType;
   }
 
   public ModelPropertyContext(
       ModelPropertyBuilder builder,
       BeanPropertyDefinition beanPropertyDefinition,
       TypeResolver resolver,
-      DocumentationType documentationType) {
+      ModelContext owner,
+      PropertySpecificationBuilder specificationBuilder) {
+    this(
+        builder,
+        specificationBuilder,
+        resolver,
+        beanPropertyDefinition,
+        null,
+        owner);
+  }
 
+  private ModelPropertyContext(
+      ModelPropertyBuilder builder,
+      PropertySpecificationBuilder specificationBuilder,
+      TypeResolver resolver,
+      BeanPropertyDefinition beanPropertyDefinition,
+      AnnotatedElement annotatedElement,
+      ModelContext owner) {
     this.builder = builder;
+    this.specificationBuilder = specificationBuilder;
     this.resolver = resolver;
-    this.beanPropertyDefinition = ofNullable(beanPropertyDefinition);
-    this.documentationType = documentationType;
-    annotatedElement = empty();
+    this.beanPropertyDefinition = beanPropertyDefinition;
+    this.annotatedElement = annotatedElement;
+    this.owner = owner;
   }
 
   /**
    * Model property build. Use this to override model property attributes
    * @return the builder
+   * @deprecated Use {@link ModelPropertyContext#getSpecificationBuilder()} instead
+   * @since 3.0
    */
+  @Deprecated
   public ModelPropertyBuilder getBuilder() {
     return builder;
+  }
+
+  /**
+   * Model property specification. Use this to override model property attributes
+   * @return the builder
+   */
+  public PropertySpecificationBuilder getSpecificationBuilder() {
+    return specificationBuilder;
   }
 
   /**
@@ -75,7 +107,7 @@ public class ModelPropertyContext {
    * @return documentation type
    */
   public DocumentationType getDocumentationType() {
-    return documentationType;
+    return owner.getDocumentationType();
   }
 
 
@@ -83,14 +115,14 @@ public class ModelPropertyContext {
    * @return annotated element that this model property is annotated with
    */
   public Optional<AnnotatedElement> getAnnotatedElement() {
-    return annotatedElement;
+    return Optional.ofNullable(annotatedElement);
   }
 
   /**
    * @return bean property definition for this model property
    */
   public Optional<BeanPropertyDefinition> getBeanPropertyDefinition() {
-    return beanPropertyDefinition;
+    return Optional.ofNullable(beanPropertyDefinition);
   }
 
   /**
@@ -98,5 +130,13 @@ public class ModelPropertyContext {
    */
   public TypeResolver getResolver() {
     return resolver;
+  }
+
+  /**
+   * Owning model context
+   * @return context that owns the property
+   */
+  public ModelContext getOwner() {
+    return owner;
   }
 }

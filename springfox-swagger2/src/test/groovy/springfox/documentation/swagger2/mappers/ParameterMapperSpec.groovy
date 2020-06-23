@@ -25,7 +25,6 @@ class ParameterMapperSpec extends Specification {
       mapped.description == "test description"
       mapped.required
       parameterInstance.isAssignableFrom(mapped.class)
-      //TODO: check the schema property
 
     where:
       parameterType  | modelRef                                                 | parameterInstance

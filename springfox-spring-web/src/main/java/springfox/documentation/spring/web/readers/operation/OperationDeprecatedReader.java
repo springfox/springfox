@@ -37,8 +37,9 @@ public class OperationDeprecatedReader implements OperationBuilderPlugin {
     Optional<Deprecated> annotationOnMethod = context.findAnnotation(Deprecated.class);
     Optional<Deprecated> annotationOnController = context.findControllerAnnotation(Deprecated.class);
 
-    context.operationBuilder().deprecated(String.valueOf(annotationOnMethod.isPresent() ||
-                                                         annotationOnController.isPresent()));
+    boolean deprecated = annotationOnMethod.isPresent() ||
+                                           annotationOnController.isPresent();
+    context.operationBuilder().deprecated(deprecated ? "true" : null);
   }
 
   @Override

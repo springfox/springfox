@@ -20,10 +20,10 @@ package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpHeaders
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import java.util.function.Function
 import java.util.stream.Collectors
@@ -32,10 +32,10 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
-class ModelProviderSpec extends Specification {
+class ModelProviderSpec extends Specification implements ModelProviderSupport {
+  @Shared def resolver = new TypeResolver()
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
   def getNames =
       new Function<Model, String>() {
         String apply(Model model) {

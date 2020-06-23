@@ -22,6 +22,7 @@ package springfox.bean.validators.plugins.schema;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
@@ -46,7 +47,24 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
   public void apply(ModelPropertyContext context) {
     Optional<Size> size = extractAnnotation(context);
 
-    size.ifPresent(size1 -> context.getBuilder().allowableValues(stringLengthRange(size1)));
+    size.ifPresent(size1 -> {
+      AllowableRangeValues allowableRangeValues = stringLengthRange(size1);
+      context.getBuilder().allowableValues(allowableRangeValues);
+      context.getSpecificationBuilder()
+             .stringFacet(s -> {
+               s.minLength(tryGetInteger(allowableRangeValues.getMin()).orElse(null));
+               s.maxLength(tryGetInteger(allowableRangeValues.getMax()).orElse(null));
+             });
+    });
+  }
+
+
+  private Optional<Integer> tryGetInteger(String min) {
+    try {
+      return Optional.of(Integer.valueOf(min));
+    } catch (NumberFormatException e) {
+      return Optional.empty();
+    }
   }
 
   Optional<Size> extractAnnotation(ModelPropertyContext context) {

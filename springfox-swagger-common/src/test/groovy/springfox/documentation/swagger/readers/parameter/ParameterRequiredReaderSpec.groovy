@@ -21,9 +21,10 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
-import springfox.documentation.builders.ParameterBuilder
+import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -31,8 +32,10 @@ import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport])
-class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ParameterRequiredReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ApiParamAnnotationSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
   def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
 
@@ -46,6 +49,10 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
 
     then:
     parameterContext.parameterBuilder().build().isRequired() == expected
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().required == expected
 
     where:
     paramAnnotation             | expected
@@ -54,6 +61,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
     null                        | false
   }
 
+  @Unroll
   def "parameters hidden using default reader"() {
     given:
     def parameterContext = setupParameterContext(paramAnnotation)
@@ -64,6 +72,10 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
 
     then:
     parameterContext.parameterBuilder().build().isHidden() == expected
+    parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build().hidden == expected
 
     where:
     paramAnnotation           | expected
@@ -80,11 +92,11 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
         new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     new ParameterContext(
-        resolvedMethodParameter,
-        new ParameterBuilder(),
+        resolvedMethodParameter
+        ,
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
   }
 
   def stubbedParamBuilder() {

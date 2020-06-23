@@ -23,7 +23,7 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.service.CollectionFormat
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -34,49 +34,56 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
+class ParameterMultiplesReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ModelProviderForServiceSupport {
 
   def sut = new ParameterMultiplesReader();
-  
+
   def "Should support all documentation types"() {
     expect:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
   }
 
   @Unroll
   def "param multiples #apiParamAnnotation && #paramType for default reader"() {
     given:
-      ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
-      ParameterContext parameterContext = new ParameterContext(
-          resolvedMethodParameter,
-          new ParameterBuilder(),
-          documentationContext(),
-          Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+    ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
+    ResolvedMethodParameter resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter,
+        documentationContext(),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext), 0)
 
     when:
-      sut.apply(parameterContext)
+    sut.apply(parameterContext)
+    
     then:
-      parameterContext.parameterBuilder().build().isAllowMultiple() == expected
+    parameterContext.parameterBuilder().build().isAllowMultiple() == (expected != null)
+    parameterContext.requestParameterBuilder()
+                    .query { q ->
+                        assert q.collectionFormat == expected
+                    }
+
     where:
-      apiParamAnnotation                        | paramType                       | expected
-      [allowMultiple: { -> true }] as ApiParam  | String.class                    | false
-      [allowMultiple: { -> true }] as ApiParam  | String[].class                  | true
-      [allowMultiple: { -> false }] as ApiParam | String[].class                  | true
-      [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | true
-      null                                      | String[].class                  | true
-      null                                      | List.class                      | true
-      null                                      | Collection.class                | true
-      null                                      | Set.class                       | true
-      null                                      | Vector.class                    | true
-      null                                      | Object[].class                  | true
-      null                                      | Integer.class                   | false
-      null                                      | Iterable.class                  | true
+    apiParamAnnotation                        | paramType                       | expected
+    [allowMultiple: { -> true }] as ApiParam  | String.class                    | null
+    [allowMultiple: { -> true }] as ApiParam  | String[].class                  | CollectionFormat.CSV
+    [allowMultiple: { -> false }] as ApiParam | String[].class                  | CollectionFormat.CSV
+    [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | CollectionFormat.CSV
+    null                                      | String[].class                  | CollectionFormat.CSV
+    null                                      | List.class                      | CollectionFormat.CSV
+    null                                      | Collection.class                | CollectionFormat.CSV
+    null                                      | Set.class                       | CollectionFormat.CSV
+    null                                      | Vector.class                    | CollectionFormat.CSV
+    null                                      | Object[].class                  | CollectionFormat.CSV
+    null                                      | Integer.class                   | null
+    null                                      | Iterable.class                  | CollectionFormat.CSV
   }
 
 

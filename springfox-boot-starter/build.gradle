@@ -1,0 +1,23 @@
+group = 'io.springfox'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  api project(':springfox-oas')
+  api project(':springfox-data-rest')
+  api project(':springfox-bean-validators')
+  api project(':springfox-swagger2')
+  api project(':springfox-swagger-ui')
+  api libs.core
+  api libs.spring
+
+  compileOnly libs.springProvidedWithMvc
+  compileOnly "org.springframework:spring-webflux:$spring"
+  compileOnly libs.springBootProvided
+  compileOnly libs.clientProvided
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
+  annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:2.3.1.RELEASE"
+
+}

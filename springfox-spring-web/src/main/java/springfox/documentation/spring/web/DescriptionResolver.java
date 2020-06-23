@@ -35,7 +35,7 @@ public class DescriptionResolver {
 
   public DescriptionResolver(Environment environment) {
     this.environment = environment;
-    this.cache = new HashMap<String, String>();
+    this.cache = new HashMap<>();
   }
 
   //Thanks to http://stackoverflow.com/a/37962230/19219
@@ -43,7 +43,7 @@ public class DescriptionResolver {
     if (isEmpty(expression)) {
       return expression;
     }
-    
+
     // Check if the expression is already been parsed
     if (cache.containsKey(expression)) {
       return cache.get(expression);

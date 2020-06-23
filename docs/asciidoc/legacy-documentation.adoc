@@ -281,7 +281,7 @@ example of this can be seen in the https://github.com/swagger-api/swagger-codege
 ===## The default value of `operationId` according to Springfox
 By default, when using Springfox in Swagger 2.0 mode, the value of `operationID` will be rendered using the following structure: "`[java_method_name_here]Using[HTTP_verb_here]`". For example, if one has a method `getPets()` connected to an HTTP GET verb, Springfox will render `getPetsUsingGET` for the operationId.
 
-====== Given this annotated method ...
+===== Given this annotated method ...
 
 [source,java]
 [subs="verbatim,attributes"]
@@ -293,7 +293,7 @@ By default, when using Springfox in Swagger 2.0 mode, the value of `operationID`
    }
 ----
 
-====== the default `operationId` will render looking like this:
+===== the default `operationId` will render looking like this:
 
 [source,json]
 [subs="verbatim,attributes"]

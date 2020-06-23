@@ -18,31 +18,35 @@
  */
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport, ConfiguredObjectMapperSupport, AlternateTypesSupport])
-class UnwrappedTypeSpec extends Specification {
+class UnwrappedTypeSpec
+    extends Specification
+    implements ModelProviderSupport,
+        ConfiguredObjectMapperSupport {
+  @Shared def resolver = new TypeResolver()
 
   def "Unwrapped field with regular getter"() {
     given:
     def mapper = objectMapperThatUsesFields()
 
     when:
-    def json = mapper.writer().writeValueAsString(unwrappedType())
+    def json = mapper.writer().writeValueAsString(unwrappedTypeCategory())
 
     then:
     json == """{"name":"test"}"""
   }
 
-  def unwrappedType() {
+  def unwrappedTypeCategory() {
     def instance = new UnwrappedTypeForFieldWithGetter()
     instance.category = new Category()
     instance.category.name = "test"

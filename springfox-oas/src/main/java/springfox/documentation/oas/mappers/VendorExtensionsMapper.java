@@ -24,8 +24,8 @@ import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -33,17 +33,22 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 
-@Mapper
+@Mapper(componentModel = "spring", implementationName = "OasVendorExtensionsMapperImpl")
 public class VendorExtensionsMapper {
 
-  public Map<String, Object> mapExtensions(List<VendorExtension> from) {
+  public Map<String, Object> mapExtensions(Collection<VendorExtension> from) {
+    if (from == null) {
+      return new HashMap<>();
+    }
     Map<String, Object> extensions = new TreeMap<>();
     Iterable<ListVendorExtension> listExtensions = from.stream()
         .filter(ListVendorExtension.class::isInstance)
         .map(each -> (ListVendorExtension) each)
         .collect(toList());
     for (ListVendorExtension each : listExtensions) {
-      extensions.put(each.getName(), each.getValue());
+      extensions.put(
+          each.getName(),
+          each.getValue());
     }
     Iterable<Map<String, Object>> objectExtensions = from.stream()
         .filter(ObjectVendorExtension.class::isInstance)
@@ -57,7 +62,9 @@ public class VendorExtensionsMapper {
         .map(each -> (StringVendorExtension) each)
         .collect(toList());
     for (StringVendorExtension each : propertyExtensions) {
-      extensions.put(each.getName(), each.getValue());
+      extensions.put(
+          each.getName(),
+          each.getValue());
     }
     return extensions;
   }
@@ -66,10 +73,12 @@ public class VendorExtensionsMapper {
     return input -> {
       if (!isEmpty(input.getName())) {
         Map<String, Object> map = new HashMap<>();
-          map.put(input.getName(), mapExtensions(input.getValue()));
-          return map;
-        }
-        return propertiesAsMap(input);
+        map.put(
+            input.getName(),
+            mapExtensions(input.getValue()));
+        return map;
+      }
+      return propertiesAsMap(input);
     };
   }
 
@@ -81,13 +90,17 @@ public class VendorExtensionsMapper {
             .map(each -> (StringVendorExtension) each)
             .collect(toList());
     for (StringVendorExtension property : stringExtensions) {
-      properties.put(property.getName(), property.getValue());
+      properties.put(
+          property.getName(),
+          property.getValue());
     }
     Iterable<ObjectVendorExtension> objectExtensions =
         input.getValue().stream().filter(ObjectVendorExtension.class::isInstance)
             .map(each -> (ObjectVendorExtension) each).collect(toList());
     for (ObjectVendorExtension property : objectExtensions) {
-      properties.put(property.getName(), mapExtensions(property.getValue()));
+      properties.put(
+          property.getName(),
+          mapExtensions(property.getValue()));
     }
     return properties;
   }

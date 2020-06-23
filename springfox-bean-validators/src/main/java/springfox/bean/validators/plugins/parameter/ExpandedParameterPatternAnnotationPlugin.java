@@ -51,6 +51,8 @@ public class ExpandedParameterPatternAnnotationPlugin implements ExpandedParamet
     if (pattern.isPresent()) {
       LOG.debug("@Pattern present: {}", pattern.get().regexp());
       context.getParameterBuilder().pattern(pattern.get().regexp());
+      context.getRequestParameterBuilder()
+             .query(q -> q.stringFacet(s -> s.pattern(pattern.get().regexp())));
     }
   }
 }

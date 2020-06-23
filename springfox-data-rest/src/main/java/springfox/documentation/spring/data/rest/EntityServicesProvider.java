@@ -38,7 +38,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.spring.web.paths.Paths.contextPath;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {
@@ -69,7 +69,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
     this.entities = entities;
     this.associations = associations;
     this.extractorConfiguration = extractorConfiguration.orElse(new DefaultExtractorConfiguration());
-    this.contextPath = contextPath(servletContext);
+    this.contextPath = contextPath(servletContext.getContextPath());
   }
 
   public List<RequestHandler> requestHandlers() {

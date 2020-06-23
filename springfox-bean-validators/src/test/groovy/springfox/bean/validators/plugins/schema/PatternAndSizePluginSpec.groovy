@@ -24,11 +24,11 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.PatternAndSizeTestModel
-import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin
-import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 /**
  * @author : ashutosh 
@@ -44,9 +44,10 @@ class PatternAndSizePluginSpec extends Specification{
     def element = PatternAndSizeTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
     when:
     sat.apply(context)
     pat.apply(context)
@@ -72,7 +73,8 @@ class PatternAndSizePluginSpec extends Specification{
         new ModelPropertyBuilder(),
         beanProperty,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext),
+        new PropertySpecificationBuilder(propertyName))
     when:
     sat.apply(context)
     pat.apply(context)

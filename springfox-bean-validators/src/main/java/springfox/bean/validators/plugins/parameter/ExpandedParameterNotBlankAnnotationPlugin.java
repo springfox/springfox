@@ -50,6 +50,7 @@ public class ExpandedParameterNotBlankAnnotationPlugin implements ExpandedParame
     if (notBlank.isPresent()) {
       LOG.debug("@NotBlank present: setting parameter as required and not allowing empty values");
       context.getParameterBuilder().required(true);
+      context.getRequestParameterBuilder().required(true);
     }
   }
 }

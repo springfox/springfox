@@ -20,7 +20,9 @@
 package springfox.documentation.service;
 
 
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
+import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.ArrayList;
@@ -29,32 +31,43 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.StringJoiner;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
-public class Operation {
+public class Operation implements Ordered {
   private final HttpMethod method;
   private final String summary;
   private final String notes;
-  private final ModelReference responseModel;
+  private final ExternalDocumentation externalDocumentation;
   private final String uniqueId;
-  private final int position;
   private final Set<String> tags;
+  private final Map<String, List<AuthorizationScope>> securityReferences;
+  private final Set<RequestParameter> requestParameters;
+  private final RequestBody body;
+  private final Set<Response> responses;
+  private final String deprecated;
+  private final List<VendorExtension> vendorExtensions;
+
+  //TODO: to be deprecated
+  private final int position;
+  private final List<Parameter> parameters;
+  private final Set<ResponseMessage> responseMessages;
+  private final ModelReference responseModel;
   private final Set<String> produces;
   private final Set<String> consumes;
   private final Set<String> protocol;
   private final boolean isHidden;
-  private final Map<String, List<AuthorizationScope>> securityReferences;
-  private final List<Parameter> parameters;
-  private final Set<ResponseMessage> responseMessages;
-  private final String deprecated;
-  private final List<VendorExtension> vendorExtensions;
-  
+
   @SuppressWarnings("ParameterNumber")
   public Operation(
       HttpMethod method,
       String summary,
       String notes,
+      ExternalDocumentation externalDocumentation,
       ModelReference responseModel,
       String uniqueId,
       int position,
@@ -67,11 +80,15 @@ public class Operation {
       Set<ResponseMessage> responseMessages,
       String deprecated,
       boolean isHidden,
-      Collection<VendorExtension> vendorExtensions) {
+      Collection<VendorExtension> vendorExtensions,
+      Set<RequestParameter> requestParameters,
+      RequestBody body,
+      Set<Response> responses) {
 
     this.method = method;
     this.summary = summary;
     this.notes = notes;
+    this.externalDocumentation = externalDocumentation;
     this.responseModel = responseModel;
     this.uniqueId = uniqueId;
     this.position = position;
@@ -79,12 +96,16 @@ public class Operation {
     this.produces = produces;
     this.consumes = consumes;
     this.protocol = protocol;
+    this.requestParameters = requestParameters;
+    this.responses = responses;
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
     this.parameters = parameters.stream()
-        .sorted(byOrder().thenComparing(byParameterName())).collect(toList());
+        .sorted(byOrder().thenComparing(byParameterName()))
+        .collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
+    this.body = body;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
@@ -92,6 +113,12 @@ public class Operation {
     return isHidden;
   }
 
+  /**
+   * @return model reference
+   * @deprecated @since 3.0.0
+   * Use @see {@link Operation#getResponses()}
+   */
+  @Deprecated
   public ModelReference getResponseModel() {
     return responseModel;
   }
@@ -102,7 +129,9 @@ public class Operation {
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
     return securityReferences.stream()
-        .collect(toMap(SecurityReference::getReference, value -> new ArrayList<>(value.getScopes())));
+        .collect(toMap(
+            SecurityReference::getReference,
+            value -> new ArrayList<>(value.getScopes())));
   }
 
   public HttpMethod getMethod() {
@@ -145,8 +174,19 @@ public class Operation {
     return parameters;
   }
 
+  /**
+   * @return model reference
+   * @deprecated @since 3.0.0
+   * Use @see {@link Operation#getResponses()}
+   */
+  @Deprecated
   public Set<ResponseMessage> getResponseMessages() {
     return responseMessages;
+  }
+
+  public SortedSet<Response> getResponses() {
+    return responses.stream()
+        .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Response::getCode))));
   }
 
   public String getDeprecated() {
@@ -163,5 +203,67 @@ public class Operation {
 
   private Comparator<Parameter> byParameterName() {
     return Comparator.comparing(Parameter::getName);
+  }
+
+  @Override
+  public int getOrder() {
+    return position;
+  }
+
+  public Set<RequestParameter> getRequestParameters() {
+    return requestParameters;
+  }
+
+  public SortedSet<RequestParameter> getQueryParameters() {
+    return requestParameters.stream()
+        .filter(r -> !r.getParameterSpecification().getContent().isPresent())
+        .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(RequestParameter::getParameterIndex)
+            .thenComparing(RequestParameter::getName))));
+  }
+
+  public RequestBody getBody() {
+    return requestParameters.stream()
+        .filter(r -> r.getParameterSpecification().getContent().isPresent())
+        .findFirst()
+        .map(this::toBody)
+        .orElse(body);
+  }
+
+  private RequestBody toBody(RequestParameter parameter) {
+    return new RequestBody(
+        parameter.getDescription(),
+        parameter.getParameterSpecification().getContent().get().getRepresentations(),
+        parameter.getRequired(),
+        parameter.getExtensions());
+  }
+
+  public ExternalDocumentation getExternalDocumentation() {
+    return externalDocumentation;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Operation.class.getSimpleName() + "[", "]")
+        .add("method=" + method)
+        .add("summary='" + summary + "'")
+        .add("notes='" + notes + "'")
+        .add("externalDocumentation=" + externalDocumentation)
+        .add("uniqueId='" + uniqueId + "'")
+        .add("position=" + position)
+        .add("tags=" + tags)
+        .add("responseModel=" + responseModel)
+        .add("produces=" + produces)
+        .add("consumes=" + consumes)
+        .add("protocol=" + protocol)
+        .add("isHidden=" + isHidden)
+        .add("securityReferences=" + securityReferences)
+        .add("parameters=" + parameters)
+        .add("responseMessages=" + responseMessages)
+        .add("requestParameters=" + requestParameters)
+        .add("body=" + body)
+        .add("responses=" + responses)
+        .add("deprecated='" + deprecated + "'")
+        .add("vendorExtensions=" + vendorExtensions)
+        .toString();
   }
 }

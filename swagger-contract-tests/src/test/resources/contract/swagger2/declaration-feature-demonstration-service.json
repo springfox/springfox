@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/features/1367/{itemId}": {
@@ -32,10 +32,10 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "findById",
-                "operationId": "findByIdUsingGET_1",
+                "operationId": "findByIdUsingGET",
                 "produces": [
-                    "application/vnd.com.pet+json",
-                    "application/vnd.com.fancy-pet+json"
+                    "application/vnd.com.fancy-pet+json",
+                    "application/vnd.com.pet+json"
                 ],
                 "parameters": [
                     {
@@ -53,8 +53,7 @@
                             "$ref": "#/definitions/FancyPet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1430-body": {
@@ -63,7 +62,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "base64EncodedBody",
-                "operationId": "base64EncodedBodyUsingPOST_1",
+                "operationId": "base64EncodedBodyUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -83,8 +82,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1430-query": {
@@ -93,7 +91,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "proper",
-                "operationId": "properUsingPOST_1",
+                "operationId": "properUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -111,8 +109,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1490/entity/{itemId}": {
@@ -121,7 +118,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "serializablePetEntity",
-                "operationId": "serializablePetEntityUsingGET_1",
+                "operationId": "serializablePetEntityUsingGET",
                 "parameters": [
                     {
                         "name": "itemId",
@@ -135,11 +132,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1490/{itemId}": {
@@ -148,7 +144,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "serializablePet",
-                "operationId": "serializablePetUsingGET_1",
+                "operationId": "serializablePetUsingGET",
                 "parameters": [
                     {
                         "name": "itemId",
@@ -162,18 +158,17 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
-                },
-                "deprecated": false
+                }
             },
             "put": {
                 "tags": [
                     "feature-demonstration-service"
                 ],
                 "summary": "updateSerializablePet",
-                "operationId": "updateSerializablePetUsingPUT_1",
+                "operationId": "updateSerializablePetUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -191,7 +186,7 @@
                         "description": "pet",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
                 ],
@@ -199,8 +194,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/1570": {
@@ -209,7 +203,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "Demo using examples",
-                "operationId": "saveUserUsingPOST_1",
+                "operationId": "saveUserUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -223,12 +217,11 @@
                     "405": {
                         "description": "Validation exception",
                         "examples": {
-                            "Example json": "{\"invalidField\": \"address\"}",
+                            "Example json": "{'invalidField': 'address'}",
                             "Example string": "The first name was invalid"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/2031": {
@@ -245,7 +238,7 @@
                     {
                         "in": "body",
                         "name": "contents",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/CustomTypeFor2031"
                         },
@@ -272,8 +265,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/addFiles": {
@@ -282,29 +274,38 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "Add a new contact with file attachment",
-                "operationId": "addFilesUsingPOST_1",
+                "operationId": "addFilesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
                 "parameters": [
                     {
-                        "name": "files",
                         "in": "formData",
-                        "description": "files",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "file"
-                        },
-                        "collectionFormat": "multi"
+                        "name": "body",
+                        "required": false,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "files"
+                            ],
+                            "properties": {
+                                "files": {
+                                    "type": "array",
+                                    "description": "files",
+                                    "items": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/allMethodsAllowed": {
@@ -313,20 +314,19 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingGET_1",
+                "operationId": "allMethodAllowedUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "head": {
                 "tags": [
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingHEAD_1",
+                "operationId": "allMethodAllowedUsingHEAD",
                 "consumes": [
                     "application/json"
                 ],
@@ -334,15 +334,14 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "post": {
                 "tags": [
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPOST_1",
+                "operationId": "allMethodAllowedUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -350,15 +349,14 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "put": {
                 "tags": [
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPUT_1",
+                "operationId": "allMethodAllowedUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -366,28 +364,26 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "delete": {
                 "tags": [
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingDELETE_1",
+                "operationId": "allMethodAllowedUsingDELETE",
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "options": {
                 "tags": [
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingOPTIONS_1",
+                "operationId": "allMethodAllowedUsingOPTIONS",
                 "consumes": [
                     "application/json"
                 ],
@@ -395,15 +391,14 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             },
             "patch": {
                 "tags": [
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPATCH_1",
+                "operationId": "allMethodAllowedUsingPATCH",
                 "consumes": [
                     "application/json"
                 ],
@@ -411,8 +406,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/arrayOfArrays": {
@@ -460,8 +454,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/bare": {
@@ -470,7 +463,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getBare",
-                "operationId": "getBareUsingPOST_1",
+                "operationId": "getBareUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -484,7 +477,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     },
                     {
                         "name": "annotatedEnumType",
@@ -507,14 +500,24 @@
                         "x-example": 10
                     },
                     {
+                        "name": "enumType",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    },
+                    {
                         "name": "foo",
                         "in": "query",
                         "description": "description of foo",
                         "required": true,
                         "type": "string",
                         "enum": [
-                            "man",
-                            "chu"
+                            "chu",
+                            "man"
                         ]
                     },
                     {
@@ -524,23 +527,6 @@
                         "required": true,
                         "type": "string",
                         "format": "date-time"
-                    },
-                    {
-                        "name": "readOnlyString",
-                        "in": "query",
-                        "description": "A read only string",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "enumType",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "enum": [
-                            "ONE",
-                            "TWO"
-                        ]
                     },
                     {
                         "name": "nestedType.name",
@@ -559,14 +545,20 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "readOnlyString",
+                        "in": "query",
+                        "description": "A read only string",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/bigDecimal": {
@@ -575,7 +567,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBigDecimal",
-                "operationId": "updateBigDecimalUsingPOST_1",
+                "operationId": "updateBigDecimalUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -585,15 +577,15 @@
                         "in": "query",
                         "description": "input",
                         "required": false,
-                        "type": "number"
+                        "type": "number",
+                        "format": "bigdecimal"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/boolean": {
@@ -602,7 +594,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBoolean",
-                "operationId": "updateBooleanUsingPOST_1",
+                "operationId": "updateBooleanUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -619,8 +611,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/date": {
@@ -629,7 +620,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateDate",
-                "operationId": "updateDateUsingPOST_1",
+                "operationId": "updateDateUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -647,8 +638,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/effective": {
@@ -657,7 +647,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffective",
-                "operationId": "getEffectiveUsingGET_1",
+                "operationId": "getEffectiveUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -665,8 +655,7 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/effectives": {
@@ -675,7 +664,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffectives",
-                "operationId": "getEffectivesUsingGET_1",
+                "operationId": "getEffectivesUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -686,8 +675,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/enumObject": {
@@ -696,7 +684,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEnumAsObject",
-                "operationId": "getEnumAsObjectUsingGET_1",
+                "operationId": "getEnumAsObjectUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -704,8 +692,7 @@
                             "$ref": "#/definitions/EnumObjectType"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/examples": {
@@ -714,7 +701,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateListOfExamples",
-                "operationId": "updateListOfExamplesUsingPUT_1",
+                "operationId": "updateListOfExamplesUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -726,17 +713,16 @@
                         "required": false,
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/Example"
+                            "$ref": "#/definitions/Error-ModelName{namespace='springfox.test.contract.swagger.models', name='Example'}"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/inheritance": {
@@ -745,7 +731,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "findVehicles",
-                "operationId": "findVehiclesUsingGET_1",
+                "operationId": "findVehiclesUsingGET",
                 "parameters": [
                     {
                         "name": "type",
@@ -765,8 +751,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/integers": {
@@ -775,7 +760,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateListOfIntegers",
-                "operationId": "updateListOfIntegersUsingPUT_1",
+                "operationId": "updateListOfIntegersUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -790,15 +775,14 @@
                             "type": "integer",
                             "format": "int32"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/listOfMaps": {
@@ -807,19 +791,21 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "listOfMaps",
-                "operationId": "listOfMapsUsingGET_1",
+                "operationId": "listOfMapsUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Map«string,string»"
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/mapOfMapOfExample": {
@@ -828,7 +814,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "mapOfMapOfExample",
-                "operationId": "mapOfMapOfExampleUsingGET_1",
+                "operationId": "mapOfMapOfExampleUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -842,8 +828,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/mapProperty": {
@@ -852,7 +837,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "modelWithMapProperty",
-                "operationId": "modelWithMapPropertyUsingGET_1",
+                "operationId": "modelWithMapPropertyUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -860,8 +845,7 @@
                             "$ref": "#/definitions/ModelWithMapProperty"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/modelAttributes": {
@@ -870,7 +854,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getModelAttribute",
-                "operationId": "getModelAttributeUsingGET_1",
+                "operationId": "getModelAttributeUsingGET",
                 "parameters": [
                     {
                         "name": "accountTypes",
@@ -880,14 +864,14 @@
                         "items": {
                             "type": "string",
                             "enum": [
-                                "CASH",
-                                "BANK"
+                                "BANK",
+                                "CASH"
                             ]
                         },
-                        "collectionFormat": "multi",
+                        "collectionFormat": "csv",
                         "enum": [
-                            "CASH",
-                            "BANK"
+                            "BANK",
+                            "CASH"
                         ]
                     },
                     {
@@ -899,7 +883,7 @@
                             "type": "integer",
                             "format": "int32"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     },
                     {
                         "name": "complexProp.name",
@@ -922,7 +906,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     },
                     {
                         "name": "stringProp",
@@ -935,8 +919,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/propertyWithArrayOfArrays": {
@@ -964,8 +947,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/propertyWithObjectNode": {
@@ -974,7 +956,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "propertyWithObjectNode",
-                "operationId": "propertyWithObjectNodeUsingPOST_1",
+                "operationId": "propertyWithObjectNodeUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -993,8 +975,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/status": {
@@ -1003,7 +984,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBaz",
-                "operationId": "updateBazUsingPOST_1",
+                "operationId": "updateBazUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -1024,8 +1005,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/statuses": {
@@ -1034,7 +1014,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBazes",
-                "operationId": "updateBazesUsingPOST_1",
+                "operationId": "updateBazesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -1052,7 +1032,7 @@
                                 "TWO"
                             ]
                         },
-                        "collectionFormat": "multi",
+                        "collectionFormat": "csv",
                         "enum": [
                             "ONE",
                             "TWO"
@@ -1063,8 +1043,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/features/{petId}": {
@@ -1074,7 +1053,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET_2",
+                "operationId": "getPetByIdUsingGET",
                 "parameters": [
                     {
                         "name": "petId",
@@ -1095,7 +1074,6 @@
                         }
                     }
                 },
-                "deprecated": false,
                 "x-test1": "value1",
                 "x-test2": {
                     "name2": "value2"
@@ -1183,6 +1161,7 @@
             "properties": {
                 "allCapsSet": {
                     "type": "array",
+                    "uniqueItems": true,
                     "items": {
                         "type": "string"
                     }
@@ -1256,20 +1235,6 @@
             },
             "title": "FancyPet"
         },
-        "Map«string,Example»": {
-            "type": "object",
-            "title": "Map«string,Example»",
-            "additionalProperties": {
-                "$ref": "#/definitions/Example"
-            }
-        },
-        "Map«string,string»": {
-            "type": "object",
-            "title": "Map«string,string»",
-            "additionalProperties": {
-                "type": "string"
-            }
-        },
         "ModelWithArrayOfArrays": {
             "type": "object",
             "properties": {
@@ -1337,6 +1302,10 @@
                 }
             },
             "title": "Pet"
+        },
+        "PetWithSerializer": {
+            "type": "object",
+            "title": "PetWithSerializer"
         },
         "Truck": {
             "title": "Truck",

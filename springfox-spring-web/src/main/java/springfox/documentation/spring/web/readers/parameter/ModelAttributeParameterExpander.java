@@ -29,11 +29,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.RequestParameterBuilder;
+import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.Types;
 import springfox.documentation.schema.property.bean.AccessorsProvider;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
@@ -86,8 +89,8 @@ public class ModelAttributeParameterExpander {
     this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
-  public List<Parameter> expand(ExpansionContext context) {
-    List<Parameter> parameters = new ArrayList<>();
+  public List<Compatibility<Parameter, RequestParameter>> expand(ExpansionContext context) {
+    List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
     Set<PropertyDescriptor> propertyDescriptors = propertyDescriptors(context.getParamType().getErasedType());
     Map<Method, PropertyDescriptor> propertyLookupByGetter
         = propertyDescriptorsByMethod(context.getParamType().getErasedType(), propertyDescriptors);
@@ -146,9 +149,15 @@ public class ModelAttributeParameterExpander {
       parameters.add(simpleFields(context.getParentName(), context, each));
     });
     return parameters.stream()
-        .filter(((Predicate<Parameter>) Parameter::isHidden).negate())
+        .filter(hiddenParameter().negate())
         .filter(voidParameters().negate())
         .collect(toList());
+  }
+
+  private Predicate<Compatibility<Parameter, RequestParameter>> hiddenParameter() {
+    return c -> c.getLegacy()
+        .map(p -> p.isHidden())
+        .orElse(false);
   }
 
   private List<ModelAttributeField> allModelAttributes(
@@ -180,22 +189,24 @@ public class ModelAttributeParameterExpander {
         input);
   }
 
-  private Predicate<Parameter> voidParameters() {
-    return input -> isVoid(input.getType().orElse(null));
+  private Predicate<Compatibility<Parameter, RequestParameter>> voidParameters() {
+    return input -> isVoid(input.getLegacy()
+        .flatMap(l -> l.getType())
+        .orElse(null));
   }
 
   private Predicate<ModelAttributeField> recursiveCollectionItemType(final ResolvedType paramType) {
     return input -> Objects.equals(collectionElementType(input.getFieldType()), paramType);
   }
 
-  private Parameter simpleFields(
+  private Compatibility<Parameter, RequestParameter> simpleFields(
       String parentName,
       ExpansionContext context,
       ModelAttributeField each) {
     LOG.debug("Attempting to expand field: {}", each);
     String dataTypeName = ofNullable(typeNameFor(each.getFieldType().getErasedType()))
         .orElse(each.getFieldType().getErasedType().getSimpleName());
-    LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
+    LOG.debug("Building parameter for field: {}, with type: {}", each, each.getFieldType());
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,
         parentName,
@@ -207,7 +218,8 @@ public class ModelAttributeParameterExpander {
             each.getFieldType(),
             each.getName()),
         context.getDocumentationContext().getDocumentationType(),
-        new ParameterBuilder());
+        new ParameterBuilder(),
+        new RequestParameterBuilder());
     return pluginsManager.expandParameter(parameterExpansionContext);
   }
 

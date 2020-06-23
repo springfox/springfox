@@ -51,7 +51,8 @@ public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
   public void apply(ModelPropertyContext context) {
     Optional<NotNull> notNull = extractAnnotation(context);
     if (notNull.isPresent()) {
-      context.getBuilder().required(notNull.isPresent());
+      context.getBuilder().required(true);
+      context.getSpecificationBuilder().required(true);
     }
   }
 

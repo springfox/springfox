@@ -25,7 +25,7 @@ import springfox.documentation.schema.ModelReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 class InheritanceDeterminer {
   private final Map<String, RefModel> parentLookup = new HashMap<String, RefModel>();

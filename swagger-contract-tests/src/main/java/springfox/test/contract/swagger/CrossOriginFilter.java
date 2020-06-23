@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -40,24 +39,25 @@ public class CrossOriginFilter implements Filter {
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossOriginFilter.class);
 
   @Override
-  public void init(FilterConfig filterConfig) {
-
-  }
-
-  @Override
-  public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException,
+  public void doFilter(
+      ServletRequest req,
+      ServletResponse resp,
+      FilterChain chain) throws IOException,
       ServletException {
 
-    LOGGER.info("Applying CORS filter");
+    LOGGER.debug("Applying CORS filter");
     HttpServletResponse response = (HttpServletResponse) resp;
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-    response.setHeader("Access-Control-Max-Age", "0");
-    chain.doFilter(req, resp);
-  }
-
-  @Override
-  public void destroy() {
-
+    response.setHeader(
+        "Access-Control-Allow-Origin",
+        "*");
+    response.setHeader(
+        "Access-Control-Allow-Methods",
+        "POST, GET, OPTIONS, DELETE");
+    response.setHeader(
+        "Access-Control-Max-Age",
+        "0");
+    chain.doFilter(
+        req,
+        resp);
   }
 }

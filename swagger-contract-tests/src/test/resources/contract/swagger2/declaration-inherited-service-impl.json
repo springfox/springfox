@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/child/1575": {
@@ -32,7 +32,7 @@
                     "inherited-service-impl"
                 ],
                 "summary": "demonstrateInheritanceWithAnnotations",
-                "operationId": "demonstrateInheritanceWithAnnotationsUsingGET_1",
+                "operationId": "demonstrateInheritanceWithAnnotationsUsingGET",
                 "produces": [
                     "application/json"
                 ],
@@ -52,8 +52,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/child/child-method": {
@@ -62,7 +61,7 @@
                     "inherited-service-impl"
                 ],
                 "summary": "getSomething",
-                "operationId": "getSomethingUsingGET_1",
+                "operationId": "getSomethingUsingGET",
                 "parameters": [
                     {
                         "name": "parameter",
@@ -79,8 +78,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

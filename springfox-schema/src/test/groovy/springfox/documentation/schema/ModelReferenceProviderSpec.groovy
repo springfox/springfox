@@ -29,8 +29,7 @@ import static java.util.Collections.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(AlternateTypesSupport)
-class ModelReferenceProviderSpec extends Specification {
+class ModelReferenceProviderSpec extends Specification implements AlternateTypesSupport {
   def "Map of Maps is rendered correctly"() {
     given:
     def resolver = new TypeResolver()
@@ -52,7 +51,6 @@ class ModelReferenceProviderSpec extends Specification {
             resolver.resolve(String),
             resolver.resolve(Map, String, Foo)))
     then:
-    //TODO: Elaborate this test
     sut.itemModel().isPresent()
   }
 

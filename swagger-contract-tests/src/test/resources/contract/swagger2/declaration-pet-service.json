@@ -26,8 +26,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/pets/byName/{name}": {
@@ -36,7 +36,7 @@
                     "pet-service"
                 ],
                 "summary": "petEntities",
-                "operationId": "petEntitiesUsingPOST_1",
+                "operationId": "petEntitiesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -59,8 +59,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/echo": {
@@ -69,7 +68,7 @@
                     "pet-service"
                 ],
                 "summary": "echo",
-                "operationId": "echoUsingPOST_1",
+                "operationId": "echoUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -97,8 +96,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/findByAge{?age}": {
@@ -108,13 +106,13 @@
                 ],
                 "summary": "Find Pet by age",
                 "description": "Exclusive range with infinity",
-                "operationId": "findPetsByAgeUsingGET_1",
+                "operationId": "findPetsByAgeUsingGET",
                 "parameters": [
                     {
                         "name": "age",
                         "in": "query",
                         "description": "Age values that need to be considered for filter",
-                        "required": false,
+                        "required": true,
                         "type": "integer",
                         "exclusiveMaximum": true,
                         "minimum": 0,
@@ -129,8 +127,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/findByLegs{?legs}": {
@@ -140,13 +137,13 @@
                 ],
                 "summary": "Find Pet by legs",
                 "description": "Exclusive range should work",
-                "operationId": "findPetsByLegsUsingGET_1",
+                "operationId": "findPetsByLegsUsingGET",
                 "parameters": [
                     {
                         "name": "legs",
                         "in": "query",
                         "description": "Legs values that need to be considered for filter",
-                        "required": false,
+                        "required": true,
                         "type": "integer",
                         "maximum": 10,
                         "exclusiveMaximum": true,
@@ -162,8 +159,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/findByStamina{?stamina}": {
@@ -173,13 +169,13 @@
                 ],
                 "summary": "Find Pet by stamina",
                 "description": "Exclusive range with -infinity",
-                "operationId": "findPetsByStaminaUsingGET_1",
+                "operationId": "findPetsByStaminaUsingGET",
                 "parameters": [
                     {
                         "name": "stamina",
                         "in": "query",
                         "description": "Stamina values",
-                        "required": false,
+                        "required": true,
                         "type": "integer",
                         "maximum": 12,
                         "exclusiveMaximum": true,
@@ -194,8 +190,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/findByStatus{?status}": {
@@ -205,7 +200,7 @@
                 ],
                 "summary": "Find Pet by status",
                 "description": "Multiple status values can be provided with comma-separated strings",
-                "operationId": "findPetsByStatusUsingGET_1",
+                "operationId": "findPetsByStatusUsingGET",
                 "parameters": [
                     {
                         "name": "status",
@@ -231,8 +226,7 @@
                     "400": {
                         "description": "Invalid status value"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/findByTags{?tags}": {
@@ -242,15 +236,14 @@
                 ],
                 "summary": "Find Pet by tags",
                 "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
-                "operationId": "findPetsByTagsUsingGET_1",
+                "operationId": "findPetsByTagsUsingGET",
                 "parameters": [
                     {
                         "name": "tags",
                         "in": "query",
                         "description": "Tags to filter by",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -273,10 +266,10 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_4",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_1",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -291,8 +284,7 @@
                     "200": {
                         "description": "Just testing"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/grooming{?type}": {
@@ -301,7 +293,7 @@
                     "pet-grooming-service"
                 ],
                 "summary": "canGroom",
-                "operationId": "canGroomUsingGET_3",
+                "operationId": "canGroomUsingGET",
                 "parameters": [
                     {
                         "name": "type",
@@ -318,8 +310,7 @@
                             "type": "boolean"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/nameToNickNamesMap": {
@@ -328,7 +319,7 @@
                     "pet-service"
                 ],
                 "summary": "nameToNickNamesMap",
-                "operationId": "nameToNickNamesMapUsingPOST_1",
+                "operationId": "nameToNickNamesMapUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -345,8 +336,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/siblings{?age,id,name}": {
@@ -355,7 +345,7 @@
                     "pet-service"
                 ],
                 "summary": "siblings",
-                "operationId": "siblingsUsingPOST_1",
+                "operationId": "siblingsUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -390,8 +380,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/transformPetNameToPetMapToAny": {
@@ -400,7 +389,7 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToAny",
-                "operationId": "transformPetNameToPetMapToAnyUsingPOST_1",
+                "operationId": "transformPetNameToPetMapToAnyUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -425,8 +414,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/transformPetNameToPetMapToGenericOpenMap": {
@@ -435,7 +423,7 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToGenericOpenMap",
-                "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST_1",
+                "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -460,8 +448,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/transformPetNameToPetMapToOpenMap": {
@@ -470,7 +457,7 @@
                     "pet-service"
                 ],
                 "summary": "transformPetNameToPetMapToOpenMap",
-                "operationId": "transformPetNameToPetMapToOpenMapUsingPOST_1",
+                "operationId": "transformPetNameToPetMapToOpenMapUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -495,8 +482,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/voidMethod/{input}": {
@@ -505,10 +491,10 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_5",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_2",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -523,8 +509,7 @@
                     "200": {
                         "description": "Just testing"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/{a}/{b}": {
@@ -533,7 +518,7 @@
                     "pet-service"
                 ],
                 "summary": "method",
-                "operationId": "methodUsingGET_1",
+                "operationId": "methodUsingGET",
                 "parameters": [
                     {
                         "name": "a",
@@ -554,8 +539,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/{name}": {
@@ -564,7 +548,7 @@
                     "pet-service"
                 ],
                 "summary": "petByName",
-                "operationId": "petByNameUsingPOST_1",
+                "operationId": "petByNameUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -584,8 +568,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/{petId}": {
@@ -595,7 +578,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET_4",
+                "operationId": "getPetByIdUsingGET_2",
                 "parameters": [
                     {
                         "name": "petId",
@@ -614,8 +597,7 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/{petId}/pic": {
@@ -624,7 +606,7 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "operationId": "updatePicUsingPOST_1",
+                "operationId": "updatePicUsingPOST",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -637,19 +619,21 @@
                         "type": "string"
                     },
                     {
+                        "in": "body",
                         "name": "pic",
-                        "in": "formData",
                         "description": "pic",
                         "required": false,
-                        "type": "file"
+                        "schema": {
+                            "type": "string",
+                            "format": "binary"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/pets/{petId}/pic/{picId}": {
@@ -658,7 +642,7 @@
                     "pet-service"
                 ],
                 "summary": "updatePic",
-                "operationId": "updatePicUsingGET_1",
+                "operationId": "updatePicUsingGET",
                 "parameters": [
                     {
                         "name": "petId",
@@ -679,8 +663,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

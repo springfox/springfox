@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/businesses/aliased/{otherId}": {
@@ -32,10 +32,10 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessById_2",
+                "operationId": "findBusinessById",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -53,8 +53,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/byTypes": {
@@ -63,7 +62,7 @@
                     "business-service"
                 ],
                 "summary": "businessesByCategories",
-                "operationId": "businessesByCategoriesUsingGET_1",
+                "operationId": "businessesByCategoriesUsingGET",
                 "produces": [
                     "application/json"
                 ],
@@ -81,7 +80,7 @@
                                 "SERVICE"
                             ]
                         },
-                        "collectionFormat": "multi",
+                        "collectionFormat": "csv",
                         "enum": [
                             "PRODUCT",
                             "SERVICE"
@@ -98,8 +97,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/demonstratesApiModelName": {
@@ -108,7 +106,7 @@
                     "business-service"
                 ],
                 "summary": "businessAsString",
-                "operationId": "businessAsStringUsingPOST_1",
+                "operationId": "businessAsStringUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -122,8 +120,7 @@
                             "$ref": "#/definitions/Biz"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/non-aliased/{businessId}": {
@@ -132,10 +129,10 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessById_3",
+                "operationId": "findBusinessById_1",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -160,8 +157,7 @@
                             "scope"
                         ]
                     }
-                ],
-                "deprecated": false
+                ]
             }
         },
         "/businesses/responseEntity/{businessId}": {
@@ -170,10 +166,10 @@
                     "business-service"
                 ],
                 "summary": "getResponseEntity",
-                "operationId": "getResponseEntityUsingGET_1",
+                "operationId": "getResponseEntityUsingGET",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -191,8 +187,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/typeEcho": {
@@ -201,7 +196,7 @@
                     "business-service"
                 ],
                 "summary": "businessTypeEcho",
-                "operationId": "businessTypeEchoUsingPOST_1",
+                "operationId": "businessTypeEchoUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -234,8 +229,7 @@
                             ]
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/businesses/vanilla/{businessId}": {
@@ -244,10 +238,10 @@
                     "business-service"
                 ],
                 "summary": "getVanillaPathVariable",
-                "operationId": "getVanillaPathVariableUsingGET_1",
+                "operationId": "getVanillaPathVariableUsingGET",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -265,8 +259,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

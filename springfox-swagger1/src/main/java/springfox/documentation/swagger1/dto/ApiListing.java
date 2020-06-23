@@ -28,12 +28,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
-@JsonPropertyOrder({"apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
-        "models"})
+@JsonPropertyOrder({ "apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
+    "models" })
 public class ApiListing {
   private String apiVersion;
   private String swaggerVersion;
@@ -91,7 +93,12 @@ public class ApiListing {
   }
 
   public void setProduces(Set<String> produces) {
-    this.produces = produces;
+    if (produces != null) {
+      if (this.produces == null) {
+        this.produces = new TreeSet<>();
+      }
+      this.produces.addAll(produces);
+    }
   }
 
   public Set<String> getConsumes() {
@@ -99,7 +106,12 @@ public class ApiListing {
   }
 
   public void setConsumes(Set<String> consumes) {
-    this.consumes = consumes;
+    if (consumes != null) {
+      if (this.consumes == null) {
+        this.consumes = new TreeSet<>();
+      }
+      this.consumes.addAll(consumes);
+    }
   }
 
   public Set<String> getProtocols() {
@@ -107,7 +119,12 @@ public class ApiListing {
   }
 
   public void setProtocols(Set<String> protocols) {
-    this.protocols = protocols;
+    if (protocols != null) {
+      if (this.protocols == null) {
+        this.protocols = new TreeSet<>();
+      }
+      this.protocols.addAll(protocols);
+    }
   }
 
   public List<Authorization> getAuthorizations() {
@@ -124,8 +141,8 @@ public class ApiListing {
 
   public void setApis(List<ApiDescription> apis) {
     this.apis = apis.stream()
-      .sorted(byPath()
-          .thenComparing(byDescription())).collect(toList());
+        .sorted(byPath()
+            .thenComparing(byDescription())).collect(toList());
   }
 
   public Map<String, ModelDto> getModels() {
@@ -133,7 +150,12 @@ public class ApiListing {
   }
 
   public void setModels(Map<String, ModelDto> models) {
-    this.models = models;
+    if (models != null) {
+      if (this.models == null) {
+        this.models = new TreeMap<>();
+      }
+      this.models.putAll(models);
+    }
   }
 
   public String getDescription() {

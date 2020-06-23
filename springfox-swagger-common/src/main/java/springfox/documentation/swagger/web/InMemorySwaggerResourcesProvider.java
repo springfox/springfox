@@ -22,9 +22,12 @@ package springfox.documentation.swagger.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +41,8 @@ import static springfox.documentation.schema.ClassSupport.*;
 public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvider {
   private final String swagger1Url;
   private final String swagger2Url;
+  private final String oas3Url;
+  private final boolean oas3Available;
 
   private boolean swagger1Available;
   private boolean swagger2Available;
@@ -47,14 +52,39 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   @Autowired
   public InMemorySwaggerResourcesProvider(
       Environment environment,
-      DocumentationCache documentationCache) {
+      DocumentationCache documentationCache,
+      DocumentationPluginsManager pluginsManager) {
+    boolean oas3DocketsPresent = pluginsManager.documentationPlugins().stream()
+        .anyMatch(d -> d.supports(DocumentationType.OAS_30));
+    boolean swagger2DocketsPresent = pluginsManager.documentationPlugins().stream()
+        .anyMatch(d -> d.supports(DocumentationType.SWAGGER_2));
     swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
-    swagger2Url = environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs");
+    swagger2Url = fixup(
+        String.format("%s%s",
+            environment.getProperty("springfox.documentation.swagger-ui.base-url", ""),
+            environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs")));
+    oas3Url = fixup(
+        String.format("%s%s",
+            environment.getProperty("springfox.documentation.swagger-ui.base-url", ""),
+            environment.getProperty("springfox.documentation.open-api.v3.path", "/v3/api-docs")));
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
     swagger2Available =
-        classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
-        || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent();
+        (classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
+            || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent())
+            && swagger2DocketsPresent;
+    oas3Available = (classByName("springfox.documentation.oas.web.OpenApiControllerWebFlux").isPresent()
+        || classByName("springfox.documentation.oas.web.OpenApiControllerWebMvc").isPresent())
+        && oas3DocketsPresent;
     this.documentationCache = documentationCache;
+  }
+
+  private String fixup(String path) {
+    if (StringUtils.isEmpty(path)
+        || "/".equals(path)
+        || "//".equals(path)) {
+      return "/";
+    }
+    return StringUtils.trimTrailingCharacter(path.replace("//", "/"), '/');
   }
 
   @Override
@@ -74,19 +104,29 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
         swaggerResource.setSwaggerVersion("2.0");
         resources.add(swaggerResource);
       }
+
+      if (oas3Available) {
+        SwaggerResource swaggerResource = resource(swaggerGroup, oas3Url);
+        swaggerResource.setSwaggerVersion("3.0.1");
+        resources.add(swaggerResource);
+      }
     }
     Collections.sort(resources);
     return resources;
   }
 
-  private SwaggerResource resource(String swaggerGroup, String baseUrl) {
+  private SwaggerResource resource(
+      String swaggerGroup,
+      String baseUrl) {
     SwaggerResource swaggerResource = new SwaggerResource();
     swaggerResource.setName(swaggerGroup);
     swaggerResource.setUrl(swaggerLocation(baseUrl, swaggerGroup));
     return swaggerResource;
   }
 
-  private String swaggerLocation(String swaggerUrl, String swaggerGroup) {
+  private String swaggerLocation(
+      String swaggerUrl,
+      String swaggerGroup) {
     String base = of(swaggerUrl).get();
     if (Docket.DEFAULT_GROUP_NAME.equals(swaggerGroup)) {
       return base;

@@ -56,7 +56,7 @@ class DocketSpec extends DocumentationContextSpec {
 
     then:
     pluginContext.groupName == 'default'
-    pluginContext.securitySchemes == null
+    pluginContext.securitySchemes.isEmpty()
     pluginContext.apiInfo.getTitle() == "Api Documentation"
     pluginContext.apiInfo.getDescription() == "Api Documentation"
     pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'

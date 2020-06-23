@@ -20,31 +20,19 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.service.VendorExtension;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DocumentationContext {
   private final DocumentationType documentationType;
@@ -55,8 +43,10 @@ public class DocumentationContext {
   private final AlternateTypeProvider alternateTypeProvider;
   private final Set<Class> ignorableParameterTypes;
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
+  private final Map<HttpMethod, List<Response>> globalResponses = new HashMap<>();
   private final List<Parameter> globalOperationParameters;
-  private final ResourceGroupingStrategy resourceGroupingStrategy;
+  private final List<Server> servers = new ArrayList<>();
+  private final List<RequestParameter> globalParameters = new ArrayList<>();
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
   private final List<? extends SecurityScheme> securitySchemes;
@@ -67,23 +57,25 @@ public class DocumentationContext {
   private final Optional<String> pathMapping;
   private final Set<ResolvedType> additionalModels;
   private final Set<Tag> tags;
-  private Set<String> produces;
-  private Set<String> consumes;
-  private String host;
-  private Set<String> protocols;
-  private boolean isUriTemplatesEnabled;
-  private List<VendorExtension> vendorExtensions;
+  private final Set<String> produces;
+  private final Set<String> consumes;
+  private final String host;
+  private final Set<String> protocols;
+  private final boolean isUriTemplatesEnabled;
+  private final List<VendorExtension> vendorExtensions;
 
   @SuppressWarnings("ParameterNumber")
   public DocumentationContext(
       DocumentationType documentationType,
       List<RequestHandler> handlerMappings,
-      ApiInfo apiInfo, String groupName,
+      ApiInfo apiInfo,
+      String groupName,
       ApiSelector apiSelector,
       Set<Class> ignorableParameterTypes,
       Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
       List<Parameter> globalOperationParameter,
-      ResourceGroupingStrategy resourceGroupingStrategy,
+      List<RequestParameter> globalRequestParameters,
+      Map<HttpMethod, List<Response>> globalResponses,
       PathProvider pathProvider,
       List<SecurityContext> securityContexts,
       List<? extends SecurityScheme> securitySchemes,
@@ -100,7 +92,8 @@ public class DocumentationContext {
       boolean isUriTemplatesEnabled,
       Set<ResolvedType> additionalModels,
       Set<Tag> tags,
-      List<VendorExtension> vendorExtensions) {
+      List<VendorExtension> vendorExtensions,
+      List<Server> servers) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -110,7 +103,8 @@ public class DocumentationContext {
     this.ignorableParameterTypes = ignorableParameterTypes;
     this.globalResponseMessages = globalResponseMessages;
     this.globalOperationParameters = globalOperationParameter;
-    this.resourceGroupingStrategy = resourceGroupingStrategy;
+    this.servers.addAll(servers);
+    this.globalParameters.addAll(globalRequestParameters);
     this.pathProvider = pathProvider;
     this.securityContexts = securityContexts;
     this.securitySchemes = securitySchemes;
@@ -128,6 +122,7 @@ public class DocumentationContext {
     this.tags = tags;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
     this.vendorExtensions = vendorExtensions;
+    this.globalResponses.putAll(globalResponses);
   }
 
   public DocumentationType getDocumentationType() {
@@ -158,18 +153,15 @@ public class DocumentationContext {
     return globalResponseMessages;
   }
 
+  /**
+   * @deprecated use @see {@link DocumentationContext#getGlobalParameters()} instead
+   * @return list of parameters
+   */
+  @Deprecated
   public List<Parameter> getGlobalRequestParameters() {
     return globalOperationParameters;
   }
 
-  /**
-   * @return resource grouping strategy
-   * @deprecated @since 2.2.0 - only here for backward compatibility
-   */
-  @Deprecated
-  public ResourceGroupingStrategy getResourceGroupingStrategy() {
-    return resourceGroupingStrategy;
-  }
 
   public PathProvider getPathProvider() {
     return pathProvider;
@@ -180,7 +172,9 @@ public class DocumentationContext {
   }
 
   public List<? extends SecurityScheme> getSecuritySchemes() {
-    return securitySchemes;
+    return securitySchemes.stream()
+                          .filter(Objects::nonNull)
+                          .collect(Collectors.toList());
   }
 
   public Comparator<ApiListingReference> getListingReferenceOrdering() {
@@ -238,5 +232,17 @@ public class DocumentationContext {
 
   public List<VendorExtension> getVendorExtentions() {
     return vendorExtensions;
+  }
+
+  public Collection<RequestParameter> getGlobalParameters() {
+    return globalParameters;
+  }
+
+  public Collection<Response> globalResponsesFor(HttpMethod method) {
+    return globalResponses.getOrDefault(method, new ArrayList<>());
+  }
+
+  public Collection<Server> getServers() {
+    return servers;
   }
 }

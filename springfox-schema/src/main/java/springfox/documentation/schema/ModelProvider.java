@@ -27,6 +27,11 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.Optional;
 
+/**
+ * @deprecated
+ * @since 3.0 use {@link ModelSpecificationProvider} instead
+ */
+@Deprecated
 public interface ModelProvider {
   @Cacheable(value = "models")
   Optional<Model> modelFor(ModelContext modelContext);

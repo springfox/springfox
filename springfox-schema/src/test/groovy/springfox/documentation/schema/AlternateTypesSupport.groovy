@@ -24,7 +24,7 @@ import springfox.documentation.spi.service.contexts.Defaults
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-class AlternateTypesSupport {
+trait AlternateTypesSupport {
 
   def defaultRules(TypeResolver resolver = new TypeResolver()) {
     def rules = new Defaults().defaultRules(resolver);

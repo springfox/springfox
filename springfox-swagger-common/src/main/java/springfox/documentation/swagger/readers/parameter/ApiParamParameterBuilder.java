@@ -24,10 +24,14 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.Example;
+import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -60,14 +64,32 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     Optional<ApiParam> apiParam = context.resolvedMethodParameter().findAnnotation(ApiParam.class);
+    AllowableValues allowedValues = allowableValues(
+        context.alternateFor(context.resolvedMethodParameter().getParameterType()),
+        apiParam.map(ApiParam::allowableValues).orElse(""));
+
     context.parameterBuilder()
-        .allowableValues(allowableValues(
-            context.alternateFor(context.resolvedMethodParameter().getParameterType()),
-            apiParam.map(ApiParam::allowableValues).orElse("")));
+        .allowableValues(allowedValues);
+
+    if (allowedValues instanceof AllowableListValues) {
+      context.requestParameterBuilder()
+             .query(q -> q.enumerationFacet(e -> e.allowedValues(allowedValues)));
+    } else if (allowedValues instanceof AllowableRangeValues) {
+      context.requestParameterBuilder()
+             .query(q -> q.numericFacet(n -> n.from((AllowableRangeValues) allowedValues)));
+    }
+
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
-      context.parameterBuilder().name(ofNullable(annotation.name())
-          .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
+      Example example = null;
+      if (annotation.example().length() > 0) {
+        example = new ExampleBuilder()
+            .value(annotation.example())
+            .build();
+      }
+      context.parameterBuilder()
+          .name(ofNullable(annotation.name())
+              .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
           .description(ofNullable(descriptions.resolve(annotation.value()))
               .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
           .parameterAccess(ofNullable(annotation.access())
@@ -79,11 +101,30 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .allowMultiple(annotation.allowMultiple())
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
-          .scalarExample(new Example(annotation.example()))
+          .scalarExample(example)
           .complexExamples(examples(annotation.examples()))
           .hidden(annotation.hidden())
           .collectionFormat(annotation.collectionFormat())
           .order(SWAGGER_PLUGIN_ORDER);
+      context.requestParameterBuilder()
+             .name(
+                 annotation.name().isEmpty()
+                 ? null
+                 : annotation.name())
+             .description(ofNullable(descriptions.resolve(annotation.value()))
+                              .filter(desc -> !desc.isEmpty())
+                              .orElse(null))
+             .required(annotation.required())
+             .hidden(annotation.hidden())
+             .precedence(SWAGGER_PLUGIN_ORDER)
+             .query(q -> q.collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
+                          .defaultValue(
+                              annotation.defaultValue().isEmpty()
+                              ? null
+                              : annotation.defaultValue())
+                          .allowEmptyValue(annotation.allowEmptyValue()))
+             .example(example)
+             .examples(allExamples(annotation.examples()));
     }
   }
 

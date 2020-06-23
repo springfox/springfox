@@ -29,6 +29,7 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
@@ -56,6 +57,29 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
       values = new AllowableRangeValues(values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);
+      AllowableRangeValues finalValues = values;
+      context.getRequestParameterBuilder()
+             .query(q -> {
+               q.numericFacet(n -> {
+                 n.minimum(safeBigDecimal(finalValues.getMin()));
+                 n.maximum(safeBigDecimal(finalValues.getMax()));
+               });
+               q.stringFacet(s -> {
+                 s.minLength(safeBigDecimal(finalValues.getMin()).intValue());
+                 s.maxLength(safeBigDecimal(finalValues.getMax()).intValue());
+               });
+             });
+    }
+  }
+
+  static BigDecimal safeBigDecimal(String doubleString) {
+    if (doubleString == null) {
+      return null;
+    }
+    try {
+      return new BigDecimal(doubleString);
+    } catch (NumberFormatException e) {
+      return null;
     }
   }
 }

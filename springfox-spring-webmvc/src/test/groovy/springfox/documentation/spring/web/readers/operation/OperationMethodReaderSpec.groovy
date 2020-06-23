@@ -25,8 +25,7 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport])
-class OperationMethodReaderSpec extends DocumentationContextSpec {
+class OperationMethodReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
 
   def "should return api method when using default reader"() {

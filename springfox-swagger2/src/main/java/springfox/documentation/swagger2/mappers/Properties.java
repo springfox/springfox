@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
 import io.swagger.models.properties.ArrayProperty;
-import io.swagger.models.properties.BaseIntegerProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
 import io.swagger.models.properties.DateProperty;
@@ -68,42 +67,34 @@ class Properties {
       new AbstractMap.SimpleEntry<>("date", newInstanceOf(DateProperty.class)),
       new AbstractMap.SimpleEntry<>("date-time", newInstanceOf(DateTimeProperty.class)),
       new AbstractMap.SimpleEntry<>("bigdecimal", newInstanceOf(DecimalProperty.class)),
-      new AbstractMap.SimpleEntry<>("biginteger", newInstanceOf(BaseIntegerProperty.class)),
+      new AbstractMap.SimpleEntry<>("biginteger", newInstanceOf(LongProperty.class)),
       new AbstractMap.SimpleEntry<>("uuid", newInstanceOf(UUIDProperty.class)),
       new AbstractMap.SimpleEntry<>("object", newInstanceOf(ObjectProperty.class)),
       new AbstractMap.SimpleEntry<>("byte", bytePropertyFactory()),
       new AbstractMap.SimpleEntry<>("__file", filePropertyFactory()))
-      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
+                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
   private Properties() {
     throw new UnsupportedOperationException();
   }
 
-  public static Property property(final String typeName) {
+  public static Property property(String typeName) {
     String safeTypeName = ofNullable(typeName).orElse("");
     return TYPE_FACTORY.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
   }
 
-  public static Property property(final ModelReference modelRef) {
+  public static Property property(ModelReference modelRef) {
     if (modelRef.isMap()) {
       return new MapProperty(property(modelRef.itemModel().get()));
     } else if (modelRef.isCollection()) {
-      if ("byte".equals(modelRef.itemModel().map(toTypeName()).orElse(""))) {
+      if ("byte".equals(modelRef.itemModel().map((Function<? super ModelReference, String>) (Function<ModelReference,
+          String>) ModelReference::getType).orElse(""))) {
         return new ByteArrayProperty();
       }
       return new ArrayProperty(
           maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
     }
     return property(modelRef.getType());
-  }
-
-  private static Function<? super ModelReference, String> toTypeName() {
-    return new Function<ModelReference, String>() {
-      @Override
-      public String apply(ModelReference input) {
-        return input.getType();
-      }
-    };
   }
 
   public static Property itemTypeProperty(ModelReference paramModel) {
@@ -115,15 +106,12 @@ class Properties {
   }
 
   private static <T extends Property> Function<String, T> newInstanceOf(final Class<T> clazz) {
-    return new Function<String, T>() {
-      @Override
-      public T apply(String input) {
-        try {
-          return clazz.newInstance();
-        } catch (Exception e) {
-          //This is bad! should never come here
-          throw new IllegalStateException(e);
-        }
+    return input -> {
+      try {
+        return clazz.newInstance();
+      } catch (Exception e) {
+        //This is bad! should never come here
+        throw new IllegalStateException(e);
       }
     };
   }
@@ -133,68 +121,44 @@ class Properties {
   }
 
   private static Function<String, ? extends Property> voidOrRef(final String typeName) {
-    return new Function<String, Property>() {
-      @Override
-      public Property apply(String input) {
-        if (typeName.equalsIgnoreCase("void")) {
-          return null;
-        }
-        return new RefProperty(typeName);
+    return (Function<String, Property>) input -> {
+      if (typeName.equalsIgnoreCase("void")) {
+        return null;
       }
+      return new RefProperty(typeName);
     };
   }
 
   private static Function<String, ? extends Property> bytePropertyFactory() {
-    return new Function<String, Property>() {
-      @Override
-      public Property apply(String input) {
-        final IntegerProperty integerProperty = new IntegerProperty();
-        integerProperty.setFormat("int32");
-        integerProperty.setMaximum(BigDecimal.valueOf(Byte.MAX_VALUE));
-        integerProperty.setMinimum(BigDecimal.valueOf(Byte.MIN_VALUE));
-        return integerProperty;
-      }
+    return (Function<String, Property>) input -> {
+      final IntegerProperty integerProperty = new IntegerProperty();
+      integerProperty.setFormat("int32");
+      integerProperty.setMaximum(BigDecimal.valueOf(Byte.MAX_VALUE));
+      integerProperty.setMinimum(BigDecimal.valueOf(Byte.MIN_VALUE));
+      return integerProperty;
     };
   }
 
   private static Function<String, ? extends Property> filePropertyFactory() {
-    return new Function<String, Property>() {
-      @Override
-      public Property apply(String input) {
-        return new FileProperty();
-      }
-    };
+    return (Function<String, Property>) input -> new FileProperty();
   }
 
   private static Comparator<String> byName() {
-    return new Comparator<String>() {
-      @Override
-      public int compare(String first, String second) {
-        return first.compareTo(second);
-      }
-    };
+    return String::compareTo;
   }
 
   private static Comparator<String> byPosition(final Map<String, ModelProperty> modelProperties) {
-    return new Comparator<String>() {
-      @Override
-      public int compare(String first, String second) {
-        ModelProperty p1 = modelProperties.get(first);
-        ModelProperty p2 = modelProperties.get(second);
-        return Integer.compare(p1.getPosition(), p2.getPosition());
-      }
+    return (first, second) -> {
+      ModelProperty p1 = modelProperties.get(first);
+      ModelProperty p2 = modelProperties.get(second);
+      return Integer.compare(p1.getPosition(), p2.getPosition());
     };
   }
 
   static Predicate<Map.Entry<String, ModelProperty>> voidProperties() {
-    return new Predicate<Map.Entry<String, ModelProperty>>() {
-      @Override
-      public boolean test(Map.Entry<String, ModelProperty> input) {
-        return isVoid(input.getValue().getType())
-            || collectionOfVoid(input.getValue().getType())
-            || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());
-      }
-    };
+    return input -> isVoid(input.getValue().getType())
+        || collectionOfVoid(input.getValue().getType())
+        || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());
   }
 
   private static boolean arrayTypeOfVoid(ResolvedType arrayElementType) {

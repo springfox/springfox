@@ -19,17 +19,23 @@
 
 package springfox.documentation.spring.web.mixins
 
+
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.OAuth
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.ResourceListing
+import springfox.documentation.spring.web.scanners.DefaultModelNamesRegistryFactory
+import springfox.documentation.spring.web.scanners.ModelSpecificationRegistryBuilder
 
-class ApiListingSupport {
+trait ApiListingSupport {
 
-   def apiListing(authorizations = [], models = null) {
+   def apiListing(
+       authorizations = [],
+       models = null,
+       modelSpecifications = null,
+       modelRegistry = new ModelSpecificationRegistryBuilder().build()) {
       new ApiListing(
-          "1.0"
-          ,
+          "1.0",
           "",
           "/relative-path-to-endpoint",
           [] as Set,
@@ -39,8 +45,11 @@ class ApiListingSupport {
           authorizations,
           [],
           models,
+          modelSpecifications,
+          new DefaultModelNamesRegistryFactory().modelNamesRegistry(modelRegistry),
           null,
-          1, ["test"] as Set)
+          1,
+          ["test"] as Set)
    }
 
    def apiListingReference() {
@@ -49,10 +58,11 @@ class ApiListingSupport {
 
    def resourceListing(List<OAuth> authorizationTypes) {
       new ResourceListing(
-              "apiVersion"
-              ,
-              [apiListingReference()],
-              authorizationTypes,
-              null)
+          "apiVersion"
+          ,
+          [apiListingReference()],
+          authorizationTypes,
+          null,
+          [])
    }
 }

@@ -26,6 +26,7 @@ import springfox.documentation.swagger1.dto.AllowableRangeValues
 import springfox.documentation.swagger1.mixins.MapperSupport
 
 class AllowableValuesMapperSpec extends Specification implements MapperSupport {
+  
   def "Maps null range input to null output"() {
     given:
       springfox.documentation.service.AllowableRangeValues source = null

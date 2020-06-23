@@ -62,13 +62,19 @@ public class OperationAuthReader implements OperationBuilderPlugin {
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
           each.securityForOperation(context).stream()
-          .collect(toMap(byReferenceName(), identity())));
+              .collect(toMap(byReferenceName(), identity())));
     }
+    maybeProcessApiOperation(context, securityReferences);
+    LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
+    context.operationBuilder().authorizations(securityReferences.values());
+  }
 
+  private void maybeProcessApiOperation(
+      OperationContext context,
+      Map<String, SecurityReference> securityReferences) {
     Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
 
-    if (apiOperationAnnotation.isPresent()) {
-
+    apiOperationAnnotation.ifPresent(apiOp -> {
       List<SecurityReference> securityReferenceOverrides = new ArrayList<>();
       for (Authorization authorization : authorizationReferences(apiOperationAnnotation.get())) {
         String value = authorization.value();
@@ -92,16 +98,14 @@ public class OperationAuthReader implements OperationBuilderPlugin {
             .toArray(new springfox.documentation.service.AuthorizationScope[0]);
         SecurityReference securityReference =
             SecurityReference.builder()
-                .reference(value)
-                .scopes(authorizationScopes)
-                .build();
+                             .reference(value)
+                             .scopes(authorizationScopes)
+                             .build();
         securityReferenceOverrides.add(securityReference);
       }
       securityReferences.putAll(securityReferenceOverrides.stream()
-          .collect(toMap(byReferenceName(), identity())));
-    }
-    LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
-    context.operationBuilder().authorizations(securityReferences.values());
+                                                          .collect(toMap(byReferenceName(), identity())));
+    });
   }
 
   private Function<SecurityReference, String> byReferenceName() {
@@ -110,7 +114,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
   private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
     return Stream.of(apiOperationAnnotation.authorizations())
-        .filter(input -> !isEmpty(input.value())).collect(toList());
+                 .filter(input -> !isEmpty(input.value())).collect(toList());
   }
 
   @Override

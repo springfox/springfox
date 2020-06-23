@@ -23,8 +23,7 @@ import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.spi.service.contexts.SecurityContext
 
-@Mixin(AuthSupport)
-class AuthorizationContextSpec extends Specification {
+class AuthorizationContextSpec extends Specification implements AuthSupport {
 
    def "scala authorizations"() {
     given:

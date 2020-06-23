@@ -28,10 +28,6 @@ import org.slf4j.LoggerFactory;
 import springfox.documentation.schema.property.BaseModelProperty;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 import static springfox.documentation.schema.property.bean.Accessors.*;
 
 
@@ -53,28 +49,13 @@ public class BeanModelProperty extends BaseModelProperty {
     this.typeResolver = typeResolver;
   }
 
-  private static ResolvedType adjustedToClassmateBug(
-      TypeResolver typeResolver,
-      ResolvedType resolvedType) {
-
-    if (resolvedType.getErasedType().getTypeParameters().length > 0) {
-      List<ResolvedType> typeParms = new ArrayList<>();
-      for (ResolvedType each : resolvedType.getTypeParameters()) {
-        typeParms.add(adjustedToClassmateBug(typeResolver, each));
-      }
-      return typeResolver.resolve(resolvedType, typeParms.toArray(new Type[typeParms.size()]));
-    } else {
-      return typeResolver.resolve(resolvedType.getErasedType());
-    }
-  }
-
   public static ResolvedType paramOrReturnType(TypeResolver typeResolver, ResolvedMethod input) {
     if (maybeAGetter(input.getRawMember())) {
       LOG.debug("Evaluating unwrapped getter for member {}", input.getRawMember().getName());
-      return adjustedToClassmateBug(typeResolver, input.getReturnType());
+      return input.getReturnType();
     } else {
       LOG.debug("Evaluating unwrapped setter for member {}", input.getRawMember().getName());
-      return adjustedToClassmateBug(typeResolver, input.getArgumentType(0));
+      return input.getArgumentType(0);
     }
   }
 

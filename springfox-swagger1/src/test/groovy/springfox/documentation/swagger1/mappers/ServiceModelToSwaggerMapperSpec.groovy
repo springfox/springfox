@@ -35,6 +35,7 @@ import springfox.documentation.builders.ResponseMessageBuilder
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ApiListingReference
+import springfox.documentation.service.Contact
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -157,7 +158,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSup
                   .apiVersion("1.0")
                   .securitySchemes(null)
                   .info(new ApiInfoBuilder()
-                    .contact("test@ssmvc.com")
+                    .contact(new Contact("test@ssmvc.com", "urn:test", "test@ssmvc.com"))
                     .description("test api")
                     .license("MIT")
                     .licenseUrl("urn:mit:lic")
@@ -191,7 +192,7 @@ class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSup
               .apiVersion("1.0")
               .securitySchemes([])
               .info(new ApiInfoBuilder()
-              .contact("test@ssmvc.com")
+              .contact(new Contact("test@ssmvc.com", "urn:test", "test@ssmvc.com"))
               .description("test api")
               .license("MIT")
               .licenseUrl("urn:mit:lic")

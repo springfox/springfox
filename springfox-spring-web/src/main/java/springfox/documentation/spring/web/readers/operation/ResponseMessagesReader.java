@@ -23,12 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
+import springfox.documentation.service.Representation;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -36,12 +39,16 @@ import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spi.service.contexts.ResponseContext;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Collections.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -54,21 +61,29 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
   private final SchemaPluginsManager pluginsManager;
+  private final ModelSpecificationFactory modelSpecifications;
+  private final DocumentationPluginsManager documentationPlugins;
 
   @Autowired
   public ResponseMessagesReader(
       EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor,
-      SchemaPluginsManager pluginsManager) {
+      SchemaPluginsManager pluginsManager,
+      ModelSpecificationFactory modelSpecifications,
+      DocumentationPluginsManager documentationPlugins) {
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
     this.pluginsManager = pluginsManager;
+    this.modelSpecifications = modelSpecifications;
+    this.documentationPlugins = documentationPlugins;
   }
 
   @Override
   public void apply(OperationContext context) {
     List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
     context.operationBuilder().responseMessages(new HashSet<>(responseMessages));
+
+    context.operationBuilder().responses(new HashSet<>(context.globalResponsesFor(context.httpMethod())));
     applyReturnTypeOverride(context);
   }
 
@@ -78,19 +93,19 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   }
 
   private void applyReturnTypeOverride(OperationContext context) {
-
     ResolvedType returnType = context.alternateFor(context.getReturnType());
     int httpStatusCode = httpStatusCode(context);
     String message = message(context);
     ModelReference modelRef = null;
 
-    ViewProviderPlugin viewProvider = 
+    ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
+    Set<Representation> representations = new HashSet<>();
     if (!isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
-          viewProvider.viewFor(returnType, context));
+          viewProvider.viewFor(context));
 
       Map<String, String> knownNames = new HashMap<>();
       Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
@@ -104,10 +119,38 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
           enumTypeDeterminer,
           typeNameExtractor,
           knownNames).apply(returnType);
+      Set<MediaType> produces = new HashSet<>(context.produces());
+      if (produces.isEmpty()) {
+        produces.add(MediaType.ALL);
+      }
+      produces
+          .forEach(mediaType ->
+              representations.add(
+                  new Representation(
+                      mediaType,
+                      modelSpecifications.create(modelContext, returnType),
+                      new HashSet<>())));
     }
-    ResponseMessage built = new ResponseMessageBuilder().code(httpStatusCode).message(message).responseModel(modelRef)
+    ResponseMessage built = new ResponseMessageBuilder()
+        .code(httpStatusCode)
+        .message(message)
+        .responseModel(modelRef)
         .build();
-    context.operationBuilder().responseMessages(singleton(built));
+
+    ResponseContext responseContext = new ResponseContext(
+        returnType,
+        context.getDocumentationContext(),
+        context.getGenericsNamingStrategy(),
+        context);
+    responseContext.responseBuilder()
+        .representations(representations)
+        .description(message)
+        .code(String.valueOf(httpStatusCode));
+
+    context.operationBuilder()
+        .responseMessages(singleton(built));
+    context.operationBuilder()
+        .responses(Collections.singleton(documentationPlugins.response(responseContext)));
   }
 
   public static int httpStatusCode(OperationContext context) {

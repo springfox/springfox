@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.mixins
 
-class AccessorAssertions {
+trait AccessorAssertions {
 
    def assertAccessor(target, String method, value){
       method = method.capitalize()

@@ -23,9 +23,11 @@ import springfox.documentation.swagger2.mappers.MapperSupport
 
 import static springfox.documentation.spi.service.contexts.Orderings.nickNameComparator
 
-@Mixin([ApiListingSupport, AuthSupport])
 class Swagger2ControllerWebFluxSpec extends DocumentationContextSpec
-    implements MapperSupport, JsonSupport {
+    implements MapperSupport,
+        JsonSupport,
+        AuthSupport,
+        ApiListingSupport {
 
     Swagger2ControllerWebFlux controller = new Swagger2ControllerWebFlux(
             new DocumentationCache(),

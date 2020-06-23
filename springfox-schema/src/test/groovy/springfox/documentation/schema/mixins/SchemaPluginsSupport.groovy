@@ -27,6 +27,7 @@ import springfox.documentation.schema.JacksonJsonViewProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.plugins.PropertyDiscriminatorBasedInheritancePlugin
 import springfox.documentation.schema.plugins.SchemaPluginsManager
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
@@ -35,29 +36,34 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.ViewProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 
-class SchemaPluginsSupport {
+trait SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        OrderAwarePluginRegistry.create(new ArrayList<>())
+        OrderAwarePluginRegistry.of(new ArrayList<>())
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        OrderAwarePluginRegistry.create(
+        OrderAwarePluginRegistry.of(
             [new PropertyDiscriminatorBasedInheritancePlugin(
-                new TypeResolver(), new JacksonEnumTypeDeterminer(), typeNameExtractor)])
+                new TypeResolver(),
+                enumTypeDeterminer,
+                typeNameExtractor,
+                new ModelSpecificationFactory(typeNameExtractor,
+                    enumTypeDeterminer))])
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
-        OrderAwarePluginRegistry.create([new JacksonJsonViewProvider(new TypeResolver())])
+        OrderAwarePluginRegistry.of([new JacksonJsonViewProvider(new TypeResolver())])
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        OrderAwarePluginRegistry.create(new ArrayList<>())
+        OrderAwarePluginRegistry.of(new ArrayList<>())
 
     new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry, syntheticModelRegistry)
   }

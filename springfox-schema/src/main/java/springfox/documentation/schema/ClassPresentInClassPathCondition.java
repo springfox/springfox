@@ -25,6 +25,7 @@ import org.springframework.util.ClassUtils;
 
 import static org.springframework.util.ClassUtils.forName;
 
+//TODO: Move this class
 public abstract class ClassPresentInClassPathCondition implements Condition {
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {

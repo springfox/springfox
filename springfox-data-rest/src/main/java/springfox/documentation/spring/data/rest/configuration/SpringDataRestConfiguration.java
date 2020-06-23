@@ -19,6 +19,7 @@
 package springfox.documentation.spring.data.rest.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +43,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 @Configuration
 @ComponentScan(basePackages = "springfox.documentation.spring.data.rest")
 @Incubating("2.5.0")
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SpringDataRestConfiguration {
 
   // tag::alternate-type-rule-convention[]
@@ -64,7 +66,7 @@ public class SpringDataRestConfiguration {
       }
     };
   }
-  // tag::alternate-type-rule-convention[]
+  // end::alternate-type-rule-convention[]
 
   // tag::alternate-type-builder[]
   private Type pageableMixin(RepositoryRestConfiguration restConfiguration) {
@@ -73,7 +75,7 @@ public class SpringDataRestConfiguration {
             String.format("%s.generated.%s",
                 Pageable.class.getPackage().getName(),
                 Pageable.class.getSimpleName()))
-        .withProperties(Stream.of(
+        .properties(Stream.of(
             property(Integer.class, restConfiguration.getPageParamName()),
             property(Integer.class, restConfiguration.getLimitParamName()),
             property(String.class, restConfiguration.getSortParamName())
@@ -83,10 +85,10 @@ public class SpringDataRestConfiguration {
 
   private AlternateTypePropertyBuilder property(Class<?> type, String name) {
     return new AlternateTypePropertyBuilder()
-        .withName(name)
-        .withType(type)
-        .withCanRead(true)
-        .withCanWrite(true);
+        .name(name)
+        .type(type)
+        .canRead(true)
+        .canWrite(true);
   }
-  // tag::alternate-type-builder[]
+  // end::alternate-type-builder[]
 }

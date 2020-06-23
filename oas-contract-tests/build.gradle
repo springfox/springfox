@@ -1,0 +1,66 @@
+buildscript {
+  ext {
+    springBootVersion = '2.3.1.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+  }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+configurations {
+  //Logback causing spring boot errors
+  all*.exclude group: 'ch.qos.logback'
+}
+
+ext {
+  limits = [
+      'instruction': 89.5,
+      'line'       : 85,
+      'complexity' : 80,
+      'method'     : 80,
+      'branch'     : 85,
+      'class'      : 94
+  ]
+}
+
+dependencies {
+  implementation "org.springframework.boot:spring-boot-starter-web"
+  implementation "org.springframework.boot:spring-boot-starter-webflux"
+  implementation "org.springframework.boot:spring-boot-starter-data-rest"
+  implementation "org.codehaus.groovy:groovy-all:$groovy"
+  implementation 'org.slf4j:slf4j-simple:1.6.1'
+  implementation "javax.validation:validation-api:$validationApiVersion"
+
+
+  testImplementation libs.test
+  testImplementation "org.skyscreamer:jsonassert:$jsonAssert"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+  implementation project(':springfox-boot-starter')
+
+  implementation(project(path: ':springfox-swagger-ui')) {
+    exclude group: 'org.springframework',
+        module: 'spring-web'
+  }
+}
+
+compileJava {
+  options.compilerArgs += [
+      "-Amapstruct.defaultComponentModel=spring",
+      "-Amapstruct.unmappedTargetPolicy=ERROR"
+  ]
+}
+
+// tag::update-contract-tests[]
+// NOTE: Uncomment to bulk update contracts
+//test {
+//  systemProperty("contract.tests.root", "$projectDir/src/test/resources")
+//  systemProperty("contract.tests.update", true)
+//}
+// end::update-contract-tests[]

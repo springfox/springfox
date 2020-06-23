@@ -18,20 +18,115 @@
  */
 package springfox.documentation.schema
 
-import spock.lang.Ignore
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, AlternateTypesSupport])
-class SimpleTypeSpec extends SchemaSpecification {
-  def namingStrategy = new CodeGenGenericTypeNamingStrategy()
+class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport {
+  @Shared def resolver = new TypeResolver()
+  @Shared def namingStrategy = new CodeGenGenericTypeNamingStrategy()
+  
+  @Unroll
+  def "simple type is rendered as [#type]"() {
+    given:
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(
+        inputParam(
+            "0_0",
+            "group",
+            resolver.resolve(simpleType()),
+            Optional.empty(),
+            new HashSet<>(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(
+        returnValue("0_0",
+            "group",
+            resolver.resolve(simpleType()),
+            Optional.empty(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+
+    expect:
+    asInput.getName() == "SimpleType"
+    asInput.getCompound().isPresent()
+    assertScalarPropertySpecification(asInput.getCompound().get(), property, type)
+
+    asReturn.getName() == "SimpleType"
+    asReturn.getCompound().isPresent()
+    assertScalarPropertySpecification(asReturn.getCompound().get(), property, type)
+
+    where:
+    property          | type
+    "aString"         | ScalarType.STRING
+    "aByte"           | ScalarType.BYTE
+    "aBoolean"        | ScalarType.BOOLEAN
+    "aShort"          | ScalarType.INTEGER
+    "anInt"           | ScalarType.INTEGER
+    "aLong"           | ScalarType.LONG
+    "aFloat"          | ScalarType.FLOAT
+    "aDouble"         | ScalarType.DOUBLE
+    "anObjectByte"    | ScalarType.BYTE
+    "anObjectBoolean" | ScalarType.BOOLEAN
+    "anObjectShort"   | ScalarType.INTEGER
+    "anObjectInt"     | ScalarType.INTEGER
+    "anObjectLong"    | ScalarType.LONG
+    "anObjectFloat"   | ScalarType.FLOAT
+    "anObjectDouble"  | ScalarType.DOUBLE
+    "uuid"            | ScalarType.UUID
+    "currency"        | ScalarType.CURRENCY
+    "aDate"           | ScalarType.DATE_TIME
+    "aSqlDate"        | ScalarType.DATE
+  }
+
+
+  def "Types with properties aliased using JsonProperty annotation"() {
+    given:
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(
+        inputParam(
+            "0_0",
+            "group",
+            resolver.resolve(typeWithJsonPropertyAnnotation()),
+            Optional.empty(),
+            new HashSet<>(),
+            documentationType,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(
+        returnValue(
+            "0_0",
+            "group",
+            resolver.resolve(typeWithJsonPropertyAnnotation()),
+            Optional.empty(),
+            documentationType,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+
+    expect:
+    asInput.getName() == "TypeWithJsonProperty"
+    asInput.getCompound().isPresent()
+    assertScalarPropertySpecification(asInput.getCompound().get(), property, type)
+
+    asReturn.getName() == "TypeWithJsonProperty"
+    asReturn.getCompound().isPresent()
+    assertScalarPropertySpecification(asReturn.getCompound().get(), property, type)
+
+    where:
+    property                    | type
+    "some_custom_odd_ball_name" | ScalarType.STRING
+  }
 
   @Unroll
-  def "simple type [#qualifiedType] is rendered as [#type]"() {
+  def "(Deprecated) simple type [#qualifiedType] is rendered as [#type]"() {
     given:
     Model asInput = modelProvider.modelFor(
         inputParam(
@@ -98,51 +193,7 @@ class SimpleTypeSpec extends SchemaSpecification {
     "aSqlDate"        | java.sql.Date | "java.sql.Date"
   }
 
-  @Ignore
-  def "type with constructor all properties are inferred"() {
-    given:
-    Model asInput = modelProvider.modelFor(
-        inputParam(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithConstructor()),
-            Optional.empty(),
-            new HashSet<>(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-    Model asReturn = modelProvider.modelFor(
-        returnValue(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithConstructor()),
-            Optional.empty(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-
-    expect:
-    asInput.getName() == "TypeWithConstructor"
-    asInput.getProperties().containsKey(property)
-    def modelProperty = asInput.getProperties().get(property)
-    modelProperty.getType().erasedType == type
-    modelProperty.getQualifiedType() == qualifiedType
-    def item = modelProperty.getModelRef()
-    item.type == Types.typeNameFor(type)
-    !item.collection
-    item.itemType == null
-
-    asReturn.getName() == "TypeWithConstructor"
-    !asReturn.getProperties().containsKey(property)
-
-    where:
-    property      | type   | qualifiedType
-    "stringValue" | String | "java.lang.String"
-  }
-
-  def "Types with properties aliased using JsonProperty annotation"() {
+  def "(Deprecated) Types with properties aliased using JsonProperty annotation"() {
     given:
     Model asInput = modelProvider.modelFor(
         inputParam(

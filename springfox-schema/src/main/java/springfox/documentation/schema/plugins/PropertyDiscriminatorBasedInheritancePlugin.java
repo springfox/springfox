@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema.plugins;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -27,8 +28,11 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
@@ -37,6 +41,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -46,37 +51,59 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
+  private final ModelSpecificationFactory modelSpecifications;
   private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   public PropertyDiscriminatorBasedInheritancePlugin(
       TypeResolver typeResolver,
       EnumTypeDeterminer enumTypeDeterminer,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      ModelSpecificationFactory modelSpecifications) {
     this.typeResolver = typeResolver;
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
+    this.modelSpecifications = modelSpecifications;
   }
 
   @Override
   public void apply(ModelContext context) {
 
-    List<ModelReference> modelRefs = modelRefs(context);
+    List<Compatibility<ModelReference, ReferenceModelSpecification>> modelRefs = subclassReferences(context);
 
     if (!modelRefs.isEmpty()) {
       context.getBuilder()
-          .discriminator(discriminator(context))
-          .subTypes(modelRefs);
+             .discriminator(discriminator(context))
+             .subTypes(modelRefs.stream()
+                                .filter(c -> c.getLegacy().isPresent())
+                                .map(c -> c.getLegacy().get())
+                                .collect(Collectors.toList()));
+      context.getModelSpecificationBuilder()
+             .compoundModel(cm -> cm.discriminator(discriminator(context))
+                                    .subclassReferences(modelRefs.stream()
+                                                                 .filter(c -> c.getModern().isPresent())
+                                                                 .map(c -> c.getModern().get())
+                                                                 .collect(Collectors.toList())));
     }
   }
 
-  private List<ModelReference> modelRefs(ModelContext context) {
+  private List<Compatibility<ModelReference, ReferenceModelSpecification>> subclassReferences(ModelContext context) {
     JsonSubTypes subTypes = AnnotationUtils.getAnnotation(forClass(context), JsonSubTypes.class);
-    List<ModelReference> modelRefs = new ArrayList<>();
+    List<Compatibility<ModelReference, ReferenceModelSpecification>> modelRefs = new ArrayList<>();
     if (subTypes != null) {
       for (JsonSubTypes.Type each : subTypes.value()) {
-        modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)
-            .apply(typeResolver.resolve(each.value())));
+        ResolvedType resolvedSubType = typeResolver.resolve(each.value());
+        modelRefs.add(
+            new Compatibility<>(
+                modelRefFactory(
+                    context,
+                    enumTypeDeterminer,
+                    typeNameExtractor)
+                    .apply(resolvedSubType),
+                modelSpecifications.create(
+                    context,
+                    resolvedSubType).getReference()
+                                   .orElse(null)));
       }
     }
     return modelRefs;
@@ -87,7 +114,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
         return ofNullable(typeInfo.property()).filter(((Predicate<String>) String::isEmpty).negate())
-            .orElse(typeInfo.use().getDefaultPropertyName());
+                                              .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }
     return "";

@@ -23,6 +23,8 @@ import org.springframework.plugin.core.Plugin;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.List;
@@ -49,6 +51,23 @@ public interface SyntheticModelProviderPlugin extends Plugin<ModelContext> {
    * @return model - when the plugin indicates it supports it, it must provide properties by name
    */
   List<ModelProperty> properties(ModelContext context);
+
+
+  /**
+   * Creates a synthetic model
+   *
+   * @param context - context to create the model from
+   * @return model - when the plugin indicates it supports it, it must return a model
+   */
+  ModelSpecification createModelSpecification(ModelContext context);
+
+  /**
+   * Creates a synthetic model properties
+   *
+   * @param context - context to create the model properties from
+   * @return model - when the plugin indicates it supports it, it must provide properties by name
+   */
+  List<PropertySpecification> propertySpecifications(ModelContext context);
 
   /**
    * Creates a dependencies for the synthetic model

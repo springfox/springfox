@@ -39,7 +39,7 @@ public class ApiInfoBuilder {
   private String license;
   private String licenseUrl;
   private String version;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Updates the api title
@@ -82,19 +82,6 @@ public class ApiInfoBuilder {
    */
   public ApiInfoBuilder version(String version) {
     this.version = version;
-    return this;
-  }
-
-  /**
-   * Updates contact information for the person responsible for this API
-   *
-   * @param contact - contact information
-   * @return this
-   * @deprecated @since 2.4.0. Use the overload that takes in a contact instead
-   */
-  @Deprecated
-  public ApiInfoBuilder contact(String contact) {
-    this.contact = new Contact(contact, "", "");
     return this;
   }
 

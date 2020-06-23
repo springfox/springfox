@@ -56,6 +56,7 @@ public abstract class BaseModelProperty implements ModelProperty {
     } else {
       jsonFormatAnnotation = empty();
     }
+
   }
 
   protected abstract ResolvedType realType();

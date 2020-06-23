@@ -72,7 +72,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     ResolvedType returnType = context.getReturnType();
     returnType = context.alternateFor(returnType);
     Optional<ResolvedType> returnParameter = context.findAnnotation(ApiOperation.class)
-        .map(resolvedTypeFromOperation(typeResolver, returnType));
+        .map(resolvedTypeFromApiOperation(typeResolver, returnType));
     if (returnParameter.isPresent() && returnParameter.get() != returnType) {
       LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(returnParameter.get()).orElse("<null>"));
       context.operationModelsBuilder().addReturn(returnParameter.get());

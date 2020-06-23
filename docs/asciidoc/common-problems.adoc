@@ -564,6 +564,6 @@ https://github.com/springfox/springfox/blob/eedbfb1b2dcf0344e21aefd0731515aa63fc
 [[q27-config]]
 [source,java,linenums]
 ----
-include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/Swagger2TestConfig.groovy[tags=question-27-config,indent=0]
+include::../../swagger-contract-tests/src/main/java/springfox/test/contract/swagger/Swagger2TestConfig.java[tags=question-27-config,indent=0]
 ----
 <1> Add `CustomTypeFor2031` as a additional model.

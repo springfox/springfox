@@ -18,9 +18,10 @@
  */
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 
 import java.util.stream.Stream
@@ -29,8 +30,9 @@ import static java.util.Collections.*
 import static java.util.stream.Collectors.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
-class EnumTypeSpec extends Specification {
+class EnumTypeSpec extends Specification implements ModelProviderSupport {
+  @Shared def resolver = new TypeResolver()
+  
   def "enum type are inferred as type string with allowable values"() {
     given:
     def list = Stream.of("ONE", "TWO").collect(toList())
@@ -81,5 +83,51 @@ class EnumTypeSpec extends Specification {
     !retModelProperty.getModelRef().collection
     retModelProperty.getModelRef().itemType == null
     retModelProperty.getAllowableValues().getValues() == list
+  }
+
+  def "enum type are inferred as type string with allowable values for openapi 3.x"() {
+    given:
+    def enumerationValues = ["ONE", "TWO"]
+    def provider = defaultModelSpecificationProvider()
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+
+    ModelSpecification asInput = provider.modelSpecificationsFor(
+        inputParam("0_0",
+            "group",
+            resolver.resolve(enumType()),
+            Optional.empty(),
+            new HashSet<>(),
+            DocumentationType.OAS_30,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+    ModelSpecification asReturn = provider.modelSpecificationsFor(
+        returnValue("0_0",
+            "group",
+            resolver.resolve(enumType()),
+            Optional.empty(),
+            DocumentationType.OAS_30,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+
+    expect:
+    asInput.getName() == "ExampleWithEnums"
+    asInput.compound.isPresent()
+    def modelProperty = asInput.compound.get().properties.find { it.name == "exampleEnum" }
+    modelProperty.name == "exampleEnum"
+    modelProperty.type.scalar.isPresent()
+    modelProperty.type.scalar.get().type == ScalarType.STRING
+    modelProperty.elementFacet(EnumerationFacet).isPresent()
+    modelProperty.elementFacet(EnumerationFacet).get().allowedValues == enumerationValues
+
+    asReturn.getName() == "ExampleWithEnums"
+    asReturn.compound.isPresent()
+    def retModelProperty = asInput.compound.get().properties.find { it.name == "exampleEnum" }
+    retModelProperty.name == "exampleEnum"
+    retModelProperty.type.scalar.isPresent()
+    retModelProperty.type.scalar.get().type == ScalarType.STRING
+    retModelProperty.elementFacet(EnumerationFacet).isPresent()
+    retModelProperty.elementFacet(EnumerationFacet).get().allowedValues == enumerationValues
   }
 }

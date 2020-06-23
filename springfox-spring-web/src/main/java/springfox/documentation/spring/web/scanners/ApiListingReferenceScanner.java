@@ -38,10 +38,10 @@ import static java.util.stream.Collectors.*;
 @Component
 public class ApiListingReferenceScanner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
 
   public ApiListingReferenceScanResult scan(DocumentationContext context) {
-    LOG.info("Scanning for api listing references");
+    LOGGER.debug("Scanning for api listing references");
 
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings
         = new HashMap<>();

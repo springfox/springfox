@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/fancypets/?{someId}": {
@@ -32,7 +32,7 @@
                     "fancy-pet-service"
                 ],
                 "summary": "createObject",
-                "operationId": "createObjectUsingPOST_2",
+                "operationId": "createObjectUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -63,8 +63,7 @@
                             "format": "int32"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

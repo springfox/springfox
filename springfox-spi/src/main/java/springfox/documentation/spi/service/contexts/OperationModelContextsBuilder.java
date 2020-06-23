@@ -115,7 +115,8 @@ public class OperationModelContextsBuilder {
 
     Supplier<TreeSet<ModelContext>> supplier = () -> new TreeSet<>(byParameterId);
 
-    return contexts.stream().collect(
-        collectingAndThen(Collectors.toCollection(supplier), Collections::unmodifiableSet));
+    return contexts.stream()
+        .map(ModelContext::copy)
+        .collect(collectingAndThen(Collectors.toCollection(supplier), Collections::unmodifiableSet));
   }
 }

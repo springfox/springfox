@@ -37,26 +37,81 @@ public class AlternateTypePropertyBuilder {
   private boolean canWrite;
   private List<Annotation> annotations;
 
+  public AlternateTypePropertyBuilder type(Class<?> clazz) {
+    this.clazz = clazz;
+    return this;
+  }
+
+  public AlternateTypePropertyBuilder name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public AlternateTypePropertyBuilder canRead(boolean canRead) {
+    this.canRead = canRead;
+    return this;
+  }
+
+  public AlternateTypePropertyBuilder canWrite(boolean canWrite) {
+    this.canWrite = canWrite;
+    return this;
+  }
+
+  public AlternateTypePropertyBuilder annotations(List<Annotation> annotations) {
+    this.annotations = annotations;
+    return this;
+  }
+
+  /**
+   * @param clazz - name of the type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypePropertyBuilder#type(Class)  instead
+   * @deprecated @since 3.0.0
+   */
   public AlternateTypePropertyBuilder withType(Class<?> clazz) {
     this.clazz = clazz;
     return this;
   }
 
+  /**
+   * @param name - name of the type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypePropertyBuilder#name(String)  instead
+   * @deprecated @since 3.0.0
+   */
   public AlternateTypePropertyBuilder withName(String name) {
     this.name = name;
     return this;
   }
 
+  /**
+   * @param canRead - properties for the alternate type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypePropertyBuilder#canRead(boolean)  instead
+   * @deprecated @since 3.0.0
+   */
   public AlternateTypePropertyBuilder withCanRead(boolean canRead) {
     this.canRead = canRead;
     return this;
   }
 
+  /**
+   * @param canWrite - properties for the alternate type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypePropertyBuilder#canWrite(boolean)  instead
+   * @deprecated @since 3.0.0
+   */
   public AlternateTypePropertyBuilder withCanWrite(boolean canWrite) {
     this.canWrite = canWrite;
     return this;
   }
 
+  /**
+   * @param annotations - properties for the alternate type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypePropertyBuilder#annotations(List)  instead
+   * @deprecated @since 3.0.0
+   */
   public AlternateTypePropertyBuilder withAnnotations(List<Annotation> annotations) {
     this.annotations = annotations;
     return this;
@@ -64,7 +119,7 @@ public class AlternateTypePropertyBuilder {
 
   public DynamicType.Builder<Object> apply(DynamicType.Builder<Object> builder) {
     if (annotations == null) {
-      annotations = new ArrayList<Annotation>();
+      annotations = new ArrayList<>();
     }
     DynamicType.Builder<Object> augmented = builder.defineField(name, clazz, Visibility.PRIVATE)
         .annotateField(annotations);

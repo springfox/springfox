@@ -52,7 +52,7 @@ public class EntityAssociationGetExtractor implements EntityAssociationOperation
     associationAction(context, path)
         .supportsMethod(GET)
         .produces(HAL_JSON)
-        .withParameterType(ParameterType.ID)
+        .parameterType(ParameterType.ID)
         .build()
         .map(get -> new SpringDataRestRequestHandler(context.getEntityContext(), get))
         .ifPresent(handlers::add);

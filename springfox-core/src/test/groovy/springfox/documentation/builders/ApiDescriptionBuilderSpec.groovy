@@ -27,55 +27,61 @@ import java.util.function.Function
 class ApiDescriptionBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
-      def orderingMock = Mock(Comparator)
-      def sut = new ApiDescriptionBuilder(orderingMock)
+    def orderingMock = Mock(Comparator)
+    def sut = new ApiDescriptionBuilder(orderingMock)
     and:
-      orderingMock.sortedCopy(value) >> value
+    orderingMock.sortedCopy(value) >> value
     when:
-      sut."$builderMethod"(value)
+    sut."$builderMethod"(value)
     and:
-      def built = sut.build()
+    def built = sut.build()
     then:
-      if (builderMethod.equals("pathDecorator")) {
-        assert built.path == ""
-      } else {
-        built."$property" == value
-      }
+    if (builderMethod.equals("pathDecorator")) {
+      assert built.path == ""
+    } else {
+      built."$property" == value
+    }
 
     where:
-      builderMethod   | value             | property
-      'path'          | 'urn:some-path'   | 'path'
-      'description'   | 'description'     | 'description'
-      'operations'    | [Mock(Operation)] | 'operations'
-      'hidden'        | true              | 'hidden'
-      'pathDecorator' | mock()            | 'path'
+    builderMethod   | value             | property
+    'path'          | 'urn:some-path'   | 'path'
+    'description'   | 'description'     | 'description'
+    'summary'       | 'summary'         | 'summary'
+    'operations'    | [Mock(Operation)] | 'operations'
+    'hidden'        | true              | 'hidden'
+    'pathDecorator' | mock()            | 'path'
   }
 
   def "Setting properties on the builder with null values preserves previous value"() {
     given:
-      def orderingMock = Mock(Comparator)
-      def sut = new ApiDescriptionBuilder(orderingMock)
+    def orderingMock = Mock(Comparator)
+    def sut = new ApiDescriptionBuilder(orderingMock)
+
     and:
-      orderingMock.sortedCopy(value) >> value
+    orderingMock.sortedCopy(value) >> value
+
     when:
-      sut."$builderMethod"(value)
+    sut."$builderMethod"(value)
+
     and:
-      sut."$builderMethod"(null)
+    sut."$builderMethod"(null)
+
     and:
-      def built = sut.build()
+    def built = sut.build()
+
     then:
-      if (builderMethod.equals("pathDecorator")) {
-        assert built.path == ""
-      } else {
-        built."$property" == value
-      }
+    if (builderMethod.equals("pathDecorator")) {
+      assert built.path == ""
+    } else {
+      built."$property" == value
+    }
 
     where:
-      builderMethod   | value             | property
-      'path'          | 'urn:some-path'   | 'path'
-      'description'   | 'description'     | 'description'
-      'operations'    | [Mock(Operation)] | 'operations'
-      'pathDecorator' | mock()            | 'path'
+    builderMethod   | value             | property
+    'path'          | 'urn:some-path'   | 'path'
+    'description'   | 'description'     | 'description'
+    'operations'    | [Mock(Operation)] | 'operations'
+    'pathDecorator' | mock()            | 'path'
   }
 
   Function<String, String> mock() {

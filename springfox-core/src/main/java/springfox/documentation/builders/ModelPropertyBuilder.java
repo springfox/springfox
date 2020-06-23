@@ -49,7 +49,6 @@ public class ModelPropertyBuilder {
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public ModelPropertyBuilder() {
-    
   }
 
   public ModelPropertyBuilder(ModelProperty modelProperty) {
@@ -102,18 +101,6 @@ public class ModelPropertyBuilder {
 
   public ModelPropertyBuilder description(String description) {
     this.description = defaultIfAbsent(description, this.description);
-    return this;
-  }
-
-  /**
-   * Updates the example
-   * @param example - example value
-   * @return this
-   * @deprecated @since 2.8.1 Use the one with Object as parameter
-   */
-  @Deprecated
-  public ModelPropertyBuilder example(String example) {
-    this.example = defaultIfAbsent(example, this.example);
     return this;
   }
 

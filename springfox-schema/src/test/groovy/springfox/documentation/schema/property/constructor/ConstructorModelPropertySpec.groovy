@@ -18,13 +18,13 @@
  */
 package springfox.documentation.schema.property.constructor
 
+import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import springfox.documentation.schema.AlternateTypesSupport
+import spock.lang.Shared
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.field.FieldModelProperty
 import springfox.documentation.service.AllowableListValues
@@ -33,8 +33,8 @@ import static java.util.Collections.*
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
-class ConstructorModelPropertySpec extends SchemaSpecification {
+class ConstructorModelPropertySpec extends SchemaSpecification implements ModelPropertyLookupSupport {
+  @Shared def resolver = new TypeResolver()
 
   def "Extracting information from resolved constructor params"() {
     given:

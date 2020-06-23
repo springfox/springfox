@@ -23,19 +23,19 @@ import io.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.PropertySourcedMapping;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -45,19 +45,23 @@ import java.util.Optional;
 
 import static org.springframework.util.MimeTypeUtils.*;
 import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.swagger2.web.Swagger2ControllerWebMvc.*;
 
-@Controller
-@ConditionalOnClass(name = "org.springframework.web.reactive.BindingContext")
+@RestController
 @ApiIgnore
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+@RequestMapping(SWAGGER2_SPECIFICATION_PATH)
 public class Swagger2ControllerWebFlux {
 
-  private static final String DEFAULT_URL = "/v2/api-docs";
   private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2ControllerWebFlux.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
   private final JsonSerializer jsonSerializer;
+
+  @Value(SWAGGER2_SPECIFICATION_PATH)
+  private String path;
 
   @Autowired
   public Swagger2ControllerWebFlux(
@@ -70,12 +74,8 @@ public class Swagger2ControllerWebFlux {
   }
 
   @RequestMapping(
-      value = DEFAULT_URL,
       method = RequestMethod.GET,
-      produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
-  @PropertySourcedMapping(
-      value = "${springfox.documentation.swagger.v2.path}",
-      propertyKey = "springfox.documentation.swagger.v2.path")
+      produces = {APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE})
   @ResponseBody
   public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,

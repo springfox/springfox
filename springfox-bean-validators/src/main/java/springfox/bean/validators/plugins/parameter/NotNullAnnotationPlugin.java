@@ -52,6 +52,7 @@ public class NotNullAnnotationPlugin implements ParameterBuilderPlugin {
     if (notNull.isPresent()) {
       LOG.debug("@NotNull present: setting parameter as required");
       context.parameterBuilder().required(true);
+      context.requestParameterBuilder().required(true);
     }
   }
 }

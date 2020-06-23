@@ -2207,6 +2207,7 @@
           "required": false,
           "format": "double",
           "type": "number"
+
         }
       }
     },

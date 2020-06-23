@@ -22,11 +22,13 @@ import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-
 
 
 @Incubating("2.1.0")
@@ -53,5 +55,12 @@ public class PathContext {
       return operation.get().getParameters();
     }
     return new ArrayList<>();
+  }
+
+  public Collection<RequestParameter> getRequestParameters() {
+    if (operation.isPresent()) {
+      return operation.get().getRequestParameters();
+    }
+    return new HashSet<>();
   }
 }

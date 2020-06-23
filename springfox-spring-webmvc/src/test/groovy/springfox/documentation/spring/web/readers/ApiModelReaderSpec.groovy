@@ -34,11 +34,9 @@ import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
-import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
@@ -48,20 +46,17 @@ import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.Foo
 import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Holder
-import springfox.documentation.spring.web.dummy.models.Wrapper
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.PetWithJsonView
 import springfox.documentation.spring.web.dummy.models.Pirate
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithConditions
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddleWithCircle
-import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddleWithModel
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter
-import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuterWithModel
 import springfox.documentation.spring.web.dummy.models.SameFancyPet
+import springfox.documentation.spring.web.dummy.models.Wrapper
 import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -73,8 +68,11 @@ import java.util.stream.Collectors
 
 import static springfox.documentation.spring.web.paths.Paths.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport, SchemaPluginsSupport])
-class ApiModelReaderSpec extends DocumentationContextSpec {
+@SuppressWarnings(["deprecation", "GrDeprecatedAPIUsage"])
+class ApiModelReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ModelProviderForServiceSupport {
 
   ApiModelReader sut
   ApiModelReader sutSpecial
@@ -86,7 +84,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def setup() {
     TypeResolver typeResolver = new TypeResolver()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
     typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
@@ -101,15 +99,24 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     ObjectMapper mapper = new ObjectMapper()
     mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION)
     sutSpecial = new ApiModelReader(
-        modelProvider(defaultSchemaPlugins(), new TypeResolver(), new JacksonEnumTypeDeterminer(), mapper),
+        modelProvider(
+            defaultSchemaPlugins(),
+            new TypeResolver(),
+            new JacksonEnumTypeDeterminer(),
+            mapper),
         new TypeResolver(),
         pluginsManager,
         new JacksonEnumTypeDeterminer(),
         typeNameExtractor)
-    resourceGroup = new ResourceGroup("businesses", DummyClass)
+    resourceGroup = new ResourceGroup(
+        "businesses",
+        DummyClass)
   }
 
-  def requestMappingContext(HandlerMethod handlerMethod, String path, String paramId = "0") {
+  def requestMappingContext(
+      HandlerMethod handlerMethod,
+      String path,
+      String paramId = "0") {
     return new RequestMappingContext(
         paramId,
         documentationContext(),
@@ -128,7 +135,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Method return type model"() {
     given:
-    RequestMappingContext context = requestMappingContext(dummyHandlerMethod('methodWithConcreteResponseBody'), '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        dummyHandlerMethod('methodWithConcreteResponseBody'),
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -136,8 +145,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     then:
     modelsMap.containsKey("0_0")
     Map<String, Model> models = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                         .collect(
+                                             Collectors.toMap(
+                                                 toModelMap,
+                                                 Function.identity()))
 
     models.size() == 1
     Model model = models.get('BusinessModel')
@@ -162,20 +173,25 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestBodyAnnotation',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodParameterWithRequestBodyAnnotation',
         DummyModels.BusinessModel,
         HttpServletResponse.class,
         DummyModels.AnnotatedBusinessModel.class
     )
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
     when:
     def modelsMap = sut.read(context)
 
     then:
     modelsMap.containsKey("0_1")
     Map<String, Model> models = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                         .collect(
+                                             Collectors.toMap(
+                                                 toModelMap,
+                                                 Function.identity()))
 
     models.size() == 1 // instead of 3
     Model model = models.get("BusinessModel")
@@ -195,12 +211,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "should only generate models for request parameters that are annotated with Springs RequestPart"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotation',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodParameterWithRequestPartAnnotation',
         DummyModels.BusinessModel,
         HttpServletResponse.class,
         DummyModels.AnnotatedBusinessModel.class
     )
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -208,8 +227,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     then:
     modelsMap.containsKey("0_1")
     Map<String, Model> models = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                         .collect(
+                                             Collectors.toMap(
+                                                 toModelMap,
+                                                 Function.identity()))
 
     models.size() == 1 // instead of 3
     Model model = models.get("BusinessModel")
@@ -219,12 +240,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "should not generate models for simple type request parameters that are annotated with Springs RequestPart"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotationOnSimpleType',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodParameterWithRequestPartAnnotationOnSimpleType',
         String.class,
         HttpServletResponse.class,
         DummyModels.AnnotatedBusinessModel.class
     )
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -237,7 +261,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   @Ignore("This needs to move to a swagger 1.2 test")
   def "Generates the correct models when there is a Map object in the input parameter"() {
     given:
-    HandlerMethod handlerMethod = handlerMethodIn(PetService, 'echo', Map)
+    HandlerMethod handlerMethod = handlerMethodIn(
+        PetService,
+        'echo',
+        Map)
     RequestMappingContext context = requestMappingContext(handlerMethod)
 
     when:
@@ -246,8 +273,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     then:
     modelsMap.containsKey("0")
     Map<String, Model> models = modelsMap.get("0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                         .collect(
+                                             Collectors.toMap(
+                                                 toModelMap,
+                                                 Function.identity()))
 
     models.size() == 2
     models.containsKey("Entry«string,Pet»")
@@ -258,12 +287,21 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Generates the correct models when alternateTypeProvider returns an ignoreable or base parameter type"() {
     given:
     plugin
-        .genericModelSubstitutes(ResponseEntity, HttpEntity)
-        .configure(contextBuilder)
+        .
+            genericModelSubstitutes(
+                ResponseEntity,
+                HttpEntity)
+        .
+            configure(contextBuilder)
 
     and:
-    HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
+    HandlerMethod handlerMethod = handlerMethodIn(
+        BusinessService,
+        'getResponseEntity',
+        String)
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/businesses/responseEntity/{businessId}')
 
     when:
     def modelsMap = sut.read(context)
@@ -275,10 +313,13 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "model should include property that is only visible during serialization"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
         DummyModels.ModelWithSerializeOnlyProperty
     )
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -287,11 +328,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     models_1.size() == 1
     models_2.size() == 1
@@ -317,16 +362,23 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelProperties_2.containsKey('alwaysVisible')
   }
 
-  def "model should include snake_case property that is only visible during serialization when objectMapper has CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"() {
+  def "model includes snake_case property that is only visible when CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES is on"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
         DummyModels.ModelWithSerializeOnlyProperty
     )
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     and:
-    def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(),
-        new TypeResolver(), defaultWebPlugins(), new JacksonEnumTypeDeterminer(), typeNameExtractor)
+    def snakeCaseReader = new ApiModelReader(
+        modelProviderWithSnakeCaseNamingStrategy(),
+        new TypeResolver(),
+        defaultWebPlugins(),
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor)
     when:
     def modelsMap = snakeCaseReader.read(context)
 
@@ -334,11 +386,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     models_1.size() == 1
     models_2.size() == 1
@@ -367,8 +423,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify issue #283"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestFoobarDto', FoobarDto)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestFoobarDto',
+        FoobarDto)
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -377,11 +437,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     models_1.size() == 1
     models_2.size() == 1
@@ -410,8 +474,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify issue #1196"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypes', Pirate)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypes',
+        Pirate)
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -420,11 +488,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_1")
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     Model pirate_1 = models_1[Pirate.simpleName]
@@ -470,9 +542,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that recursive type same for serialization and deserialization"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithConditions',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithConditions',
         RecursiveTypeWithConditions)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -481,11 +556,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_1")
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     Model recursiveTypeWithConditions_1 = models_1[RecursiveTypeWithConditions.simpleName]
@@ -552,8 +631,13 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Test to verify that type holder doesn't generate spare models"() {
     given:
     HandlerMethod handlerMethod =
-        dummyHandlerMethod('methodToTestSpareModelsWithKnownTypes', Foo, Holder)
-    RequestMappingContext contextFirst = requestMappingContext(handlerMethod, '/somePath')
+        dummyHandlerMethod(
+            'methodToTestSpareModelsWithKnownTypes',
+            Foo,
+            Holder)
+    RequestMappingContext contextFirst = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = new HashMap<>(sut.read(contextFirst))
@@ -563,14 +647,20 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_1")
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_3 = modelsMap.get("0_2").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     modelsMap.keySet().size() == 3
@@ -619,9 +709,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that recursive type different for serialization and deserialization"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions',
         RecursiveTypeWithNonEqualsConditionsOuter)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -630,11 +723,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_1")
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     Model recursiveTypeWithConditionsOuter_1 = models_1['RecursiveTypeWithNonEqualsConditionsOuter']
@@ -653,21 +750,36 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     recursiveTypeWithConditionsOuter_1.getProperties().size() == 1
 
     recursiveTypeWithConditionsOuter_1.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsMiddle')
-    ModelReference modelRef_1 = recursiveTypeWithConditionsOuter_1.getProperties()
-        .get('recursiveTypeWithNonEqualsConditionsMiddle').getModelRef()
-    modelRef_1.getModelId().get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddle"
+    ModelReference modelRef_1 = recursiveTypeWithConditionsOuter_1.
+        getProperties()
+                                                                  .
+                                                                      get('recursiveTypeWithNonEqualsConditionsMiddle').
+        getModelRef()
+    modelRef_1.
+        getModelId().
+        get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddle"
     modelRef_1.getType() == 'RecursiveTypeWithNonEqualsConditionsMiddle'
 
     recursiveTypeWithConditionsMiddle_1.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsInner')
-    ModelReference modelRef_2 = recursiveTypeWithConditionsMiddle_1.getProperties()
-        .get('recursiveTypeWithNonEqualsConditionsInner').getModelRef()
-    modelRef_2.getModelId().get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsInner"
+    ModelReference modelRef_2 = recursiveTypeWithConditionsMiddle_1.
+        getProperties()
+                                                                   .
+                                                                       get('recursiveTypeWithNonEqualsConditionsInner').
+        getModelRef()
+    modelRef_2.
+        getModelId().
+        get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsInner"
     modelRef_2.getType() == 'RecursiveTypeWithNonEqualsConditionsInner'
 
     recursiveTypeWithConditionsInner_1.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsOuter')
-    ModelReference modelRef_3 = recursiveTypeWithConditionsInner_1.getProperties()
-        .get('recursiveTypeWithNonEqualsConditionsOuter').getModelRef()
-    modelRef_3.getModelId().get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter"
+    ModelReference modelRef_3 = recursiveTypeWithConditionsInner_1.
+        getProperties()
+                                                                  .
+                                                                      get('recursiveTypeWithNonEqualsConditionsOuter').
+        getModelRef()
+    modelRef_3.
+        getModelId().
+        get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter"
     modelRef_3.getType() == 'RecursiveTypeWithNonEqualsConditionsOuter'
 
     and:
@@ -687,34 +799,57 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     recursiveTypeWithConditionsOuter_2.getProperties().size() == 2
 
     recursiveTypeWithConditionsOuter_2.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsMiddle')
-    ModelReference modelRef_4 = recursiveTypeWithConditionsOuter_2.getProperties()
-        .get('recursiveTypeWithNonEqualsConditionsMiddle').getModelRef()
-    modelRef_4.getModelId().get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddle"
+    ModelReference modelRef_4 = recursiveTypeWithConditionsOuter_2.
+        getProperties()
+                                                                  .
+                                                                      get('recursiveTypeWithNonEqualsConditionsMiddle').
+        getModelRef()
+    modelRef_4.
+        getModelId().
+        get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddle"
     modelRef_4.getType() == 'RecursiveTypeWithNonEqualsConditionsMiddle_1'
 
     recursiveTypeWithConditionsMiddle_2.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsInner')
-    ModelReference modelRef_5 = recursiveTypeWithConditionsMiddle_2.getProperties()
-        .get('recursiveTypeWithNonEqualsConditionsInner').getModelRef()
-    modelRef_5.getModelId().get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsInner"
+    ModelReference modelRef_5 = recursiveTypeWithConditionsMiddle_2.
+        getProperties()
+                                                                   .
+                                                                       get('recursiveTypeWithNonEqualsConditionsInner').
+        getModelRef()
+    modelRef_5.
+        getModelId().
+        get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsInner"
     modelRef_5.getType() == 'RecursiveTypeWithNonEqualsConditionsInner_1'
 
     recursiveTypeWithConditionsInner_2.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsOuter')
-    ModelReference modelRef_6 = recursiveTypeWithConditionsInner_2.getProperties()
-        .get('recursiveTypeWithNonEqualsConditionsOuter').getModelRef()
-    modelRef_6.getModelId().get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter"
+    ModelReference modelRef_6 = recursiveTypeWithConditionsInner_2.
+        getProperties()
+                                                                  .
+                                                                      get('recursiveTypeWithNonEqualsConditionsOuter').
+        getModelRef()
+    modelRef_6.
+        getModelId().
+        get() == "springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter"
     modelRef_6.getType() == 'RecursiveTypeWithNonEqualsConditionsOuter_1'
 
   }
 
   def "Test to verify that recursive type same with known types from other branch"() {
     given:
-    HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithConditions',
+    HandlerMethod handlerMethodFirst = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithConditions',
         RecursiveTypeWithConditions)
-    RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+    RequestMappingContext contextFirst = requestMappingContext(
+        handlerMethodFirst,
+        '/somePath',
+        '0')
 
-    HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions',
+    HandlerMethod handlerMethodSecond = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions',
         RecursiveTypeWithNonEqualsConditionsOuter)
-    RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+    RequestMappingContext contextSecond = requestMappingContext(
+        handlerMethodSecond,
+        '/somePath',
+        '1')
 
     when:
     def modelsMap = new HashMap<>(sut.read(contextFirst))
@@ -723,23 +858,31 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     then:
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("0_1")
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("1_0")
     Map<String, Model> models_3 = modelsMap.get("1_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("1_1")
     Map<String, Model> models_4 = modelsMap.get("1_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     Model recursiveTypeWithConditions_1 = models_1[RecursiveTypeWithConditions.simpleName]
@@ -797,12 +940,19 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that recursive type with dependent non equals circle produce two models"() {
     given:
-    HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithCircle',
-       RecursiveTypeWithNonEqualsConditionsMiddleWithCircle)
-    RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+    HandlerMethod handlerMethodFirst = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithCircle',
+        RecursiveTypeWithNonEqualsConditionsMiddleWithCircle)
+    RequestMappingContext contextFirst = requestMappingContext(
+        handlerMethodFirst,
+        '/somePath',
+        '0')
 
     HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithCircle')
-    RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+    RequestMappingContext contextSecond = requestMappingContext(
+        handlerMethodSecond,
+        '/somePath',
+        '1')
 
     when:
     def modelsMap = new HashMap<>(sut.read(contextFirst))
@@ -812,53 +962,59 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("0_1")
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("1_0")
     Map<String, Model> models_3 = modelsMap.get("1_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     Model recursiveTypeWithNonEqualsConditionsMiddleWithModel =
-            models_1['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
+        models_1['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
     Model recursiveTypeWithNonEqualsConditionsInnerWithModel =
-            models_1['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
+        models_1['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
     Model recursiveTypeWithNonEqualsConditionsOuterWithModel =
-            models_1['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
+        models_1['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
 
     Model recursiveTypeWithNonEqualsConditionsMiddleWithCircle =
-            models_2['RecursiveTypeWithNonEqualsConditionsMiddleWithCircle']
+        models_2['RecursiveTypeWithNonEqualsConditionsMiddleWithCircle']
     Model recursiveTypeWithNonEqualsConditionsInnerWithCircle =
-            models_2['RecursiveTypeWithNonEqualsConditionsInnerWithCircle']
+        models_2['RecursiveTypeWithNonEqualsConditionsInnerWithCircle']
     Model recursiveTypeWithNonEqualsConditionsOuterWithCircle =
-            models_2['RecursiveTypeWithNonEqualsConditionsOuterWithCircle']
+        models_2['RecursiveTypeWithNonEqualsConditionsOuterWithCircle']
     Model recursiveTypeWithNonEqualsConditionsMiddleWithModel_1 =
-            models_2['RecursiveTypeWithNonEqualsConditionsMiddleWithModel_1']
+        models_2['RecursiveTypeWithNonEqualsConditionsMiddleWithModel_1']
     Model recursiveTypeWithNonEqualsConditionsInnerWithModel_1 =
-            models_2['RecursiveTypeWithNonEqualsConditionsInnerWithModel_1']
+        models_2['RecursiveTypeWithNonEqualsConditionsInnerWithModel_1']
     Model recursiveTypeWithNonEqualsConditionsOuterWithModel_1 =
-            models_2['RecursiveTypeWithNonEqualsConditionsOuterWithModel_1']
+        models_2['RecursiveTypeWithNonEqualsConditionsOuterWithModel_1']
     Model pet = models_2['Pet']
 
     Model recursiveTypeWithNonEqualsConditionsMiddleWithCircle_1 =
-            models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithCircle_1']
+        models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithCircle_1']
     Model recursiveTypeWithNonEqualsConditionsInnerWithCircle_1 =
-            models_3['RecursiveTypeWithNonEqualsConditionsInnerWithCircle_1']
+        models_3['RecursiveTypeWithNonEqualsConditionsInnerWithCircle_1']
     Model recursiveTypeWithNonEqualsConditionsOuterWithCircle_1 =
-            models_3['RecursiveTypeWithNonEqualsConditionsOuterWithCircle_1']
+        models_3['RecursiveTypeWithNonEqualsConditionsOuterWithCircle_1']
     Model recursiveTypeWithNonEqualsConditionsMiddleWithModel_2 =
-            models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
+        models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
     Model recursiveTypeWithNonEqualsConditionsInnerWithModel_2 =
-            models_3['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
+        models_3['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
     Model recursiveTypeWithNonEqualsConditionsOuterWithModel_2 =
-            models_3['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
+        models_3['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
 
     and:
     models_1.size() == 3
@@ -888,27 +1044,35 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     and:
     recursiveTypeWithNonEqualsConditionsMiddleWithModel
-            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsMiddleWithModel_2)
+        .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsMiddleWithModel_2)
     recursiveTypeWithNonEqualsConditionsInnerWithModel
-            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsInnerWithModel_2)
+        .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsInnerWithModel_2)
     recursiveTypeWithNonEqualsConditionsOuterWithModel
-            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsOuterWithModel)
+        .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsOuterWithModel)
 
     and:
     !recursiveTypeWithNonEqualsConditionsMiddleWithCircle
-            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsMiddleWithCircle_1)
+        .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsMiddleWithCircle_1)
 
   }
 
   def "Test to verify that recursive type with dependent registered model produce one model"() {
     given:
-    HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithModel',
+    HandlerMethod handlerMethodFirst = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithModel',
         springfox.documentation.spring.web.dummy.models.Pet)
-    RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+    RequestMappingContext contextFirst = requestMappingContext(
+        handlerMethodFirst,
+        '/somePath',
+        '0')
 
-    HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithModel',
+    HandlerMethod handlerMethodSecond = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithModel',
         Wrapper)
-    RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+    RequestMappingContext contextSecond = requestMappingContext(
+        handlerMethodSecond,
+        '/somePath',
+        '1')
 
     when:
     def modelsMap = new HashMap<>(sut.read(contextFirst))
@@ -918,36 +1082,42 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("0_1")
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
-        
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
+
     modelsMap.containsKey("1_1")
     Map<String, Model> models_3 = modelsMap.get("1_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     Model wrapper = models_1['Wrapper«RecursiveTypeWithNonEqualsConditionsOuterWithModel»']
     Model recursiveTypeWithNonEqualsConditionsMiddleWithModel =
-            models_1['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
+        models_1['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
     Model recursiveTypeWithNonEqualsConditionsInnerWithModel =
-            models_1['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
+        models_1['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
     Model recursiveTypeWithNonEqualsConditionsOuterWithModel =
-            models_1['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
+        models_1['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
     Model pet = models_2['Pet']
-    
+
     Model wrapper_1 = models_3['Wrapper«RecursiveTypeWithNonEqualsConditionsOuterWithModel»_1']
     Model recursiveTypeWithNonEqualsConditionsMiddleWithModel_1 =
-            models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithModel_1']
+        models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithModel_1']
     Model recursiveTypeWithNonEqualsConditionsInnerWithModel_1 =
-            models_3['RecursiveTypeWithNonEqualsConditionsInnerWithModel_1']
+        models_3['RecursiveTypeWithNonEqualsConditionsInnerWithModel_1']
     Model recursiveTypeWithNonEqualsConditionsOuterWithModel_1 =
-            models_3['RecursiveTypeWithNonEqualsConditionsOuterWithModel_1']
+        models_3['RecursiveTypeWithNonEqualsConditionsOuterWithModel_1']
     Model pet_1 = models_3['Pet']
 
     and:
@@ -975,17 +1145,29 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that recursive type same with known types"() {
     given:
-    HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithConditions',
+    HandlerMethod handlerMethodFirst = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithConditions',
         RecursiveTypeWithConditions)
-    RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+    RequestMappingContext contextFirst = requestMappingContext(
+        handlerMethodFirst,
+        '/somePath',
+        '0')
 
-    HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions',
+    HandlerMethod handlerMethodSecond = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions',
         RecursiveTypeWithNonEqualsConditionsOuter)
-    RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+    RequestMappingContext contextSecond = requestMappingContext(
+        handlerMethodSecond,
+        '/somePath',
+        '1')
 
-    HandlerMethod handlerMethodThird = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithKnownTypes',
+    HandlerMethod handlerMethodThird = dummyHandlerMethod(
+        'methodToTestBidirectionalRecursiveTypesWithKnownTypes',
         RecursiveTypeWithConditions)
-    RequestMappingContext contextThird = requestMappingContext(handlerMethodThird, '/somePath', "2")
+    RequestMappingContext contextThird = requestMappingContext(
+        handlerMethodThird,
+        '/somePath',
+        "2")
 
     when:
     def modelsMap = new HashMap<>(sut.read(contextFirst))
@@ -996,29 +1178,41 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_1")
     modelsMap.containsKey("0_0")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("1_1")
     modelsMap.containsKey("1_0")
     Map<String, Model> models_3 = modelsMap.get("1_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_4 = modelsMap.get("1_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     modelsMap.containsKey("2_1")
     modelsMap.containsKey("2_0")
     Map<String, Model> models_5 = modelsMap.get("2_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_6 = modelsMap.get("2_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     and:
     Model recursiveTypeWithConditions_1 = models_1[RecursiveTypeWithConditions.simpleName]
@@ -1104,8 +1298,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that duplicate class names in different packages will be produced as different models (#182)"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestIssue182', Pet)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestIssue182',
+        Pet)
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -1114,11 +1312,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     Model pet_1 = models_1["Pet"]
     Model pet_2 = models_2["Pet_1"]
@@ -1146,9 +1348,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that same class for serialization and deserialization will be produced as one model"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSerializationAndDeserialization',
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestSerializationAndDeserialization',
         Map)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -1157,11 +1362,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     Model fancyPet_1 = models_1["FancyPet"]
     Model category_1 = models_1["Category"]
@@ -1187,7 +1396,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     ModelReference modelRef_1 = fancyPet_1.getProperties().get('categories').getModelRef()
     modelRef_1.isCollection()
     modelRef_1.itemModel().get()
-        .getModelId().get() == "springfox.documentation.spring.web.dummy.models.Category"
+              .getModelId().get() == "springfox.documentation.spring.web.dummy.models.Category"
     and:
     category_1.getProperties().size() == 1
     category_1.getProperties().containsKey('name')
@@ -1208,7 +1417,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     ModelReference modelRef_2 = fancyPet_2.getProperties().get('categories').getModelRef()
     modelRef_2.isCollection()
     modelRef_2.itemModel().get()
-        .getModelId().get() == "springfox.documentation.spring.web.dummy.models.Category"
+              .getModelId().get() == "springfox.documentation.spring.web.dummy.models.Category"
     and:
     category_2.getProperties().size() == 1
     category_2.getProperties().containsKey('name')
@@ -1217,8 +1426,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that different class for serialization and deserialization will be produced as two models"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSameClassesWithDifferentProperties', SameFancyPet)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestSameClassesWithDifferentProperties',
+        SameFancyPet)
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -1227,11 +1440,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     Model category_1 = models_1["SameCategory"]
     Model category_2 = models_2["SameCategory_1"]
@@ -1280,8 +1497,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that @JsonView works correctly with DEFAULT_VIEW_INCLUSION (issues #563, #807, #895"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestJsonView', PetWithJsonView)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestJsonView',
+        PetWithJsonView)
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sut.read(context)
@@ -1290,11 +1511,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     Model pet_1 = models_1["PetWithJsonView"]
     Model pet_2 = models_2["PetWithJsonView_1"]
@@ -1318,8 +1543,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Test to verify that @JsonView works correctly without DEFAULT_VIEW_INCLUSION (issues #563, #807, #895"() {
     given:
-    HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestJsonView', PetWithJsonView)
-    RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+    HandlerMethod handlerMethod = dummyHandlerMethod(
+        'methodToTestJsonView',
+        PetWithJsonView)
+    RequestMappingContext context = requestMappingContext(
+        handlerMethod,
+        '/somePath')
 
     when:
     def modelsMap = sutSpecial.read(context)
@@ -1328,11 +1557,15 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
     Map<String, Model> models_1 = modelsMap.get("0_0").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
-        .collect(Collectors.toMap(toModelMap,
-            Function.identity()))
+                                           .collect(
+                                               Collectors.toMap(
+                                                   toModelMap,
+                                                   Function.identity()))
 
     Model pet_1 = models_1["PetWithJsonView"]
     Model pet_2 = models_2["PetWithJsonView_1"]

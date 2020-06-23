@@ -5,6 +5,7 @@ import com.fasterxml.classmate.members.ResolvedField
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
@@ -14,7 +15,10 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 class ExpandedParameterBuilderSpec extends Specification {
   def "List of enums are expanded correctly"() {
     given:
-    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(new TypeResolver(), new JacksonEnumTypeDeterminer())
+    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(
+        new TypeResolver(),
+        new JacksonEnumTypeDeterminer()
+    )
 
     and:
     ParameterExpansionContext context = new ParameterExpansionContext(
@@ -26,7 +30,8 @@ class ExpandedParameterBuilderSpec extends Specification {
             named("enums").type,
             "enums"),
         DocumentationType.SWAGGER_12,
-        new ParameterBuilder())
+        new ParameterBuilder(),
+        new RequestParameterBuilder())
 
     when:
     sut.apply(context)
@@ -46,7 +51,10 @@ class ExpandedParameterBuilderSpec extends Specification {
   @Unroll
   def "List of scalar type for #field is expanded correctly"() {
     given:
-    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(new TypeResolver(), new JacksonEnumTypeDeterminer())
+    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(
+        new TypeResolver(),
+        new JacksonEnumTypeDeterminer()
+    )
 
     and:
     ParameterExpansionContext context = new ParameterExpansionContext(
@@ -58,7 +66,8 @@ class ExpandedParameterBuilderSpec extends Specification {
             named(field).type,
             field),
         DocumentationType.SWAGGER_12,
-        new ParameterBuilder())
+        new ParameterBuilder(),
+        new RequestParameterBuilder())
 
     when:
     sut.apply(context)

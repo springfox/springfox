@@ -42,6 +42,7 @@ import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+import springfox.documentation.spring.web.readers.operation.ContentParameterAggregator
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
@@ -56,8 +57,11 @@ import javax.servlet.http.HttpServletResponse
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport])
-class OperationParameterReaderSpec extends DocumentationContextSpec {
+class OperationParameterReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        SwaggerPluginsSupport,
+        ModelProviderForServiceSupport {
   OperationParameterReader sut
   def pluginsManager
 
@@ -84,7 +88,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
     expander.pluginsManager = pluginsManager
 
-    sut = new OperationParameterReader(expander, enumTypeDeterminer)
+    sut = new OperationParameterReader(expander, enumTypeDeterminer, new ContentParameterAggregator())
     sut.pluginsManager = pluginsManager
   }
 
@@ -130,7 +134,6 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     'required'      | false
     'allowMultiple' | false
     'paramType'     | null
-    //TODO: add more properties and readers
   }
 
   def "Should expand ModelAttribute request params"() {

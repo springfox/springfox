@@ -10,9 +10,13 @@ ext {
 }
 
 dependencies {
-  compile project(':springfox-core')
-  compile project(':springfox-spi')
-  provided "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson}"
-  testCompile libs.test
-  testCompile project(':springfox-core').sourceSets.test.output
+  api project(':springfox-core')
+  api project(':springfox-spi')
+
+  implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson}"
+  implementation libs.springProvided
+  implementation libs.clientProvided
+
+  testImplementation libs.test
+  testImplementation project(':springfox-core').sourceSets.test.output
 }

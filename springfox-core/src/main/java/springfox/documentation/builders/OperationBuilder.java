@@ -19,23 +19,31 @@
 package springfox.documentation.builders;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
+import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestBody;
+import springfox.documentation.service.RequestParameter;
+import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -51,23 +59,30 @@ public class OperationBuilder {
   private static final Collection<String> REQUEST_BODY_MEDIA_TYPES
       = of(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE).collect(toSet());
   private final OperationNameGenerator nameGenerator;
+  private final Set<String> tags = new TreeSet<>();
+  private final List<SecurityReference> securityReferences = new ArrayList<>();
+  private final MultiValueMap<String, Response> responses = new LinkedMultiValueMap<>();
+  private final Set<RequestParameter> requestParameters = new HashSet<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+
   private HttpMethod method = HttpMethod.GET;
   private String summary;
   private String notes;
   private String uniqueId;
   private String codeGenMethodNameStem;
-  private int position;
-  private Set<String> produces = new LinkedHashSet<>();
-  private Set<String> consumes = new LinkedHashSet<>();
-  private Set<String> protocol = new LinkedHashSet<>();
-  private List<SecurityReference> securityReferences = new ArrayList<>();
-  private List<Parameter> parameters = new ArrayList<>();
-  private Set<ResponseMessage> responseMessages = new HashSet<>();
-  private Set<String> tags = new LinkedHashSet<>();
   private String deprecated;
+  private RequestBody body;
+  private ExternalDocumentation externalDocumentation;
+
+  //TODO: to be deprecated
   private boolean isHidden;
   private ModelReference responseModel;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private int position;
+  private final List<Parameter> parameters = new ArrayList<>();
+  private final Set<ResponseMessage> responseMessages = new HashSet<>();
+  private final Set<String> produces = new TreeSet<>();
+  private final Set<String> consumes = new TreeSet<>();
+  private final Set<String> protocol = new TreeSet<>();
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;
@@ -184,7 +199,11 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder authorizations(Collection<SecurityReference> securityReferences) {
-    this.securityReferences.addAll(nullToEmptyList(securityReferences));
+    List<SecurityReference> newSecurityReferences = nullToEmptyList(securityReferences);
+    if (!newSecurityReferences.isEmpty()) {
+      this.securityReferences.clear();
+      this.securityReferences.addAll(newSecurityReferences);
+    }
     return this;
   }
 
@@ -193,24 +212,44 @@ public class OperationBuilder {
    *
    * @param parameters - input parameter definitions
    * @return this
+   * @deprecated @since 3.0.0
+   * Use @see {@link OperationBuilder#requestParameters(Collection)}
    */
-  public OperationBuilder parameters(final List<Parameter> parameters) {
+  @Deprecated
+  public OperationBuilder parameters(List<Parameter> parameters) {
     List<Parameter> source = nullToEmptyList(parameters);
     List<Parameter> destination = new ArrayList<>(this.parameters);
     ParameterMerger merger = new ParameterMerger(destination, source);
-    this.parameters = new ArrayList<>(merger.merged());
+    this.parameters.clear();
+    this.parameters.addAll(merger.merged());
     return this;
   }
 
 
   /**
-   * Updates the response messages
-   *
    * @param responseMessages - new response messages to be merged with existing response messages
    * @return this
+   * @deprecated @since 3.0.0
+   * Updates the response messages
+   * Use @see {@link OperationBuilder#responses(Collection)}
    */
+  @Deprecated
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = new HashSet<>(mergeResponseMessages(responseMessages));
+    Set<ResponseMessage> merged = mergeResponseMessages(responseMessages);
+    this.responseMessages.clear();
+    this.responseMessages.addAll(merged);
+    return this;
+  }
+
+  /**
+   * Updates the response messages
+   *
+   * @param responses - new response messages to be merged with existing response messages
+   * @return this
+   * @since 3.0.0
+   */
+  public OperationBuilder responses(Collection<Response> responses) {
+    responses.forEach(r -> this.responses.add(r.getCode(), r));
     return this;
   }
 
@@ -236,12 +275,20 @@ public class OperationBuilder {
     return this;
   }
 
+  public OperationBuilder externalDocumentation(ExternalDocumentation externalDocumentation) {
+    this.externalDocumentation = externalDocumentation;
+    return this;
+  }
+
+
   /**
-   * Updates the reference to the response model
-   *
    * @param responseType = response type model reference
    * @return this
+   * @deprecated @since 3.0.0
+   * Updates the reference to the response model
+   * Use @see {@link OperationBuilder#responses(Collection)}
    */
+  @Deprecated
   public OperationBuilder responseModel(ModelReference responseType) {
     this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
@@ -254,7 +301,11 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder tags(Set<String> tags) {
-    this.tags = nullToEmptySet(tags);
+    Set<String> newTags = nullToEmptySet(tags);
+    if (!newTags.isEmpty()) {
+      this.tags.clear();
+      this.tags.addAll(newTags);
+    }
     return this;
   }
 
@@ -269,13 +320,53 @@ public class OperationBuilder {
     return this;
   }
 
+
+  /**
+   * Updates the operation request body
+   *
+   * @param requestBody - operation extensions
+   * @return this
+   * @since 3.0.0
+   */
+  public OperationBuilder requestBody(RequestBody requestBody) {
+    this.body = requestBody;
+    return this;
+  }
+
+  /**
+   * Updates the operation response body
+   *
+   * @param parameters - operation extensions
+   * @return this
+   * @since 3.0.0
+   */
+  public OperationBuilder requestParameters(Collection<RequestParameter> parameters) {
+    RequestParameterMerger merger = new RequestParameterMerger(
+        this.requestParameters,
+        nullToEmptyList(parameters));
+    this.requestParameters.clear();
+    this.requestParameters.addAll(merger.merge());
+    return this;
+  }
+
+
   public Operation build() {
     String uniqueOperationId = nameGenerator.startingWith(uniqueOperationIdStem());
+
+    Set<Response> responses = new HashSet<>();
+    for (String code : this.responses.keySet()) {
+      if (this.responses.get(code).size() > 0) {
+        responses.add(mergeResponses(this.responses.get(code)));
+      }
+    }
+    SortedSet<RequestParameter> requestParameters = new TreeSet<>(defaultRequestParameterComparator());
+    requestParameters.addAll(this.requestParameters);
 
     return new Operation(
         method,
         summary,
         notes,
+        externalDocumentation,
         responseModel,
         uniqueOperationId,
         position,
@@ -288,7 +379,24 @@ public class OperationBuilder {
         responseMessages,
         deprecated,
         isHidden,
-        vendorExtensions);
+        vendorExtensions,
+        requestParameters,
+        body,
+        responses);
+  }
+
+  private Response mergeResponses(List<Response> responses) {
+    if (responses.size() == 1) {
+      return responses.stream().findFirst().get();
+    }
+    Response response = null;
+    for (Response each : responses) {
+      response = new ResponseBuilder()
+          .copyOf(response)
+          .copyOf(each)
+          .build();
+    }
+    return response;
   }
 
   private Set<String> adjustConsumableMediaTypes() {
@@ -340,4 +448,7 @@ public class OperationBuilder {
     return merged;
   }
 
+  private Comparator<RequestParameter> defaultRequestParameterComparator() {
+    return (p1, p2) -> nullToEmpty(p1.getName()).compareToIgnoreCase(nullToEmpty(p2.getName()));
+  }
 }

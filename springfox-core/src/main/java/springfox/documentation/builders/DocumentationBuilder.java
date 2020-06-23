@@ -19,9 +19,9 @@
 
 package springfox.documentation.builders;
 
+import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
-import springfox.documentation.service.DocumentationReference;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
@@ -29,28 +29,30 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.service.Tags.*;
 
 public class DocumentationBuilder {
-  private String groupName;
-  private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());
+  private final Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());
+  private final Set<Tag> tags = new TreeSet<>(tagComparator());
+  private final Set<String> produces = new TreeSet<>();
+  private final Set<String> consumes = new TreeSet<>();
+  private final Set<String> schemes = new TreeSet<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<Server> servers = new ArrayList<>();
   private ResourceListing resourceListing;
-  private Set<Tag> tags = new LinkedHashSet<>();
+  private String groupName;
   private String basePath;
-  private Set<String> produces = new LinkedHashSet<>();
-  private Set<String> consumes = new LinkedHashSet<>();
   private String host;
-  private Set<String> schemes = new LinkedHashSet<>();
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
-  private List<Server> servers = new ArrayList<>();
-  private DocumentationReference documentationReference;
-
+  private ExternalDocumentation externalDocumentation;
 
   /**
    * Name of the documentation group
@@ -108,7 +110,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder tags(Set<Tag> tags) {
-    this.tags.addAll(nullToEmptySet(tags));
+    this.tags.addAll(nullToEmptySet(tags).stream()
+                                         .filter(Objects::nonNull)
+                                         .collect(toSet()));
     return this;
   }
 
@@ -119,7 +123,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder produces(Set<String> mediaTypes) {
-    this.produces.addAll(nullToEmptySet(mediaTypes));
+    this.produces.addAll(nullToEmptySet(mediaTypes).stream()
+                                                   .filter(Objects::nonNull)
+                                                   .collect(toSet()));
     return this;
   }
 
@@ -130,7 +136,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder consumes(Set<String> mediaTypes) {
-    this.consumes.addAll(nullToEmptySet(mediaTypes));
+    this.consumes.addAll(nullToEmptySet(mediaTypes).stream()
+                                                   .filter(Objects::nonNull)
+                                                   .collect(toSet()));
     return this;
   }
 
@@ -154,7 +162,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder schemes(Set<String> schemes) {
-    this.schemes.addAll(nullToEmptySet(schemes));
+    this.schemes.addAll(nullToEmptySet(schemes).stream()
+                                               .filter(Objects::nonNull)
+                                               .collect(toSet()));
     return this;
   }
 
@@ -196,13 +206,13 @@ public class DocumentationBuilder {
   /**
    * Adds external documentation information for this API
    *
-   * @param documentationReference - external documentation reference
+   * @param externalDocumentation - external documentation reference
    * @return this
    */
-  public DocumentationBuilder documentationReference(DocumentationReference documentationReference) {
-    this.documentationReference = defaultIfAbsent(
-        documentationReference,
-        this.documentationReference);
+  public DocumentationBuilder externalDocumentation(ExternalDocumentation externalDocumentation) {
+    this.externalDocumentation = defaultIfAbsent(
+        externalDocumentation,
+        this.externalDocumentation);
     return this;
   }
 
@@ -222,7 +232,7 @@ public class DocumentationBuilder {
         host,
         schemes,
         servers,
-        documentationReference,
+        externalDocumentation,
         vendorExtensions);
   }
 }

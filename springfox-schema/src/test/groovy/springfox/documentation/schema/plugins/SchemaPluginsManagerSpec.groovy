@@ -23,6 +23,7 @@ import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ExampleWithEnums
@@ -46,8 +47,7 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, AlternateTypesSupport])
-class SchemaPluginsManagerSpec extends Specification {
+class SchemaPluginsManagerSpec extends Specification implements TypesForTestingSupport, AlternateTypesSupport {
   SchemaPluginsManager sut
   TypeNameExtractor typeNames
   def propertyPlugin = Mock(ModelPropertyBuilderPlugin)
@@ -55,18 +55,19 @@ class SchemaPluginsManagerSpec extends Specification {
   def namePlugin = Mock(TypeNameProviderPlugin)
   def resourcesModelPlugin = Mock(SyntheticModelProviderPlugin)
   def viewProviderPlugin = Mock(ViewProviderPlugin)
+  def resolver = new TypeResolver()
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        OrderAwarePluginRegistry.create(singletonList(propertyPlugin))
+        OrderAwarePluginRegistry.of(singletonList(propertyPlugin))
     propertyPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        OrderAwarePluginRegistry.create(singletonList(modelPlugin))
+        OrderAwarePluginRegistry.of(singletonList(modelPlugin))
     modelPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create(singletonList(namePlugin))
+        OrderAwarePluginRegistry.of(singletonList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderPlugin =
@@ -74,7 +75,7 @@ class SchemaPluginsManagerSpec extends Specification {
     namePlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        OrderAwarePluginRegistry.create(singletonList(resourcesModelPlugin))
+        OrderAwarePluginRegistry.of(singletonList(resourcesModelPlugin))
     resourcesModelPlugin.supports(_) >> false
 
     sut = new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderPlugin, syntheticModelRegistry)
@@ -86,10 +87,18 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model property when plugins are found"() {
     given:
-    def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), Mock(AnnotatedElement),
-        new TypeResolver(), SPRING_WEB)
+    def modelContext = Mock(ModelContext)
+    def context = new ModelPropertyContext(
+        Mock(ModelPropertyBuilder),
+        new PropertySpecificationBuilder("any"),
+        Mock(AnnotatedElement),
+        new TypeResolver(),
+        modelContext)
+
     when:
+    modelContext.getDocumentationType() >> SPRING_WEB
     sut.property(context)
+
     then:
     1 * propertyPlugin.apply(context)
   }

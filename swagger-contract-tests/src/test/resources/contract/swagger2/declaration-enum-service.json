@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/enums/collection": {
@@ -32,12 +32,13 @@
                     "enum-service"
                 ],
                 "summary": "Example with response entity collection",
-                "operationId": "getResponseEntityCollectionUsingGET_1",
+                "operationId": "getResponseEntityCollectionUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
+                            "uniqueItems": true,
                             "items": {
                                 "type": "string",
                                 "enum": [
@@ -47,8 +48,7 @@
                             }
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/enums/entity": {
@@ -57,7 +57,7 @@
                     "enum-service"
                 ],
                 "summary": "Example with response entity single value",
-                "operationId": "getResponseEntityValueUsingGET_1",
+                "operationId": "getResponseEntityValueUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -69,8 +69,7 @@
                             ]
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/enums/wrapped": {
@@ -79,7 +78,7 @@
                     "enum-service"
                 ],
                 "summary": "Example with wrapped enum collection",
-                "operationId": "getCollectionValueUsingGET_1",
+                "operationId": "getCollectionValueUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -87,8 +86,7 @@
                             "$ref": "#/definitions/EnumCollection"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },
@@ -114,6 +112,7 @@
             "properties": {
                 "types": {
                     "type": "array",
+                    "uniqueItems": true,
                     "items": {
                         "type": "string",
                         "enum": [

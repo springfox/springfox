@@ -20,21 +20,28 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
+import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ParameterStyle;
+import springfox.documentation.service.ParameterType;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spring.wrapper.NameValueExpression;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static java.util.Collections.*;
 import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.builders.Parameters.*;
 import static springfox.documentation.service.Parameter.*;
 
 public abstract class AbstractOperationParameterRequestConditionReader implements OperationBuilderPlugin {
@@ -75,12 +82,56 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
     return parameters;
   }
 
+  protected Set<RequestParameter> getRequestParameters(
+      Set<NameValueExpression<String>> expressions,
+      ParameterType parameterType) {
+    Set<RequestParameter> parameters = new HashSet<>();
+    int index = 0;
+    for (NameValueExpression<String> expression : expressions) {
+      if (skipRequestParameter(parameters, expression)) {
+        continue;
+      }
+
+      String paramValue = expression.getValue();
+      AllowableListValues allowableValues = null;
+      if (!isEmpty(paramValue)) {
+        allowableValues = new AllowableListValues(singletonList(paramValue), "string");
+      }
+      AllowableListValues finalAllowableValues = allowableValues;
+      RequestParameter parameter = new RequestParameterBuilder()
+          .name(expression.getName())
+          .description(null)
+          .required(true)
+          .query(q -> q.style(ParameterStyle.SIMPLE)
+                       .explode(false)
+                       .allowReserved(false)
+                       .defaultValue(paramValue)
+                       .enumerationFacet(e -> e.allowedValues(finalAllowableValues))
+                       .model(new ModelSpecificationBuilder()
+                                  .name(expression.getName())
+                                  .scalarModel(ScalarType.STRING)
+                                  .build()))
+          .in(parameterType)
+          .precedence(DEFAULT_PRECEDENCE)
+          .build();
+      parameters.add(parameter);
+    }
+
+    return parameters;
+  }
+
   private boolean skipParameter(List<Parameter> parameters, NameValueExpression<String> expression) {
     return expression.isNegated() || parameterHandled(parameters, expression);
   }
 
+  private boolean skipRequestParameter(Set<RequestParameter> parameters, NameValueExpression<String> expression) {
+    return expression.isNegated()
+        || parameters.stream()
+        .anyMatch(p -> Objects.equals(p.getName(), expression.getName()));
+  }
+
   private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {
-    return parameters.stream().anyMatch(withName(expression.getName()));
+    return parameters.stream().anyMatch(input -> expression.getName().equals(input.getName()));
   }
 
   @Override

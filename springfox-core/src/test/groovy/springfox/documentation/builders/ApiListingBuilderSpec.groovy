@@ -26,15 +26,11 @@ import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.Tag
 
-import static springfox.documentation.builders.BuilderDefaults.*
-
 class ApiListingBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
       def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
-    and:
-      orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -63,8 +59,6 @@ class ApiListingBuilderSpec extends Specification {
     given:
       def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
-    and:
-      orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -95,8 +89,6 @@ class ApiListingBuilderSpec extends Specification {
     given:
       def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
-    and:
-      orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -104,18 +96,18 @@ class ApiListingBuilderSpec extends Specification {
     and:
       def built = sut.build()
     then:
-      built."$property" == nullToEmptySet(value as Set)
+      built."$property" == new TreeSet<>(expectedValue)
 
     where:
-    builderMethod       | value   | property
-    'appendProduces'    | ["a"]   | 'produces'
-    'appendConsumes'    | ["a"]   | 'consumes'
-    'appendProduces'    | []      | 'produces'
-    'appendConsumes'    | []      | 'consumes'
-    'appendProduces'    | [null]  | 'produces'
-    'appendConsumes'    | [null]  | 'consumes'
-    'appendProduces'    | null    | 'produces'
-    'appendConsumes'    | null    | 'consumes'
+    builderMethod       | value   | property   | expectedValue
+    'appendProduces'    | ["a"]   | 'produces' | ["a"]
+    'appendConsumes'    | ["a"]   | 'consumes' | ["a"]
+    'appendProduces'    | []      | 'produces' | []
+    'appendConsumes'    | []      | 'consumes' | []
+    'appendProduces'    | [null]  | 'produces' | []
+    'appendConsumes'    | [null]  | 'consumes' | []
+    'appendProduces'    | null    | 'produces' | []
+    'appendConsumes'    | null    | 'consumes' | []
 
   }
 
@@ -149,7 +141,32 @@ class ApiListingBuilderSpec extends Specification {
       [tag("test"), tag("2")] as Set    | "Description test"  | 1
   }
 
-  def tag(name) {
+  def "models are sorted by name" () {
+    given:
+    def sut = new ApiListingBuilder(Mock(Comparator))
+
+    Map<String, Model> modelMap = [
+        "HttpEntity«Resource«Pet»»": new ModelBuilder("1").build(),
+        "Resource«Pet»": new ModelBuilder("2").build(),
+        "Pet": new ModelBuilder("3").build()
+    ]
+    when:
+    def builtModels = sut.models(modelMap).build().models
+
+    then:
+    builtModels instanceof TreeMap
+    builtModels.eachWithIndex { Map.Entry<String, Model> entry, int i ->
+      if (i == 2) {
+        assert entry.key == "Resource«Pet»"
+      } else if (i == 0) {
+        assert entry.key == "HttpEntity«Resource«Pet»»"
+      } else if (i == 1) {
+        assert entry.key == "Pet"
+      }
+    }
+  }
+
+    def tag(name) {
     new Tag(name, "Description $name")
   }
 
@@ -161,7 +178,7 @@ class ApiListingBuilderSpec extends Specification {
     and:
       orderingMock.sortedCopy(value) >> value
     when:
-      sut.tagNames(value as Set);
+      sut.tagNames(value as Set)
     and:
       def built = sut.build()
     then:

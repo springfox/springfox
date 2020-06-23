@@ -28,7 +28,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation consumes defined",
-                "operationId": "withOperationConsumesUsingPOST_1",
+                "operationId": "withOperationConsumesUsingPOST",
                 "consumes": [
                     "application/xml"
                 ],
@@ -50,8 +50,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/with-operation-consumes-produces": {
@@ -60,7 +59,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation consumes and produces defined",
-                "operationId": "withOperationConsumesAndProducesUsingPOST_1",
+                "operationId": "withOperationConsumesAndProducesUsingPOST",
                 "consumes": [
                     "application/xml"
                 ],
@@ -82,8 +81,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/with-operation-produces": {
@@ -92,7 +90,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation produces defined",
-                "operationId": "withOperationProducesUsingGET_1",
+                "operationId": "withOperationProducesUsingGET",
                 "produces": [
                     "application/xml"
                 ],
@@ -103,8 +101,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/without-operation-consumes": {
@@ -113,7 +110,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does not have operation consumes defined",
-                "operationId": "withoutOperationConsumesUsingPOST_1",
+                "operationId": "withoutOperationConsumesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -135,8 +132,7 @@
                     "200": {
                         "description": "OK"
                     }
-                },
-                "deprecated": false
+                }
             }
         },
         "/consumes-produces/without-operation-produces": {
@@ -145,7 +141,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does not have operation produces defined",
-                "operationId": "withoutOperationProducesUsingGET_1",
+                "operationId": "withoutOperationProducesUsingGET",
                 "produces": [
                     "*/*"
                 ],
@@ -156,8 +152,7 @@
                             "type": "string"
                         }
                     }
-                },
-                "deprecated": false
+                }
             }
         }
     },

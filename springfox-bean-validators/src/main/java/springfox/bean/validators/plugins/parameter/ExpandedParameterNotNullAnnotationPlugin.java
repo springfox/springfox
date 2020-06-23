@@ -50,6 +50,7 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
     if (notNull.isPresent()) {
       LOG.debug("Setting parameter to required because of @NotNull attribute");
       context.getParameterBuilder().required(true);
+      context.getRequestParameterBuilder().required(true);
     }
   }
 }

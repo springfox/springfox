@@ -26,13 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
-import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.DefaultTypeNameProvider
-import springfox.documentation.schema.JacksonEnumTypeDeterminer
-import springfox.documentation.schema.Model
-import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
+import springfox.documentation.schema.*
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -45,19 +40,18 @@ import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Business
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static java.util.Collections.*
+import static java.util.Collections.emptySet
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
-class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
+class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-      OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+      OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
+  def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
   def typeNameExtractor = new TypeNameExtractor(
       new TypeResolver(),
       modelNameRegistry,
-      new JacksonEnumTypeDeterminer())
+      enumTypeDeterminer)
   def operationModelContextsBuilder = new OperationModelContextsBuilder(
       "group",
       DocumentationType.SWAGGER_12,
@@ -72,7 +66,10 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       defaultSchemaPlugins(),
       typeNameExtractor,
       new TypeResolver(),
-      new JacksonEnumTypeDeterminer())
+      enumTypeDeterminer,
+      new ModelSpecificationFactory(
+          typeNameExtractor,
+          enumTypeDeterminer))
 
   def "Should support all documentation types"() {
     expect:
@@ -87,14 +84,14 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
-    knownModels.put("0_0", new HashSet<Model>());
+    knownModels.put("0_0", new HashSet<Model>())
 
     ParameterContext parameterContext =
-        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+        new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
-            })
+            }, 0)
 
     when:
     sut.apply(parameterContext)
@@ -107,6 +104,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       def allowable = modelRef.allowableValues as AllowableListValues
       assert allowable.values.size() == 2
     }
+
     where:
     paramType                   | annotations          | expected
     char                        | []                   | "string"
@@ -152,11 +150,11 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     knownModels.put("0_0", new HashSet<Model>())
 
     ParameterContext parameterContext =
-        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+        new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
-            })
+            }, 0)
 
     when:
     sut.apply(parameterContext)
@@ -176,11 +174,12 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     knownModels.put("0_0", new HashSet<Model>())
 
     ParameterContext parameterContext =
-        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+        new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
-            })
+            }, 0)
+
 
     when:
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
@@ -188,17 +187,19 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     def typeNameExtractor = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     def sut = new ParameterDataTypeReader(
         defaultSchemaPlugins(),
         typeNameExtractor,
         new TypeResolver(),
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer,
+        new ModelSpecificationFactory(
+            typeNameExtractor,
+            enumTypeDeterminer))
     sut.apply(parameterContext)
     then:
     parameterContext.parameterBuilder().build().modelRef.type == "List"
     parameterContext.parameterBuilder().build().modelRef.itemType == "string"
-
   }
 
 }

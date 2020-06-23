@@ -37,7 +37,12 @@ public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<Pattern> pattern = extractAnnotation(context, Pattern.class);
-    context.getBuilder().pattern(createPatternValueFromAnnotation(pattern));
+    String patternValueFromAnnotation = createPatternValueFromAnnotation(pattern);
+    context.getBuilder().pattern(patternValueFromAnnotation);
+    if (patternValueFromAnnotation != null) {
+      context.getSpecificationBuilder()
+             .stringFacet(s -> s.pattern(patternValueFromAnnotation));
+    }
   }
 
   @Override

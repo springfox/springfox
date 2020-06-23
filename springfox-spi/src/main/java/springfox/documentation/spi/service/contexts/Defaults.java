@@ -22,11 +22,13 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
+import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.ClassSupport;
@@ -34,13 +36,9 @@ import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
+import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -59,7 +57,8 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 public class Defaults {
 
   private HashSet<Class> ignored;
-  private LinkedHashMap<RequestMethod, List<ResponseMessage>> responses;
+  private LinkedHashMap<RequestMethod, List<ResponseMessage>> responseMessages;
+  private Map<HttpMethod, List<Response>> responses = new LinkedHashMap<>();
   private List<Class<? extends Annotation>> annotations;
   private Comparator<Operation> operationOrdering;
   private Comparator<ApiDescription> apiDescriptionOrdering;
@@ -77,8 +76,20 @@ public class Defaults {
    * Default response messages set on all api operations
    *
    * @return - map of method to response messages
+   * @deprecated @since 3.0.0
+   * Use {@link Defaults#defaultResponses()} instead
    */
+  @Deprecated
   public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
+    return responseMessages;
+  }
+
+  /**
+   * Default response messages set on all api operations
+   *
+   * @return - map of method to response messages
+   */
+  public Map<HttpMethod, List<Response>> defaultResponses() {
     return responses;
   }
 
@@ -106,7 +117,6 @@ public class Defaults {
         typeResolver.resolve(Object.class)));
     rules.add(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
         typeResolver.resolve(Object.class)));
-
 
     rules.add(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
         typeResolver.resolve(WildcardType.class)));
@@ -140,8 +150,11 @@ public class Defaults {
     return rules;
   }
 
-  private void maybeAddRuleForClassName(TypeResolver typeResolver, List<AlternateTypeRule> rules, String className,
-                                        Class clazz) {
+  private void maybeAddRuleForClassName(
+      TypeResolver typeResolver,
+      List<AlternateTypeRule> rules,
+      String className,
+      Class clazz) {
     Optional<? extends Class> fromClazz = ClassSupport.classByName(className);
     fromClazz.ifPresent(aClass -> rules.add(newRule(
         typeResolver.resolve(aClass),
@@ -151,8 +164,136 @@ public class Defaults {
   private void init() {
     initIgnorableTypes();
     initResponseMessages();
+    initResponses();
     initExcludeAnnotations();
     initOrderings();
+  }
+
+  private void initResponses() {
+    responses = new LinkedHashMap<>();
+    responses.put(HttpMethod.GET, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(OK.value()))
+            .description(OK.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(NOT_FOUND.value()))
+            .description(NOT_FOUND.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
+
+    responses.put(HttpMethod.PUT, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(CREATED.value()))
+            .description(CREATED.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(NOT_FOUND.value()))
+            .description(NOT_FOUND.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
+
+    responses.put(HttpMethod.POST, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(CREATED.value()))
+            .description(CREATED.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(NOT_FOUND.value()))
+            .description(NOT_FOUND.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
+
+    responses.put(HttpMethod.DELETE, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(NO_CONTENT.value()))
+            .description(NO_CONTENT.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
+
+    responses.put(HttpMethod.PATCH, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(NO_CONTENT.value()))
+            .description(NO_CONTENT.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
+
+    responses.put(HttpMethod.TRACE, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(NO_CONTENT.value()))
+            .description(NO_CONTENT.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
+
+    responses.put(HttpMethod.OPTIONS, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(NO_CONTENT.value()))
+            .description(NO_CONTENT.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
+
+    responses.put(HttpMethod.HEAD, asList(
+        new ResponseBuilder()
+            .code(String.valueOf(NO_CONTENT.value()))
+            .description(NO_CONTENT.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(FORBIDDEN.value()))
+            .description(FORBIDDEN.getReasonPhrase())
+            .build(),
+        new ResponseBuilder()
+            .code(String.valueOf(UNAUTHORIZED.value()))
+            .description(UNAUTHORIZED.getReasonPhrase())
+            .build()));
   }
 
   private void initOrderings() {
@@ -179,26 +320,24 @@ public class Defaults {
 
     boolean exists = true;
 
+    classFor("javax.servlet.ServletRequest").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.ServletResponse").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.HttpServletRequest").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.HttpServletResponse").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.ServletContext").ifPresent(it -> ignored.add(it));
+  }
+
+  Optional<Class> classFor(String className) {
     try {
-      Class.forName("javax.servlet.ServletContext", false, this.getClass().getClassLoader());
+      return Optional.of(Class.forName(className, false, this.getClass().getClassLoader()));
     } catch (ClassNotFoundException e) {
-      exists = false;
+      return Optional.empty();
     }
-
-    if (exists) {
-      ignored.add(ServletRequest.class);
-      ignored.add(ServletResponse.class);
-      ignored.add(HttpServletRequest.class);
-      ignored.add(HttpServletResponse.class);
-      ignored.add(ServletContext.class);
-    }
-
-
   }
 
   private void initResponseMessages() {
-    responses = new LinkedHashMap<>();
-    responses.put(GET, asList(
+    responseMessages = new LinkedHashMap<>();
+    responseMessages.put(GET, asList(
         new ResponseMessageBuilder()
             .code(OK.value())
             .message(OK.getReasonPhrase())
@@ -219,7 +358,7 @@ public class Defaults {
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null).build()));
 
-    responses.put(PUT, asList(
+    responseMessages.put(PUT, asList(
         new ResponseMessageBuilder()
             .code(CREATED.value())
             .message(CREATED.getReasonPhrase())
@@ -240,7 +379,7 @@ public class Defaults {
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null).build()));
 
-    responses.put(POST, asList(
+    responseMessages.put(POST, asList(
         new ResponseMessageBuilder()
             .code(CREATED.value())
             .message(CREATED.getReasonPhrase())
@@ -261,7 +400,7 @@ public class Defaults {
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null).build()));
 
-    responses.put(DELETE, asList(
+    responseMessages.put(DELETE, asList(
         new ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
@@ -278,7 +417,7 @@ public class Defaults {
             .responseModel(null)
             .build()));
 
-    responses.put(PATCH, asList(
+    responseMessages.put(PATCH, asList(
         new ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
@@ -294,7 +433,7 @@ public class Defaults {
             .responseModel(null)
             .build()));
 
-    responses.put(TRACE, asList(
+    responseMessages.put(TRACE, asList(
         new ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
@@ -311,7 +450,7 @@ public class Defaults {
             .responseModel(null)
             .build()));
 
-    responses.put(OPTIONS, asList(
+    responseMessages.put(OPTIONS, asList(
         new ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
@@ -327,7 +466,7 @@ public class Defaults {
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null)
             .build()));
-    responses.put(HEAD, asList(
+    responseMessages.put(HEAD, asList(
         new ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())

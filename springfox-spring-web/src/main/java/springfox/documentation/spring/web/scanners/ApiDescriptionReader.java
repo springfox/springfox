@@ -43,7 +43,7 @@ import static java.util.stream.Collectors.*;
 @Component
 public class ApiDescriptionReader {
 
-  private static Logger log = LoggerFactory.getLogger(ApiDescriptionReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiDescriptionReader.class);
   private final OperationReader operationReader;
   private final DocumentationPluginsManager pluginsManager;
   private final ApiDescriptionLookup lookup;
@@ -84,7 +84,7 @@ public class ApiDescriptionReader {
         }
       } catch (Error e) {
         String contentMsg = "Skipping process path[" + path + "], method[" + methodName + "] as it has an error.";
-        log.error(contentMsg, e);
+        LOGGER.error(contentMsg, e);
       }
     }
     return apiDescriptionList;

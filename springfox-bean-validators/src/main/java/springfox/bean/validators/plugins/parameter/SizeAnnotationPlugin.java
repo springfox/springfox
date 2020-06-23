@@ -54,6 +54,19 @@ public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
       AllowableRangeValues values = stringLengthRange(size.get());
       LOG.debug("Adding allowable Values @Size: {} - {}", values.getMin(), values.getMax());
       context.parameterBuilder().allowableValues(values);
+      context.requestParameterBuilder()
+             .query(q -> q.stringFacet(s -> {
+               s.minLength(tryGetInteger(values.getMin()).orElse(null));
+               s.maxLength(tryGetInteger(values.getMax()).orElse(null));
+             }));
+    }
+  }
+
+  private Optional<Integer> tryGetInteger(String min) {
+    try {
+      return Optional.of(Integer.valueOf(min));
+    } catch (NumberFormatException e) {
+      return Optional.empty();
     }
   }
 }

@@ -31,8 +31,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import static springfox.documentation.builders.PathSelectors.*
 
-@Mixin([RequestMappingSupport])
-class ApiDocumentationScannerSpec extends DocumentationContextSpec {
+class ApiDocumentationScannerSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)

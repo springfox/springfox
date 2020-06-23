@@ -24,6 +24,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.common.Compatibility;
+import springfox.documentation.schema.NumericElementFacet;
+import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -32,6 +35,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static springfox.bean.validators.plugins.Validators.*;
@@ -54,33 +58,60 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
     Optional<DecimalMax> max = extractAnnotation(context, DecimalMax.class);
 
     // add support for @DecimalMin/@DecimalMax
-    context.getBuilder().allowableValues(createAllowableValuesFromDecimalMinMaxForNumbers(min, max));
+    Compatibility<AllowableValues, NumericElementFacet> values =
+        facetFromDecimalMinMaxForNumbers(min, max);
+    context.getBuilder().allowableValues(values.getLegacy().orElse(null));
+    values.getModern()
+          .ifPresent(facet -> context.getSpecificationBuilder()
+                                     .numericFacet(n -> n.copyOf(facet)));
 
   }
 
-  private AllowableValues createAllowableValuesFromDecimalMinMaxForNumbers(
+  private Compatibility<AllowableValues, NumericElementFacet> facetFromDecimalMinMaxForNumbers(
       Optional<DecimalMin> decimalMin,
       Optional<DecimalMax> decimalMax) {
     AllowableRangeValues myvalues = null;
+    NumericElementFacet numericFacet = null;
 
     if (decimalMin.isPresent() && decimalMax.isPresent()) {
       LOG.debug("@DecimalMin+@DecimalMax detected: adding AllowableRangeValues to field ");
       DecimalMin min = decimalMin.get();
       DecimalMax max = decimalMax.get();
       myvalues = new AllowableRangeValues(min.value(), !min.inclusive(), max.value(), !max.inclusive());
+      numericFacet = new NumericElementFacetBuilder()
+          .multipleOf(NumericElementFacet.DEFAULT_MULTIPLE)
+          .minimum(new BigDecimal(min.value()))
+          .exclusiveMinimum(!min.inclusive())
+          .maximum(new BigDecimal(max.value()))
+          .exclusiveMaximum(!max.inclusive())
+          .build();
 
     } else if (decimalMin.isPresent()) {
       LOG.debug("@DecimalMin detected: adding AllowableRangeValues to field ");
       DecimalMin min = decimalMin.get();
       myvalues = new AllowableRangeValues(min.value(), !min.inclusive(), null, null);
+      numericFacet = new NumericElementFacetBuilder()
+          .multipleOf(NumericElementFacet.DEFAULT_MULTIPLE)
+          .minimum(new BigDecimal(min.value()))
+          .exclusiveMinimum(!min.inclusive())
+          .maximum(null)
+          .exclusiveMaximum(null)
+          .build();
 
     } else if (decimalMax.isPresent()) {
       LOG.debug("@DecimalMax detected: adding AllowableRangeValues to field ");
       DecimalMax max = decimalMax.get();
       myvalues = new AllowableRangeValues(null, null, max.value(), !max.inclusive());
+      numericFacet = new NumericElementFacetBuilder()
+          .multipleOf(NumericElementFacet.DEFAULT_MULTIPLE)
+          .minimum(null)
+          .exclusiveMinimum(null)
+          .maximum(new BigDecimal(max.value()))
+          .exclusiveMaximum(!max.inclusive())
+          .build();
 
     }
-    return myvalues;
+    return new Compatibility<>(myvalues, numericFacet);
   }
 
 }

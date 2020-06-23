@@ -26,22 +26,24 @@ import springfox.documentation.schema.DefaultTypeNameProvider;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.function.Predicate;
-
-import static java.util.Optional.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiModelTypeNameProvider extends DefaultTypeNameProvider {
   @Override
   public String nameFor(Class<?> type) {
-    ApiModel annotation = findAnnotation(type, ApiModel.class);
+    ApiModel annotation = findAnnotation(
+        type,
+        ApiModel.class);
     String defaultTypeName = super.nameFor(type);
     if (annotation != null) {
-      return ofNullable(annotation.value())
-          .filter(((Predicate<String>) String::isEmpty).negate())
-          .orElse(defaultTypeName);
+      String value = nullToEmpty(annotation.value());
+      if (value.length() == 0) {
+        return defaultTypeName;
+      }
+      return value;
     }
     return defaultTypeName;
   }

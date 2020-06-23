@@ -31,19 +31,21 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Bug2219ListingScanner implements ApiListingScannerPlugin {
 
   @Override
   public List<ApiDescription> apply(DocumentationContext context) {
-    return new ArrayList<ApiDescription>(
+    return new ArrayList<>(
         Arrays.asList(
             new ApiDescription(
                 "different-group",
                 "/bugs/2219",
+                "This is a bug summary",
                 "This is a bug-fix for 2219",
-                Arrays.asList(
+                Collections.singletonList(
                     new OperationBuilder(
                         new CachingOperationNameGenerator())
                         .authorizations(new ArrayList<>())
@@ -51,7 +53,7 @@ public class Bug2219ListingScanner implements ApiListingScannerPlugin {
                         .method(HttpMethod.GET)
                         .notes("This is a test method")
                         .parameters(
-                            Arrays.asList(
+                            Collections.singletonList(
                                 new ParameterBuilder()
                                     .description("description of bug 2219")
                                     .type(new TypeResolver().resolve(String.class))

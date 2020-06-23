@@ -25,7 +25,9 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.PatternTestModel
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 class PatternAnnotationPluginSpec extends Specification {
@@ -45,9 +47,10 @@ class PatternAnnotationPluginSpec extends Specification {
     def element = PatternTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     sut.apply(context)
@@ -73,7 +76,8 @@ class PatternAnnotationPluginSpec extends Specification {
         new ModelPropertyBuilder(),
         beanProperty,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext),
+        new PropertySpecificationBuilder(propertyName))
 
     when:
     sut.apply(context)

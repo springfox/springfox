@@ -19,10 +19,12 @@
 package springfox.documentation.spring.web.plugins;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.reactive.function.server.support.RouterFunctionMapping;
 import org.springframework.web.reactive.result.method.RequestMappingInfo;
 import org.springframework.web.reactive.result.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.RequestHandler;
@@ -41,16 +43,20 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class WebFluxRequestHandlerProvider implements RequestHandlerProvider {
   private final List<RequestMappingInfoHandlerMapping> handlerMappings;
   private final HandlerMethodResolver methodResolver;
+  private final List<RouterFunctionMapping> routerFunctionMappings;
 
   @Autowired
   public WebFluxRequestHandlerProvider(
       HandlerMethodResolver methodResolver,
-      List<RequestMappingInfoHandlerMapping> handlerMappings) {
+      List<RequestMappingInfoHandlerMapping> handlerMappings,
+      List<RouterFunctionMapping> routerFunctionMappings) {
     this.handlerMappings = handlerMappings;
     this.methodResolver = methodResolver;
+    this.routerFunctionMappings = routerFunctionMappings;
   }
 
   @Override

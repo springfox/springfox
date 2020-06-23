@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
@@ -33,8 +34,11 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
+import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
@@ -74,6 +78,7 @@ public class Docket implements DocumentationPlugin {
   private final DocumentationType documentationType;
   private final List<SecurityContext> securityContexts = new ArrayList<>();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
+  private final Map<HttpMethod, List<Response>> responses = new HashMap<>();
   private final List<Parameter> globalOperationParameters = new ArrayList<>();
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList<>();
   private final Set<Class> ignorableParameterTypes = new HashSet<>();
@@ -82,6 +87,7 @@ public class Docket implements DocumentationPlugin {
   private final Set<String> consumes = new LinkedHashSet<>();
   private final Set<ResolvedType> additionalModels = new HashSet<>();
   private final Set<Tag> tags = new HashSet<>();
+  private final List<Server> servers = new ArrayList<>();
 
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
@@ -98,7 +104,8 @@ public class Docket implements DocumentationPlugin {
   private Optional<String> pathMapping = empty();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<RequestParameter> globalRequestParameters = new ArrayList<>();
 
 
   public Docket(DocumentationType documentationType) {
@@ -190,11 +197,33 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
+   * Use {@link Docket#responses} instead
+   * @deprecated @since 3.0.0
    */
-  public Docket globalResponseMessage(RequestMethod requestMethod,
-                                      List<ResponseMessage> responseMessages) {
-
+  @Deprecated
+  public Docket globalResponseMessage(
+      RequestMethod requestMethod,
+      List<ResponseMessage> responseMessages) {
     this.responseMessages.put(requestMethod, responseMessages);
+    return this;
+  }
+
+  /**
+   * Overrides the default http response messages at the http request method level.
+   * <p>
+   * To set specific response messages for specific api operations use the swagger core annotations on
+   * the appropriate controller methods.
+   *
+   * @param httpMethod - http request method for which to apply the message
+   * @param responses  - the message
+   * @return this Docket
+   * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
+   * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
+   */
+  public Docket globalResponses(
+      HttpMethod httpMethod,
+      List<Response> responses) {
+    this.responses.put(httpMethod, responses);
     return this;
   }
 
@@ -202,10 +231,24 @@ public class Docket implements DocumentationPlugin {
    * Adds default parameters which will be applied to all operations.
    *
    * @param operationParameters parameters which will be globally applied to all operations
-   * @return this Docket
+   * @return this Docket use @see {@link Docket#globalRequestParameters} instead
+   * @deprecated
    */
+  @Deprecated
   public Docket globalOperationParameters(List<Parameter> operationParameters) {
     this.globalOperationParameters.addAll(nullToEmptyList(operationParameters));
+    return this;
+  }
+
+  /**
+   * Adds default parameters which will be applied to all operations.
+   *
+   * @param globalOperationRequestParameters parameters which will be globally applied to all operations
+   * @return this Docket
+   * @deprecated
+   */
+  public Docket globalOperationRequestParameters(List<RequestParameter> globalOperationRequestParameters) {
+    this.globalRequestParameters.addAll(nullToEmptyList(globalOperationRequestParameters));
     return this;
   }
 
@@ -427,6 +470,19 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
+   * Method to add global tags to the docket
+   *
+   * @param first     - at least one tag is required to use this method
+   * @param remaining - remaining tags
+   * @return this Docket
+   */
+  public Docket servers(Server first, Server... remaining) {
+    servers.add(first);
+    servers.addAll(Arrays.stream(nullToEmptyArray(remaining)).collect(toSet()));
+    return this;
+  }
+
+  /**
    * Initiates a builder for api selection.
    *
    * @return api selection builder. To complete building the api selector, the build method of the api selector
@@ -449,7 +505,9 @@ public class Docket implements DocumentationPlugin {
         .selector(apiSelector)
         .applyDefaultResponseMessages(applyDefaultResponseMessages)
         .additionalResponseMessages(responseMessages)
+        .additionalResponses(responses)
         .additionalOperationParameters(globalOperationParameters)
+        .additionalRequestParameters(globalRequestParameters)
         .additionalIgnorableTypes(ignorableParameterTypes)
         .ruleBuilders(ruleBuilders)
         .groupName(groupName)
@@ -469,6 +527,7 @@ public class Docket implements DocumentationPlugin {
         .additionalModels(additionalModels)
         .tags(tags)
         .vendorExtentions(vendorExtensions)
+        .servers(servers)
         .build();
   }
 

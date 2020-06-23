@@ -22,14 +22,14 @@ package springfox.documentation.spring.web.scanners
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
+import springfox.documentation.schema.ModelSpecification
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.SpringGroupingStrategy
+
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.Bug2219ListingScanner
 import springfox.documentation.spring.web.dummy.DummyClass
@@ -38,7 +38,6 @@ import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -48,19 +47,19 @@ import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.*
 
-@Mixin([
-    RequestMappingSupport,
-    AuthSupport,
-    ModelProviderForServiceSupport,
-    ServicePluginsSupport,
-    ApiDescriptionSupport,
-    SchemaPluginsSupport])
-class ApiListingScannerSpec extends DocumentationContextSpec {
+class ApiListingScannerSpec
+    extends DocumentationContextSpec
+    implements AuthSupport,
+        RequestMappingSupport,
+        ModelProviderForServiceSupport,
+        ApiDescriptionSupport {
+  
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
   ApiListingScanningContext listingContext
   ApiListingScanner scanner
   def methodResolver = new HandlerMethodResolver(new TypeResolver())
+  ApiModelSpecificationReader specificationReader
 
   def setup() {
     SecurityContext securityContext = SecurityContext.builder()
@@ -68,7 +67,6 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
         .forPaths(regex('/anyPath.*'))
         .build()
 
-    contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
         .securityContexts(singletonList(securityContext))
         .configure(contextBuilder)
@@ -76,7 +74,13 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
     apiModelReader.read(_) >> new HashMap<>()
-    scanner = new ApiListingScanner(apiDescriptionReader, apiModelReader, defaultWebPlugins())
+    specificationReader = Mock(ApiModelSpecificationReader)
+    specificationReader.read(_) >> new HashSet<ModelSpecification>()
+    scanner = new ApiListingScanner(
+        apiDescriptionReader,
+        apiModelReader,
+        specificationReader,
+        defaultWebPlugins())
   }
 
   def "Should create an api listing for a single resource grouping "() {
@@ -124,8 +128,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def sut = new ApiListingScanner(
         apiDescriptionReader,
         apiModelReader,
+        specificationReader,
         customWebPlugins(
-            [],
             [],
             [],
             [],
@@ -152,8 +156,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def sut = new ApiListingScanner(
         apiDescriptionReader,
         apiModelReader,
+        specificationReader,
         customWebPlugins(
-            [],
             [],
             [],
             [],

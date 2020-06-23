@@ -10,23 +10,25 @@ ext {
 }
 
 dependencies {
-  compile libs.core
-  compile libs.spring
+  api libs.core
+  api libs.spring
+  api project(':springfox-spi')
+  api project(':springfox-schema')
+  api project(':springfox-spring-web')
+  api project(':springfox-spring-webmvc')
+  api project(':springfox-spring-integration')
+
+  implementation libs.clientProvided
   compileOnly libs.springProvidedWithSpringIntegration
-  compile project(':springfox-spi')
-  compile project(':springfox-schema').sourceSets.main.output
-  compile project(':springfox-spring-web')
-  compile project(':springfox-spring-webmvc')
-  compile project(':springfox-spring-integration')
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
-  provided libs.clientProvidedServlet
-
-  testCompile "javax.validation:validation-api:$validationApiVersion"
-  testCompile project(':springfox-core')
-  testCompile project(':springfox-spring-web').sourceSets.test.output
-  testCompile libs.springProvidedWithSpringIntegration
-  testCompile libs.test
-  testCompile libs.swagger2Core
-  testCompile project(':springfox-core').sourceSets.test.output
-  testCompile project(':springfox-schema').sourceSets.test.output
+  testImplementation "javax.validation:validation-api:$validationApiVersion"
+  testImplementation project(':springfox-core')
+  testImplementation project(':springfox-spring-web').sourceSets.test.output
+  testImplementation libs.springProvidedWithSpringIntegration
+  testImplementation libs.test
+  testImplementation libs.swagger2Core
+  testImplementation project(':springfox-core').sourceSets.test.output
+  testImplementation project(':springfox-schema').sourceSets.test.output
+  testImplementation "javax.servlet:javax.servlet-api:$servlet"
 }

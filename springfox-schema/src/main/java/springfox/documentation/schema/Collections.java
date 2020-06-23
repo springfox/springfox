@@ -21,6 +21,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.lang.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +46,10 @@ public class Collections {
     }
   }
 
-  public static boolean isContainerType(ResolvedType type) {
+  public static boolean isContainerType(@Nullable ResolvedType type) {
+    if (type == null) {
+      return false;
+    }
     return List.class.isAssignableFrom(type.getErasedType()) ||
         Set.class.isAssignableFrom(type.getErasedType()) ||
         (Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type)) ||
@@ -61,6 +65,20 @@ public class Collections {
       return "Array";
     } else if (Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type)) {
       return "List";
+    } else {
+      throw new UnsupportedOperationException(String.format("Type is not collection type %s", type));
+    }
+  }
+
+  public static CollectionType collectionType(ResolvedType type) {
+    if (List.class.isAssignableFrom(type.getErasedType())) {
+      return CollectionType.LIST;
+    } else if (Set.class.isAssignableFrom(type.getErasedType())) {
+      return CollectionType.SET;
+    } else if (type.isArray()) {
+      return CollectionType.ARRAY;
+    } else if (Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type)) {
+      return CollectionType.LIST;
     } else {
       throw new UnsupportedOperationException(String.format("Type is not collection type %s", type));
     }

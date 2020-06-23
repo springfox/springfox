@@ -25,7 +25,6 @@ import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
@@ -37,8 +36,12 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ParameterMultiplesReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ApiParamAnnotationSupport,
+        ModelProviderForServiceSupport  {
+  
   def descriptions = new DescriptionResolver(new MockEnvironment())
 
   @Unroll
@@ -50,8 +53,8 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
     ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
     ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        documentationContext(), genericNamingStrategy, Mock(OperationContext))
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
+        documentationContext(), genericNamingStrategy, Mock(OperationContext), 0)
 
     when:
     def operationCommand = stubbedParamBuilder();
@@ -59,7 +62,11 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
 
     then:
     parameterContext.parameterBuilder().build().isAllowMultiple() == expected
-
+    (parameterContext.requestParameterBuilder().build()
+        ?.parameterSpecification
+        ?.query
+        ?.orElse(null)
+        ?.collectionFormat != null) == expected
     where:
     apiParamAnnotation               | paramType                       | expected
     apiParamWithAllowMultiple(false) | String[].class                  | false

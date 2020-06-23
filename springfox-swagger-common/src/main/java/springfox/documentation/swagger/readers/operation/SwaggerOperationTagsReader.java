@@ -21,13 +21,11 @@ package springfox.documentation.swagger.readers.operation;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.HashSet;
@@ -44,47 +42,36 @@ import static springfox.documentation.service.Tags.*;
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
 
-  private final DefaultTagsProvider tagsProvider;
-
-  @Autowired
-  public SwaggerOperationTagsReader(DefaultTagsProvider tagsProvider) {
-    this.tagsProvider = tagsProvider;
-  }
-
   @Override
   public void apply(OperationContext context) {
-    Set<String> defaultTags = tagsProvider.tags(context);
-    Set<String> tags =
-        Stream.concat(operationTags(context).stream(), controllerTags(context).stream()).collect(toSet());
-    if (tags.isEmpty()) {
-      context.operationBuilder().tags(defaultTags);
-    } else {
-      context.operationBuilder().tags(tags);
-    }
+    context.operationBuilder().tags(
+        Stream.concat(operationTags(context).stream(),
+                      controllerTags(context).stream()).collect(toSet()));
   }
 
   private Set<String> controllerTags(OperationContext context) {
     Optional<Api> controllerAnnotation = context.findControllerAnnotation(Api.class);
-    return controllerAnnotation.map(tagsFromController()).orElse(new HashSet<>());
+    return controllerAnnotation
+        .map(tagsFromController())
+        .orElse(new HashSet<>());
   }
 
   private Set<String> operationTags(OperationContext context) {
     Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
-    return annotation.map(tagsFromOperation()).orElse(new HashSet<>());
+    return new HashSet<>(annotation.map(tagsFromOperation())
+                                   .orElse(new HashSet<>()));
   }
 
   private Function<ApiOperation, Set<String>> tagsFromOperation() {
     return input -> Stream.of(input.tags())
-        .filter(emptyTags())
-        .distinct()
-        .collect(toCollection(TreeSet::new));
+                          .filter(emptyTags())
+                          .collect(toCollection(TreeSet::new));
   }
 
   private Function<Api, Set<String>> tagsFromController() {
     return input -> Stream.of(input.tags())
-        .filter(emptyTags())
-        .distinct()
-        .collect(toCollection(TreeSet::new));
+                          .filter(emptyTags())
+                          .collect(toCollection(TreeSet::new));
   }
 
   @Override

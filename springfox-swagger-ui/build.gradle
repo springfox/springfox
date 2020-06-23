@@ -15,21 +15,13 @@ import org.apache.tools.ant.filters.ReplaceTokens
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-buildscript {
-  repositories {
-    jcenter()
-  }
-
-}
-
 plugins {
-  id "de.undercouch.download" version "3.4.3"
-  id "com.moowork.node" version "1.2.0"
+  id "de.undercouch.download" version "4.0.4"
+  id "com.github.node-gradle.node" version "2.2.3"
 }
 
 ext {
-  swaggerUiVersion = '3.23.11'
+  swaggerUiVersion = '3.26.2'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -39,12 +31,12 @@ ext {
 }
 
 dependencies {
-  provided project(':springfox-spring-webmvc')
-  testCompile libs.test
+  implementation project(':springfox-spring-webmvc')
+  testImplementation libs.test
 }
 
 node {
-  version = '8.12.0' // LTS
+  version = '12.16.2' // LTS
   npmVersion = '6.4.1'
   distBaseUrl = 'https://nodejs.org/dist'
   download = true
@@ -54,6 +46,7 @@ node {
 }
 
 task swaggerUiDownload {
+  outputs.file(destinationZip) 
   doLast {
     download {
       src downloadUrl

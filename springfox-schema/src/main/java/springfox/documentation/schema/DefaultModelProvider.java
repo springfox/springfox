@@ -76,7 +76,7 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Override
   public Optional<Model> modelFor(ModelContext modelContext) {
-    ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
+    ResolvedType propertiesHost = modelContext.alternateEvaluatedType();
 
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
@@ -105,9 +105,10 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, ModelProperty> propertiesIndex
         = properties(
         modelContext,
-        propertiesHost).stream().collect(toMap(
-        ModelProperty::getName,
-        identity()));
+        propertiesHost).stream()
+                       .collect(toMap(
+                           ModelProperty::getName,
+                           identity()));
     LOG.debug("Inferred {} properties. Properties found {}",
               propertiesIndex.size(),
               String.join(

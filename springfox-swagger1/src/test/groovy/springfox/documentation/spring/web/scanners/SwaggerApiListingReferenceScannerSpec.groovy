@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spring.web.SpringGroupingStrategy
+
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
@@ -33,15 +33,16 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
-import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
 import static java.util.Optional.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 import static springfox.documentation.spring.web.paths.Paths.*
 
-@Mixin([AccessorAssertions, RequestMappingSupport])
-class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
+class SwaggerApiListingReferenceScannerSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        AccessorAssertions {
 
   ApiListingReferenceScanner sut = new ApiListingReferenceScanner()
   List<RequestHandler> requestHandlers
@@ -51,7 +52,6 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
   def setup() {
     requestHandlers = [Mock(RequestHandler)]
     contextBuilder.requestHandlers(requestHandlers)
-        .withResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
     plugin
         .pathProvider(new DefaultPathProvider())
         .select()
@@ -73,9 +73,9 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     documentationContext().groupName == "default"
 
     where:
-    handlerMappings              | resourceGroupingStrategy                   | groupName | message
-    [requestMappingInfo("path")] | null                                       | null      | "resourceGroupingStrategy is required"
-    [requestMappingInfo("path")] | new ClassOrApiAnnotationResourceGrouping() | null      | "groupName is required"
+    handlerMappings              | groupName | message
+    [requestMappingInfo("path")] | null      | "resourceGroupingStrategy is required"
+    [requestMappingInfo("path")] | null      | "groupName is required"
   }
 
   def "should group controller paths"() {
@@ -115,7 +115,6 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
     when:
     contextBuilder.requestHandlers(requestHandlers)
-    contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin.configure(contextBuilder)
 
     and:

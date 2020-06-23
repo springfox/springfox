@@ -21,19 +21,15 @@ package springfox.documentation.builders;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
-import springfox.documentation.annotations.Incubating;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-@Incubating("2.7.0")
 public class AlternateTypeBuilder {
   private String fullyQualifiedClassName;
-  private List<AlternateTypePropertyBuilder> properties = new ArrayList<>();
-  private List<Annotation> annotations = new ArrayList<Annotation>();
+  private final List<AlternateTypePropertyBuilder> properties = new ArrayList<>();
+  private final List<Annotation> annotations = new ArrayList<>();
 
   public AlternateTypeBuilder fullyQualifiedClassName(String fullyQualifiedClassName) {
     this.fullyQualifiedClassName = fullyQualifiedClassName;
@@ -45,11 +41,36 @@ public class AlternateTypeBuilder {
     return this;
   }
 
+  public AlternateTypeBuilder properties(List<AlternateTypePropertyBuilder> properties) {
+    this.properties.addAll(properties);
+    return this;
+  }
+
+  public AlternateTypeBuilder annotations(List<Annotation> annotations) {
+    this.annotations.addAll(annotations);
+    return this;
+  }
+
+
+  /**
+   * @param properties - properties for the alternate type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypeBuilder#properties instead
+   * @deprecated @since 3.0.0
+   */
+  @Deprecated
   public AlternateTypeBuilder withProperties(List<AlternateTypePropertyBuilder> properties) {
     this.properties.addAll(properties);
     return this;
   }
 
+  /**
+   * @param annotations - annotations
+   * @return - AlternateTypeBuilder
+   * @see AlternateTypeBuilder#annotations instead
+   * @deprecated @since 3.0.0
+   */
+  @Deprecated
   public AlternateTypeBuilder withAnnotations(List<Annotation> annotations) {
     this.annotations.addAll(annotations);
     return this;
@@ -64,7 +85,7 @@ public class AlternateTypeBuilder {
       builder = each.apply(builder);
     }
     return builder.make()
-        .load(getClass().getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
-        .getLoaded();
+                  .load(getClass().getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
+                  .getLoaded();
   }
 }

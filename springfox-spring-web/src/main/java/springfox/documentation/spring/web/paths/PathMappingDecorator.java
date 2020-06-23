@@ -35,12 +35,8 @@ class PathMappingDecorator implements PathDecorator {
 
   @Override
   public Function<String, String> decorator(final PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        return new PathMappingAdjuster(context.documentationContext()).adjustedPath(input);
-      }
-    };
+    return input -> new PathMappingAdjuster(context.documentationContext())
+        .adjustedPath(input);
   }
 
   @Override

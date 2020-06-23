@@ -28,12 +28,12 @@ import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import com.fasterxml.jackson.databind.type.TypeFactory
+import spock.lang.Shared
 
 import static springfox.documentation.schema.property.bean.Accessors.*
 
-@SuppressWarnings("GrMethodMayBeStatic")
-class ModelPropertyLookupSupport {
-  static final ObjectMapper mapper = new ObjectMapper();
+trait ModelPropertyLookupSupport {
+  @Shared ObjectMapper mapper = new ObjectMapper();
 
   ResolvedMethod accessorMethod(def typeToTest, String methodName) {
     TypeResolver resolver = new TypeResolver()

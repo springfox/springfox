@@ -22,8 +22,8 @@ package springfox.documentation.schema.mixins
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.databind.ObjectMapper
 
-@SuppressWarnings("GrMethodMayBeStatic")
-class ConfiguredObjectMapperSupport {
+trait ConfiguredObjectMapperSupport {
+
   ObjectMapper objectMapperThatUsesFields() {
     def objectMapper = new ObjectMapper()
     objectMapper.serializationConfig.defaultVisibilityChecker
@@ -36,6 +36,7 @@ class ConfiguredObjectMapperSupport {
             .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
     return objectMapper
   }
+
   ObjectMapper objectMapperThatUsesGetters() {
     def objectMapper = new ObjectMapper()
     objectMapper.serializationConfig.defaultVisibilityChecker
@@ -48,6 +49,7 @@ class ConfiguredObjectMapperSupport {
             .withGetterVisibility(JsonAutoDetect.Visibility.ANY)
     return objectMapper
   }
+
   ObjectMapper objectMapperThatUsesSetters() {
     def objectMapper = new ObjectMapper()
     objectMapper.serializationConfig.defaultVisibilityChecker

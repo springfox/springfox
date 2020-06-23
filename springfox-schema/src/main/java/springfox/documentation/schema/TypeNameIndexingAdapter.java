@@ -30,7 +30,7 @@ import java.util.Optional;
 
 public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(TypeNameIndexingAdapter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TypeNameIndexingAdapter.class);
 
   private final Map<String, String> knownNames = new HashMap<>();
 
@@ -49,7 +49,7 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
       String typeId) {
     if (knownNames.containsKey(typeId)) {
       if (!knownNames.get(typeId).equals(typeName)) {
-        LOG.info("Rewriting type {} with model id: {} is not allowed, because it is already registered",
+        LOGGER.debug("Rewriting type {} with model id: {} is not allowed, because it is already registered",
                  typeName,
                  typeId);
         throw new IllegalStateException("Model already registered with different name.");
@@ -103,13 +103,13 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
       String typeIdOf,
       String typeIdTo) {
     if (!knownNames.containsKey(typeIdTo)) {
-      LOG.warn(
+      LOGGER.warn(
           "Model with model id: {} was not found, because it is not registered",
           typeIdTo);
       throw new IllegalStateException("Model was not found");
     }
     if (knownNames.containsKey(typeIdOf) && !knownNames.get(typeIdOf).equals(knownNames.get(typeIdTo))) {
-      LOG.warn(
+      LOGGER.warn(
           "Model with model id: {} already has equality to other model",
           typeIdTo);
       throw new IllegalStateException("Model already has equality to other model");

@@ -27,7 +27,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.Parameters.*;
 
 class ParameterMerger {
 
@@ -40,8 +39,8 @@ class ParameterMerger {
   }
 
   public List<Parameter> merged() {
-    Set<String> existingParameterNames = destination.stream().map(toParameterName()).collect(toSet());
-    Set<String> newParameterNames = source.stream().map(toParameterName()).collect(toSet());
+    Set<String> existingParameterNames = destination.stream().map(Parameter::getName).collect(toSet());
+    Set<String> newParameterNames = source.stream().map(Parameter::getName).collect(toSet());
     List<Parameter> merged = new ArrayList<>();
 
     Set<String> asIsParams = existingParameterNames.stream()
@@ -73,7 +72,8 @@ class ParameterMerger {
       List<Parameter> newParams) {
     List<Parameter> parameters = new ArrayList<>();
     for (Parameter newParam : newParams) {
-      Optional<Parameter> original = existingParameters.stream().filter(withName(newParam.getName())).findFirst();
+      Optional<Parameter> original = existingParameters.stream()
+          .filter(input -> newParam.getName().equals(input.getName())).findFirst();
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
         if (newParam.getOrder() > original.get().getOrder()) {
           parameters.add(merged(newParam, original.get()));

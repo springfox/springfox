@@ -25,11 +25,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.ScalarModelSpecification;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -61,6 +68,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
+  @SuppressWarnings("InnerAssignment")
   @Override
   public void apply(ParameterExpansionContext context) {
     AllowableValues allowable = allowableValues(context.getFieldType().getErasedType());
@@ -72,32 +80,81 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     String typeName = context.getDataTypeName();
     ModelReference itemModel = null;
     ResolvedType resolved = resolver.resolve(context.getFieldType());
+    ModelSpecification modelSpecification;
     if (isContainerType(resolved)) {
       resolved = fieldType(context).orElse(resolved);
       ResolvedType elementType = collectionElementType(resolved);
       String itemTypeName = typeNameFor(elementType.getErasedType());
       AllowableValues itemAllowables = null;
+      ScalarModelSpecification scalarModelSpecification =
+          new ScalarModelSpecification(ScalarTypes.builtInScalarType(elementType)
+                                                  .orElse(ScalarType.STRING));
       if (enumTypeDeterminer.isEnum(elementType.getErasedType())) {
-        itemAllowables = Enums.allowableValues(elementType.getErasedType());
+
+        allowable = itemAllowables = Enums.allowableValues(elementType.getErasedType());
         itemTypeName = "string";
+        scalarModelSpecification = new ScalarModelSpecification(ScalarType.STRING);
       }
       typeName = containerType(resolved);
       itemModel = new ModelRef(itemTypeName, itemAllowables);
+      modelSpecification = new ModelSpecificationBuilder()
+          .collectionModel(new CollectionSpecification(
+              new ModelSpecificationBuilder()
+                  .scalarModel(scalarModelSpecification)
+                  .facets(f -> f.enumerationFacet(
+                      e -> e.allowedValues(Enums.allowableValues(elementType.getErasedType()))
+                            .build()))
+                  .build(),
+              collectionType(resolved)))
+          .facets(f -> f.enumerationFacet(
+              e -> e.allowedValues(Enums.allowableValues(elementType.getErasedType()))
+                    .build()))
+          .build();
     } else if (enumTypeDeterminer.isEnum(resolved.getErasedType())) {
       typeName = "string";
+      ResolvedType finalResolved1 = resolved;
+      modelSpecification = new ModelSpecificationBuilder()
+          .scalarModel(ScalarType.STRING)
+          .facets(f -> f.enumerationFacet(
+              e -> e.allowedValues(Enums.allowableValues(finalResolved1.getErasedType()))
+                    .build()))
+          .build();
+    } else {
+      ScalarModelSpecification scalarModelSpecification =
+          new ScalarModelSpecification(ScalarTypes.builtInScalarType(resolved)
+                                                  .orElse(ScalarType.STRING));
+      ResolvedType finalResolved2 = resolved;
+      modelSpecification = new ModelSpecificationBuilder()
+          .scalarModel(scalarModelSpecification)
+          .facets(f -> f.enumerationFacet(
+              e -> e.allowedValues(Enums.allowableValues(finalResolved2.getErasedType()))
+                    .build()))
+          .build();
     }
     context.getParameterBuilder()
-        .name(name)
-        .description(null)
-        .defaultValue(null)
-        .required(Boolean.FALSE)
-        .allowMultiple(isContainerType(resolved))
-        .type(resolved)
-        .modelRef(new ModelRef(typeName, itemModel))
-        .allowableValues(allowable)
-        .parameterType(context.getParameterType())
-        .order(DEFAULT_PRECEDENCE)
-        .parameterAccess(null);
+           .name(name)
+           .description(null)
+           .defaultValue(null)
+           .required(Boolean.FALSE)
+           .allowMultiple(isContainerType(resolved))
+           .type(resolved)
+           .modelRef(new ModelRef(typeName, itemModel))
+           .allowableValues(allowable)
+           .parameterType(context.getParameterType())
+           .order(DEFAULT_PRECEDENCE)
+           .parameterAccess(null);
+
+    AllowableValues finalAllowable = allowable;
+    ResolvedType finalResolved = resolved;
+    context.getRequestParameterBuilder()
+           .name(name)
+           .description(null)
+           .required(Boolean.FALSE)
+           .in(context.getParameterType())
+           .precedence(DEFAULT_PRECEDENCE)
+           .query(q -> q.collectionFormat(isContainerType(finalResolved) ? CollectionFormat.CSV : null)
+                        .model(modelSpecification)
+                        .enumerationFacet(e -> e.allowedValues(finalAllowable)));
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {
@@ -121,7 +178,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
 
   private List<String> getEnumValues(final Class<?> subject) {
     return Stream.of(subject.getEnumConstants())
-        .map((Function<Object, String>) Object::toString)
-        .collect(toList());
+                 .map((Function<Object, String>) Object::toString)
+                 .collect(toList());
   }
 }

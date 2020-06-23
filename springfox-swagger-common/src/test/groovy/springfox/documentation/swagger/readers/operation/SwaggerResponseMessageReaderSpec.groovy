@@ -23,7 +23,13 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
-import springfox.documentation.schema.*
+import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.Example
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.ModelRef
+import springfox.documentation.schema.ModelReference
+import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.service.Header
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.EnumTypeDeterminer
@@ -32,11 +38,9 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.dummy.ResponseExampleTestController
 import springfox.documentation.spring.web.dummy.ResponseHeaderTestController
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport])
-class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
+class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   def "ApiResponse annotation should override when using swagger reader"() {
     given:
@@ -44,33 +48,48 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         operationContext(documentationContext(), dummyHandlerMethod('methodWithApiResponses'))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     when:
     new SwaggerResponseMessageReader(
-        new JacksonEnumTypeDeterminer(),
+        enumTypeDeterminer,
         typeNameExtractor,
-        resolver)
-      .apply(operationContext)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
     def responseMessages = operation.responseMessages
+    def responses = operation.responses
 
     then:
     responseMessages.size() == 2
-    def annotatedResponse = responseMessages.find { it.code == 413 }
+    def annotatedResponseMessage = responseMessages.find { it.code == 413 }
+    annotatedResponseMessage != null
+    annotatedResponseMessage.message == "a message"
+
+    def classLevelResponseMessage = responseMessages.find { it.code == 404 }
+    classLevelResponseMessage != null
+    classLevelResponseMessage.message == "Not Found"
+
+    and:
+    responses.size() == 2
+    def annotatedResponse = responses.find { it.code == "413" }
     annotatedResponse != null
-    annotatedResponse.message == "a message"
-    def classLevelResponse = responseMessages.find { it.code == 404 }
+    annotatedResponse.description == "a message"
+
+    def classLevelResponse = responses.find { it.code == "404" }
     classLevelResponse != null
-    classLevelResponse.message == "Not Found"
+    classLevelResponse.description == "Not Found"
+
   }
 
   def "ApiOperation annotation should provide response"() {
@@ -79,59 +98,76 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         operationContext(documentationContext(), dummyHandlerMethod('methodApiResponseClass'))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     when:
     new SwaggerResponseMessageReader(
-        new JacksonEnumTypeDeterminer(),
+        enumTypeDeterminer,
         typeNameExtractor,
-        resolver)
-      .apply(operationContext)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
     def responseMessages = operation.responseMessages
+    def responses = operation.responses
 
     then:
     responseMessages.size() == 2
-    def annotatedResponse = responseMessages.find { it.code == 200 }
+    def annotatedResponseMessage = responseMessages.find { it.code == 200 }
+    annotatedResponseMessage != null
+    annotatedResponseMessage.message == "OK"
+
+    def classLevelResponseMessage = responseMessages.find { it.code == 404 }
+    classLevelResponseMessage != null
+    classLevelResponseMessage.message == "Not Found"
+
+    and:
+    responses.size() == 2
+    def annotatedResponse = responses.find { it.code == "200" }
     annotatedResponse != null
-    annotatedResponse.message == "OK"
-    def classLevelResponse = responseMessages.find { it.code == 404 }
+    annotatedResponse.description == "OK"
+
+    def classLevelResponse = responses.find { it.code == "404" }
     classLevelResponse != null
-    classLevelResponse.message == "Not Found"
+    classLevelResponse.description == "Not Found"
   }
 
   @Unroll
-  def "ApiOperation#responseHeaders and ApiResponse#responseHeader are merged for method #methodName"() {
+  def "ApiOperation.responseHeaders and ApiResponse.responseHeader are merged for method #methodName"() {
     given:
     OperationContext operationContext =
         operationContext(documentationContext(), handlerMethodIn(ResponseHeaderTestController, methodName))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     when:
-    new SwaggerResponseMessageReader(new JacksonEnumTypeDeterminer(),
+    new SwaggerResponseMessageReader(enumTypeDeterminer,
         typeNameExtractor,
-        resolver)
-      .apply(operationContext)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
     def responseMessages = operation.responseMessages
+    def responses = operation.responses
 
     then:
     responseMessages.size() == 0 || responseMessages.inject(true) {
@@ -182,9 +218,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
   def "Supports all documentation types"() {
     given:
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    JacksonEnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
@@ -194,12 +231,14 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
     def sut = new SwaggerResponseMessageReader(
         new JacksonEnumTypeDeterminer(),
         typeNameExtractor,
-        resolver)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
 
     then:
     !sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.OAS_30)
   }
 
   @Unroll
@@ -209,7 +248,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         operationContext(documentationContext(), handlerMethodIn(ResponseExampleTestController, methodName))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
     def typeNameExtractor = new TypeNameExtractor(
@@ -221,15 +260,19 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
     new SwaggerResponseMessageReader(
         Mock(EnumTypeDeterminer),
         typeNameExtractor,
-        resolver)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, Mock(EnumTypeDeterminer)),
+        defaultWebPlugins())
         .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
     def responseMessages = operation.responseMessages
+    def responses = operation.responses
 
     then:
     examplesMatch(responseMessages[0].examples, examples)
+    examplesMatch(responses[0].examples, examples)
 
     where:
     methodName                  | examples

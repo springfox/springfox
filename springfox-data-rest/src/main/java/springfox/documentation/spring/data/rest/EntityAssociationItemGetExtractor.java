@@ -57,8 +57,8 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
       associationAction(context, path)
           .supportsMethod(GET)
           .consumes(HAL_JSON)
-          .withParameterType(ID)
-          .withParameterType(ASSOCIATION)
+          .parameterType(ID)
+          .parameterType(ASSOCIATION)
           .build()
           .map(getPropertyItem -> new SpringDataRestRequestHandler(context.getEntityContext(), getPropertyItem))
           .ifPresent(handlers::add);

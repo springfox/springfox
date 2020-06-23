@@ -19,14 +19,16 @@
 
 package springfox.documentation.spring.web;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @SuppressWarnings("HideUtilityClassConstructor")
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SpringfoxWebMvcConfiguration {
   @Bean
-  public static WebMvcObjectMapperConfigurer objectMapperConfigurer() {
+  public static WebMvcObjectMapperConfigurer webMvcObjectMapperConfigurer() {
     return new WebMvcObjectMapperConfigurer();
   }
 }

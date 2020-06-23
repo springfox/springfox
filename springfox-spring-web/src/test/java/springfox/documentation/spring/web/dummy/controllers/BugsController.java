@@ -88,7 +88,10 @@ public class BugsController {
   }
 
   @ApiImplicitParams(
-      @ApiImplicitParam(dataType = "string", allowMultiple = true, paramType = "header")
+      @ApiImplicitParam(name = "custom-header",
+                        dataTypeClass = String.class,
+                        allowMultiple = true,
+                        paramType = "header")
   )
   @RequestMapping(value = "1209", method = POST)
   public ResponseEntity<String> bug1209() {

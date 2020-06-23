@@ -27,194 +27,196 @@ import org.springframework.http.ResponseEntity
 import org.springframework.ui.ModelMap
 import springfox.documentation.schema.*
 
-class TypesForTestingSupport {
+trait TypesForTestingSupport {
 
-  public static final resolver = new TypeResolver()
-
-  static Class simpleType() {
+  Class simpleType() {
     SimpleType
   }
-  static Class unwrappedType() {
+  Class unwrappedType() {
     UnwrappedType
   }
-  static Class typeWithConstructor() {
+  Class typeWithConstructor() {
     TypeWithConstructor
   }
-  static Class typeWithConstructorProperty() {
+  Class typeWithConstructorProperty() {
     TypeWithConstructorProperty
   }
-  static Class typeWithConstructorProperties() {
+  Class typeWithConstructorProperties() {
     TypeWithConstructorProperties
   }
-  static Class typeWithDelegatedConstructor() {
+  Class typeWithDelegatedConstructor() {
     TypeWithDelegatedJsonCreatorConstructor
   }
 
-  static Class typeWithJsonCreatorConstructor() {
+  Class typeWithJsonCreatorConstructor() {
     TypeWithJsonCreatorConstructor
   }
-  static Class mapsContainer() {
+  Class mapsContainer() {
     MapsContainer
   }
-  static Class typeWithJsonPropertyAnnotation() {
+  Class typeWithJsonPropertyAnnotation() {
     TypeWithJsonProperty
   }
-  static Class complexType() {
+  Class complexType() {
     ComplexType
   }
-  static Class enumType() {
+  Class enumType() {
     ExampleWithEnums
   }
-  static Class collectionEnumType() {
+  Class collectionEnumType() {
     ExampleWithEnumCollection
   }
-  static Class typeWithLists() {
+  Class typeWithLists() {
     ListsContainer
   }
-  static Class typeWithSets() {
+  Class typeWithSets() {
     SetsContainer
   }
-  static Class typeWithArrays() {
+  Class typeWithArrays() {
     ArraysContainer
   }
-  static Class recursiveType() {
+  Class recursiveType() {
     RecursiveType
   }
-  static Class inheritedComplexType() {
+  Class inheritedComplexType() {
     InheritedComplexType
   }
 
-  static ResolvedType genericClassWithTypeErased() {
-    resolver.resolve(GenericType)
+  ResolvedType genericClassWithTypeErased() {
+    typeResolver().resolve(GenericType)
   }
 
-  static ResolvedType genericClass() {
-    resolver.resolve(GenericType, SimpleType)
+  ResolvedType genericClass() {
+    typeResolver().resolve(GenericType, SimpleType)
   }
 
-  static ResolvedType genericClassOfType(def type) {
-    resolver.resolve(GenericType, type)
+  ResolvedType genericClassOfType(def type) {
+    typeResolver().resolve(GenericType, type)
   }
 
-  static ResolvedType genericClassWithListField() {
-    resolver.resolve(GenericType, resolver.resolve(List, SimpleType))
+  ResolvedType genericClassWithListField() {
+    typeResolver().resolve(GenericType, typeResolver().resolve(List, SimpleType))
   }
-  static ResolvedType genericClassWithGenericField() {
-    resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, SimpleType))
-  }
-
-  static ResolvedType nestedMapOfMaps() {
-    resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, SimpleType))
+  ResolvedType genericClassWithGenericField() {
+    typeResolver().resolve(GenericType, typeResolver().resolve(ResponseEntityAlternative, SimpleType))
   }
 
-  static ResolvedType genericClassWithDeepGenerics() {
-    resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, resolver.resolve(List, SimpleType)))
+  ResolvedType nestedMapOfMaps() {
+    typeResolver().resolve(GenericType, typeResolver().resolve(ResponseEntityAlternative, SimpleType))
   }
 
-  static ResolvedType genericTypeOfMapsContainer() {
-    resolver.resolve(GenericType, mapsContainer())
+  ResolvedType genericClassWithDeepGenerics() {
+    typeResolver().resolve(GenericType, typeResolver().resolve(ResponseEntityAlternative, typeResolver().resolve(List, SimpleType)))
   }
 
-  static ResolvedType genericCollectionWithEnum() {
-    resolver.resolve(GenericType, resolver.resolve(Collection, ExampleEnum))
+  ResolvedType genericTypeOfMapsContainer() {
+    typeResolver().resolve(GenericType, mapsContainer())
   }
 
-  static ResolvedType genericTypeWithPrimitiveArray() {
-    resolver.resolve(GenericType, resolver.arrayType(byte.class))
+  ResolvedType genericCollectionWithEnum() {
+    typeResolver().resolve(GenericType, typeResolver().resolve(Collection, ExampleEnum))
   }
 
-  static ResolvedType genericTypeWithComplexArray() {
-    resolver.resolve(GenericType, resolver.arrayType(SimpleType.class))
+  ResolvedType genericTypeWithPrimitiveArray() {
+    typeResolver().resolve(GenericType, typeResolver().arrayType(byte.class))
   }
 
-  static ResolvedType genericListOfSimpleType() {
-    resolver.resolve(List, SimpleType)
-  }
-  static ResolvedType genericListOfInteger() {
-    resolver.resolve(List, Integer)
-  }
-  static ResolvedType genericSetOfSimpleType() {
-    resolver.resolve(Set, SimpleType)
-  }
-  static ResolvedType genericSetOfInteger() {
-    resolver.resolve(Set, Integer)
+  ResolvedType genericTypeWithComplexArray() {
+    typeResolver().resolve(GenericType, typeResolver().arrayType(SimpleType.class))
   }
 
-  static ResolvedType erasedList() {
-    resolver.resolve(List)
+  ResolvedType genericListOfSimpleType() {
+    typeResolver().resolve(List, SimpleType)
   }
-  static ResolvedType erasedSet() {
-    resolver.resolve(Set)
+  ResolvedType genericListOfInteger() {
+    typeResolver().resolve(List, Integer)
   }
-  static Class typeForTestingPropertyNames() {
+  ResolvedType genericSetOfSimpleType() {
+    typeResolver().resolve(Set, SimpleType)
+  }
+  ResolvedType genericSetOfInteger() {
+    typeResolver().resolve(Set, Integer)
+  }
+
+  ResolvedType erasedList() {
+    typeResolver().resolve(List)
+  }
+  ResolvedType erasedSet() {
+    typeResolver().resolve(Set)
+  }
+  Class typeForTestingPropertyNames() {
     TypeForTestingPropertyNames
   }
 
-  static Class typeForTestingJsonGetterAnnotation(){
+  Class typeForTestingJsonGetterAnnotation(){
     TypeWithJsonGetterAnnotation
   }
 
-  static ResolvedType hashMap(def keyClazz, def valueClazz) {
-    resolver.resolve(Map, keyClazz, valueClazz)
+  ResolvedType hashMap(def keyClazz, def valueClazz) {
+    typeResolver().resolve(Map, keyClazz, valueClazz)
   }
 
-  static ResolvedType genericMap(def toResolve, def key, def value) {
-    resolver.resolve(toResolve, resolver.resolve(Entry, key, value));
+  ResolvedType genericMap(def toResolve, def key, def value) {
+    typeResolver().resolve(toResolve, typeResolver().resolve(Entry, key, value));
   }
 
-  static ResolvedType typeWithAlternateProperty() {
-    resolver.resolve(TypeWithAlternateProperty);
+  ResolvedType typeWithAlternateProperty() {
+    typeResolver().resolve(TypeWithAlternateProperty);
   }
 
-  static ResolvedType typeWithResponseEntityOfVoid() {
-    resolver.resolve(GenericType, resolver.resolve(ResponseEntity, Void))
+  ResolvedType typeWithResponseEntityOfVoid() {
+    typeResolver().resolve(GenericType, typeResolver().resolve(ResponseEntity, Void))
   }
 
-  static ResolvedType nestedGenericType(def clazz) {
-    resolver.resolve(GenericType, resolver.resolve(ResponseEntity, clazz))
+  ResolvedType nestedGenericType(def clazz) {
+    typeResolver().resolve(GenericType, typeResolver().resolve(ResponseEntity, clazz))
   }
 
-  static ResolvedType listOfMapOfStringToString() {
-    resolver.resolve(List, resolver.resolve(Map, String, String))
+  ResolvedType listOfMapOfStringToString() {
+    typeResolver().resolve(List, typeResolver().resolve(Map, String, String))
   }
 
-  static ResolvedType listOfMapOfStringToSimpleType() {
-    resolver.resolve(List, resolver.resolve(Map, String, SimpleType))
+  ResolvedType listOfMapOfStringToSimpleType() {
+    typeResolver().resolve(List, typeResolver().resolve(Map, String, SimpleType))
   }
 
-  static ResolvedType listOfErasedMap() {
-    resolver.resolve(List, Map)
+  ResolvedType listOfErasedMap() {
+    typeResolver().resolve(List, Map)
   }
 
-  static ResolvedType listOfModelMap() {
-    resolver.resolve(List, ModelMap)
+  ResolvedType listOfModelMap() {
+    typeResolver().resolve(List, ModelMap)
   }
 
-  static ResolvedType resources(def clazz) {
-    resolver.resolve(CollectionModel, clazz)
+  ResolvedType resources(def clazz) {
+    typeResolver().resolve(CollectionModel, clazz)
   }
 
-  static ResolvedType customMapOpen() {
-    resolver.resolve(CustomMap)
+  ResolvedType customMapOpen() {
+    typeResolver().resolve(CustomMap)
   }
 
-  static ResolvedType customMapOfType(def clazz) {
-    resolver.resolve(CustomMap, clazz)
+  ResolvedType customMapOfType(def clazz) {
+    typeResolver().resolve(CustomMap, clazz)
   }
 
-  def ResolvedType typeForTestingPropertyPositions() {
-    resolver.resolve(TypeForTestingPropertyPositions)
+  ResolvedType typeForTestingPropertyPositions() {
+    typeResolver().resolve(TypeForTestingPropertyPositions)
   }
 
-  def ResolvedType typeWithVoidLists() {
-    resolver.resolve(GenericTypeBoundToMultiple, Void.class, Void.class)
+  ResolvedType typeWithVoidLists() {
+    typeResolver().resolve(GenericTypeBoundToMultiple, Void.class, Void.class)
   }
 
-  def ResolvedType genericEntityModel() {
-    resolver.resolve(EntityModel, SubclassOfRepresentationModel.class)
+  ResolvedType genericEntityModel() {
+    typeResolver().resolve(EntityModel, SubclassOfRepresentationModel.class)
   }
 
-  static def nestedMaps() {
-    resolver.resolve(Response, LanguageResponse)
+  def nestedMaps() {
+    typeResolver().resolve(Response, LanguageResponse)
+  }
+
+  def typeResolver() {
+    new TypeResolver()
   }
 }

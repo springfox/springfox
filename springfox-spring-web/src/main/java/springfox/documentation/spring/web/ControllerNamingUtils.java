@@ -28,7 +28,7 @@ import org.springframework.web.util.UriUtils;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 public class ControllerNamingUtils {
-  private static Logger log = LoggerFactory.getLogger(ControllerNamingUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ControllerNamingUtils.class);
   private static final String ISO_8859_1 = "ISO-8859-1";
 
   private ControllerNamingUtils() {
@@ -38,7 +38,7 @@ public class ControllerNamingUtils {
   public static String pathRoot(String requestPattern) {
     Assert.notNull(requestPattern, "Request pattern is required");
     Assert.hasText(requestPattern, "Request pattern is not empty");
-    log.info("Resolving path root for {}", requestPattern);
+    LOGGER.debug("Resolving path root for {}", requestPattern);
     String adjustedPattern = requestPattern.startsWith("/") ? requestPattern : "/" + requestPattern;
     int idx = adjustedPattern.indexOf("/", 1);
     if (idx > -1) {
@@ -59,7 +59,7 @@ public class ControllerNamingUtils {
     try {
       return UriUtils.decode(path, ISO_8859_1);
     } catch (Exception e) {
-      log.error("Could not decode:" + path, e);
+      LOGGER.error("Could not decode:" + path, e);
     }
     return path;
   }

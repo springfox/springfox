@@ -52,6 +52,8 @@ public class PatternAnnotationPlugin implements ParameterBuilderPlugin {
     if (pattern.isPresent()) {
       LOG.debug("@Pattern present: {}", pattern.get().regexp());
       context.parameterBuilder().pattern(pattern.get().regexp());
+      context.requestParameterBuilder()
+             .query(q -> q.stringFacet(s -> s.pattern(pattern.get().regexp())));
     }
   }
 }

@@ -25,12 +25,23 @@ package springfox.gradlebuild.utils
 import org.gradle.api.Project
 
 class ProjectDefinitions {
+
+  static final TEST_PROJECTS = [
+      'swagger-contract-tests',
+      'swagger-contract-tests-webflux',
+      'oas-contract-tests',
+      'buildSrc',
+      'springfox-spring-config',
+      'spingfox-petstore',
+      'springfox-petstore-webflux'
+  ]
+
   static publishables(Project project) {
     return project.subprojects.findAll {
-      !['swagger-contract-tests', 'swagger-contract-tests-webflux', 'buildSrc', 'springfox-spring-config'].contains(it.name)
+      !TEST_PROJECTS.contains(it.name)
     }
   }
   static publishable(Project project) {
-    !['swagger-contract-tests', 'swagger-contract-tests-webflux', 'buildSrc', 'springfox-spring-config'].contains(project.name)
+    !TEST_PROJECTS.contains(project.name)
   }
 }

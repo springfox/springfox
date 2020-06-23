@@ -19,16 +19,19 @@
 
 package springfox.documentation.swagger.readers.parameter
 
+
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.core.MethodParameter
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.EnumerationFacet
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -39,8 +42,11 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ApiParamParameterBuilderSpec
+    extends DocumentationContextSpec
+    implements ApiParamAnnotationSupport,
+        RequestMappingSupport,
+        ModelProviderForServiceSupport {
 
   def descriptions = new DescriptionResolver(new MockEnvironment())
 
@@ -52,10 +58,9 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
-        new ParameterBuilder(),
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     ApiParamParameterBuilder operationCommand =
@@ -65,11 +70,25 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
         )
     operationCommand.apply(parameterContext)
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
+    EnumerationFacet facet = parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
+        .parameterSpecification
+        .query
+        .orElse(null)
+        ?.facetOfType(EnumerationFacet)
+        ?.orElse(null)
+
 
     then:
     allowableValues != null
     allowableValues.getValueType() == "LIST"
     allowableValues.getValues() == ["PRODUCT", "SERVICE"]
+
+    and:
+    facet != null
+    facet.allowedValues == ["PRODUCT", "SERVICE"]
 
     where:
     handlerMethod                                                                    | expected
@@ -85,19 +104,31 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     ParameterContext parameterContext =
         new ParameterContext(
             resolvedMethodParameter,
-            new ParameterBuilder(),
             documentationContext(),
             genericNamingStrategy,
-            Mock(OperationContext))
+            Mock(OperationContext), 0)
 
     when:
     ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
     operationCommand.apply(parameterContext)
+
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
+    EnumerationFacet facet = parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
+        .parameterSpecification
+        .query
+        .orElse(null)
+        ?.facetOfType(EnumerationFacet)
+        ?.orElse(null)
 
     then:
     allowableValues.getValueType() == "LIST"
     allowableValues.getValues() == expected
+
+    and:
+    facet?.allowedValues == expected
 
     where:
     apiParamAnnotation                       | expected
@@ -114,21 +145,35 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
-        new ParameterBuilder(),
         documentationContext(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext), 0)
 
     when:
     ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
     operationCommand.apply(parameterContext)
     AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
+    NumericElementFacet facet = parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
+        .parameterSpecification
+        .query
+        .orElse(null)
+        ?.facetOfType(NumericElementFacet)
+        ?.orElse(null)
 
     then:
-    allowableValues.getMin() == min as String
-    allowableValues.getMax() == max as String
-    allowableValues.getExclusiveMax() == exclusiveMax
-    allowableValues.getExclusiveMin() == exclusiveMin
+    allowableValues.min == min as String
+    allowableValues.max == max as String
+    allowableValues.exclusiveMax == exclusiveMax
+    allowableValues.exclusiveMin == exclusiveMin
+
+    and:
+    facet?.minimum == (min != null ? BigDecimal.valueOf(min) : null)
+    facet?.maximum == (max != null ? BigDecimal.valueOf(max) : null)
+    facet?.exclusiveMaximum == exclusiveMax
+    facet?.exclusiveMinimum == exclusiveMin
 
     where:
     apiParamAnnotation                                                | min  | max               | exclusiveMin | exclusiveMax

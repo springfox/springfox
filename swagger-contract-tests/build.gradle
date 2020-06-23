@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    springBootVersion = '2.2.2.RELEASE'
+    springBootVersion = '2.3.1.RELEASE'
   }
   repositories {
     mavenCentral()
@@ -10,28 +10,15 @@ buildscript {
   }
 }
 
-apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-
-repositories {
-  jcenter()
-}
-
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'war'
-apply plugin: 'org.springframework.boot'
 
 configurations {
   //Logback causing spring boot errors
   all*.exclude group: 'ch.qos.logback'
-  //Making sure we don't clash on the classpath as two controllers would be loaded
-  all*.exclude group: 'org.springframework', module: 'spring-webflux'
-  all*.exclude group: 'io.springfox', module: 'springfox-spring-webflux'
 }
 
-ext['groovy.version'] = '2.5.0'
+ext['groovy.version'] = '2.5.4'
 ext {
   limits = [
       'instruction': 89.5,
@@ -44,25 +31,25 @@ ext {
 }
 
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter-web")
-  compile("org.springframework.boot:spring-boot-starter-data-rest")
-  compile("org.springframework.boot:spring-boot-starter-data-jpa")
-  compile("com.h2database:h2")
+  implementation "org.springframework.boot:spring-boot-starter-web"
+  implementation "org.springframework.boot:spring-boot-starter-data-rest"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+  implementation "com.h2database:h2"
+  implementation "org.codehaus.groovy:groovy-all:$groovy"
+  implementation libs.clientProvided
+  implementation "javax.validation:validation-api:$validationApiVersion"
 
-  testCompile libs.test
-  testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
-  testCompile("org.springframework.boot:spring-boot-starter-test")
+  testImplementation libs.test
+  testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
 
-  compile project(':springfox-swagger1')
-  compile project(':springfox-swagger2')
-  compile project(':springfox-data-rest')
-  compile project(':springfox-petstore')
-  compile project(':springfox-bean-validators')
-  compile project(':springfox-spring-web').sourceSets.test.output
-  compile project(':springfox-spring-webmvc').sourceSets.test.output
+  implementation project(':springfox-swagger1')
+  implementation project(':springfox-swagger2')
+  implementation project(':springfox-data-rest')
+  implementation project(':springfox-petstore')
+  implementation project(':springfox-bean-validators')
 
-
-  compile(project(path: ':springfox-swagger-ui')) {
+  implementation(project(path: ':springfox-swagger-ui')) {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }
@@ -72,4 +59,4 @@ dependencies {
 //  systemProperty("contract.tests.root", "$projectDir/src/test/resources")
 //  systemProperty("contract.tests.update", true)
 //}
-// tag::update-contract-tests[]
+// end::update-contract-tests[]

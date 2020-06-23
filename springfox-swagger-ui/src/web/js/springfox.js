@@ -4,6 +4,7 @@ window.onload = () => {
 
   const buildSystemAsync = async (baseUrl) => {
     try {
+      console.log(baseUrl);
       const configUIResponse = await fetch(
           baseUrl + "/swagger-resources/configuration/ui",
           {
@@ -36,12 +37,6 @@ window.onload = () => {
             },
           });
       const resources = await resourcesResponse.json();
-      resources.forEach(resource => {
-        if (resource.url.substring(0, 4) !== 'http') {
-          resource.url = baseUrl + resource.url;
-        }
-      });
-
       window.ui = getUI(baseUrl, resources, configUI, configSecurity);
     } catch (e) {
       const retryURL = await prompt(

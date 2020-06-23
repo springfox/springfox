@@ -19,6 +19,8 @@
 
 package springfox.documentation.service;
 
+import springfox.documentation.common.ExternalDocumentation;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,8 +38,8 @@ public class Documentation {
   private final Set<String> consumes;
   private final String host;
   private final Set<String> schemes;
-  private final List<Server> servers;
-  private final DocumentationReference documentationReference;
+  private final List<Server> servers = new ArrayList<>();
+  private final ExternalDocumentation externalDocumentation;
   private final List<VendorExtension> vendorExtensions;
 
   @SuppressWarnings("ParameterNumber")
@@ -52,7 +54,7 @@ public class Documentation {
       String host,
       Set<String> schemes,
       List<Server> servers,
-      DocumentationReference documentationReference,
+      ExternalDocumentation externalDocumentation,
       Collection<VendorExtension> vendorExtensions) {
 
     this.groupName = groupName;
@@ -64,8 +66,8 @@ public class Documentation {
     this.consumes = consumes;
     this.host = host;
     this.schemes = schemes;
-    this.servers = servers;
-    this.documentationReference = documentationReference;
+    this.servers.addAll(servers);
+    this.externalDocumentation = externalDocumentation;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
@@ -113,7 +115,13 @@ public class Documentation {
     return servers;
   }
 
-  public DocumentationReference getDocumentationReference() {
-    return documentationReference;
+  public ExternalDocumentation getExternalDocumentation() {
+    return externalDocumentation;
+  }
+
+  public void addServer(Server inferredServer) {
+    if (!servers.contains(inferredServer)) {
+      servers.add(inferredServer);
+    }
   }
 }

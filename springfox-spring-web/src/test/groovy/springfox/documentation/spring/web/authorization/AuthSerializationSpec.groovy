@@ -28,8 +28,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.AuthSupport
 
-@Mixin(AuthSupport)
-class AuthSerializationSpec extends Specification {
+class AuthSerializationSpec extends Specification implements AuthSupport {
    final ObjectMapper mapper = new ObjectMapper();
 
    def setup() {

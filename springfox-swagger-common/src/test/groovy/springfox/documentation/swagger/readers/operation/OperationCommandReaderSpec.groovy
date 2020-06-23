@@ -28,8 +28,7 @@ import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport])
-class OperationCommandReaderSpec extends DocumentationContextSpec {
+class OperationCommandReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   private static final int CURRENT_COUNT = 3
   @Shared
   def descriptions = new DescriptionResolver(new MockEnvironment())

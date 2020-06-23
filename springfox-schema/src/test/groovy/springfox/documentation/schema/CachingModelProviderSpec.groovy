@@ -19,6 +19,8 @@
 
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
@@ -27,47 +29,74 @@ import springfox.documentation.spi.schema.AlternateTypeProvider
 import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(TypesForTestingSupport)
-class CachingModelProviderSpec extends Specification {
+class CachingModelProviderSpec extends Specification implements TypesForTestingSupport {
+  @Shared def resolver = new TypeResolver()
+   
   def "Implementation caches the invocations" () {
     given:
-      def context = inputParam("0_0",
-          "group",
-          resolver.resolve(complexType()),
-          Optional.empty(),
-          new HashSet<>(),
-          DocumentationType.SWAGGER_2,
-          new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy(),
-          emptySet())
-      def model = aModel()
-      def mock = Mock(ModelProvider) {
-        modelFor(context) >> Optional.of(model)
-      }
+    def context = inputParam(
+        "0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        new HashSet<>(),
+        DocumentationType.SWAGGER_2,
+        new AlternateTypeProvider([]),
+        new CodeGenGenericTypeNamingStrategy(),
+        emptySet())
+    def model = aModel()
+    def mock = Mock(ModelProvider) {
+      modelFor(context) >> Optional.of(model)
+    }
+    def modelSpecification = Mock(ModelSpecification)
+    def specificationMock = Mock(ModelSpecificationProvider) {
+      modelSpecificationsFor(context) >> Optional.of(modelSpecification)
+    }
+
     when:
-      def sut = new CachingModelProvider(mock)
+    def sut = new CachingModelProvider(
+        mock,
+        specificationMock)
+
     then:
-      sut.modelFor(context) == sut.modelFor(context)
+    sut.modelFor(context) == sut.modelFor(context)
+    sut.modelSpecificationsFor(context) == sut.modelSpecificationsFor(context)
   }
 
   def "Cache misses do not not result in errors" () {
     given:
-      def context = inputParam("0_0",
-          "group",
-          resolver.resolve(complexType()),
-          Optional.empty(),
-          new HashSet<>(),
-          DocumentationType.SWAGGER_2,
-          new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy(),
-          emptySet())
-      def mock = Mock(ModelProvider) {
-        modelFor(context) >> { throw new NullPointerException() }
+    def context = inputParam(
+        "0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        new HashSet<>(),
+        DocumentationType.SWAGGER_2,
+        new AlternateTypeProvider([]),
+        new CodeGenGenericTypeNamingStrategy(),
+        emptySet())
+    def mock = Mock(ModelProvider) {
+      // @formatter:off
+      modelFor(context) >> { throw new NullPointerException() }
+     // @formatter:on
+    }
+    def modelSpecification = Mock(ModelSpecification)
+    def specificationMock = Mock(ModelSpecificationProvider) {
+      // @formatter:off
+      modelSpecificationsFor(context) >> {
+        throw new NullPointerException()
       }
+      // @formatter:on
+    }
+
     when:
-      def sut = new CachingModelProvider(mock)
+    def sut = new CachingModelProvider(
+        mock,
+        specificationMock)
+
     then:
-      !sut.modelFor(context).isPresent()
+    !sut.modelFor(context).isPresent()
+    !sut.modelSpecificationsFor(context).isPresent()
   }
 
   def aModel() {

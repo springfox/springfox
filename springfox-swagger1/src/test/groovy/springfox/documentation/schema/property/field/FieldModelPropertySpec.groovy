@@ -19,23 +19,25 @@
 
 package springfox.documentation.schema.property.field
 
-import springfox.documentation.schema.AlternateTypesSupport
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
+import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableListValues
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
-class FieldModelPropertySpec extends SchemaSpecification {
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
+class FieldModelPropertySpec extends SchemaSpecification implements ModelPropertyLookupSupport {
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared def resolver = new TypeResolver()
 
-  def "Extracting information from resolved fields"() {
+  @Unroll
+  def "Extracting information from resolved field #fieldName"() {
     given:
     def modelContext = inputParam(
         "0_0",
@@ -74,9 +76,6 @@ class FieldModelPropertySpec extends SchemaSpecification {
     fieldName  || description          | isRequired | typeName  | qualifiedTypeName | allowableValues
     "intProp"  || "int Property Field" | true       | "int"     | "int"             | null
     "boolProp" || null                 | false      | "boolean" | "boolean"         | null
-//    "enumProp"      || null                 | false      | "string"             | "springfox.documentation.schema.ExampleEnum"                   | ["ONE", "TWO"]
-//    "genericProp"   || null                 | false      | "GenericType«string»"| "springfox.documentation.schema.GenericType<java.lang.String>" | null
-    //TODO : Fix these two
   }
 
   def "Extracting information from generic fields with array type binding"() {

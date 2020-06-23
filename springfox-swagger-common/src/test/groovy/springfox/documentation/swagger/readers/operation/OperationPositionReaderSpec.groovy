@@ -23,8 +23,7 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport])
-class OperationPositionReaderSpec extends DocumentationContextSpec {
+class OperationPositionReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   def "should have correct api position using swagger reader"() {
     given:

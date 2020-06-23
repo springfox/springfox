@@ -25,10 +25,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -62,7 +66,7 @@ public class Annotations {
     return results;
   }
 
-  public static Function<ApiOperation, ResolvedType> resolvedTypeFromOperation(
+  public static Function<ApiOperation, ResolvedType> resolvedTypeFromApiOperation(
       final TypeResolver typeResolver,
       final ResolvedType defaultType) {
 
@@ -74,6 +78,52 @@ public class Annotations {
       final ResolvedType defaultType) {
 
     return annotation -> getResolvedType(annotation, typeResolver, defaultType);
+  }
+
+  public static Function<
+      Operation,
+      Collection<io.swagger.v3.oas.annotations.responses.ApiResponse>> fromOperationAnnotation() {
+
+    return annotation -> {
+      if (null != annotation) {
+        return Arrays.asList(annotation.responses());
+      }
+      return new ArrayList<>();
+    };
+  }
+
+  public static Function<
+      io.swagger.v3.oas.annotations.responses.ApiResponses,
+      Collection<io.swagger.v3.oas.annotations.responses.ApiResponse>> fromApiResponsesAnnotation() {
+
+    return annotation -> {
+      if (null != annotation) {
+        return Arrays.asList(annotation.value());
+      }
+      return new ArrayList<>();
+    };
+  }
+
+  public static Function<Schema, ResolvedType> resolvedTypeFromSchema(
+      TypeResolver typeResolver,
+      ResolvedType defaultType) {
+
+    return annotation -> getResolvedType(annotation, typeResolver, defaultType);
+  }
+
+  @SuppressWarnings("Duplicates")
+  private static ResolvedType getResolvedType(
+      Schema annotation,
+      TypeResolver resolver,
+      ResolvedType defaultType) {
+    if (null != annotation) {
+      Class<?> response = annotation.implementation();
+      String responseContainer = annotation.multipleOf() > 0 ? "LIST" : "";
+      if (resolvedType(resolver, response, responseContainer).isPresent()) {
+        return resolvedType(resolver, response, responseContainer).get();
+      }
+    }
+    return defaultType;
   }
 
   @SuppressWarnings("Duplicates")

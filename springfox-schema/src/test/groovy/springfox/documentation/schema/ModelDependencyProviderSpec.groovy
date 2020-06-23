@@ -18,15 +18,16 @@
  */
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelDependencyProviderSpec extends SchemaSpecification {
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared def resolver = new TypeResolver()
 
   @Unroll
   def "dependencies are inferred correctly"() {

@@ -53,6 +53,9 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     context.parameterBuilder()
         .name(name)
         .description(name);
+    context.requestParameterBuilder()
+        .name(name)
+        .description(name);
   }
 
   @Override

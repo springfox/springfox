@@ -10,14 +10,16 @@ ext {
 }
 
 dependencies {
-  compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
-  compile libs.core
-  compile libs.spring
+  api "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
+  api libs.core
+  api libs.spring
   
-  provided libs.springProvided
-  provided libs.clientProvided
+  compileOnly libs.springProvided
+  compileOnly libs.clientProvided
 
-  testCompile libs.test
-  testCompile libs.clientProvidedServlet
-  testCompile libs.springProvidedWithMvc
+  testImplementation libs.test
+  testImplementation libs.clientProvided
+  testImplementation "javax.servlet:javax.servlet-api:$servlet"
+
+  testImplementation libs.springProvidedWithMvc
 }
