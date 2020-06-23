@@ -42,6 +42,7 @@ import springfox.documentation.swagger1.dto.ResponseMessage;
     DataTypeMapper.class,
     AuthorizationTypesMapper.class
 })
+@SuppressWarnings("deprecation")
 public interface ServiceModelToSwaggerMapper {
   //Api related
   ApiDescription toSwaggerApiDescription(springfox.documentation.service.ApiDescription from);

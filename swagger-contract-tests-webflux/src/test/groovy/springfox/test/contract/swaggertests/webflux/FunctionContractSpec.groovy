@@ -17,31 +17,21 @@
  *
  */
 
-package springfox.test.contract.swaggertests
+package springfox.test.contract.swaggertests.webflux
 
-import com.fasterxml.classmate.TypeResolver
+
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
-import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.reactive.function.client.WebClient
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.schema.AlternateTypeRuleConvention
-import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
-import springfox.test.contract.swagger.SecuritySupport
-import springfox.test.contract.swagger.SwaggerWebfluxApplication
+import springfox.test.contract.swagger.webflux.SwaggerWebfluxApplication
 
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*

@@ -41,7 +41,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc
 import springfox.test.contract.swagger.SwaggerApplication
-import springfox.test.contract.swagger.listeners.ObjectMapperEventListener
+import springfox.test.contract.swagger.webflux.listeners.ObjectMapperEventListener
 
 import static org.springframework.boot.test.context.SpringBootTest.*
 

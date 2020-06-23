@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.test.contract.swagger.listeners;
+package springfox.test.contract.swagger.webflux.listeners;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

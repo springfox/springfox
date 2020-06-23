@@ -1,4 +1,4 @@
-package springfox.test.contract.swagger;
+package springfox.test.contract.swagger.webflux;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;

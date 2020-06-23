@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.test.contract.swagger;
+package springfox.test.contract.swagger.webflux;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

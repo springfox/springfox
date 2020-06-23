@@ -1,4 +1,4 @@
-package springfox.test.contract.swagger;
+package springfox.test.contract.swagger.webflux;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

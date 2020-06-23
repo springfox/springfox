@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.test.contract.swaggertests
+package springfox.test.contract.swaggertests.webflux
 
 import groovy.json.StringEscapeUtils
 import org.codehaus.groovy.runtime.ResourceGroovyMethods

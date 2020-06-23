@@ -37,7 +37,7 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes",})
 @Mapper(componentModel = "spring")
 public abstract class SchemaMapper {
   @Named("ModelsMapping")
