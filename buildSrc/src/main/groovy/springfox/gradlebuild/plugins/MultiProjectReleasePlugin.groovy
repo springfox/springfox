@@ -108,8 +108,7 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
       publishTask.dependsOn bintrayUploadTasks
     }
 
-    bumpAndTagTask.dependsOn publishTask
-    releaseTask.dependsOn bumpAndTagTask
+    releaseTask.dependsOn publishTask
   }
 
   def configureVersion(Project project, BuildInfo buildInfo) {
