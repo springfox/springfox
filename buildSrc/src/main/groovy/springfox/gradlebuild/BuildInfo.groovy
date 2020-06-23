@@ -49,10 +49,7 @@ class BuildInfo {
   }
 
   String getReleaseTag() {
-    if (isReleaseBuild) {
-      return "${buildVersion.major}.${buildVersion.minor}.${buildVersion.patch}"
-    }
-    ""
+    return "${buildVersion.major}.${buildVersion.minor}.${buildVersion.patch}"
   }
 
   boolean getIsReleaseBuild() {

@@ -40,7 +40,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
 
   @Override
   void persist(Project project, BuildInfo buildInfo) {
-    if (buildInfo.isReleaseBuild) {
+    if (buildInfo.isReleaseBuild || project.hasProperty("force")) {
       createAnnotatedTag(project, buildInfo)
       updateVersionFile(project, buildInfo)
       commitToRepository(project, buildInfo)
@@ -56,6 +56,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
       project.logger.warn("[RELEASE] [DRYRUN] Will execute command: $commitChanges")
       return
     }
+    project.logger.lifecycle("[RELEASE] Executing command: $commitChanges")
     def proc = commitChanges.execute()
     def err = new StringBuilder()
     def out = new StringBuilder()
@@ -70,13 +71,19 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
   }
 
   def updateVersionFile(project, buildInfo) {
+    def nextVersion = buildInfo.nextVersion.asText();
+    if (!nextVersion.endsWith("-SNAPSHOT")) {
+      nextVersion += "-SNAPSHOT"
+    }
     if (buildInfo.dryRun) {
-      project.logger.warn("[RELEASE] [DRYRUN] Would have saved ${buildInfo.nextVersion.asText()} " +
+      project.logger.warn("[RELEASE] [DRYRUN] Would have saved $nextVersion " +
           "to the version file (${versionFile.absolutePath})")
       return
     }
+    project.logger.lifecycle("[RELEASE] Saving $nextVersion " +
+        "to the version file (${versionFile.absolutePath})")
     versionFile.withOutputStream {
-      it.write("${buildInfo.nextVersion.asText()}".bytes)
+      it.write("${nextVersion}".bytes)
     }
   }
 }

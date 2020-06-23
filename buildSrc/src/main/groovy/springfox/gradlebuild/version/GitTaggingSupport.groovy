@@ -27,6 +27,7 @@ trait GitTaggingSupport {
           "[RELEASE] [DRYRUN] Would have executed -> $tagCommand")
       return
     }
+    project.logger.lifecycle("[RELEASE] Executing command -> $tagCommand")
     def proc = tagCommand.execute()
     proc.waitFor()
     def err = new StringBuilder()
