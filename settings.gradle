@@ -24,4 +24,3 @@ include 'springfox-spring-config'
 include 'swagger-contract-tests'
 include 'swagger-contract-tests-webflux'
 include 'oas-contract-tests'
-

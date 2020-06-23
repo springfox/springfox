@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static springfox.documentation.builders.PathSelectors.*;
+
 @Configuration
 @ComponentScan({
     "springfox.documentation.spring.web.dummy.controllers",
@@ -433,5 +435,18 @@ public class Swagger2TestConfig {
         .paths(PathSelectors.regex("/same/.*"))
         .build();
 
+  }
+
+  @Bean
+  public Docket cyclic(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("cyclic")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .produces(new HashSet<>(
+            Arrays.asList("application/xml", "application/json")))
+        .select()
+        .paths(regex("/cyclic-structures/.*"))
+        .build();
   }
 }

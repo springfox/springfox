@@ -125,11 +125,11 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       String typeName = typeNameFor(parameterType.getErasedType());
       ScalarTypes.builtInScalarType(parameterType.getErasedType())
                  .ifPresent(model::scalarModel);
-      if (isBaseType(typeName)) {
+      if (isBaseType(typeName)) { //TODO: handle enums
         modelRef = new ModelRef(typeName);
       } else {
         LOG.warn(
-            "Trying to infer dataType {}",
+            "Unexpected data type dataType {}. Expecting a base type",
             parameterType);
       }
     }
