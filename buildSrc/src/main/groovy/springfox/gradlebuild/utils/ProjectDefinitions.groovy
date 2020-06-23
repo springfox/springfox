@@ -32,7 +32,7 @@ class ProjectDefinitions {
       'oas-contract-tests',
       'buildSrc',
       'springfox-spring-config',
-      'spingfox-petstore',
+      'springfox-petstore',
       'springfox-petstore-webflux'
   ]
 
