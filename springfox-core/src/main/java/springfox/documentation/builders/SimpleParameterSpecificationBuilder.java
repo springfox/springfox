@@ -27,7 +27,7 @@ public class SimpleParameterSpecificationBuilder {
   private Boolean allowEmptyValue;
   private String defaultValue;
   private CollectionFormat collectionFormat;
-  private final ModelSpecificationBuilder model = new ModelSpecificationBuilder();
+  private ModelSpecificationBuilder model;
 
   public SimpleParameterSpecificationBuilder style(ParameterStyle style) {
     this.style = style;
@@ -45,6 +45,9 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder model(@NonNull Consumer<ModelSpecificationBuilder> consumer) {
+    if (model == null) {
+      model = new ModelSpecificationBuilder();
+    }
     consumer.accept(model);
     return this;
   }
@@ -96,15 +99,19 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   SimpleParameterSpecification build() {
+    if (model == null) {
+      return null;
+    }
+    ModelSpecification builtModel = model.build();
+    if (builtModel == null) {
+      return null;
+    }
     List<ElementFacet> facets = facetBuilders.values().stream()
         .filter(Objects::nonNull)
         .map(ElementFacetBuilder::build)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-    ModelSpecification builtModel = model.build();
-    if (builtModel == null) {
-      return null;
-    }
+
     if (explode != null
         && explode
         && builtModel.getCollection().isPresent()) {
