@@ -86,6 +86,8 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return resolvedType -> isBaseType(ModelContext.fromParent(modelContext, resolvedType));
   }
 
+
+  @SuppressWarnings("deprecation")
   private boolean isBaseType(ModelContext modelContext) {
     String typeName = nameExtractor.typeName(modelContext);
     return Types.isBaseType(typeName);

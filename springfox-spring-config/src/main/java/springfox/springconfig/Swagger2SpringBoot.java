@@ -26,17 +26,22 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.async.DeferredResult;
-import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
+import springfox.documentation.builders.ResponseBuilder;
+import springfox.documentation.schema.ModelKeyBuilder;
+import springfox.documentation.schema.QualifiedModelName;
+import springfox.documentation.schema.ReferenceModelSpecification;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
@@ -86,22 +91,33 @@ public class Swagger2SpringBoot {
                 typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
                 typeResolver.resolve(WildcardType.class))) //<10>
         .useDefaultResponseMessages(false) //<11>
-        .globalResponseMessage(RequestMethod.GET, //<12>
-            singletonList(new ResponseMessageBuilder()
-                .code(500)
-                .message("500 message")
-                .responseModel(new ModelRef("Error")) //<13>
+        .globalResponses(HttpMethod.GET, //<12>
+            singletonList(new ResponseBuilder()
+                .code("500")
+                .description("500 message")
+                .representation(MediaType.TEXT_XML)
+                .apply(r -> r.model(m -> new ModelSpecificationBuilder()
+                    .referenceModel(
+                        new ReferenceModelSpecification(
+                            new ModelKeyBuilder()
+                                .qualifiedModelName(
+                                    new QualifiedModelName(
+                                        "some:namespace",
+                                        "ERROR"))
+                                .build())))) //<13>
                 .build()))
         .securitySchemes(singletonList(apiKey())) //<14>
         .securityContexts(singletonList(securityContext())) //<15>
         .enableUrlTemplating(true) //<21>
-        .globalOperationParameters(//<22>
-            singletonList(new ParameterBuilder()
+        .globalRequestParameters(//<22>
+            singletonList(new springfox.documentation.builders.RequestParameterBuilder()
                 .name("someGlobalParameter")
                 .description("Description of someGlobalParameter")
-                .modelRef(new ModelRef("string"))
-                .parameterType("query")
+                .in(ParameterType.QUERY)
                 .required(true)
+                .query(q -> q.model(new ModelSpecificationBuilder()
+                    .scalarModel(ScalarType.STRING)
+                    .build()))
                 .build()))
         .tags(new Tag("Pet Service", "All apis relating to pets")) // <23>
         .additionalModels(typeResolver.resolve(AdditionalModel.class)); //<24>

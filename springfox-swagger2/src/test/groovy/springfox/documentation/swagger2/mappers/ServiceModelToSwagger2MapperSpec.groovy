@@ -30,13 +30,13 @@ import springfox.documentation.service.ModelNamesRegistry
 import springfox.documentation.service.ObjectVendorExtension
 import springfox.documentation.service.ParameterStyle
 import springfox.documentation.service.ParameterType
-import springfox.documentation.service.Representation
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.StringVendorExtension
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
+import java.util.function.Consumer
 import java.util.function.Function
 
 import static java.util.Collections.*
@@ -244,9 +244,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
     def operation1 = new OperationBuilder(new CachingOperationNameGenerator())
         .authorizations(
             [SecurityReference.builder()
-                              .reference("basic")
-                              .scopes(scope)
-                              .build()])
+                 .reference("basic")
+                 .scopes(scope)
+                 .build()])
         .consumes(singleton("application/json"))
         .produces(singleton("application/json"))
         .deprecated("true")
@@ -275,16 +275,16 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                  .name("order")
                  .description("Chose first or second")
                  .in(ParameterType.FORM)
-                 .query {q ->
+                 .query { q ->
                    q.style(ParameterStyle.FORM)
-                    .enumerationFacet {e
-                      ->
-                      e.allowedValues(["FIRST", "SECOND"])
-                    }
-                    .model(
-                        new ModelSpecificationBuilder()
-                            .scalarModel(ScalarType.STRING)
-                            .build())
+                       .enumerationFacet { e
+                         ->
+                         e.allowedValues(["FIRST", "SECOND"])
+                       }
+                       .model(
+                           new ModelSpecificationBuilder()
+                               .scalarModel(ScalarType.STRING)
+                               .build())
                  }
                  .build()])
         .position(1)
@@ -297,15 +297,10 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                  .code("200")
                  .description("Success")
                  .examples([example])
-                 .representations(
-                     [
-                         new Representation(
-                             MediaType.TEXT_PLAIN,
-                             new ModelSpecificationBuilder()
-                                 .scalarModel(ScalarType.STRING)
-                                 .build(),
-                             [] as Set)
-                     ] as Set)
+                 .representation(MediaType.TEXT_PLAIN)
+                 .apply({
+                   it.model { m -> m.scalarModel(ScalarType.STRING) }
+                 } as Consumer)
                  .build()] as Set)
         .extensions([first, second])
         .build()
@@ -328,10 +323,10 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .build()
     modelProperty.updateModelRef(createFactory(new ModelRef("string")))
     def modelSpecs = ["m1":
-         new ModelSpecificationBuilder()
-             .scalarModel(ScalarType.STRING)
-             .name("test")
-             .build()]
+                          new ModelSpecificationBuilder()
+                              .scalarModel(ScalarType.STRING)
+                              .name("test")
+                              .build()]
     def modelNames = Mock(ModelNamesRegistry)
     modelNames.modelsByName() >> modelSpecs
     new ApiListingBuilder(defaults.apiDescriptionOrdering())

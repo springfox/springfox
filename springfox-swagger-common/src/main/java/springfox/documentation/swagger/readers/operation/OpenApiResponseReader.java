@@ -35,7 +35,6 @@ import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.Header;
-import springfox.documentation.service.Representation;
 import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -108,14 +107,15 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
         .collect(Collectors.toList());
     responseAnnotation.ifPresent(allApiResponses::add);
 
-    Set<Response> responses = new HashSet<>();
 
+    Set<Response> responses = new HashSet<>();
     for (ApiResponse apiResponse : allApiResponses) {
-      Set<Representation> representations = new HashSet<>();
       Map<String, Header> headers = new HashMap<>();
       List<Example> examples = new ArrayList<>();
-      Optional<ResolvedType> type = Optional.empty();
-
+      Optional<ResolvedType> type;
+      ResponseContext responseContext = new ResponseContext(
+          context.getDocumentationContext(),
+          context);
       for (Content each : apiResponse.content()) {
         type = resolvedType(each.schema());
         if (isSuccessful(apiResponse.responseCode())) {
@@ -137,23 +137,12 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
         }
         headers.putAll(headers(apiResponse.headers()));
 
-        Optional<ResolvedType> finalType = type;
-        representations.add(
-            new Representation(
-                each.mediaType().isEmpty() ? MediaType.ALL : MediaType.valueOf(each.mediaType()),
-                finalType.map(t -> modelSpecifications.create(modelContext, t))
-                    .orElse(null),
-                new HashSet<>()));
-
+        type.ifPresent(t -> responseContext.responseBuilder()
+            .representation(each.mediaType().isEmpty() ? MediaType.ALL : MediaType.valueOf(each.mediaType()))
+            .apply(r -> r.model(
+                m -> m.copyOf(modelSpecifications.create(modelContext, t)))));
       }
-      ResponseContext responseContext = new ResponseContext(
-          type.orElse(null),
-          context.getDocumentationContext(),
-          context.getGenericsNamingStrategy(),
-          context);
-
       responseContext.responseBuilder()
-          .representations(representations)
           .examples(examples)
           .description(apiResponse.description())
           .headers(headers.values())

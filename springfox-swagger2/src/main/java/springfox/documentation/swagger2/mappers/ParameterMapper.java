@@ -32,7 +32,6 @@ import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.springframework.util.StringUtils;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -41,10 +40,13 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
-import static springfox.documentation.swagger2.mappers.Properties.*;
 
+/**
+ * Use {@link RequestParameterMapper} instead
+ * @deprecated @since 3.0.0
+ */
+@Deprecated
 @Mapper(componentModel = "spring")
 public class ParameterMapper {
 
@@ -76,8 +78,8 @@ public class ParameterMapper {
         .description(source.getDescription());
 
     // Form Parameters only work with certain primitive types specified in the spec
-    ModelReference modelRef = source.getModelRef();
-    parameter.setProperty(itemTypeProperty(modelRef));
+    springfox.documentation.schema.ModelReference modelRef = source.getModelRef();
+    parameter.setProperty(springfox.documentation.swagger2.mappers.Properties.itemTypeProperty(modelRef));
 
     if (!SUPPORTED_FORM_DATA_TYPES.contains(parameter.getType())
         || "array".equals(parameter.getType())
@@ -137,7 +139,7 @@ public class ParameterMapper {
     return object instanceof Example && StringUtils.isEmpty(((Example) object).getValue());
   }
 
-  Model fromModelRef(ModelReference modelRef) {
+  Model fromModelRef(springfox.documentation.schema.ModelReference modelRef) {
     if (modelRef.isCollection()) {
       if (modelRef.getItemType().equals("byte")) {
         ModelImpl baseModel = new ModelImpl();
@@ -149,21 +151,23 @@ public class ParameterMapper {
         files.items(new FileProperty());
         return files;
       }
-      ModelReference itemModel = modelRef.itemModel().get();
+      springfox.documentation.schema.ModelReference itemModel = modelRef.itemModel().get();
       return new ArrayModel()
-          .items(maybeAddAllowableValues(itemTypeProperty(itemModel), itemModel.getAllowableValues()));
+          .items(maybeAddAllowableValues(
+              springfox.documentation.swagger2.mappers.Properties.itemTypeProperty(itemModel),
+              itemModel.getAllowableValues()));
     }
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();
-      ModelReference itemModel = modelRef.itemModel().get();
+      springfox.documentation.schema.ModelReference itemModel = modelRef.itemModel().get();
       baseModel.additionalProperties(
           maybeAddAllowableValues(
-              itemTypeProperty(itemModel),
+              springfox.documentation.swagger2.mappers.Properties.itemTypeProperty(itemModel),
               itemModel.getAllowableValues()));
       return baseModel;
     }
-    if (isBaseType(modelRef.getType())) {
-      Property property = property(modelRef.getType());
+    if (springfox.documentation.schema.Types.isBaseType(modelRef.getType())) {
+      Property property = springfox.documentation.swagger2.mappers.Properties.property(modelRef.getType());
       ModelImpl baseModel = new ModelImpl();
       baseModel.setType(property.getType());
       baseModel.setFormat(property.getFormat());

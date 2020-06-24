@@ -44,6 +44,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Controller
 @RequestMapping(value = "/api/user", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(value = "/user", description = "Operations about user")
+@SuppressWarnings("unchecked")
 public class UserController {
   private UserRepository userRepository = new UserRepository();
 

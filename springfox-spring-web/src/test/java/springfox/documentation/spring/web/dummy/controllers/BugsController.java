@@ -129,7 +129,7 @@ public class BugsController {
 
   @RequestMapping(value = "1440", method = GET)
   public EntityModel<String> issue1440() {
-    return new EntityModel<String>("1420");
+    return EntityModel.of("1420");
   }
 
   @RequestMapping(value = "1475", method = GET)
@@ -264,6 +264,7 @@ public class BugsController {
   public void method1() {
   }
 
+  @SuppressWarnings("deprecation")
   @GetMapping(value = "/1841", produces = APPLICATION_JSON_UTF8_VALUE)
   public void method2() {
   }
@@ -334,6 +335,7 @@ public class BugsController {
 
   }
 
+  @SuppressWarnings("deprecation")
   @PostMapping(value = "/1887/{env}/{list-id}/emails",
       produces = APPLICATION_JSON_UTF8_VALUE,
       consumes = APPLICATION_JSON_UTF8_VALUE)
@@ -420,6 +422,7 @@ public class BugsController {
     return null;
   }
 
+  @SuppressWarnings("deprecation")
   @RequestMapping(value = "/bug2203", method = RequestMethod.GET,
       produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<Response<LanguageResponse>> bug2203() {

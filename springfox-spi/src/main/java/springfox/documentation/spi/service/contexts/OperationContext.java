@@ -77,6 +77,7 @@ public class OperationContext {
     return operationIndex;
   }
 
+  @SuppressWarnings("deprecation")
   public List<ResponseMessage> getGlobalResponseMessages(String forHttpMethod) {
     DocumentationContext documentationContext = getDocumentationContext();
     if (documentationContext.getGlobalResponseMessages()
@@ -123,6 +124,7 @@ public class OperationContext {
     return requestContext.operationModelsBuilder();
   }
 
+  @SuppressWarnings("deprecation")
   public Map<String, Set<Model>> getKnownModels() {
     return requestContext.getModelMap();
   }

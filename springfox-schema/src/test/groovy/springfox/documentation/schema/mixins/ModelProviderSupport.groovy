@@ -82,7 +82,6 @@ trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTesti
         typeNameExtractor)
 
     new DefaultModelProvider(
-        typeResolver,
         modelPropertiesProvider,
         modelDependenciesProvider,
         pluginsManager,

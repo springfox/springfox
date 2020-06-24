@@ -56,7 +56,7 @@ class SpringRestDocsOperationBuilderPluginSpec extends Specification {
     def operation = operationBuilder.build()
 
     then:
-    2 == operation.responseMessages[0].examples.size()
+    2 == operation.responses[0].examples.size()
   }
 
 

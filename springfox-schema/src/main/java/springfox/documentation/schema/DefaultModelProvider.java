@@ -20,7 +20,6 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +46,16 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
 
+/**
+ * Use an implementation of {@link ModelSpecificationProvider} instead
+ *
+ * @deprecated @since 3.0.0
+ */
 @Component
 @Qualifier("default")
+@Deprecated
 public class DefaultModelProvider implements ModelProvider {
   private static final Logger LOG = LoggerFactory.getLogger(DefaultModelProvider.class);
-  private final TypeResolver resolver;
   private final ModelPropertiesProvider propertiesProvider;
   private final ModelDependencyProvider dependencyProvider;
   private final SchemaPluginsManager schemaPluginsManager;
@@ -60,13 +64,11 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Autowired
   public DefaultModelProvider(
-      TypeResolver resolver,
       @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
       @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
       SchemaPluginsManager schemaPluginsManager,
       TypeNameExtractor typeNameExtractor,
       EnumTypeDeterminer enumTypeDeterminer) {
-    this.resolver = resolver;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
     this.schemaPluginsManager = schemaPluginsManager;
@@ -106,17 +108,17 @@ public class DefaultModelProvider implements ModelProvider {
         = properties(
         modelContext,
         propertiesHost).stream()
-                       .collect(toMap(
-                           ModelProperty::getName,
-                           identity()));
+        .collect(toMap(
+            ModelProperty::getName,
+            identity()));
     LOG.debug("Inferred {} properties. Properties found {}",
-              propertiesIndex.size(),
-              String.join(
-                  ", ",
-                  propertiesIndex.keySet()));
+        propertiesIndex.size(),
+        String.join(
+            ", ",
+            propertiesIndex.keySet()));
     return of(modelBuilder(propertiesHost,
-                           new TreeMap<>(propertiesIndex),
-                           modelContext));
+        new TreeMap<>(propertiesIndex),
+        modelContext));
   }
 
   private Model modelBuilder(
@@ -169,15 +171,15 @@ public class DefaultModelProvider implements ModelProvider {
       String typeName = typeNameExtractor.typeName(parentContext);
 
       return Optional.of(parentContext.getBuilder()
-                             .type(resolvedType)
-                             .name(typeName)
-                             .qualifiedType(simpleQualifiedTypeName(resolvedType))
-                             .properties(new HashMap<>())
-                             .description("")
-                             .baseModel("")
-                             .discriminator("")
-                             .subTypes(new ArrayList<>())
-                             .build());
+          .type(resolvedType)
+          .name(typeName)
+          .qualifiedType(simpleQualifiedTypeName(resolvedType))
+          .properties(new HashMap<>())
+          .description("")
+          .baseModel("")
+          .discriminator("")
+          .subTypes(new ArrayList<>())
+          .build());
     }
     return empty();
   }

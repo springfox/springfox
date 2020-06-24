@@ -18,6 +18,7 @@
 
 package springfox.test.contract.oas.api;
 
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -42,6 +43,6 @@ public class ExceptionTranslator {
         "javax.servlet.error.status_code",
         HttpStatus.BAD_REQUEST.value(),
         org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST);
-    return errorAttributes.getErrorAttributes(request, false);
+    return errorAttributes.getErrorAttributes(request, ErrorAttributeOptions.defaults());
   }
 }

@@ -18,7 +18,6 @@
  */
 package springfox.documentation.spring.web.dummy.controllers;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +29,6 @@ import springfox.documentation.spring.web.dummy.models.Pet;
 public class GenericPetController extends GenericRestController<Pet, PetRepository> {
   @PostMapping("test")
   public ResponseEntity<Pet> test() {
-    return new ResponseEntity(HttpStatus.OK);
+    return ResponseEntity.ok(new Pet());
   }
 }

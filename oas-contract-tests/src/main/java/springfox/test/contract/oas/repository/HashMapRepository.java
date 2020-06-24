@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.TreeSet;
 
 @NoRepositoryBean
+@SuppressWarnings("unchecked")
 public abstract class HashMapRepository<T, ID> implements CrudRepository<T, ID> {
 
   private final BeanWrapper entityBeanInfo;

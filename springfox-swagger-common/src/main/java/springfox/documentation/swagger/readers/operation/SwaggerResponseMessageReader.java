@@ -37,7 +37,6 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.Header;
-import springfox.documentation.service.Representation;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -66,6 +65,7 @@ import static springfox.documentation.swagger.readers.operation.ResponseHeaders.
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@SuppressWarnings("deprecation")
 public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
   private final EnumTypeDeterminer enumTypeDeterminer;
@@ -123,6 +123,9 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       ApiResponse[] apiResponseAnnotations = apiResponses.value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
         if (!seenResponsesByCode.containsKey(apiResponse.code())) {
+          ResponseContext responseContext = new ResponseContext(
+              context.getDocumentationContext(),
+              context);
           seenResponsesByCode.put(
               apiResponse.code(),
               apiResponse);
@@ -168,23 +171,15 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               .examples(examples)
               .headersWithDescription(headers)
               .build());
-          ResponseContext responseContext = new ResponseContext(
-              type.orElse(null),
-              context.getDocumentationContext(),
-              context.getGenericsNamingStrategy(),
-              context);
-          Set<Representation> representations = new HashSet<>();
+
           Optional<ResolvedType> finalType = type;
           context.produces()
               .forEach(mediaType ->
-                  representations.add(
-                      new Representation(
-                          mediaType,
-                          finalType.map(t -> modelSpecifications.create(modelContext, t))
-                              .orElse(null),
-                          new HashSet<>())));
+                  finalType.map(t -> modelSpecifications.create(modelContext, t))
+                      .ifPresent(model -> responseContext.responseBuilder()
+                          .representation(mediaType)
+                          .apply(r -> r.model(m -> m.copyOf(model)))));
           responseContext.responseBuilder()
-              .representations(representations)
               .examples(examples)
               .description(apiResponse.message())
               .headers(headers.values())
@@ -221,23 +216,17 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       if (!responseMessages.contains(defaultMessage) && !"void".equals(responseModel.getType())) {
         responseMessages.add(defaultMessage);
       }
-
       ResponseContext responseContext = new ResponseContext(
-          resolvedType,
           context.getDocumentationContext(),
-          context.getGenericsNamingStrategy(),
           context);
-      Set<Representation> representations = new HashSet<>();
       context.consumes()
           .forEach(mediaType ->
-              representations.add(
-                  new Representation(
-                      mediaType,
-                      modelSpecifications.create(modelContext, resolvedType),
-                      new HashSet<>())));
+              responseContext.responseBuilder()
+                  .representation(mediaType)
+                  .apply(r -> r.model(m ->
+                      m.copyOf(modelSpecifications.create(modelContext, resolvedType)))));
 
       responseContext.responseBuilder()
-          .representations(representations)
           .description(message(context))
           .code(String.valueOf(httpStatusCode(context)));
       responses.add(documentationPlugins.response(responseContext));

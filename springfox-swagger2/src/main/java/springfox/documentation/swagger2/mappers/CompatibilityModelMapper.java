@@ -18,6 +18,7 @@ public abstract class CompatibilityModelMapper {
   @Value("${springfox.documentation.swagger.v2.use-model-v3:true}")
   private boolean useModelV3;
 
+  @SuppressWarnings("deprecation")
   Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
     if (useModelV3) {
       return Mappers.getMapper(ModelSpecificationMapper.class).modelsFromApiListings(apiListings);

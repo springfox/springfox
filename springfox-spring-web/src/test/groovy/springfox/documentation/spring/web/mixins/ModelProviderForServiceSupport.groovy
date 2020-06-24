@@ -89,8 +89,7 @@ trait ModelProviderForServiceSupport implements ServicePluginsSupport {
             defaultSchemaPlugins())
     new CachingModelProvider(
         new DefaultModelProvider(
-          typeResolver,
-          modelPropertiesProvider,
+            modelPropertiesProvider,
           new CachingModelDependencyProvider(modelDependenciesProvider),
           pluginsManager,
           typeNameExtractor,
@@ -140,7 +139,6 @@ trait ModelProviderForServiceSupport implements ServicePluginsSupport {
             enumTypeDeterminer,
             defaultSchemaPlugins())
     new DefaultModelProvider(
-        typeResolver,
         modelPropertiesProvider,
         modelDependenciesProvider,
         pluginsManager,

@@ -28,6 +28,12 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.*;
 
+/**
+ * Scheduled to be removed in the next release
+ * @deprecated
+ * @since 3.0
+ */
+@Deprecated
 class ParameterMerger {
 
   private final List<Parameter> destination;

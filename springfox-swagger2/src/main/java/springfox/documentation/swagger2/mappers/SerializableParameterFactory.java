@@ -19,8 +19,12 @@
 package springfox.documentation.swagger2.mappers;
 
 import io.swagger.models.parameters.SerializableParameter;
-import springfox.documentation.service.Parameter;
 
+/**
+ * Not required when using {@link RequestParameterMapper} instead
+ * @deprecated @since 3.0.0
+ */
+@Deprecated
 interface SerializableParameterFactory {
-  SerializableParameter create(Parameter parameter);
+  SerializableParameter create(springfox.documentation.service.Parameter parameter);
 }

@@ -23,17 +23,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.OperationBuilder;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.builders.ResponseBuilder;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.Response;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
@@ -41,6 +36,7 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +45,8 @@ import static java.util.Collections.*;
 
 @SuppressWarnings({
     "WhitespaceAround",
-    "ParenPad" })
+    "ParenPad",
+    "deprecation"})
 public class Bug1767ListingScanner implements ApiListingScannerPlugin {
 
   // tag::api-listing-plugin[]
@@ -81,7 +78,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                     .notes("This is a test method")
                                     .parameters(
                                         Collections.singletonList( //<4>
-                                             new ParameterBuilder()
+                                             new springfox.documentation.builders.ParameterBuilder()
                                                  .description(
                                                      "search by "
                                                          + "description")
@@ -91,7 +88,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                                  .parameterType("query")
                                                  .parameterAccess("access")
                                                  .required(true)
-                                                 .modelRef(new ModelRef(
+                                                 .modelRef(new springfox.documentation.schema.ModelRef(
                                                      "string")) //<5>
                                                  .build()))
                                     .requestParameters(
@@ -109,8 +106,8 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                                                                          ScalarType.STRING)
                                                                                      .build()))
                                                  .build()))
-                                    .responseMessages(responseMessages()) //<6>
-                                    .responseModel(new ModelRef("string")) //<7>
+                                    .responses(responseMessages()) //<6>
+                                    .responseModel(new springfox.documentation.schema.ModelRef("string")) //<7>
                                     .responses(responses()) //<6b>
                                     .build()),
                            false),
@@ -129,17 +126,17 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                    .notes("This is a test method")
                                    .parameters(
                                        Collections.singletonList(
-                                           new ParameterBuilder()
+                                           new springfox.documentation.builders.ParameterBuilder()
                                                .description("description of bug 2219")
                                                .type(new TypeResolver().resolve(String.class))
                                                .name("description")
                                                .parameterType("query")
                                                .parameterAccess("access")
                                                .required(true)
-                                               .modelRef(new ModelRef("string"))
+                                               .modelRef(new springfox.documentation.schema.ModelRef("string"))
                                                .build()))
-                                   .responseMessages(responseMessages())
-                                   .responseModel(new ModelRef("string"))
+                                   .responses(responseMessages())
+                                   .responseModel(new springfox.documentation.schema.ModelRef("string"))
                                    .build()),
                            false)));
   }
@@ -148,26 +145,26 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
   /**
    * @return Set of response messages that overide the default/global response messages
    */
-  private Set<ResponseMessage> responseMessages() { //<8>
-    return singleton(new ResponseMessageBuilder()
-                         .code(200)
-                         .message("Successfully received bug 1767 or 2219 response")
-                         .responseModel(new ModelRef("string"))
-                         .build());
+  private Set<Response> responseMessages() { //<8>
+    return singleton(new springfox.documentation.builders.ResponseBuilder()
+        .code("200")
+        .description("Successfully received bug 1767 or 2219 response")
+        .representation(MediaType.TEXT_PLAIN)
+        .apply(r -> r.model(m -> m.scalarModel(ScalarType.STRING)))
+        .build());
   }
 
   /**
    * @return Set of response messages that overide the default/global response messages
    */
-  private Set<Response> responses() { //<8b>
-    return singleton(new ResponseBuilder()
-                         .code("200")
-                         .description("Successfully received bug 1767 or 2219 response")
-                         .representations(singleton(new RepresentationBuilder()
-                                                        .mediaType(MediaType.ALL)
-                                                        .model(m -> m.scalarModel(ScalarType.STRING))
-                                                        .build()))
-                         .build());
+  private Collection<Response> responses() { //<8b>
+    return singletonList(new ResponseBuilder()
+        .code("200")
+        .description("Successfully received bug 1767 or 2219 response")
+        .representation(MediaType.ALL)
+        .apply(r -> r.model(m -> m.scalarModel(ScalarType.STRING))
+            .build())
+        .build());
   }
   // end::api-listing-plugin[]
 

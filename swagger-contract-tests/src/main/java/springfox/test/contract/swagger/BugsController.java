@@ -81,6 +81,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Api(tags = "Bugs")
 @RestController
 @RequestMapping("/bugs")
+@SuppressWarnings("deprecation")
 public class BugsController {
   @RequestMapping(value = "1306", method = POST)
   public ResponseEntity<Map<String, String>> bug1306(@RequestParam Map<String, String> paramMap) {

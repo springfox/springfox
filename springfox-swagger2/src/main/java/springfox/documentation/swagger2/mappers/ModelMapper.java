@@ -33,7 +33,6 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 
@@ -50,8 +49,11 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
-import static springfox.documentation.swagger2.mappers.Properties.*;
-
+/**
+ * Use {@link ModelSpecificationMapper} instead
+ * @deprecated @since 3.0.0
+ */
+@Deprecated
 @Mapper
 public class ModelMapper {
   public Map<String, Model> mapModels(Map<String, springfox.documentation.schema.Model> from) {
@@ -114,7 +116,8 @@ public class ModelMapper {
     if (isMapType(source.getType())) {
       Optional<Class> clazz = typeOfValue(source);
       if (clazz.isPresent()) {
-        model.additionalProperties(property(clazz.get().getSimpleName()));
+        model.additionalProperties(
+            springfox.documentation.swagger2.mappers.Properties.property(clazz.get().getSimpleName()));
       } else {
         model.additionalProperties(new ObjectProperty());
       }
@@ -124,7 +127,8 @@ public class ModelMapper {
 
   private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<>();
-    properties.entrySet().stream().filter(voidProperties().negate())
+    properties.entrySet().stream()
+        .filter(springfox.documentation.swagger2.mappers.Properties.voidProperties().negate())
         .forEachOrdered(each -> mappedProperties.put(each.getKey(), mapProperty(each.getValue())));
     return mappedProperties;
   }
@@ -138,7 +142,8 @@ public class ModelMapper {
    */
   private SortedMap<String, ModelProperty> sort(Map<String, ModelProperty> modelProperties) {
 
-    SortedMap<String, ModelProperty> sortedMap = new TreeMap<>(defaultOrdering(modelProperties));
+    SortedMap<String, ModelProperty> sortedMap
+        = new TreeMap<>(springfox.documentation.swagger2.mappers.Properties.defaultOrdering(modelProperties));
     sortedMap.putAll(modelProperties);
     return sortedMap;
   }
@@ -233,17 +238,18 @@ public class ModelMapper {
     }
   }
 
-  static Property modelRefToProperty(ModelReference modelRef) {
+  static Property modelRefToProperty(springfox.documentation.schema.ModelReference modelRef) {
     if (modelRef == null || "void".equalsIgnoreCase(modelRef.getType())) {
       return null;
     }
     Property responseProperty;
     if (modelRef.isCollection()) {
-      responseProperty = property(modelRef);
+      responseProperty = springfox.documentation.swagger2.mappers.Properties.property(modelRef);
     } else if (modelRef.isMap()) {
-      responseProperty = new MapProperty(property(modelRef.itemModel().get()));
+      responseProperty =
+          new MapProperty(springfox.documentation.swagger2.mappers.Properties.property(modelRef.itemModel().get()));
     } else {
-      responseProperty = property(modelRef.getType());
+      responseProperty = springfox.documentation.swagger2.mappers.Properties.property(modelRef.getType());
     }
 
     maybeAddAllowableValues(responseProperty, modelRef.getAllowableValues());

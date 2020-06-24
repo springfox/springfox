@@ -22,31 +22,18 @@ import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
-import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-
-import java.util.Set;
 
 public class ResponseContext {
-  private final ResolvedType responseType;
   private final DocumentationContext documentationContext;
-  private final GenericTypeNamingStrategy genericNamingStrategy;
   private final OperationContext operationContext;
   private final ResponseBuilder responseBuilder = new ResponseBuilder();
 
   public ResponseContext(
-      ResolvedType responseType,
       DocumentationContext documentationContext,
-      GenericTypeNamingStrategy genericNamingStrategy,
       OperationContext operationContext) {
-    
-    this.responseType = responseType;
-    this.documentationContext = documentationContext;
-    this.genericNamingStrategy = genericNamingStrategy;
-    this.operationContext = operationContext;
-  }
 
-  public ResolvedType responseType() {
-    return responseType;
+    this.documentationContext = documentationContext;
+    this.operationContext = operationContext;
   }
 
   public ResponseBuilder responseBuilder() {
@@ -61,24 +48,16 @@ public class ResponseContext {
     return documentationContext.getDocumentationType();
   }
 
-  public ResolvedType alternateFor(ResolvedType parameterType) {
-    return getAlternateTypeProvider().alternateFor(parameterType);
+  public ResolvedType alternateFor(ResolvedType source) {
+    return getAlternateTypeProvider().alternateFor(source);
   }
 
-  public AlternateTypeProvider getAlternateTypeProvider() {
+  private AlternateTypeProvider getAlternateTypeProvider() {
     return documentationContext.getAlternateTypeProvider();
-  }
-
-  public GenericTypeNamingStrategy getGenericNamingStrategy() {
-    return genericNamingStrategy;
   }
 
   public OperationContext getOperationContext() {
     return operationContext;
-  }
-
-  public Set<Class> getIgnorableTypes() {
-    return documentationContext.getIgnorableParameterTypes();
   }
 
   public String getGroupName() {

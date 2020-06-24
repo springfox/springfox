@@ -220,6 +220,7 @@ public class Docket implements DocumentationPlugin {
    * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
    */
+  //TODO: Fix this builder
   public Docket globalResponses(
       HttpMethod httpMethod,
       List<Response> responses) {
@@ -243,12 +244,12 @@ public class Docket implements DocumentationPlugin {
   /**
    * Adds default parameters which will be applied to all operations.
    *
-   * @param globalOperationRequestParameters parameters which will be globally applied to all operations
+   * @param globalRequestParameters parameters which will be globally applied to all operations
    * @return this Docket
-   * @deprecated
    */
-  public Docket globalOperationRequestParameters(List<RequestParameter> globalOperationRequestParameters) {
-    this.globalRequestParameters.addAll(nullToEmptyList(globalOperationRequestParameters));
+  //TODO: Make this fluent
+  public Docket globalRequestParameters(List<RequestParameter> globalRequestParameters) {
+    this.globalRequestParameters.addAll(nullToEmptyList(globalRequestParameters));
     return this;
   }
 

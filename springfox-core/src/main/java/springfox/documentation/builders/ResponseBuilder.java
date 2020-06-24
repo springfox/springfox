@@ -3,7 +3,6 @@ package springfox.documentation.builders;
 import org.springframework.http.MediaType;
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.Header;
-import springfox.documentation.service.Representation;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.VendorExtension;
 
@@ -12,7 +11,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -21,7 +22,7 @@ public class ResponseBuilder {
   private String description;
   private Boolean isDefault = false;
   private final List<Header> headers = new ArrayList<>();
-  private final Map<MediaType, Representation> representations = new HashMap<>();
+  private final Map<MediaType, RepresentationBuilder> representations = new HashMap<>();
   private final List<VendorExtension> vendorExtensions = new ArrayList<>();
   private final List<Example> examples = new ArrayList<>();
 
@@ -45,10 +46,18 @@ public class ResponseBuilder {
     return this;
   }
 
-  public ResponseBuilder representations(Set<Representation> representations) {
-    nullToEmptySet(representations).forEach(r ->
-        this.representations.put(r.getMediaType(), r));
-    return this;
+  private RepresentationBuilder representationBuilderFor(org.springframework.http.MediaType mediaType) {
+    return this.representations.computeIfAbsent(mediaType,
+        m -> new RepresentationBuilder()
+            .mediaType(m));
+  }
+
+  public Function<Consumer<RepresentationBuilder>, ResponseBuilder> representation(
+      org.springframework.http.MediaType mediaType) {
+    return content -> {
+      content.accept(representationBuilderFor(mediaType));
+      return this;
+    };
   }
 
   public ResponseBuilder vendorExtensions(Collection<VendorExtension> vendorExtensions) {
@@ -65,12 +74,13 @@ public class ResponseBuilder {
     if (source == null) {
       return this;
     }
+    source.getRepresentations().forEach(each ->
+        this.representation(each.getMediaType()).apply(r -> r.copyOf(each)));
     this.code(source.getCode())
         .description(source.getDescription())
         .examples(source.getExamples())
         .headers(source.getHeaders())
         .isDefault(source.isDefault())
-        .representations(source.getRepresentations())
         .vendorExtensions(source.getVendorExtensions());
     return this;
   }
@@ -81,7 +91,10 @@ public class ResponseBuilder {
         description,
         isDefault,
         headers,
-        representations.values(),
+        representations.values()
+            .stream()
+            .map(RepresentationBuilder::build)
+            .collect(Collectors.toSet()),
         examples,
         vendorExtensions);
   }

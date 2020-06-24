@@ -21,6 +21,7 @@ package springfox.documentation.schema;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.EntityModel;
 
+@SuppressWarnings("deprecation")
 public class SimpleTypeEntityModel extends EntityModel<SimpleType> {
   public SimpleTypeEntityModel(SimpleType content, Link... links) {
     super(content, links);

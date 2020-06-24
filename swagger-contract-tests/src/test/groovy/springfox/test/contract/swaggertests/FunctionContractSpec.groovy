@@ -46,7 +46,8 @@ import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
-    classes = SwaggerApplication
+    classes = SwaggerApplication,
+    properties = ["logging.level.springfox.documentation=DEBUG"]
 )
 class FunctionContractSpec extends Specification implements FileAccess {
 

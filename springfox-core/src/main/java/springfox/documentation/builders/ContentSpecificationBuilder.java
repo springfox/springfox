@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 public class ContentSpecificationBuilder {
   private static final org.springframework.http.MediaType DEFAULT_MEDIA_TYPE =
       new org.springframework.http.MediaType("application", "springfox");
-  private Map<org.springframework.http.MediaType, RepresentationBuilder> representations = new HashMap<>();
+  private final Map<org.springframework.http.MediaType, RepresentationBuilder> representations = new HashMap<>();
   private boolean requestBody = false;
 
-  public ContentSpecificationBuilder representations(Collection<Representation> representations) {
+  private ContentSpecificationBuilder representations(Collection<Representation> representations) {
     this.representations.putAll(representations.stream()
         .collect(Collectors.toMap(
             Representation::getMediaType,
@@ -25,7 +25,7 @@ public class ContentSpecificationBuilder {
     return this;
   }
 
-  public RepresentationBuilder representationBuilderFor(org.springframework.http.MediaType mediaType) {
+  private RepresentationBuilder representationBuilderFor(org.springframework.http.MediaType mediaType) {
     return this.representations.computeIfAbsent(mediaType,
         m -> new RepresentationBuilder()
             .mediaType(m));

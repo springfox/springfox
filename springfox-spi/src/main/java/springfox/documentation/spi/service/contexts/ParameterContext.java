@@ -32,6 +32,7 @@ import java.util.Set;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterContext {
+  @SuppressWarnings("deprecation")
   private final ParameterBuilder parameterBuilder;
   private final ResolvedMethodParameter resolvedMethodParameter;
   private final DocumentationContext documentationContext;
@@ -39,13 +40,13 @@ public class ParameterContext {
   private final OperationContext operationContext;
   private final RequestParameterBuilder requestParameterBuilder;
 
+  @SuppressWarnings("deprecation")
   public ParameterContext(
       ResolvedMethodParameter resolvedMethodParameter,
       DocumentationContext documentationContext,
       GenericTypeNamingStrategy genericNamingStrategy,
       OperationContext operationContext,
       int parameterIndex) {
-
     this.parameterBuilder = new ParameterBuilder();
     this.requestParameterBuilder = new RequestParameterBuilder()
         .accepts(nullToEmptyList(operationContext.consumes()))

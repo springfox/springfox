@@ -48,17 +48,19 @@ public class VersionApiReader implements ParameterBuilderPlugin {
     ResolvedMethodParameter methodParameter = parameterContext.resolvedMethodParameter();
     Optional<VersionApi> requestParam = methodParameter.findAnnotation(VersionApi.class);
     if (requestParam.isPresent()) { //<2>
-      parameterContext.parameterBuilder()
-          .parameterType("header")
+      parameterContext.requestParameterBuilder()
+          .in(ParameterType.HEADER)
           .name("v")
-          .type(resolver.resolve(String.class)); //<3>
+          .query(q -> q.model(new ModelSpecificationBuilder()
+              .scalarModel(ScalarType.STRING)
+              .build())); //<3>
       parameterContext.requestParameterBuilder()
           .in(ParameterType.HEADER)
           .name("v")
           .query(q -> q.style(ParameterStyle.SIMPLE)
-                      .model(new ModelSpecificationBuilder()
-                                 .scalarModel(ScalarType.STRING)
-                                 .build()));
+              .model(new ModelSpecificationBuilder()
+                  .scalarModel(ScalarType.STRING)
+                  .build()));
     }
   }
 

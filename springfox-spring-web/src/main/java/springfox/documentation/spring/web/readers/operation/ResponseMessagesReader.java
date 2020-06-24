@@ -31,7 +31,6 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
-import springfox.documentation.service.Representation;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -56,6 +55,7 @@ import static springfox.documentation.schema.Types.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   private final EnumTypeDeterminer enumTypeDeterminer;
@@ -101,7 +101,9 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
-    Set<Representation> representations = new HashSet<>();
+    ResponseContext responseContext = new ResponseContext(
+        context.getDocumentationContext(),
+        context);
     if (!isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
@@ -125,11 +127,9 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
       }
       produces
           .forEach(mediaType ->
-              representations.add(
-                  new Representation(
-                      mediaType,
-                      modelSpecifications.create(modelContext, returnType),
-                      new HashSet<>())));
+              responseContext.responseBuilder()
+                  .representation(mediaType)
+                  .apply(r -> r.model(m -> m.copyOf(modelSpecifications.create(modelContext, returnType)))));
     }
     ResponseMessage built = new ResponseMessageBuilder()
         .code(httpStatusCode)
@@ -137,13 +137,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
         .responseModel(modelRef)
         .build();
 
-    ResponseContext responseContext = new ResponseContext(
-        returnType,
-        context.getDocumentationContext(),
-        context.getGenericsNamingStrategy(),
-        context);
     responseContext.responseBuilder()
-        .representations(representations)
         .description(message)
         .code(String.valueOf(httpStatusCode));
 

@@ -38,7 +38,6 @@ import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelReference;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap;
@@ -52,9 +51,14 @@ import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
+/**
+ * Use {@link ModelSpecificationMapper} instead
+ *
+ * @deprecated @since 3.0.0
+ */
+@Deprecated
 class Properties {
   private static final Map<String, Function<String, ? extends Property>> TYPE_FACTORY
       = unmodifiableMap(Stream.of(
@@ -72,7 +76,7 @@ class Properties {
       new AbstractMap.SimpleEntry<>("object", newInstanceOf(ObjectProperty.class)),
       new AbstractMap.SimpleEntry<>("byte", bytePropertyFactory()),
       new AbstractMap.SimpleEntry<>("__file", filePropertyFactory()))
-                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
+      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
   private Properties() {
     throw new UnsupportedOperationException();
@@ -83,12 +87,12 @@ class Properties {
     return TYPE_FACTORY.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
   }
 
-  public static Property property(ModelReference modelRef) {
+  public static Property property(springfox.documentation.schema.ModelReference modelRef) {
     if (modelRef.isMap()) {
       return new MapProperty(property(modelRef.itemModel().get()));
     } else if (modelRef.isCollection()) {
-      if ("byte".equals(modelRef.itemModel().map((Function<? super ModelReference, String>) (Function<ModelReference,
-          String>) ModelReference::getType).orElse(""))) {
+      if ("byte".equals(modelRef.itemModel()
+          .map(springfox.documentation.schema.ModelReference::getType).orElse(""))) {
         return new ByteArrayProperty();
       }
       return new ArrayProperty(
@@ -97,7 +101,7 @@ class Properties {
     return property(modelRef.getType());
   }
 
-  public static Property itemTypeProperty(ModelReference paramModel) {
+  public static Property itemTypeProperty(springfox.documentation.schema.ModelReference paramModel) {
     if (paramModel.isCollection()) {
       return new ArrayProperty(
           maybeAddAllowableValues(itemTypeProperty(paramModel.itemModel().get()), paramModel.getAllowableValues()));
@@ -167,5 +171,10 @@ class Properties {
 
   private static boolean collectionOfVoid(ResolvedType type) {
     return isContainerType(type) && isVoid(collectionElementType(type));
+  }
+
+  @SuppressWarnings("deprecation")
+  private static boolean isVoid(ResolvedType resolvedType) {
+    return springfox.documentation.schema.Types.isVoid(resolvedType);
   }
 }

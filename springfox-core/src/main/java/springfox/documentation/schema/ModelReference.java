@@ -23,6 +23,12 @@ import springfox.documentation.service.AllowableValues;
 
 import java.util.Optional;
 
+
+/**
+ * Not required when using {@link ModelSpecification} instead
+ * @deprecated @since 3.0.0
+ */
+@Deprecated
 public interface ModelReference {
 
   String getType();

@@ -40,7 +40,6 @@ import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
@@ -48,10 +47,8 @@ import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ModelNamesRegistry;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.Representation;
 import springfox.documentation.service.RequestParameter;
-import springfox.documentation.service.ResponseMessage;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -69,7 +66,6 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.slf4j.LoggerFactory.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
 @Mapper(uses = {
     CompatibilityModelMapper.class,
@@ -117,6 +113,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Contact map(springfox.documentation.service.Contact from);
 
   @BeforeMapping
+  @SuppressWarnings("deprecation")
   void beforeMappingOperations(
       @MappingTarget Operation target,
       springfox.documentation.service.Operation source,
@@ -130,7 +127,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       }
       target.setResponses(mapResponses(source.getResponses(), modelNamesRegistry));
     } else {
-      for (Parameter each : source.getParameters()) {
+      for (springfox.documentation.service.Parameter each : source.getParameters()) {
         parameters.add(Mappers.getMapper(ParameterMapper.class).mapParameter(each));
       }
       target.setResponses(mapResponseMessages(source.getResponseMessages()));
@@ -177,11 +174,17 @@ public abstract class ServiceModelToSwagger2Mapper {
     return security;
   }
 
-  protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
+
+  /**
+   * Not required when using {@link ServiceModelToSwagger2Mapper#mapResponses(Set, ModelNamesRegistry)} instead
+   * @deprecated @since 3.0.0
+   */
+  @Deprecated
+  protected Map<String, Response> mapResponseMessages(Set<springfox.documentation.service.ResponseMessage> from) {
     Map<String, Response> responses = new TreeMap<>();
-    for (ResponseMessage responseMessage : from) {
+    for (springfox.documentation.service.ResponseMessage responseMessage : from) {
       Property responseProperty;
-      ModelReference modelRef = responseMessage.getResponseModel();
+      springfox.documentation.schema.ModelReference modelRef = responseMessage.getResponseModel();
       responseProperty = modelRefToProperty(modelRef);
       Response response = new Response()
           .description(responseMessage.getMessage())
@@ -236,6 +239,11 @@ public abstract class ServiceModelToSwagger2Mapper {
       property.setDescription(entry.getValue().getDescription());
       return new AbstractMap.SimpleEntry<>(entry.getKey(), property);
     };
+  }
+
+  @SuppressWarnings("deprecation")
+  private Property modelRefToProperty(springfox.documentation.schema.ModelReference modelReference) {
+    return springfox.documentation.swagger2.mappers.ModelMapper.modelRefToProperty(modelReference);
   }
 
   protected Map<String, Path> mapApiListings(Map<String, List<ApiListing>> apiListings) {

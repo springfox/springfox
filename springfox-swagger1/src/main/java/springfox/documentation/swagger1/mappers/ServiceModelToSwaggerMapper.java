@@ -23,8 +23,6 @@ import io.swagger.models.Contact;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.swagger1.dto.ApiDescription;
 import springfox.documentation.swagger1.dto.ApiInfo;
@@ -67,7 +65,7 @@ public interface ServiceModelToSwaggerMapper {
   @Mappings({
       @Mapping(target = "subTypes", source = "subTypes", qualifiedBy = DataTypeMapper.ResponseTypeName.class),
   })
-  ModelDto toSwaggerModelDto(Model from);
+  ModelDto toSwaggerModelDto(springfox.documentation.schema.Model from);
 
   @Mappings({
        @Mapping(target = "swaggerVersion", constant = "1.2"),
@@ -78,7 +76,7 @@ public interface ServiceModelToSwaggerMapper {
   @Mappings({
           @Mapping(target = "type", source = "modelRef", qualifiedBy = DataTypeMapper.Type.class)
   })
-  ModelPropertyDto toSwaggerModelPropertyDto(ModelProperty from);
+  ModelPropertyDto toSwaggerModelPropertyDto(springfox.documentation.schema.ModelProperty from);
 
   @Mappings({
       @Mapping(target = "dataType", source = "responseModel", qualifiedBy = DataTypeMapper.OperationType.class),

@@ -29,23 +29,22 @@ import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpResponse;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.Header;
-import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BinaryOperator;
@@ -63,7 +62,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder()
-        .responseMessages(read(context));
+        .responses(read(context));
   }
 
   @Override
@@ -78,8 +77,8 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
    * @param context representing an operation
    * @return response messages.
    */
-  protected Set<ResponseMessage> read(OperationContext context) {
-    Set<ResponseMessage> ret;
+  protected Set<Response> read(OperationContext context) {
+    Set<Response> ret;
     try {
       PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
       Resource[] resources = resourceResolver.getResources(
@@ -96,10 +95,10 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
                   RawHttpResponse::getStatusCode,
                   mappingResponseToResponseMessageBuilder(),
                   mergingExamples()
-                   ),
+              ),
               responseMessagesMap -> responseMessagesMap.values()
                   .stream()
-                  .map(ResponseMessageBuilder::build)
+                  .map(ResponseBuilder::build)
                   .collect(Collectors.toSet())));
     } catch (
         Exception e) {
@@ -124,33 +123,33 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
     };
   }
 
-  private BinaryOperator<ResponseMessageBuilder> mergingExamples() {
+  private BinaryOperator<ResponseBuilder> mergingExamples() {
     return (leftWithSameStatusCode, rightWithSameStatusCode) ->
         leftWithSameStatusCode.examples(rightWithSameStatusCode.build()
             .getExamples());
   }
 
-  private Function<RawHttpResponse<Void>, ResponseMessageBuilder> mappingResponseToResponseMessageBuilder() {
-    return parsedResponse -> new ResponseMessageBuilder()
-        .code(parsedResponse.getStatusCode())
+  private Function<RawHttpResponse<Void>, ResponseBuilder> mappingResponseToResponseMessageBuilder() {
+    return parsedResponse -> new ResponseBuilder()
+        .code(String.valueOf(parsedResponse.getStatusCode()))
         .examples(toExamples(parsedResponse))
-        .headersWithDescription(toHeaders(parsedResponse));
+        .headers(toHeaders(parsedResponse));
   }
 
-  private Map<String, Header> toHeaders(RawHttpResponse<Void> parsedResponse) {
+  @SuppressWarnings("deprecation")
+  private Collection<Header> toHeaders(RawHttpResponse<Void> parsedResponse) {
     return parsedResponse.getHeaders()
         .asMap()
-        .entrySet()
+        .keySet()
         .stream()
-        .collect(toMap(
-            Map.Entry::getKey,
-            o -> new Header(
-                o.getKey(),
-                "",
-                new ModelRef("string"),
-                new ModelSpecificationBuilder()
-                    .scalarModel(ScalarType.STRING)
-                    .build())));
+        .map(strings -> new Header(
+            strings,
+            "",
+            new springfox.documentation.schema.ModelRef("string"),
+            new ModelSpecificationBuilder()
+                .scalarModel(ScalarType.STRING)
+                .build()))
+        .collect(Collectors.toList());
   }
 
   private List<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
@@ -165,7 +164,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
         .map(bodyReader -> {
           String ret = null;
           try {
-            ret = bodyReader.asRawString(Charset.forName("utf-8"));
+            ret = bodyReader.asRawString(StandardCharsets.UTF_8);
           } catch (IOException e) {
             LOG.error("failed to read response body", e);
           }

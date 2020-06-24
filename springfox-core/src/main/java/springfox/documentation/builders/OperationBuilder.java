@@ -25,13 +25,10 @@ import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestBody;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
 
@@ -76,10 +73,13 @@ public class OperationBuilder {
 
   //TODO: to be deprecated
   private boolean isHidden;
-  private ModelReference responseModel;
+  @SuppressWarnings("deprecation")
+  private springfox.documentation.schema.ModelReference responseModel;
   private int position;
-  private final List<Parameter> parameters = new ArrayList<>();
-  private final Set<ResponseMessage> responseMessages = new HashSet<>();
+  @SuppressWarnings("deprecation")
+  private final List<springfox.documentation.service.Parameter> parameters = new ArrayList<>();
+  @SuppressWarnings("deprecation")
+  private final Set<springfox.documentation.service.ResponseMessage> responseMessages = new HashSet<>();
   private final Set<String> produces = new TreeSet<>();
   private final Set<String> consumes = new TreeSet<>();
   private final Set<String> protocol = new TreeSet<>();
@@ -216,9 +216,9 @@ public class OperationBuilder {
    * Use @see {@link OperationBuilder#requestParameters(Collection)}
    */
   @Deprecated
-  public OperationBuilder parameters(List<Parameter> parameters) {
-    List<Parameter> source = nullToEmptyList(parameters);
-    List<Parameter> destination = new ArrayList<>(this.parameters);
+  public OperationBuilder parameters(List<springfox.documentation.service.Parameter> parameters) {
+    List<springfox.documentation.service.Parameter> source = nullToEmptyList(parameters);
+    List<springfox.documentation.service.Parameter> destination = new ArrayList<>(this.parameters);
     ParameterMerger merger = new ParameterMerger(destination, source);
     this.parameters.clear();
     this.parameters.addAll(merger.merged());
@@ -234,8 +234,8 @@ public class OperationBuilder {
    * Use @see {@link OperationBuilder#responses(Collection)}
    */
   @Deprecated
-  public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    Set<ResponseMessage> merged = mergeResponseMessages(responseMessages);
+  public OperationBuilder responseMessages(Set<springfox.documentation.service.ResponseMessage> responseMessages) {
+    Set<springfox.documentation.service.ResponseMessage> merged = mergeResponseMessages(responseMessages);
     this.responseMessages.clear();
     this.responseMessages.addAll(merged);
     return this;
@@ -248,6 +248,7 @@ public class OperationBuilder {
    * @return this
    * @since 3.0.0
    */
+  //TODO: needs to change
   public OperationBuilder responses(Collection<Response> responses) {
     responses.forEach(r -> this.responses.add(r.getCode(), r));
     return this;
@@ -289,7 +290,7 @@ public class OperationBuilder {
    * Use @see {@link OperationBuilder#responses(Collection)}
    */
   @Deprecated
-  public OperationBuilder responseModel(ModelReference responseType) {
+  public OperationBuilder responseModel(springfox.documentation.schema.ModelReference responseType) {
     this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
   }
@@ -413,14 +414,16 @@ public class OperationBuilder {
         .orElse(defaultStem);
   }
 
-  private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
+  @Deprecated
+  private Set<springfox.documentation.service.ResponseMessage> mergeResponseMessages(
+      Set<springfox.documentation.service.ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
-    Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream()
-        .collect(toMap(ResponseMessage::getCode, identity()));
-    Set<ResponseMessage> merged = new HashSet<>(this.responseMessages);
-    for (ResponseMessage each : responseMessages) {
+    Map<Integer, springfox.documentation.service.ResponseMessage> responsesByCode = this.responseMessages.stream()
+        .collect(toMap(springfox.documentation.service.ResponseMessage::getCode, identity()));
+    Set<springfox.documentation.service.ResponseMessage> merged = new HashSet<>(this.responseMessages);
+    for (springfox.documentation.service.ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
-        ResponseMessage responseMessage = responsesByCode.get(each.getCode());
+        springfox.documentation.service.ResponseMessage responseMessage = responsesByCode.get(each.getCode());
         String message = defaultIfAbsent(ofNullable(each.getMessage())
             .filter(((Predicate<String>) String::isEmpty).negate())
             .orElse(null), responseMessage.getMessage());
@@ -430,7 +433,7 @@ public class OperationBuilder {
             ofNullable(each.getExamples()).orElse(emptyList())
                 .stream())
             .collect(toList());
-        ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(),
+        springfox.documentation.schema.ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(),
             responseMessage.getResponseModel());
         merged.remove(responseMessage);
         merged.add(new ResponseMessageBuilder()

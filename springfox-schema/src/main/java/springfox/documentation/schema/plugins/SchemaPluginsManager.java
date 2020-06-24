@@ -65,6 +65,12 @@ public class SchemaPluginsManager {
     this.syntheticModelProviders = syntheticModelProviders;
   }
 
+  /**
+   * Use {@link SchemaPluginsManager#propertySpecification(ModelPropertyContext)} instead
+   * @deprecated @since 3.0.0
+   * @param context - property context
+   * @return the model property
+   */
   public ModelProperty property(ModelPropertyContext context) {
     for (ModelPropertyBuilderPlugin enricher : propertyEnrichers.getPluginsFor(context.getDocumentationType())) {
       enricher.apply(context);
@@ -72,6 +78,13 @@ public class SchemaPluginsManager {
     return context.getBuilder().build();
   }
 
+  /**
+   * Use {@link SchemaPluginsManager#modelSpecification(ModelContext)} instead
+   * @deprecated @since 3.0.0
+   * @param context - model context
+   * @return the model
+   */
+  @Deprecated
   public Model model(ModelContext context) {
     for (ModelBuilderPlugin enricher : modelEnrichers.getPluginsFor(context.getDocumentationType())) {
       enricher.apply(context);
@@ -84,6 +97,13 @@ public class SchemaPluginsManager {
         .orElseThrow(() -> new IllegalStateException("No ViewProviderPlugin for " + documentationType.getName()));
   }
 
+  /**
+   * Use {@link SchemaPluginsManager#syntheticModelSpecification(ModelContext)} instead
+   * @deprecated @since 3.0.0
+   * @param context - model context
+   * @return the model
+   */
+  @Deprecated
   public Optional<Model> syntheticModel(ModelContext context) {
       return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.create(context));
   }
@@ -100,6 +120,13 @@ public class SchemaPluginsManager {
                                   .map(p -> p.createModelSpecification(context));
   }
 
+  /**
+   * Use {@link SchemaPluginsManager#syntheticPropertySpecifications(ModelContext)} instead
+   * @deprecated @since 3.0.0
+   * @param context - model context
+   * @return the model
+   */
+  @Deprecated
   public List<ModelProperty> syntheticProperties(ModelContext context) {
       return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.properties(context))
           .orElseGet(ArrayList::new);
