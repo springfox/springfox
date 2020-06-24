@@ -105,8 +105,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
               .defaultValue(paramValue)
               .enumerationFacet(e -> e.allowedValues(finalAllowableValues))
               .model(m -> m.name(expression.getName())
-                  .scalarModel(ScalarType.STRING)
-                  .build()))
+                  .scalarModel(ScalarType.STRING)))
           .in(parameterType)
           .precedence(DEFAULT_PRECEDENCE)
           .build();

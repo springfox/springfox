@@ -33,6 +33,7 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -91,15 +92,16 @@ public abstract class SchemaMapper {
   private Schema model(
       ModelSpecification source,
       @Context ModelNamesRegistry namesRegistry) {
+    Optional<ModelFacets> facets = source.getFacets();
     Schema model = mapFrom(source, namesRegistry)
-        .description(source.getFacets().getDescription())
+        .description(facets.map(ModelFacets::getDescription).orElse(null))
 //        .discriminator(source.getCompound()
 //                             .map(CompoundModelSpecification::getDiscriminator)
 //                             .orElse(null)) //TODO: Some work here
-        .example(source.getFacets().getExamples().stream()
+        .example(facets.map(ModelFacets::getExamples).orElse(EMPTY_LIST).stream()
             .findFirst().orElse(null))
         .name(source.getName())
-        .xml(mapXml(source.getFacets().getXml()));
+        .xml(facets.map(ModelFacets::getXml).map(this::mapXml).orElse(null));
 
     source.getCompound()
         .ifPresent(c -> {
@@ -118,7 +120,7 @@ public abstract class SchemaMapper {
               .collect(toList());
           model.setRequired(requiredFields);
           model.setType("object");
-          model.setTitle(source.getFacets().getTitle());
+          model.setTitle(facets.map(ModelFacets::getTitle).orElse(null));
         });
 
 
@@ -126,15 +128,15 @@ public abstract class SchemaMapper {
         .ifPresent(s -> {
           model.setType(s.getType().getType());
           model.setFormat(s.getType().getFormat());
-          source.getFacets().elementFacet(EnumerationFacet.class)
+          facets.flatMap(mf -> mf.elementFacet(EnumerationFacet.class))
               .ifPresent(ef -> model.setEnum(ef.getAllowedValues()));
-          source.getFacets().elementFacet(StringElementFacet.class)
+          facets.flatMap(mf -> mf.elementFacet(StringElementFacet.class))
               .ifPresent(sf -> {
                 model.setPattern(sf.getPattern());
                 model.setMinLength(sf.getMinLength());
                 model.setMaxLength(sf.getMaxLength());
               });
-          source.getFacets().elementFacet(NumericElementFacet.class)
+          facets.flatMap(mf -> mf.elementFacet(NumericElementFacet.class))
               .ifPresent(nf -> {
                 model.maximum(nf.getMaximum());
                 model.minimum(nf.getMinimum());
@@ -157,8 +159,8 @@ public abstract class SchemaMapper {
         .ifPresent(c -> {
           ModelSpecification itemSpec = c.getModel();
           ArraySchema arrayModel = new ArraySchema();
-          arrayModel.description(source.getFacets().getDescription());
-          arrayModel.setExample(source.getFacets().getExamples().stream()
+          arrayModel.description(facets.map(ModelFacets::getDescription).orElse(null));
+          arrayModel.setExample(facets.map(ModelFacets::getExamples).orElse(EMPTY_LIST).stream()
               .findFirst()
               .orElse(null));
           if (itemSpec.getScalar().isPresent()) {
@@ -178,7 +180,7 @@ public abstract class SchemaMapper {
                 new ReferenceModelSpecificationToSchemaConverter(namesRegistry)
                     .convert(itemSpec.getReference().get()));
           }
-          source.getFacets().elementFacet(CollectionElementFacet.class)
+          facets.flatMap(mf -> mf.elementFacet(CollectionElementFacet.class))
               .ifPresent(cf -> {
                 arrayModel.setMaxItems(cf.getMaxItems());
                 arrayModel.setMinItems(cf.getMinItems());
@@ -213,6 +215,7 @@ public abstract class SchemaMapper {
     return model;
   }
 
+  @SuppressWarnings("unchecked")
   private Schema mapComposedModel(
       Schema parent,
       ModelSpecification source,
@@ -221,8 +224,9 @@ public abstract class SchemaMapper {
         .addAllOfItem(parent)
         .addAllOfItem(model(source, namesRegistry));
 
-    model.setDescription(source.getFacets().getDescription());
-    model.setExample(source.getFacets().getExamples().stream().findFirst().orElse(null));
+    model.setDescription(source.getFacets().map(ModelFacets::getDescription).orElse(null));
+    model.setExample(source.getFacets().map(ModelFacets::getExamples).orElse(EMPTY_LIST)
+        .stream().findFirst().orElse(null));
     model.setTitle(source.getName());
 
     Map<String, PropertySpecification> properties = source.getCompound()
@@ -252,7 +256,7 @@ public abstract class SchemaMapper {
       ModelNamesRegistry modelNamesRegistry) {
     Schema property = model(source.getType(), modelNamesRegistry);
 
-    ModelFacets facets = source.getType().getFacets();
+    ModelFacets facets = source.getType().getFacets().orElse(null);
     maybeAddFacets(property, facets);
     maybeAddFacets(property, source);
 
@@ -261,7 +265,7 @@ public abstract class SchemaMapper {
       maybeAddFacets(
           arrayProperty.getItems(),
           source.getType().getCollection()
-              .map(c -> c.getModel().getFacets())
+              .flatMap(c -> c.getModel().getFacets())
               .orElse(null));
     }
 
@@ -270,7 +274,7 @@ public abstract class SchemaMapper {
       maybeAddFacets(
           (Schema) mapProperty.getAdditionalProperties(),
           source.getType().getMap()
-              .map(c -> c.getValue().getFacets())
+              .flatMap(c -> c.getValue().getFacets())
               .orElse(null));
     }
 

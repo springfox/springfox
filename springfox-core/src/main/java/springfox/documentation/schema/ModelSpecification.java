@@ -1,8 +1,13 @@
 package springfox.documentation.schema;
 
+import springfox.documentation.service.VendorExtension;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.StringJoiner;
+
+import static java.util.Collections.*;
 
 public class ModelSpecification {
   private final ScalarModelSpecification scalar;
@@ -56,8 +61,18 @@ public class ModelSpecification {
     return Optional.ofNullable(reference);
   }
 
-  public ModelFacets getFacets() {
-    return facets;
+  public Optional<ModelFacets> getFacets() {
+    return Optional.ofNullable(facets);
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Example> getFacetExamples() {
+    return getFacets().map(ModelFacets::getExamples).orElse(EMPTY_LIST);
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<VendorExtension> getFacetExtensions() {
+    return getFacets().map(ModelFacets::getExtensions).orElse(EMPTY_LIST);
   }
 
   public String getName() {

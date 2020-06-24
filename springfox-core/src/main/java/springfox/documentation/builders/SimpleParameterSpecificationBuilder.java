@@ -130,8 +130,7 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder copyOf(SimpleParameterSpecification simple) {
-    for (ElementFacet each :
-        simple.getFacets()) {
+    for (ElementFacet each : simple.getFacets()) {
       this.facetBuilder(each.facetBuilder())
           .copyOf(each);
     }

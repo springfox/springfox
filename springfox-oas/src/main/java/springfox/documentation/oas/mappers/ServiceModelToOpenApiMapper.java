@@ -276,9 +276,9 @@ public abstract class ServiceModelToOpenApiMapper {
   @Mappings({
       @Mapping(target = "schema", source = "model", qualifiedByName = "ModelsMapping"),
       @Mapping(target = "encoding", source = "encodings"),
-      @Mapping(target = "examples", source = "model.facets.examples"),
+      @Mapping(target = "examples", source = "model.facetExamples"),
       @Mapping(target = "example", ignore = true),
-      @Mapping(target = "extensions", source = "model.facets.extensions"),
+      @Mapping(target = "extensions", source = "model.facetExtensions")
   })
   protected abstract MediaType fromRepresentation(
       Representation each,

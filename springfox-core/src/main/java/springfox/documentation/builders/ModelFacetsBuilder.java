@@ -107,12 +107,16 @@ public class ModelFacetsBuilder {
     return this;
   }
 
+
   public ModelFacets build() {
     List<ElementFacet> facets = facetBuilders.values().stream()
         .filter(Objects::nonNull)
         .map(ElementFacetBuilder::build)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
+    if (isBuilderUntouched(facets)) {
+      return null;
+    }
     return new ModelFacets(
         modelKey,
         title,
@@ -126,7 +130,23 @@ public class ModelFacetsBuilder {
         extensions);
   }
 
+  private boolean isBuilderUntouched(List<ElementFacet> facets) {
+    return modelKey == null
+        && title == null
+        && facets.isEmpty()
+        && nullable == null
+        && description == null
+        && deprecated == null
+        && xml == null
+        && externalDocumentation == null
+        && extensions.isEmpty()
+        && examples.isEmpty();
+  }
+
   public ModelFacetsBuilder copyOf(ModelFacets other) {
+    if (other == null) {
+      return this;
+    }
     for (ElementFacet each : other.getFacets()) {
       this.facetBuilder(each.facetBuilder())
           .copyOf(each);

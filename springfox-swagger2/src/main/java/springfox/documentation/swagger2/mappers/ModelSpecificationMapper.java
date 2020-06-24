@@ -13,6 +13,7 @@ import org.mapstruct.Mapper;
 import springfox.documentation.schema.CollectionElementFacet;
 import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.EnumerationFacet;
+import springfox.documentation.schema.ModelFacets;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.NumericElementFacet;
 import springfox.documentation.schema.PropertySpecification;
@@ -65,20 +66,20 @@ public abstract class ModelSpecificationMapper {
         .orElse(model(source, namesRegistry));
   }
 
-  @SuppressWarnings({ "CyclomaticComplexity", "NPathComplexity", "JavaNCSS" })
+  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity", "JavaNCSS", "unchecked"})
   private Model model(
       ModelSpecification source,
       @Context ModelNamesRegistry namesRegistry) {
     Model toReturn;
     ModelImpl model = new ModelImpl()
-        .description(source.getFacets().getDescription())
+        .description(source.getFacets().map(ModelFacets::getDescription).orElse(null))
         .discriminator(source.getCompound()
             .map(CompoundModelSpecification::getDiscriminator)
             .orElse(null))
-        .example(source.getFacets().getExamples().stream()
+        .example(source.getFacets().map(ModelFacets::getExamples).orElse(EMPTY_LIST).stream()
             .findFirst().orElse(null))
         .name(source.getName())
-        .xml(mapXml(source.getFacets().getXml()));
+        .xml(mapXml(source.getFacets().map(ModelFacets::getXml).orElse(null)));
 
     toReturn = source.getCompound()
         .map(c -> {
@@ -95,7 +96,7 @@ public abstract class ModelSpecificationMapper {
           model.setRequired(requiredFields);
           model.setSimple(false);
           model.setType(ModelImpl.OBJECT);
-          model.setTitle(source.getFacets().getTitle());
+          model.setTitle(source.getFacets().map(ModelFacets::getTitle).orElse(null));
           return model;
         })
         .orElse(null);
@@ -107,15 +108,15 @@ public abstract class ModelSpecificationMapper {
         .map(s -> {
           model.setType(s.getType().getType());
           model.setFormat(s.getType().getFormat());
-          source.getFacets().elementFacet(EnumerationFacet.class)
+          source.getFacets().flatMap(f -> f.elementFacet(EnumerationFacet.class))
               .ifPresent(ef -> model._enum(ef.getAllowedValues()));
-          source.getFacets().elementFacet(StringElementFacet.class)
+          source.getFacets().flatMap(f -> f.elementFacet(StringElementFacet.class))
               .ifPresent(sf -> {
                 model.setPattern(sf.getPattern());
                 model.setMinLength(sf.getMinLength());
                 model.setMaxLength(sf.getMaxLength());
               });
-          source.getFacets().elementFacet(NumericElementFacet.class)
+          source.getFacets().flatMap(f -> f.elementFacet(NumericElementFacet.class))
               .ifPresent(nf -> {
                 model.maximum(nf.getMaximum());
                 model.minimum(nf.getMinimum());
@@ -147,8 +148,8 @@ public abstract class ModelSpecificationMapper {
         .map(c -> {
           ModelSpecification itemSpec = c.getModel();
           ArrayModel arrayModel = new ArrayModel()
-              .description(source.getFacets().getDescription());
-          arrayModel.setExample(source.getFacets().getExamples().stream()
+              .description(source.getFacets().map(ModelFacets::getDescription).orElse(null));
+          arrayModel.setExample(source.getFacets().map(ModelFacets::getExamples).orElse(EMPTY_LIST).stream()
               .findFirst()
               .orElse(null));
           if (itemSpec.getScalar().isPresent()) {
@@ -168,7 +169,7 @@ public abstract class ModelSpecificationMapper {
                 new ReferenceModelSpecificationToPropertyConverter(namesRegistry)
                     .convert(itemSpec.getReference().get()));
           }
-          source.getFacets().elementFacet(CollectionElementFacet.class)
+          source.getFacets().flatMap(f -> f.elementFacet(CollectionElementFacet.class))
               .ifPresent(cf -> {
                 arrayModel.setMaxItems(cf.getMaxItems());
                 arrayModel.setMinItems(cf.getMinItems());
@@ -208,6 +209,7 @@ public abstract class ModelSpecificationMapper {
         .orElse(null);
   }
 
+  @SuppressWarnings("unchecked")
   private Model mapComposedModel(
       RefModel parent,
       ModelSpecification source,
@@ -216,8 +218,9 @@ public abstract class ModelSpecificationMapper {
         .interfaces(singletonList(parent))
         .child(model(source, namesRegistry));
 
-    model.setDescription(source.getFacets().getDescription());
-    model.setExample(source.getFacets().getExamples().stream().findFirst().orElse(null));
+    model.setDescription(source.getFacets().map(ModelFacets::getDescription).orElse(null));
+    model.setExample(source.getFacets().map(ModelFacets::getExamples).orElse(EMPTY_LIST)
+        .stream().findFirst().orElse(null));
     model.setTitle(source.getName());
 
     Map<String, PropertySpecification> properties = source.getCompound()

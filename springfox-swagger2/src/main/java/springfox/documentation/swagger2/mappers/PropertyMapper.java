@@ -57,7 +57,7 @@ public class PropertyMapper {
 
     if (property != null) {
       property.setName(modelSpecification.getName());
-      maybeAddFacets(property, modelSpecification.getFacets());
+      maybeAddFacets(property, modelSpecification.getFacets().orElse(null));
     }
     
     return property;
@@ -68,7 +68,7 @@ public class PropertyMapper {
       @Context ModelNamesRegistry modelNamesRegistry) {
     Property property = fromModel(source.getType(), modelNamesRegistry);
 
-    ModelFacets facets = source.getType().getFacets();
+    ModelFacets facets = source.getType().getFacets().orElse(null);
     maybeAddFacets(property, facets);
     maybeAddFacets(property, source);
 
@@ -77,7 +77,7 @@ public class PropertyMapper {
       maybeAddFacets(
           arrayProperty.getItems(),
           source.getType().getCollection()
-              .map(c -> c.getModel().getFacets())
+              .flatMap(c -> c.getModel().getFacets())
               .orElse(null));
     }
 
@@ -86,7 +86,7 @@ public class PropertyMapper {
       maybeAddFacets(
           mapProperty.getAdditionalProperties(),
           source.getType().getMap()
-              .map(c -> c.getValue().getFacets())
+              .flatMap(c -> c.getValue().getFacets())
               .orElse(null));
     }
 

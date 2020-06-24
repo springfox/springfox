@@ -109,9 +109,9 @@ public class RequestParameterMapper {
                   Property itemProperty
                       = maybeAddFacets(
                       property,
-                      model.getFacets());
+                      model.getFacets().orElse(null));
                   ((AbstractSerializableParameter) finalParameter).setItems(itemProperty);
-                  maybeAddFacets(itemProperty, model.getFacets());
+                  maybeAddFacets(itemProperty, model.getFacets().orElse(null));
                 });
 
           }
@@ -167,7 +167,7 @@ public class RequestParameterMapper {
     Optional<Representation> urlEncoded = content.get().getRepresentations().stream()
         .filter(r -> r.getMediaType() == MediaType.APPLICATION_FORM_URLENCODED)
         .findFirst();
-    urlEncoded.flatMap(m -> m.getModel().getFacets().elementFacet(StringElementFacet.class))
+    urlEncoded.flatMap(m -> m.getModel().getFacets().flatMap(mf -> mf.elementFacet(StringElementFacet.class)))
         .ifPresent(sf -> parameter.setPattern(sf.getPattern()));
     parameter.setRequired(source.getRequired());
     parameter.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getExtensions()));

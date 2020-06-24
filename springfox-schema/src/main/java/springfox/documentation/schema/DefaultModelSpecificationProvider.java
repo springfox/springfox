@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.ModelFacetsBuilder;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
@@ -111,9 +110,9 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         = properties(
         modelContext,
         propertiesHost).stream()
-                       .collect(Collectors.toMap(
-                           PropertySpecification::getName,
-                           identity()));
+        .collect(Collectors.toMap(
+            PropertySpecification::getName,
+            identity()));
     LOG.debug(
         "Inferred {} properties. Properties found {}",
         propertiesIndex.size(),
@@ -134,18 +133,18 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         modelContext,
         propertiesHost));
     modelContext.getModelSpecificationBuilder()
-                .name(typeName)
-                .compoundModel(cm -> cm.modelKey(new ModelKeyBuilder()
-                                                     .qualifiedModelName(new QualifiedModelName(
-                                                         safeGetPackageName(propertiesHost),
-                                                         typeName))
-                                                     .viewDiscriminator(modelContext.getView().orElse(null))
-                                                     .validationGroupDiscriminators(modelContext.getValidationGroups())
-                                                     .isResponse(modelContext.isReturnType())
-                                                     .build())
-                                       .properties(properties.values())
-                                       .maxProperties(properties.size())
-                                       .minProperties(properties.size()));
+        .name(typeName)
+        .compoundModel(cm -> cm.modelKey(new ModelKeyBuilder()
+            .qualifiedModelName(new QualifiedModelName(
+                safeGetPackageName(propertiesHost),
+                typeName))
+            .viewDiscriminator(modelContext.getView().orElse(null))
+            .validationGroupDiscriminators(modelContext.getValidationGroups())
+            .isResponse(modelContext.isReturnType())
+            .build())
+            .properties(properties.values())
+            .maxProperties(properties.size())
+            .minProperties(properties.size()));
     return schemaPluginsManager.modelSpecification(modelContext);
   }
 
@@ -182,30 +181,27 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
 
       return of(
           mapContext.getModelSpecificationBuilder()
-                    .mapModel(
-                        new MapSpecification(
-                            modelSpecifications.create(
-                                keyContext,
-                                keyType),
-                            modelSpecifications.create(
-                                valueContext,
-                                valueType)))
-                    .facets(f -> f.copyOf(
-                        new ModelFacetsBuilder()
-                            .modelKey(new ModelKeyBuilder()
-                                              .qualifiedModelName(new QualifiedModelName(
-                                                  safeGetPackageName(resolvedType),
-                                                  typeName))
-                                              .viewDiscriminator(mapContext.getView().orElse(null))
-                                              .validationGroupDiscriminators(mapContext.getValidationGroups())
-                                              .isResponse(mapContext.isReturnType())
-                                              .build())
-                            .title(typeName)
-                            .description("Key of type " + typeName)
-                            .nullable(false)
-                            .deprecated(false)
-                            .build()))
-                    .build());
+              .mapModel(
+                  new MapSpecification(
+                      modelSpecifications.create(
+                          keyContext,
+                          keyType),
+                      modelSpecifications.create(
+                          valueContext,
+                          valueType)))
+              .facets(f -> f.modelKey(new ModelKeyBuilder()
+                  .qualifiedModelName(new QualifiedModelName(
+                      safeGetPackageName(resolvedType),
+                      typeName))
+                  .viewDiscriminator(mapContext.getView().orElse(null))
+                  .validationGroupDiscriminators(mapContext.getValidationGroups())
+                  .isResponse(mapContext.isReturnType())
+                  .build())
+                  .title(typeName)
+                  .description("Key of type " + typeName)
+                  .nullable(false)
+                  .deprecated(false))
+              .build());
     }
     return empty();
   }
@@ -215,9 +211,9 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       ResolvedType propertiesHost) {
     String typeName = typeNameExtractor.typeName(context);
     context.getEffectiveModelKeyBuilder()
-           .qualifiedModelName(new QualifiedModelName(
-               safeGetPackageName(propertiesHost),
-               typeName));
+        .qualifiedModelName(new QualifiedModelName(
+            safeGetPackageName(propertiesHost),
+            typeName));
     return propertiesProvider.propertySpecificationsFor(
         propertiesHost,
         context);

@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import static springfox.documentation.builders.NoopValidator.*;
 
 public class ModelSpecificationBuilder {
-  private final ModelFacetsBuilder facetsBuilder = new ModelFacetsBuilder();
+  private ModelFacetsBuilder facetsBuilder;
   private String name;
   private ScalarModelSpecification scalar;
   private CollectionSpecification collection;
@@ -33,6 +33,9 @@ public class ModelSpecificationBuilder {
   }
 
   public ModelSpecificationBuilder facets(@NonNull Consumer<ModelFacetsBuilder> facets) {
+    if (facetsBuilder == null) {
+      facetsBuilder = new ModelFacetsBuilder();
+    }
     facets.accept(facetsBuilder);
     return this;
   }
@@ -87,7 +90,7 @@ public class ModelSpecificationBuilder {
     }
     return new ModelSpecification(
         name,
-        facetsBuilder.build(),
+        facetsBuilder != null ? facetsBuilder.build() : null,
         scalar,
         compoundModel,
         collection,
@@ -115,7 +118,7 @@ public class ModelSpecificationBuilder {
           .compoundModel(cm -> cm.copyOf(compound))
           .collectionModel(collection)
           .mapModel(map)
-          .facets(f -> f.copyOf(other.getFacets()));
+          .facets(f -> f.copyOf(other.getFacets().orElse(null)));
     }
     return this;
   }
