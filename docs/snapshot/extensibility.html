@@ -683,10 +683,6 @@ order specified in the bean. In general spring plugins get the highest priority,
 29
 30
 31
-32
-33
-34
-35
 </pre></td>
   <td class="code"><pre><span class="annotation">@Component</span>
 <span class="annotation">@Order</span>(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + <span class="integer">1000</span>) <i class="conum" data-value="1"></i><b>(1)</b>
@@ -705,16 +701,12 @@ order specified in the bean. In general spring plugins get the highest priority,
       parameterContext.requestParameterBuilder()
           .in(ParameterType.HEADER)
           .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">v</span><span class="delimiter">&quot;</span></span>)
-          .query(q -&gt; q.model(<span class="keyword">new</span> ModelSpecificationBuilder()
-              .scalarModel(ScalarType.STRING)
-              .build())); <i class="conum" data-value="3"></i><b>(3)</b>
+          .query(q -&gt; q.model(m -&gt; m.scalarModel(ScalarType.STRING))); <i class="conum" data-value="3"></i><b>(3)</b>
       parameterContext.requestParameterBuilder()
           .in(ParameterType.HEADER)
           .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">v</span><span class="delimiter">&quot;</span></span>)
           .query(q -&gt; q.style(ParameterStyle.SIMPLE)
-              .model(<span class="keyword">new</span> ModelSpecificationBuilder()
-                  .scalarModel(ScalarType.STRING)
-                  .build()));
+              .model(m -&gt; m.scalarModel(ScalarType.STRING)));
     }
   }
 
@@ -871,10 +863,6 @@ is applied to the parameter.</td>
 110
 111
 112
-113
-114
-115
-116
 </pre></td>
   <td class="code"><pre>  <span class="directive">private</span> <span class="directive">final</span> CachingOperationNameGenerator operationNames;
 
@@ -926,11 +914,7 @@ is applied to the parameter.</td>
                                                  .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
                                                  .required(<span class="predefined-constant">true</span>)
                                                  .in(ParameterType.QUERY)
-                                                 .query(q -&gt; q.model(
-                                                     <span class="keyword">new</span> ModelSpecificationBuilder() <span class="comment">//&lt;5b&gt;</span>
-                                                                                     .scalarModel(
-                                                                                         ScalarType.STRING)
-                                                                                     .build()))
+                                                 .query(q -&gt; q.model(m -&gt; m.scalarModel(ScalarType.STRING))) <span class="comment">//&lt;5b&gt;</span>
                                                  .build()))
                                     .responses(responseMessages()) <i class="conum" data-value="6"></i><b>(6)</b>
                                     .responseModel(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="7"></i><b>(7)</b>
@@ -1204,7 +1188,6 @@ instead of <code>Pageable</code>.</p>
 18
 19
 20
-21
 </pre></td>
   <td class="code"><pre><span class="directive">private</span> <span class="predefined-type">Type</span> pageableMixin(RepositoryRestConfiguration restConfiguration) {
   <span class="keyword">return</span> <span class="keyword">new</span> AlternateTypeBuilder()
@@ -1212,20 +1195,19 @@ instead of <code>Pageable</code>.</p>
           <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s.generated.%s</span><span class="delimiter">&quot;</span></span>,
               <span class="predefined-type">Pageable</span>.class.getPackage().getName(),
               <span class="predefined-type">Pageable</span>.class.getSimpleName()))
-      .properties(Stream.of(
-          property(<span class="predefined-type">Integer</span>.class, restConfiguration.getPageParamName()),
-          property(<span class="predefined-type">Integer</span>.class, restConfiguration.getLimitParamName()),
-          property(<span class="predefined-type">String</span>.class, restConfiguration.getSortParamName())
-      ).collect(toList()))
+      .property(p -&gt; p.name(restConfiguration.getPageParamName())
+          .type(<span class="predefined-type">Integer</span>.class)
+          .canRead(<span class="predefined-constant">true</span>)
+          .canWrite(<span class="predefined-constant">true</span>))
+      .property(p -&gt; p.name(restConfiguration.getLimitParamName())
+          .type(<span class="predefined-type">Integer</span>.class)
+          .canRead(<span class="predefined-constant">true</span>)
+          .canWrite(<span class="predefined-constant">true</span>))
+      .property(p -&gt; p.name(restConfiguration.getSortParamName())
+          .type(<span class="predefined-type">String</span>.class)
+          .canRead(<span class="predefined-constant">true</span>)
+          .canWrite(<span class="predefined-constant">true</span>))
       .build();
-}
-
-<span class="directive">private</span> AlternateTypePropertyBuilder property(<span class="predefined-type">Class</span>&lt;?&gt; type, <span class="predefined-type">String</span> name) {
-  <span class="keyword">return</span> <span class="keyword">new</span> AlternateTypePropertyBuilder()
-      .name(name)
-      .type(type)
-      .canRead(<span class="predefined-constant">true</span>)
-      .canWrite(<span class="predefined-constant">true</span>);
 }</pre></td>
 </tr></table></code></pre>
 </div>
@@ -1354,7 +1336,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-06-24 04:29:41 UTC
+Last updated 2020-06-24 15:41:54 UTC
 </div>
 </div>
 <style>

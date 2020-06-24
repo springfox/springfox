@@ -234,13 +234,13 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="springfox/documentation/spi/schema/contexts/ModelContext.html#getBuilder--">springfox.documentation.spi.schema.contexts.ModelContext.getBuilder()</a>
-<div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
+<td class="colOne"><a href="springfox/documentation/spi/schema/contexts/ModelPropertyContext.html#getBuilder--">springfox.documentation.spi.schema.contexts.ModelPropertyContext.getBuilder()</a>
+<div class="block"><span class="deprecationComment">Use <a href="springfox/documentation/spi/schema/contexts/ModelPropertyContext.html#getSpecificationBuilder--"><code>ModelPropertyContext.getSpecificationBuilder()</code></a> instead</span></div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="springfox/documentation/spi/schema/contexts/ModelPropertyContext.html#getBuilder--">springfox.documentation.spi.schema.contexts.ModelPropertyContext.getBuilder()</a>
-<div class="block"><span class="deprecationComment">Use <a href="springfox/documentation/spi/schema/contexts/ModelPropertyContext.html#getSpecificationBuilder--"><code>ModelPropertyContext.getSpecificationBuilder()</code></a> instead</span></div>
+<td class="colOne"><a href="springfox/documentation/spi/schema/contexts/ModelContext.html#getBuilder--">springfox.documentation.spi.schema.contexts.ModelContext.getBuilder()</a>
+<div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -341,8 +341,19 @@
 <td class="colOne"><a href="springfox/documentation/schema/property/ModelPropertiesProvider.html#propertiesFor-com.fasterxml.classmate.ResolvedType-springfox.documentation.spi.schema.contexts.ModelContext-">springfox.documentation.schema.property.ModelPropertiesProvider.propertiesFor(ResolvedType, ModelContext)</a></td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="springfox/documentation/builders/AlternateTypeBuilder.html#property-springfox.documentation.builders.AlternateTypePropertyBuilder-">springfox.documentation.builders.AlternateTypeBuilder.property(AlternateTypePropertyBuilder)</a>
+<div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="springfox/documentation/schema/plugins/SchemaPluginsManager.html#property-springfox.documentation.spi.schema.contexts.ModelPropertyContext-">springfox.documentation.schema.plugins.SchemaPluginsManager.property(ModelPropertyContext)</a>
 <div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="springfox/documentation/builders/DocumentationBuilder.html#resourceListing-springfox.documentation.service.ResourceListing-">springfox.documentation.builders.DocumentationBuilder.resourceListing(ResourceListing)</a>
+<div class="block"><span class="deprecationComment">@since 3.0.0
+ Prefer fluent builder api <a href="springfox/documentation/builders/DocumentationBuilder.html#resourceListing-java.util.function.Consumer-"><code>DocumentationBuilder.resourceListing(Consumer)</code></a></span></div>
 </td>
 </tr>
 <tr class="altColor">
@@ -375,12 +386,24 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="springfox/documentation/builders/AlternateTypeBuilder.html#withAnnotations-java.util.List-">springfox.documentation.builders.AlternateTypeBuilder.withAnnotations(List&lt;Annotation&gt;)</a>
+<td class="colOne"><a href="springfox/documentation/builders/AuthorizationCodeGrantBuilder.html#tokenEndpoint-springfox.documentation.service.TokenEndpoint-">springfox.documentation.builders.AuthorizationCodeGrantBuilder.tokenEndpoint(TokenEndpoint)</a>
+<div class="block"><span class="deprecationComment">@since 3.0.0
+ Prefer fluent builder api <a href="springfox/documentation/builders/AuthorizationCodeGrantBuilder.html#tokenEndpoint-java.util.function.Consumer-"><code>AuthorizationCodeGrantBuilder.tokenEndpoint(Consumer)</code></a></span></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="springfox/documentation/builders/AuthorizationCodeGrantBuilder.html#tokenRequestEndpoint-springfox.documentation.service.TokenRequestEndpoint-">springfox.documentation.builders.AuthorizationCodeGrantBuilder.tokenRequestEndpoint(TokenRequestEndpoint)</a>
+<div class="block"><span class="deprecationComment">@since 3.0.0
+ Prefer fluent builder api <a href="springfox/documentation/builders/AuthorizationCodeGrantBuilder.html#tokenRequestEndpoint-java.util.function.Consumer-"><code>AuthorizationCodeGrantBuilder.tokenRequestEndpoint(Consumer)</code></a></span></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="springfox/documentation/builders/AlternateTypePropertyBuilder.html#withAnnotations-java.util.List-">springfox.documentation.builders.AlternateTypePropertyBuilder.withAnnotations(List&lt;Annotation&gt;)</a>
 <div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="springfox/documentation/builders/AlternateTypePropertyBuilder.html#withAnnotations-java.util.List-">springfox.documentation.builders.AlternateTypePropertyBuilder.withAnnotations(List&lt;Annotation&gt;)</a>
+<td class="colOne"><a href="springfox/documentation/builders/AlternateTypeBuilder.html#withAnnotations-java.util.List-">springfox.documentation.builders.AlternateTypeBuilder.withAnnotations(List&lt;Annotation&gt;)</a>
 <div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
 </td>
 </tr>
@@ -445,43 +468,48 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="springfox/documentation/builders/AlternateTypePropertyBuilder.html#AlternateTypePropertyBuilder--">springfox.documentation.builders.AlternateTypePropertyBuilder()</a>
+<div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="springfox/documentation/service/ApiInfo.html#ApiInfo-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">springfox.documentation.service.ApiInfo(String, String, String, String, String, String, String)</a>
 <div class="block"><span class="deprecationComment">@since 2.4.0</span></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="springfox/documentation/schema/Example.html#Example-java.lang.Object-">springfox.documentation.schema.Example(Object)</a>
 <div class="block"><span class="deprecationComment">@since 3.0.0
  Use @see <a href="springfox/documentation/schema/Example.html#Example-java.lang.String-java.lang.String-java.lang.String-java.lang.Object-java.lang.String-java.lang.String-"><code>Example.Example(String, String, String, Object, String, String)</code></a></span></div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="springfox/documentation/schema/Example.html#Example-java.lang.String-java.lang.Object-">springfox.documentation.schema.Example(String, Object)</a>
 <div class="block"><span class="deprecationComment">@since 3.0.0
  Use @see <a href="springfox/documentation/schema/Example.html#Example-java.lang.String-java.lang.String-java.lang.String-java.lang.Object-java.lang.String-java.lang.String-"><code>Example.Example(String, String, String, Object, String, String)</code></a></span></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="springfox/documentation/swagger/web/SecurityConfiguration.html#SecurityConfiguration-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-springfox.documentation.swagger.web.ApiKeyVehicle-java.lang.String-java.lang.String-">springfox.documentation.swagger.web.SecurityConfiguration(String, String, String, String, String, ApiKeyVehicle, String, String)</a>
 <div class="block"><span class="deprecationComment">@since 2.8.0. Use the <a href="springfox/documentation/swagger/web/SecurityConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>SecurityConfigurationBuilder</code></a> instead</span></div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="springfox/documentation/swagger/web/UiConfiguration.html#UiConfiguration-java.lang.String-">springfox.documentation.swagger.web.UiConfiguration(String)</a>
 <div class="block"><span class="deprecationComment">@since 2.8.0. Use the <a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</span></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="springfox/documentation/swagger/web/UiConfiguration.html#UiConfiguration-java.lang.String-java.lang.String:A-">springfox.documentation.swagger.web.UiConfiguration(String, String[])</a>
 <div class="block"><span class="deprecationComment">@since 2.8.0. Use the <a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</span></div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="springfox/documentation/swagger/web/UiConfiguration.html#UiConfiguration-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String:A-boolean-boolean-">springfox.documentation.swagger.web.UiConfiguration(String, String, String, String, String[], boolean, boolean)</a>
 <div class="block"><span class="deprecationComment">@since 2.6.1. Use the <a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</span></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="springfox/documentation/swagger/web/UiConfiguration.html#UiConfiguration-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String:A-boolean-boolean-java.lang.Long-">springfox.documentation.swagger.web.UiConfiguration(String, String, String, String, String[], boolean, boolean, Long)</a>
 <div class="block"><span class="deprecationComment">@since 2.8.0. Use the <a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</span></div>
 </td>

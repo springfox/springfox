@@ -17,8 +17,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":42,"i12":10,"i13":10,"i14":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -139,7 +139,7 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -178,7 +178,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#externalDocumentation-springfox.documentation.common.ExternalDocumentation-">externalDocumentation</a></span>(<a href="../../../springfox/documentation/common/ExternalDocumentation.html" title="class in springfox.documentation.common">ExternalDocumentation</a>&nbsp;externalDocumentation)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#externalDocumentation-java.util.function.Consumer-">externalDocumentation</a></span>(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ExternalDocumentationBuilder.html" title="class in springfox.documentation.builders">ExternalDocumentationBuilder</a>&gt;&nbsp;consumer)</code>
 <div class="block">Adds external documentation information for this API</div>
 </td>
 </tr>
@@ -202,23 +202,32 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#resourceListing-springfox.documentation.service.ResourceListing-">resourceListing</a></span>(<a href="../../../springfox/documentation/service/ResourceListing.html" title="class in springfox.documentation.service">ResourceListing</a>&nbsp;resourceListing)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#resourceListing-java.util.function.Consumer-">resourceListing</a></span>(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ResourceListingBuilder.html" title="class in springfox.documentation.builders">ResourceListingBuilder</a>&gt;&nbsp;consumer)</code>
 <div class="block">Updates the resource listing</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#schemes-java.util.Set-">schemes</a></span>(java.util.Set&lt;java.lang.String&gt;&nbsp;schemes)</code>
-<div class="block">Updates the schemes this api supports</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#resourceListing-springfox.documentation.service.ResourceListing-">resourceListing</a></span>(<a href="../../../springfox/documentation/service/ResourceListing.html" title="class in springfox.documentation.service">ResourceListing</a>&nbsp;resourceListing)</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">@since 3.0.0
+ Prefer fluent builder api <a href="../../../springfox/documentation/builders/DocumentationBuilder.html#resourceListing-java.util.function.Consumer-"><code>resourceListing(Consumer)</code></a></span></div>
+</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#servers-java.util.List-">servers</a></span>(java.util.List&lt;<a href="../../../springfox/documentation/service/Server.html" title="class in springfox.documentation.service">Server</a>&gt;&nbsp;servers)</code>
-<div class="block">Adds servers information for this API</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#schemes-java.util.Set-">schemes</a></span>(java.util.Set&lt;java.lang.String&gt;&nbsp;schemes)</code>
+<div class="block">Updates the schemes this api supports</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ServerBuilder.html" title="class in springfox.documentation.builders">ServerBuilder</a>&gt;,<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#server-java.lang.String-">server</a></span>(java.lang.String&nbsp;name)</code>
+<div class="block">Adds servers information for this API</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/DocumentationBuilder.html#tags-java.util.Set-">tags</a></span>(java.util.Set&lt;<a href="../../../springfox/documentation/service/Tag.html" title="class in springfox.documentation.service">Tag</a>&gt;&nbsp;tags)</code>
 <div class="block">Updates the tags with new entries</div>
@@ -301,11 +310,31 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>resourceListing</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&nbsp;resourceListing(<a href="../../../springfox/documentation/service/ResourceListing.html" title="class in springfox.documentation.service">ResourceListing</a>&nbsp;resourceListing)</pre>
+<pre>@Deprecated
+public&nbsp;<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&nbsp;resourceListing(<a href="../../../springfox/documentation/service/ResourceListing.html" title="class in springfox.documentation.service">ResourceListing</a>&nbsp;resourceListing)</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">@since 3.0.0
+ Prefer fluent builder api <a href="../../../springfox/documentation/builders/DocumentationBuilder.html#resourceListing-java.util.function.Consumer-"><code>resourceListing(Consumer)</code></a></span></div>
 <div class="block">Updates the resource listing</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>resourceListing</code> - - resource listing</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
+</li>
+</ul>
+<a name="resourceListing-java.util.function.Consumer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resourceListing</h4>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&nbsp;resourceListing(@NonNull
+                                            java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ResourceListingBuilder.html" title="class in springfox.documentation.builders">ResourceListingBuilder</a>&gt;&nbsp;consumer)</pre>
+<div class="block">Updates the resource listing</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>consumer</code> - - consumer that provides a resource listing builder</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this</dd>
 </dl>
@@ -423,33 +452,34 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="servers-java.util.List-">
+<a name="server-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>servers</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&nbsp;servers(java.util.List&lt;<a href="../../../springfox/documentation/service/Server.html" title="class in springfox.documentation.service">Server</a>&gt;&nbsp;servers)</pre>
+<h4>server</h4>
+<pre>public&nbsp;java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ServerBuilder.html" title="class in springfox.documentation.builders">ServerBuilder</a>&gt;,<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&gt;&nbsp;server(java.lang.String&nbsp;name)</pre>
 <div class="block">Adds servers information for this API</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>servers</code> - - servers</dd>
+<dd><code>name</code> - - servers</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this</dd>
 </dl>
 </li>
 </ul>
-<a name="externalDocumentation-springfox.documentation.common.ExternalDocumentation-">
+<a name="externalDocumentation-java.util.function.Consumer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>externalDocumentation</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&nbsp;externalDocumentation(<a href="../../../springfox/documentation/common/ExternalDocumentation.html" title="class in springfox.documentation.common">ExternalDocumentation</a>&nbsp;externalDocumentation)</pre>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/DocumentationBuilder.html" title="class in springfox.documentation.builders">DocumentationBuilder</a>&nbsp;externalDocumentation(@NonNull
+                                                  java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ExternalDocumentationBuilder.html" title="class in springfox.documentation.builders">ExternalDocumentationBuilder</a>&gt;&nbsp;consumer)</pre>
 <div class="block">Adds external documentation information for this API</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>externalDocumentation</code> - - external documentation reference</dd>
+<dd><code>consumer</code> - - external documentation reference</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this</dd>
 </dl>

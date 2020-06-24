@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -150,29 +150,25 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#copyOf-springfox.documentation.service.Representation-">copyOf</a></span>(<a href="../../../springfox/documentation/service/Representation.html" title="class in springfox.documentation.service">Representation</a>&nbsp;other)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#clearEncodings--">clearEncodings</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#copyOf-springfox.documentation.service.Representation-">copyOf</a></span>(<a href="../../../springfox/documentation/service/Representation.html" title="class in springfox.documentation.service">Representation</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/EncodingBuilder.html" title="class in springfox.documentation.builders">EncodingBuilder</a>&gt;,<a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#encoding-java.lang.String-">encoding</a></span>(java.lang.String&nbsp;property)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../springfox/documentation/builders/EncodingBuilder.html" title="class in springfox.documentation.builders">EncodingBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#encodingForProperty-java.lang.String-">encodingForProperty</a></span>(java.lang.String&nbsp;property)</code>&nbsp;</td>
-</tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#encodings-java.util.Collection-">encodings</a></span>(java.util.Collection&lt;<a href="../../../springfox/documentation/service/Encoding.html" title="class in springfox.documentation.service">Encoding</a>&gt;&nbsp;encodings)</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#mediaType-org.springframework.http.MediaType-">mediaType</a></span>(org.springframework.http.MediaType&nbsp;mediaType)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#mediaType-java.lang.String-">mediaType</a></span>(java.lang.String&nbsp;mediaType)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/RepresentationBuilder.html#model-java.util.function.Consumer-">model</a></span>(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a>&gt;&nbsp;model)</code>&nbsp;</td>
 </tr>
@@ -242,22 +238,13 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;<a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a>&nbsp;mediaType(org.springframework.http.MediaType&nbsp;mediaType)</pre>
 </li>
 </ul>
-<a name="encodings-java.util.Collection-">
+<a name="clearEncodings--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>encodings</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a>&nbsp;encodings(java.util.Collection&lt;<a href="../../../springfox/documentation/service/Encoding.html" title="class in springfox.documentation.service">Encoding</a>&gt;&nbsp;encodings)</pre>
-</li>
-</ul>
-<a name="encodingForProperty-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>encodingForProperty</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/EncodingBuilder.html" title="class in springfox.documentation.builders">EncodingBuilder</a>&nbsp;encodingForProperty(java.lang.String&nbsp;property)</pre>
+<h4>clearEncodings</h4>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a>&nbsp;clearEncodings()</pre>
 </li>
 </ul>
 <a name="encoding-java.lang.String-">

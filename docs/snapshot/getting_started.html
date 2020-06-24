@@ -774,8 +774,6 @@ dependencies {
 180
 181
 182
-183
-184
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -894,9 +892,7 @@ dependencies {
                 .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Description of someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
                 .in(ParameterType.QUERY)
                 .required(<span class="predefined-constant">true</span>)
-                .query(q -&gt; q.model(<span class="keyword">new</span> ModelSpecificationBuilder()
-                    .scalarModel(ScalarType.STRING)
-                    .build()))
+                .query(q -&gt; q.model(m -&gt; m.scalarModel(ScalarType.STRING)))
                 .build()))
         .tags(<span class="keyword">new</span> Tag(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet Service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">All apis relating to pets</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="23"></i><b>(23)</b>
         .additionalModels(typeResolver.resolve(AdditionalModel.class)); <i class="conum" data-value="24"></i><b>(24)</b>
@@ -1551,7 +1547,7 @@ cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-06-24 04:29:41 UTC
+Last updated 2020-06-24 15:41:54 UTC
 </div>
 </div>
 <style>

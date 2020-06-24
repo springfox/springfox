@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":42};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":42,"i4":10,"i5":42,"i6":42};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -158,11 +158,15 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html#properties-java.util.List-">properties</a></span>(java.util.List&lt;<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&gt;&nbsp;properties)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html#property-springfox.documentation.builders.AlternateTypePropertyBuilder-">property</a></span>(<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&nbsp;property)</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">@since 3.0.0</span></div>
+</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html#property-springfox.documentation.builders.AlternateTypePropertyBuilder-">property</a></span>(<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&nbsp;property)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html#property-java.util.function.Consumer-">property</a></span>(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&gt;&nbsp;property)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a></code></td>
@@ -234,16 +238,27 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>property</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a>&nbsp;property(<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&nbsp;property)</pre>
+<pre>@Deprecated
+public&nbsp;<a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a>&nbsp;property(<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&nbsp;property)</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">@since 3.0.0</span></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>property</code> - - properties for the alternate type</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>AlternateTypeBuilder</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html#property-java.util.function.Consumer-"><code>instead</code></a></dd>
+</dl>
 </li>
 </ul>
-<a name="properties-java.util.List-">
+<a name="property-java.util.function.Consumer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>properties</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a>&nbsp;properties(java.util.List&lt;<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&gt;&nbsp;properties)</pre>
+<h4>property</h4>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a>&nbsp;property(@NonNull
+                                     java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a>&gt;&nbsp;property)</pre>
 </li>
 </ul>
 <a name="annotations-java.util.List-">

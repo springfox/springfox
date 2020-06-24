@@ -74,13 +74,13 @@ var activeTableTab = "activeTableTab";
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -115,6 +115,23 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#SimpleParameterSpecificationBuilder--">SimpleParameterSpecificationBuilder</a></span>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.summary">
@@ -161,7 +178,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#model-springfox.documentation.schema.ModelSpecification-">model</a></span>(<a href="../../../springfox/documentation/schema/ModelSpecification.html" title="class in springfox.documentation.schema">ModelSpecification</a>&nbsp;model)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#model-java.util.function.Consumer-">model</a></span>(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a>&gt;&nbsp;consumer)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
@@ -191,6 +208,23 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="SimpleParameterSpecificationBuilder--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SimpleParameterSpecificationBuilder</h4>
+<pre>public&nbsp;SimpleParameterSpecificationBuilder()</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.detail">
@@ -224,13 +258,14 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;allowReserved(java.lang.Boolean&nbsp;allowReserved)</pre>
 </li>
 </ul>
-<a name="model-springfox.documentation.schema.ModelSpecification-">
+<a name="model-java.util.function.Consumer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>model</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;model(<a href="../../../springfox/documentation/schema/ModelSpecification.html" title="class in springfox.documentation.schema">ModelSpecification</a>&nbsp;model)</pre>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;model(@NonNull
+                                                 java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a>&gt;&nbsp;consumer)</pre>
 </li>
 </ul>
 <a name="allowEmptyValue-java.lang.Boolean-">
@@ -266,7 +301,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>collectionFacet</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;collectionFacet(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/CollectionElementFacetBuilder.html" title="class in springfox.documentation.builders">CollectionElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;collectionFacet(@NonNull
+                                                           java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/CollectionElementFacetBuilder.html" title="class in springfox.documentation.builders">CollectionElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
 </li>
 </ul>
 <a name="stringFacet-java.util.function.Consumer-">
@@ -275,7 +311,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>stringFacet</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;stringFacet(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/StringElementFacetBuilder.html" title="class in springfox.documentation.builders">StringElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;stringFacet(@NonNull
+                                                       java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/StringElementFacetBuilder.html" title="class in springfox.documentation.builders">StringElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
 </li>
 </ul>
 <a name="numericFacet-java.util.function.Consumer-">
@@ -284,7 +321,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>numericFacet</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;numericFacet(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/schema/NumericElementFacetBuilder.html" title="class in springfox.documentation.schema">NumericElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;numericFacet(@NonNull
+                                                        java.util.function.Consumer&lt;<a href="../../../springfox/documentation/schema/NumericElementFacetBuilder.html" title="class in springfox.documentation.schema">NumericElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
 </li>
 </ul>
 <a name="enumerationFacet-java.util.function.Consumer-">
@@ -293,7 +331,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>enumerationFacet</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;enumerationFacet(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/EnumerationElementFacetBuilder.html" title="class in springfox.documentation.builders">EnumerationElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<pre>public&nbsp;<a href="../../../springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;enumerationFacet(@NonNull
+                                                            java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/EnumerationElementFacetBuilder.html" title="class in springfox.documentation.builders">EnumerationElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
 </li>
 </ul>
 <a name="copyOf-springfox.documentation.service.SimpleParameterSpecification-">
@@ -359,13 +398,13 @@ extends java.lang.Object</pre>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>

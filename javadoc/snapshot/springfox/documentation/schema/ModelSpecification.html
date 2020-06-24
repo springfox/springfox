@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -163,34 +163,42 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getCompound--">getCompound</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../springfox/documentation/schema/ModelFacets.html" title="class in springfox.documentation.schema">ModelFacets</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getFacets--">getFacets</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>java.util.List&lt;<a href="../../../springfox/documentation/schema/Example.html" title="class in springfox.documentation.schema">Example</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getFacetExamples--">getFacetExamples</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>java.util.List&lt;<a href="../../../springfox/documentation/service/VendorExtension.html" title="interface in springfox.documentation.service">VendorExtension</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getFacetExtensions--">getFacetExtensions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>java.util.Optional&lt;<a href="../../../springfox/documentation/schema/ModelFacets.html" title="class in springfox.documentation.schema">ModelFacets</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getFacets--">getFacets</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.util.Optional&lt;<a href="../../../springfox/documentation/schema/MapSpecification.html" title="class in springfox.documentation.schema">MapSpecification</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getMap--">getMap</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getName--">getName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>java.util.Optional&lt;<a href="../../../springfox/documentation/schema/ReferenceModelSpecification.html" title="class in springfox.documentation.schema">ReferenceModelSpecification</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getReference--">getReference</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.util.Optional&lt;<a href="../../../springfox/documentation/schema/ScalarModelSpecification.html" title="class in springfox.documentation.schema">ScalarModelSpecification</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#getScalar--">getScalar</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.util.Optional&lt;<a href="../../../springfox/documentation/schema/ModelKey.html" title="class in springfox.documentation.schema">ModelKey</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#key--">key</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelSpecification.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -299,7 +307,25 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getFacets</h4>
-<pre>public&nbsp;<a href="../../../springfox/documentation/schema/ModelFacets.html" title="class in springfox.documentation.schema">ModelFacets</a>&nbsp;getFacets()</pre>
+<pre>public&nbsp;java.util.Optional&lt;<a href="../../../springfox/documentation/schema/ModelFacets.html" title="class in springfox.documentation.schema">ModelFacets</a>&gt;&nbsp;getFacets()</pre>
+</li>
+</ul>
+<a name="getFacetExamples--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFacetExamples</h4>
+<pre>public&nbsp;java.util.List&lt;<a href="../../../springfox/documentation/schema/Example.html" title="class in springfox.documentation.schema">Example</a>&gt;&nbsp;getFacetExamples()</pre>
+</li>
+</ul>
+<a name="getFacetExtensions--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFacetExtensions</h4>
+<pre>public&nbsp;java.util.List&lt;<a href="../../../springfox/documentation/service/VendorExtension.html" title="interface in springfox.documentation.service">VendorExtension</a>&gt;&nbsp;getFacetExtensions()</pre>
 </li>
 </ul>
 <a name="getName--">
