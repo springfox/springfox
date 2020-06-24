@@ -2,6 +2,7 @@ springfox.bean.validators.configuration
 springfox.bean.validators.plugins
 springfox.bean.validators.plugins.parameter
 springfox.bean.validators.plugins.schema
+springfox.boot.starter.autoconfigure
 springfox.documentation
 springfox.documentation.annotations
 springfox.documentation.builders
@@ -50,11 +51,3 @@ springfox.documentation.swagger2.annotations
 springfox.documentation.swagger2.configuration
 springfox.documentation.swagger2.mappers
 springfox.documentation.swagger2.web
-springfox.petstore
-springfox.petstore.controller
-springfox.petstore.model
-springfox.petstore.repository
-springfox.petstore.webflux
-springfox.petstore.webflux.controller
-springfox.petstore.webflux.model
-springfox.petstore.webflux.repository
