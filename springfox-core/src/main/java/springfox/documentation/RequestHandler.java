@@ -108,6 +108,7 @@ public interface RequestHandler extends Comparable<RequestHandler> {
         .compare(this, other);
   }
 
+  @SuppressWarnings({"rawtypes", "unchecked"})
   static String sortedPaths(PatternsRequestCondition patternsCondition) {
     TreeSet<String> paths = new TreeSet<>(patternsCondition.getPatterns());
     return paths.stream()

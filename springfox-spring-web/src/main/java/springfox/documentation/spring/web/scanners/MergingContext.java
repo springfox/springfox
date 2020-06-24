@@ -18,10 +18,8 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import springfox.documentation.schema.Model;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
 public class MergingContext {
 
   private final String rootId;
@@ -36,16 +35,17 @@ public class MergingContext {
   private final Map<String, Set<String>> circlePath;
   private final Map<String, Set<String>> circleParameters;
   private final Map<String, ComparisonCondition> globalComparisonConditions;
-  private final Map<String, Set<Model>> typedModelMap;
+  private final Map<String, Set<springfox.documentation.schema.Model>> typedModelMap;
   private final Map<String, String> modelIdToParameterId;
   private final Map<String, ModelContext> contextMap;
-  private final Map<String, Model> currentBranch;
+  private final Map<String, springfox.documentation.schema.Model> currentBranch;
   private final Set<String> seenModels;
 
-  public MergingContext(String parameterId,
-      Map<String, Set<Model>> typedModelMap,
+  public MergingContext(
+      String parameterId,
+      Map<String, Set<springfox.documentation.schema.Model>> typedModelMap,
       Map<String, String> modelIdToParameterId,
-      Map<String, Model> currentBranch,
+      Map<String, springfox.documentation.schema.Model> currentBranch,
       Map<String, ModelContext> contextMap) {
     this.rootId = "";
     this.parameterId = parameterId;
@@ -59,7 +59,10 @@ public class MergingContext {
     this.seenModels = new HashSet<>();
   }
 
-  private MergingContext(String rootId, Set<String> seenModels, MergingContext mergingContext) {
+  private MergingContext(
+      String rootId,
+      Set<String> seenModels,
+      MergingContext mergingContext) {
     this.rootId = rootId;
     this.parameterId = mergingContext.parameterId;
     this.circlePath = Collections.unmodifiableMap(copyMap(mergingContext.circlePath));
@@ -73,7 +76,8 @@ public class MergingContext {
     this.seenModels = Collections.unmodifiableSet(seenModels);
   }
 
-  private MergingContext(String rootId,
+  private MergingContext(
+      String rootId,
       Set<String> seenModels,
       Map<String, Set<String>> circlePath,
       Map<String, Set<String>> circleParameters,
@@ -111,7 +115,7 @@ public class MergingContext {
     return this.circleParameters.get(circleId);
   }
 
-  public Model getRootModel() {
+  public springfox.documentation.schema.Model getRootModel() {
     return this.currentBranch.get(rootId);
   }
 
@@ -119,7 +123,7 @@ public class MergingContext {
     return this.contextMap.containsKey(modelId);
   }
 
-  public Model getModel(String modelId) {
+  public springfox.documentation.schema.Model getModel(String modelId) {
     return this.currentBranch.get(modelId);
   }
 
@@ -131,7 +135,7 @@ public class MergingContext {
     return this.modelIdToParameterId.get(modelId);
   }
 
-  public Set<Model> getSimilarTypeModels(String type) {
+  public Set<springfox.documentation.schema.Model> getSimilarTypeModels(String type) {
     if (this.typedModelMap.containsKey(type)) {
       return this.typedModelMap.get(type);
     }
@@ -142,7 +146,8 @@ public class MergingContext {
     return this.seenModels.contains(modelId);
   }
 
-  public MergingContext toRootId(String rootId,
+  public MergingContext toRootId(
+      String rootId,
       Set<ComparisonCondition> comparisonConditions,
       Set<String> allowedParameters) {
     Set<String> localSeenModels = new HashSet<>(this.seenModels);
@@ -159,7 +164,7 @@ public class MergingContext {
     Map<String, Set<String>> circlePath = copyMap(this.circlePath);
     circlePath.forEach((k, v) -> v.add(rootId));
 
-    circlePath.put(this.rootId, new HashSet<>(Arrays.asList(rootId)));
+    circlePath.put(this.rootId, new HashSet<>(Collections.singletonList(rootId)));
 
     return new MergingContext(rootId, localSeenModels, circlePath, circleParameters,
         globalComparisonConditions, this);

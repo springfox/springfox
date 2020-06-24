@@ -142,6 +142,7 @@ public abstract class ServiceModelToOpenApiMapper {
       RequestParameter from,
       @Context ModelNamesRegistry modelNamesRegistry);
 
+  @SuppressWarnings("unchecked")
   @AfterMapping
   public void afterMappingParameter(
       RequestParameter from,

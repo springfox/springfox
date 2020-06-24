@@ -20,7 +20,6 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
@@ -31,6 +30,8 @@ import java.util.List;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
+
+@SuppressWarnings("rawtypes")
 public class ModelPropertyBuilder {
   private ResolvedType type;
   private String qualifiedType;
@@ -46,12 +47,13 @@ public class ModelPropertyBuilder {
   private String defaultValue;
   private Xml xml;
   private Boolean allowEmptyValue;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public ModelPropertyBuilder() {
   }
 
-  public ModelPropertyBuilder(ModelProperty modelProperty) {
+  @SuppressWarnings("deprecation")
+  public ModelPropertyBuilder(springfox.documentation.schema.ModelProperty modelProperty) {
     this.type = modelProperty.getType();
     this.qualifiedType = modelProperty.getQualifiedType();
     this.position = modelProperty.getPosition();
@@ -156,11 +158,12 @@ public class ModelPropertyBuilder {
     return this;
   }
 
-  public ModelProperty build() {
+  @SuppressWarnings("deprecation")
+  public springfox.documentation.schema.ModelProperty build() {
     if (xml != null && isEmpty(xml.getName())) {
       xml.setName(name);
     }
-    return new ModelProperty(
+    return new springfox.documentation.schema.ModelProperty(
         name,
         type,
         qualifiedType,

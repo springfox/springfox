@@ -58,6 +58,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     this.pluginsManager = pluginsManager;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public void apply(OperationContext context) {
     ResolvedType returnType = context.getReturnType();

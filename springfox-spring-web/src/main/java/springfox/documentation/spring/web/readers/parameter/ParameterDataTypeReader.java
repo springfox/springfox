@@ -33,8 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.MapSpecification;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
@@ -56,10 +54,10 @@ import java.util.Set;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOG = LoggerFactory.getLogger(ParameterDataTypeReader.class);
   private final TypeNameExtractor nameExtractor;
@@ -95,17 +93,17 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
     ResolvedType parameterType = methodParameter.getParameterType();
     parameterType = context.alternateFor(parameterType);
-    ModelReference modelRef = null;
+    springfox.documentation.schema.ModelReference modelRef = null;
     ModelSpecificationBuilder model = new ModelSpecificationBuilder();
     boolean isRequestBody = false;
     if (methodParameter.hasParameterAnnotation(PathVariable.class) && treatAsAString(parameterType)) {
       parameterType = resolver.resolve(String.class);
-      modelRef = new ModelRef("string");
+      modelRef = new springfox.documentation.schema.ModelRef("string");
       model.scalarModel(ScalarType.STRING);
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
-      modelRef = new ModelRef(
+      modelRef = new springfox.documentation.schema.ModelRef(
           "",
-          new ModelRef("string"),
+          new springfox.documentation.schema.ModelRef("string"),
           true);
       ModelSpecificationBuilder map = new ModelSpecificationBuilder();
       model.mapModel(
@@ -118,15 +116,15 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                   .build()));
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
       parameterType = resolver.resolve(String.class);
-      modelRef = new ModelRef("string");
+      modelRef = new springfox.documentation.schema.ModelRef("string");
       model.scalarModel(ScalarType.STRING);
     }
     if (!methodParameter.hasParameterAnnotations()) {
-      String typeName = typeNameFor(parameterType.getErasedType());
+      String typeName = springfox.documentation.schema.Types.typeNameFor(parameterType.getErasedType());
       ScalarTypes.builtInScalarType(parameterType.getErasedType())
                  .ifPresent(model::scalarModel);
-      if (isBaseType(typeName)) { //TODO: handle enums
-        modelRef = new ModelRef(typeName);
+      if (springfox.documentation.schema.Types.isBaseType(typeName)) { //TODO: handle enums
+        modelRef = new springfox.documentation.schema.ModelRef(typeName);
       } else {
         LOG.warn(
             "Unexpected data type dataType {}. Expecting a base type",
@@ -183,7 +181,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   }
 
   private boolean treatAsAString(ResolvedType parameterType) {
-    return !(isBaseType(typeNameFor(parameterType.getErasedType()))
+    return !(springfox.documentation.schema.Types.isBaseType(
+        springfox.documentation.schema.Types.typeNameFor(parameterType.getErasedType()))
                  || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
   }
 }

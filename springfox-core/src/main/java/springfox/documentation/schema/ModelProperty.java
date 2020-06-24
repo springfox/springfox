@@ -31,6 +31,12 @@ import java.util.function.Function;
 
 
 //CHECKSTYLE:OFF CyclomaticComplexityCheck
+
+/**
+ * Use {@link PropertySpecification} instead
+ * @deprecated @since 3.0.0
+ */
+@Deprecated
 public class ModelProperty {
   private final String name;
   private final ResolvedType type;

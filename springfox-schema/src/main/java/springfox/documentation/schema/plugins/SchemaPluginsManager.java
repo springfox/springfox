@@ -24,8 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.spi.DocumentationType;
@@ -71,7 +69,8 @@ public class SchemaPluginsManager {
    * @param context - property context
    * @return the model property
    */
-  public ModelProperty property(ModelPropertyContext context) {
+  @Deprecated
+  public springfox.documentation.schema.ModelProperty property(ModelPropertyContext context) {
     for (ModelPropertyBuilderPlugin enricher : propertyEnrichers.getPluginsFor(context.getDocumentationType())) {
       enricher.apply(context);
     }
@@ -85,7 +84,7 @@ public class SchemaPluginsManager {
    * @return the model
    */
   @Deprecated
-  public Model model(ModelContext context) {
+  public springfox.documentation.schema.Model model(ModelContext context) {
     for (ModelBuilderPlugin enricher : modelEnrichers.getPluginsFor(context.getDocumentationType())) {
       enricher.apply(context);
     }
@@ -104,7 +103,7 @@ public class SchemaPluginsManager {
    * @return the model
    */
   @Deprecated
-  public Optional<Model> syntheticModel(ModelContext context) {
+  public Optional<springfox.documentation.schema.Model> syntheticModel(ModelContext context) {
       return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.create(context));
   }
 
@@ -127,7 +126,7 @@ public class SchemaPluginsManager {
    * @return the model
    */
   @Deprecated
-  public List<ModelProperty> syntheticProperties(ModelContext context) {
+  public List<springfox.documentation.schema.ModelProperty> syntheticProperties(ModelContext context) {
       return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.properties(context))
           .orElseGet(ArrayList::new);
   }

@@ -20,7 +20,6 @@
 package springfox.documentation.service;
 
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,7 @@ import java.util.Map;
 public class ResponseMessage {
   private final int code;
   private final String message;
-  private final ModelReference responseModel;
+  private final springfox.documentation.schema.ModelReference responseModel;
   private final List<Example> examples;
   private final Map<String, Header> headers;
   private final List<VendorExtension> vendorExtensions;
@@ -40,7 +39,7 @@ public class ResponseMessage {
   public ResponseMessage(
       int code,
       String message,
-      ModelReference responseModel,
+      springfox.documentation.schema.ModelReference responseModel,
       List<Example> examples,
       Map<String, Header> headers,
       List<VendorExtension> vendorExtensions) {
@@ -60,7 +59,7 @@ public class ResponseMessage {
     return message;
   }
 
-  public ModelReference getResponseModel() {
+  public springfox.documentation.schema.ModelReference getResponseModel() {
     return responseModel;
   }
 

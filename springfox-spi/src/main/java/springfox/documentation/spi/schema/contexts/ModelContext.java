@@ -20,7 +20,6 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.spi.DocumentationType;
@@ -32,6 +31,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
 public class ModelContext {
   private final String parameterId;
   private final ResolvedType type;
@@ -44,7 +44,7 @@ public class ModelContext {
 
   private final ModelContext parentContext;
   private final Set<ResolvedType> seenTypes = new HashSet<>();
-  private final ModelBuilder modelBuilder;
+  private final springfox.documentation.builders.ModelBuilder modelBuilder;
   private final ModelSpecificationBuilder modelSpecificationBuilder;
   private final ModelKeyBuilder effectiveModelKeyBuilder = new ModelKeyBuilder();
   private final AlternateTypeProvider alternateTypeProvider;
@@ -74,7 +74,7 @@ public class ModelContext {
     this.returnType = returnType;
     this.view = view;
     this.validationGroups = new HashSet<>(validationGroups);
-    this.modelBuilder = new ModelBuilder(getModelId());
+    this.modelBuilder = new springfox.documentation.builders.ModelBuilder(getModelId());
     this.modelSpecificationBuilder = new ModelSpecificationBuilder();
     this.getEffectiveModelKeyBuilder()
         .isResponse(isReturnType());
@@ -95,7 +95,7 @@ public class ModelContext {
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
-    this.modelBuilder = new ModelBuilder(getModelId());
+    this.modelBuilder = new springfox.documentation.builders.ModelBuilder(getModelId());
     this.modelSpecificationBuilder = new ModelSpecificationBuilder();
     this.getEffectiveModelKeyBuilder()
         .isResponse(isReturnType());
@@ -324,7 +324,7 @@ public class ModelContext {
    * @return ModelBuilder
    */
   @Deprecated
-  public ModelBuilder getBuilder() {
+  public springfox.documentation.builders.ModelBuilder getBuilder() {
     return modelBuilder;
   }
 

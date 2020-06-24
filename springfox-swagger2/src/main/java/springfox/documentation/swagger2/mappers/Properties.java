@@ -37,7 +37,6 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
-import springfox.documentation.schema.ModelProperty;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap;
@@ -120,7 +119,7 @@ class Properties {
     };
   }
 
-  static Comparator<String> defaultOrdering(Map<String, ModelProperty> properties) {
+  static Comparator<String> defaultOrdering(Map<String, springfox.documentation.schema.ModelProperty> properties) {
     return byPosition(properties).thenComparing(byName());
   }
 
@@ -151,15 +150,16 @@ class Properties {
     return String::compareTo;
   }
 
-  private static Comparator<String> byPosition(final Map<String, ModelProperty> modelProperties) {
+  private static Comparator<String> byPosition(
+      Map<String, springfox.documentation.schema.ModelProperty> modelProperties) {
     return (first, second) -> {
-      ModelProperty p1 = modelProperties.get(first);
-      ModelProperty p2 = modelProperties.get(second);
+      springfox.documentation.schema.ModelProperty p1 = modelProperties.get(first);
+      springfox.documentation.schema.ModelProperty p2 = modelProperties.get(second);
       return Integer.compare(p1.getPosition(), p2.getPosition());
     };
   }
 
-  static Predicate<Map.Entry<String, ModelProperty>> voidProperties() {
+  static Predicate<Map.Entry<String, springfox.documentation.schema.ModelProperty>> voidProperties() {
     return input -> isVoid(input.getValue().getType())
         || collectionOfVoid(input.getValue().getType())
         || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());

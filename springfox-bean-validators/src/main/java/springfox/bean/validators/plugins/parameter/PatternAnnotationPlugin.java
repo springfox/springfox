@@ -46,6 +46,7 @@ public class PatternAnnotationPlugin implements ParameterBuilderPlugin {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ParameterContext context) {
     Optional<Pattern> pattern = annotationFromParameter(context, Pattern.class);
 

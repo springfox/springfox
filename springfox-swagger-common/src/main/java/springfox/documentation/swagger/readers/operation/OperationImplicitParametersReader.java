@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.common.Compatibility;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
@@ -43,6 +42,7 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@SuppressWarnings("deprecation")
 public class OperationImplicitParametersReader implements OperationBuilderPlugin {
   private final DescriptionResolver descriptions;
 
@@ -53,7 +53,8 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
 
   @Override
   public void apply(OperationContext context) {
-    List<Compatibility<Parameter, RequestParameter>> parameters = readParameters(context);
+    List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters
+        = readParameters(context);
     context.operationBuilder().parameters(parameters.stream()
         .map(Compatibility::getLegacy)
         .filter(Optional::isPresent)
@@ -71,10 +72,11 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
     return pluginDoesApply(delimiter);
   }
 
-  private List<Compatibility<Parameter, RequestParameter>> readParameters(OperationContext context) {
+  private List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>>
+  readParameters(OperationContext context) {
     List<ApiImplicitParams> annotations = context.findAllAnnotations(ApiImplicitParams.class);
 
-    List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
+    List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters = new ArrayList<>();
     if (!annotations.isEmpty()) {
       for (ApiImplicitParams annotation : annotations) {
           for (ApiImplicitParam param : annotation.value()) {

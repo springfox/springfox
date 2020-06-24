@@ -30,15 +30,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ExampleBuilder;
-import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.Response;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -90,7 +87,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    Compatibility<Set<ResponseMessage>, Set<Response>> read = read(context);
+    Compatibility<Set<springfox.documentation.service.ResponseMessage>,
+        Set<springfox.documentation.service.Response>> read = read(context);
     context.operationBuilder().responseMessages(read.getLegacy().orElse(new HashSet<>()));
     context.operationBuilder().responses(read.getModern().orElse(new HashSet<>()));
   }
@@ -102,7 +100,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
 
   @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
-  protected Compatibility<Set<ResponseMessage>, Set<Response>> read(OperationContext context) {
+  protected Compatibility<Set<springfox.documentation.service.ResponseMessage>,
+      Set<Response>> read(OperationContext context) {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
@@ -115,7 +114,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
 
     List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
-    Set<ResponseMessage> responseMessages = new HashSet<>();
+    Set<springfox.documentation.service.ResponseMessage> responseMessages = new HashSet<>();
     Set<Response> responses = new HashSet<>();
 
     Map<Integer, ApiResponse> seenResponsesByCode = new HashMap<>();
@@ -129,7 +128,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           seenResponsesByCode.put(
               apiResponse.code(),
               apiResponse);
-          Optional<ModelReference> responseModel = empty();
+          Optional<springfox.documentation.schema.ModelReference> responseModel = empty();
           ModelContext modelContext = context.operationModelsBuilder()
               .addReturn(
                   typeResolver.resolve(apiResponse.response()),
@@ -164,7 +163,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           Map<String, Header> headers = new HashMap<>(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
-          responseMessages.add(new ResponseMessageBuilder()
+          responseMessages.add(new springfox.documentation.builders.ResponseMessageBuilder()
               .code(apiResponse.code())
               .message(apiResponse.message())
               .responseModel(responseModel.orElse(null))
@@ -201,14 +200,15 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               model.getId(),
               model.getName()));
 
-      ModelReference responseModel = modelRefFactory(
+      springfox.documentation.schema.ModelReference responseModel = modelRefFactory(
           modelContext,
           enumTypeDeterminer,
           typeNameExtractor,
           knownNames)
           .apply(resolvedType);
       context.operationBuilder().responseModel(responseModel);
-      ResponseMessage defaultMessage = new ResponseMessageBuilder()
+      springfox.documentation.service.ResponseMessage defaultMessage =
+          new springfox.documentation.builders.ResponseMessageBuilder()
           .code(httpStatusCode(context))
           .message(message(context))
           .responseModel(responseModel)

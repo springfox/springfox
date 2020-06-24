@@ -27,21 +27,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelKeyBuilder;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.CollectionFormat;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -58,12 +55,12 @@ import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
 import static org.slf4j.LoggerFactory.*;
-import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.schema.property.PackageNames.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
+@SuppressWarnings("deprecation")
 @Component
 @Order(SWAGGER_PLUGIN_ORDER)
 public class OperationImplicitParameterReader implements OperationBuilderPlugin {
@@ -78,7 +75,8 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
 
   @Override
   public void apply(OperationContext context) {
-    List<Compatibility<Parameter, RequestParameter>> parameters = readParameters(context);
+    List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters
+        = readParameters(context);
     context.operationBuilder().parameters(parameters.stream()
         .map(Compatibility::getLegacy)
         .filter(Optional::isPresent)
@@ -96,13 +94,13 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
     return SwaggerPluginSupport.pluginDoesApply(delimiter);
   }
 
-  static Compatibility<Parameter, RequestParameter> implicitParameter(
+  static Compatibility<springfox.documentation.service.Parameter, RequestParameter> implicitParameter(
       DescriptionResolver descriptions,
       ApiImplicitParam param) {
-    Compatibility<ModelRef, ModelSpecification> modelRef = maybeGetModelRef(param);
+    Compatibility<springfox.documentation.schema.ModelRef, ModelSpecification> modelRef = maybeGetModelRef(param);
     ParameterType in = ParameterType.from(param.paramType());
     return new Compatibility<>(
-        new ParameterBuilder()
+        new springfox.documentation.builders.ParameterBuilder()
             .name(param.name())
             .description(descriptions.resolve(param.value()))
             .defaultValue(param.defaultValue())
@@ -140,23 +138,25 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
     );
   }
 
-  private static Compatibility<ModelRef, ModelSpecification> maybeGetModelRef(ApiImplicitParam param) {
+  private static Compatibility<springfox.documentation.schema.ModelRef, ModelSpecification>
+  maybeGetModelRef(ApiImplicitParam param) {
     String dataType = ofNullable(param.dataType())
         .filter(((Predicate<String>) String::isEmpty).negate())
         .orElse("string");
     ModelSpecification modelSpecification = modelSpecification(param);
 
     AllowableValues allowableValues = null;
-    if (isBaseType(dataType)) {
+    if (springfox.documentation.schema.Types.isBaseType(dataType)) {
       allowableValues = allowableValueFromString(param.allowableValues());
     }
     if (param.allowMultiple()) {
       return new Compatibility<>(
-          new ModelRef("", new ModelRef(dataType, allowableValues)),
+          new springfox.documentation.schema.ModelRef("",
+              new springfox.documentation.schema.ModelRef(dataType, allowableValues)),
           modelSpecification);
     }
     return new Compatibility<>(
-        new ModelRef(dataType, allowableValues), modelSpecification);
+        new springfox.documentation.schema.ModelRef(dataType, allowableValues), modelSpecification);
   }
 
   private static ModelSpecification modelSpecification(
@@ -220,9 +220,10 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .build();
   }
 
-  private List<Compatibility<Parameter, RequestParameter>> readParameters(OperationContext context) {
+  private List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>>
+  readParameters(OperationContext context) {
     Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
-    List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
+    List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters = new ArrayList<>();
     annotation.ifPresent(
         apiImplicitParam ->
             parameters.add(

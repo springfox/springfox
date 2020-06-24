@@ -20,9 +20,6 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.Xml;
 
 import java.util.ArrayList;
@@ -50,15 +47,15 @@ public class ModelBuilder {
   private Object example;
   private Xml xml;
 
-  private Map<String, ModelProperty> properties = new HashMap<>();
-  private List<ModelReference> subTypes = new ArrayList<>();
+  private Map<String, springfox.documentation.schema.ModelProperty> properties = new HashMap<>();
+  private List<springfox.documentation.schema.ModelReference> subTypes = new ArrayList<>();
 
   /**
    * Constructor with the model
    *
    * @param model - existing model
    */
-  public ModelBuilder(Model model) {
+  public ModelBuilder(springfox.documentation.schema.Model model) {
     this.id = model.getId();
     this.name = model.getName();
     this.qualifiedType = model.getQualifiedType();
@@ -113,7 +110,7 @@ public class ModelBuilder {
    * @param properties - map of properties by name
    * @return this
    */
-  public ModelBuilder properties(Map<String, ModelProperty> properties) {
+  public ModelBuilder properties(Map<String, springfox.documentation.schema.ModelProperty> properties) {
     if (properties != null) {
       this.properties = new HashMap<>(properties);
     }
@@ -166,7 +163,7 @@ public class ModelBuilder {
    * @return this
    * @since 2.8.1 We changed the subType to be a model refers
    */
-  public ModelBuilder subTypes(List<ModelReference> subTypes) {
+  public ModelBuilder subTypes(List<springfox.documentation.schema.ModelReference> subTypes) {
     if (subTypes != null) {
       this.subTypes = new ArrayList<>(subTypes);
     }
@@ -207,11 +204,11 @@ public class ModelBuilder {
     return this;
   }
 
-  public Model build() {
+  public springfox.documentation.schema.Model build() {
     if (xml != null && isEmpty(xml.getName())) {
       xml.setName(name);
     }
-    return new Model(
+    return new springfox.documentation.schema.Model(
         id,
         name,
         modelType,

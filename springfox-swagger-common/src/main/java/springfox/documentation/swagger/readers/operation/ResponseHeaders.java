@@ -25,8 +25,6 @@ import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
 import springfox.documentation.schema.ModelKeyBuilder;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.ReferenceModelSpecification;
@@ -44,37 +42,33 @@ import java.util.stream.Stream;
 
 import static java.util.Optional.*;
 import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.schema.Types.*;
 
 public class ResponseHeaders {
   private ResponseHeaders() {
     throw new UnsupportedOperationException();
   }
 
-
   public static Map<String, Header> headers(io.swagger.v3.oas.annotations.headers.Header[] responseHeaders) {
     Map<String, Header> headers = new HashMap<>();
     Stream.of(responseHeaders)
-          .filter(emptyOrVoidHeader().negate()).forEachOrdered(each -> {
-      headers.put(each.name(), new Header(
-          each.name(),
-          each.description(),
-          null,
-          headerModelSpecification(each),
-          each.required()));
-    });
+        .filter(emptyOrVoidHeader().negate()).forEachOrdered(each ->
+        headers.put(each.name(), new Header(
+            each.name(),
+            each.description(),
+            null,
+            headerModelSpecification(each),
+            each.required())));
     return headers;
   }
 
   public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
     Map<String, Header> headers = new HashMap<>();
-    Stream.of(responseHeaders).filter(emptyOrVoid().negate()).forEachOrdered(each -> {
-      headers.put(each.name(), new Header(
-          each.name(),
-          each.description(),
-          headerModel(each),
-          headerSpecification(each)));
-    });
+    Stream.of(responseHeaders).filter(emptyOrVoid().negate())
+        .forEachOrdered(each -> headers.put(each.name(), new Header(
+            each.name(),
+            each.description(),
+            headerModel(each),
+            headerSpecification(each))));
     return headers;
   }
 
@@ -129,13 +123,16 @@ public class ResponseHeaders {
     return input -> isEmpty(input.name()) || Void.class.equals(input.response());
   }
 
-  private static ModelReference headerModel(ResponseHeader each) {
-    ModelReference modelReference;
-    String typeName = ofNullable(typeNameFor(each.response())).orElse("string");
+  @SuppressWarnings("deprecation")
+  private static springfox.documentation.schema.ModelReference headerModel(ResponseHeader each) {
+    springfox.documentation.schema.ModelReference modelReference;
+    String typeName = ofNullable(springfox.documentation.schema.Types.typeNameFor(each.response()))
+        .orElse("string");
     if (isEmpty(each.responseContainer())) {
-      modelReference = new ModelRef(typeName);
+      modelReference = new springfox.documentation.schema.ModelRef(typeName);
     } else {
-      modelReference = new ModelRef(each.responseContainer(), new ModelRef(typeName));
+      modelReference = new springfox.documentation.schema.ModelRef(each.responseContainer(),
+          new springfox.documentation.schema.ModelRef(typeName));
     }
     return modelReference;
   }
@@ -169,7 +166,7 @@ public class ResponseHeaders {
           .facets(f -> f.deprecated(each.deprecated()))
           .build();
     }
-    if (each.schema().multipleOf() >  0) {
+    if (each.schema().multipleOf() > 0) {
       return new ModelSpecificationBuilder()
           .collectionModel(new CollectionSpecification(
               itemSpecification,

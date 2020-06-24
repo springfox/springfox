@@ -47,6 +47,7 @@ public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ParameterContext context) {
     Optional<Size> size = annotationFromParameter(context, Size.class);
     LOG.debug("searching for @size: {}", size.isPresent());

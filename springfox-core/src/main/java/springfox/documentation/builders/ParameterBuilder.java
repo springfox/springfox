@@ -22,9 +22,7 @@ package springfox.documentation.builders;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.Ordered;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableValues;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.VendorExtension;
@@ -54,7 +52,7 @@ public class ParameterBuilder {
   private ParameterType paramType;
   private String paramAccess;
   private ResolvedType type;
-  private ModelReference modelRef;
+  private springfox.documentation.schema.ModelReference modelRef;
   private boolean hidden;
   private String pattern;
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
@@ -73,7 +71,7 @@ public class ParameterBuilder {
    * @param other parameter to copy from
    * @return this
    */
-  ParameterBuilder from(Parameter other) {
+  ParameterBuilder from(springfox.documentation.service.Parameter other) {
     return name(other.getName())
         .allowableValues(other.getAllowableValues())
         .allowMultiple(other.isAllowMultiple())
@@ -214,7 +212,7 @@ public class ParameterBuilder {
    * @param modelRef model reference
    * @return this
    */
-  public ParameterBuilder modelRef(ModelReference modelRef) {
+  public ParameterBuilder modelRef(springfox.documentation.schema.ModelReference modelRef) {
     this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
@@ -338,11 +336,11 @@ public class ParameterBuilder {
     return this;
   }
 
-  public Parameter build() {
+  public springfox.documentation.service.Parameter build() {
     if (!PARAMETER_TYPES_ALLOWING_EMPTY_VALUE.contains(paramType)) {
       allowEmptyValue = null;
     }
-    return new Parameter(
+    return new springfox.documentation.service.Parameter(
         name,
         description,
         defaultValue,

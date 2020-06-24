@@ -43,7 +43,6 @@ import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
 
 
 /**
@@ -83,7 +82,7 @@ public class DefaultModelProvider implements ModelProvider {
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
         || enumTypeDeterminer.isEnum(propertiesHost.getErasedType())
-        || isBaseType(propertiesHost)
+        || springfox.documentation.schema.Types.isBaseType(propertiesHost)
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug(
           "Skipping model of type {} as its either a container type, map, enum or base type, or its already "

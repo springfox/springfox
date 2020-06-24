@@ -36,6 +36,7 @@ import java.util.Optional;
 public class OperationPositionReader implements OperationBuilderPlugin {
   private static final Logger LOGGER = LoggerFactory.getLogger(OperationPositionReader.class);
 
+  @SuppressWarnings("deprecation")
   @Override
   public void apply(OperationContext context) {
     Optional<ApiOperation> apiOperation = context.findAnnotation(ApiOperation.class);

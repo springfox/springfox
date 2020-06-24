@@ -53,12 +53,8 @@ public class ApiSelectorBuilder {
     return requestHandlerSelector.and(transform(pathSelector));
   }
 
+  @SuppressWarnings("unchecked")
   private Predicate<RequestHandler> transform(final Predicate<String> pathSelector) {
-    return new Predicate<RequestHandler>() {
-      @Override
-      public boolean test(RequestHandler input) {
-        return input.getPatternsCondition().getPatterns().stream().anyMatch(pathSelector);
-      }
-    };
+    return input -> input.getPatternsCondition().getPatterns().stream().anyMatch(pathSelector);
   }
 }

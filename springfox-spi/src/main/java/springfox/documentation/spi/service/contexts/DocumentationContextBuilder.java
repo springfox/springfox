@@ -31,10 +31,8 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
@@ -59,15 +57,18 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
+@SuppressWarnings("deprecation")
 public class DocumentationContextBuilder {
 
   private final List<SecurityContext> securityContexts = new ArrayList<>();
   private final Set<Class> ignorableParameterTypes = new HashSet<>();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap<>();
+  private final Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> responseMessageOverrides
+      = new TreeMap<>();
   private final Map<HttpMethod, List<Response>> responseOverrides = new TreeMap<>();
-  private final List<Parameter> globalOperationParameters = new ArrayList<>();
+  private final List<springfox.documentation.service.Parameter> globalOperationParameters = new ArrayList<>();
   private final List<AlternateTypeRule> rules = new ArrayList<>();
-  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap<>();
+  private final Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> defaultResponseMessages
+      = new HashMap<>();
   private final Map<HttpMethod, List<Response>> defaultResponses = new HashMap<>();
   private final Set<String> protocols = new HashSet<>();
   private final Set<String> produces = new LinkedHashSet<>();
@@ -120,7 +121,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder additionalResponseMessages(
-      Map<RequestMethod, List<ResponseMessage>> additionalResponseMessages) {
+      Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> additionalResponseMessages) {
     this.responseMessageOverrides.putAll(additionalResponseMessages);
     return this;
   }
@@ -131,7 +132,8 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder additionalOperationParameters(List<Parameter> globalRequestParameters) {
+  public DocumentationContextBuilder additionalOperationParameters(
+      List<springfox.documentation.service.Parameter> globalRequestParameters) {
     this.globalOperationParameters.addAll(nullToEmptyList(globalRequestParameters));
     return this;
   }
@@ -163,8 +165,8 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  private Map<RequestMethod, List<ResponseMessage>> aggregateResponseMessages() {
-    Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
+  private Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> aggregateResponseMessages() {
+    Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> responseMessages = new HashMap<>();
     if (applyDefaultResponseMessages) {
       responseMessages.putAll(defaultResponseMessages);
     }
@@ -218,7 +220,7 @@ public class DocumentationContextBuilder {
    */
   @Deprecated
   public DocumentationContextBuilder defaultResponseMessages(
-      Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages) {
+      Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> defaultResponseMessages) {
     this.defaultResponseMessages.putAll(defaultResponseMessages);
     return this;
   }
@@ -292,7 +294,8 @@ public class DocumentationContextBuilder {
 
 
   public DocumentationContext build() {
-    Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
+    Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> responseMessages
+        = aggregateResponseMessages();
     Map<HttpMethod, List<Response>> responses = aggregateResponses();
     OrderComparator.sort(rules);
     return new DocumentationContext(

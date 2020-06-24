@@ -49,6 +49,7 @@ import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
 @Component("swaggerParameterDescriptionReader")
 @Order(SWAGGER_PLUGIN_ORDER)
+@SuppressWarnings("deprecation")
 public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
   private final EnumTypeDeterminer enumTypeDeterminer;

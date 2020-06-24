@@ -21,14 +21,13 @@ package springfox.documentation.builders;
 
 import org.junit.Before;
 import org.junit.Test;
-import springfox.documentation.schema.ModelProperty;
-
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("deprecation")
 public class ModelPropertyDefaultValueTest {
 
     private ModelPropertyBuilder propertyBuilder;
-    private ModelProperty modelProperty;
+    private springfox.documentation.schema.ModelProperty modelProperty;
 
     @Before
     public void createNewPropertyBuilder() {

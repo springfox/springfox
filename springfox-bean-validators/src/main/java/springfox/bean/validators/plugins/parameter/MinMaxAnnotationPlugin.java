@@ -48,6 +48,7 @@ public class MinMaxAnnotationPlugin implements ParameterBuilderPlugin {
     return true;
   }
 
+  @SuppressWarnings("deprecation")
   public void apply(ParameterContext context) {
     Optional<Min> min = annotationFromParameter(context, Min.class);
     Optional<Max> max = annotationFromParameter(context, Max.class);

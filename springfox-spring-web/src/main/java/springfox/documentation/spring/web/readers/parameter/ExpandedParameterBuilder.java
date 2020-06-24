@@ -28,8 +28,6 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.Enums;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
@@ -51,11 +49,11 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.service.Parameter.*;
+import static springfox.documentation.service.RequestParameter.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
   private final TypeResolver resolver;
   private final EnumTypeDeterminer enumTypeDeterminer;
@@ -78,13 +76,13 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
                   : String.format("%s.%s", context.getParentName(), context.getFieldName());
 
     String typeName = context.getDataTypeName();
-    ModelReference itemModel = null;
+    springfox.documentation.schema.ModelReference itemModel = null;
     ResolvedType resolved = resolver.resolve(context.getFieldType());
     ModelSpecification modelSpecification;
     if (isContainerType(resolved)) {
       resolved = fieldType(context).orElse(resolved);
       ResolvedType elementType = collectionElementType(resolved);
-      String itemTypeName = typeNameFor(elementType.getErasedType());
+      String itemTypeName = springfox.documentation.schema.Types.typeNameFor(elementType.getErasedType());
       AllowableValues itemAllowables = null;
       ScalarModelSpecification scalarModelSpecification =
           new ScalarModelSpecification(ScalarTypes.builtInScalarType(elementType)
@@ -96,7 +94,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         scalarModelSpecification = new ScalarModelSpecification(ScalarType.STRING);
       }
       typeName = containerType(resolved);
-      itemModel = new ModelRef(itemTypeName, itemAllowables);
+      itemModel = new springfox.documentation.schema.ModelRef(itemTypeName, itemAllowables);
       modelSpecification = new ModelSpecificationBuilder()
           .collectionModel(new CollectionSpecification(
               new ModelSpecificationBuilder()
@@ -138,7 +136,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
            .required(Boolean.FALSE)
            .allowMultiple(isContainerType(resolved))
            .type(resolved)
-           .modelRef(new ModelRef(typeName, itemModel))
+           .modelRef(new springfox.documentation.schema.ModelRef(typeName, itemModel))
            .allowableValues(allowable)
            .parameterType(context.getParameterType())
            .order(DEFAULT_PRECEDENCE)

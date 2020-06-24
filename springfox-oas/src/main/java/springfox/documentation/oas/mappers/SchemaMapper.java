@@ -87,7 +87,7 @@ public abstract class SchemaMapper {
   @SuppressWarnings({
       "CyclomaticComplexity",
       "NPathComplexity",
-      "JavaNCSS"})
+      "JavaNCSS", "unchecked"})
   private Schema model(
       ModelSpecification source,
       @Context ModelNamesRegistry namesRegistry) {
@@ -246,6 +246,7 @@ public abstract class SchemaMapper {
             e -> fromProperty(e.getValue(), modelNamesRegistry)));
   }
 
+  @SuppressWarnings("unchecked")
   private Schema fromProperty(
       PropertySpecification source,
       ModelNamesRegistry modelNamesRegistry) {
@@ -351,7 +352,9 @@ public abstract class SchemaMapper {
 
   @SuppressWarnings({
       "NPathComplexity",
-      "CyclomaticComplexity"})
+      "CyclomaticComplexity",
+      "unchecked",
+      "UnusedReturnValue"})
   static Schema maybeAddFacets(
       Schema property,
       ElementFacetSource facets) {
@@ -400,6 +403,7 @@ public abstract class SchemaMapper {
     return property;
   }
 
+  @SuppressWarnings("SameParameterValue")
   private static <T extends Number> List<T> convert(
       List<String> values,
       Class<T> toType) {

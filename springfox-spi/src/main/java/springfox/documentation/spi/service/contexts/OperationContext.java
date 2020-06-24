@@ -24,12 +24,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.OperationBuilder;
-import springfox.documentation.schema.Model;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.service.Response;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -78,7 +75,7 @@ public class OperationContext {
   }
 
   @SuppressWarnings("deprecation")
-  public List<ResponseMessage> getGlobalResponseMessages(String forHttpMethod) {
+  public List<springfox.documentation.service.ResponseMessage> getGlobalResponseMessages(String forHttpMethod) {
     DocumentationContext documentationContext = getDocumentationContext();
     if (documentationContext.getGlobalResponseMessages()
         .containsKey(RequestMethod.valueOf(forHttpMethod))) {
@@ -94,7 +91,7 @@ public class OperationContext {
    * @return List
    */
   @Deprecated
-  public List<Parameter> getGlobalOperationParameters() {
+  public List<springfox.documentation.service.Parameter> getGlobalOperationParameters() {
     return nullToEmptyList(getDocumentationContext().getGlobalRequestParameters());
   }
 
@@ -125,7 +122,7 @@ public class OperationContext {
   }
 
   @SuppressWarnings("deprecation")
-  public Map<String, Set<Model>> getKnownModels() {
+  public Map<String, Set<springfox.documentation.schema.Model>> getKnownModels() {
     return requestContext.getModelMap();
   }
 
@@ -149,6 +146,7 @@ public class OperationContext {
     return requestContext.consumes();
   }
 
+  @SuppressWarnings("rawtypes")
   public Set<Class> getIgnorableParameterTypes() {
     return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(
         toSet(),

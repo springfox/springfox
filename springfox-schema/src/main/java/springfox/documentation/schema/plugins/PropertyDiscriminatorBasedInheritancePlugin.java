@@ -29,7 +29,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.common.Compatibility;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
@@ -48,6 +47,7 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
@@ -69,27 +69,30 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
   @Override
   public void apply(ModelContext context) {
 
-    List<Compatibility<ModelReference, ReferenceModelSpecification>> modelRefs = subclassReferences(context);
+    List<Compatibility<springfox.documentation.schema.ModelReference, ReferenceModelSpecification>> modelRefs
+        = subclassReferences(context);
 
     if (!modelRefs.isEmpty()) {
       context.getBuilder()
-             .discriminator(discriminator(context))
-             .subTypes(modelRefs.stream()
-                                .filter(c -> c.getLegacy().isPresent())
-                                .map(c -> c.getLegacy().get())
-                                .collect(Collectors.toList()));
+          .discriminator(discriminator(context))
+          .subTypes(modelRefs.stream()
+              .filter(c -> c.getLegacy().isPresent())
+              .map(c -> c.getLegacy().get())
+              .collect(Collectors.toList()));
       context.getModelSpecificationBuilder()
-             .compoundModel(cm -> cm.discriminator(discriminator(context))
-                                    .subclassReferences(modelRefs.stream()
-                                                                 .filter(c -> c.getModern().isPresent())
-                                                                 .map(c -> c.getModern().get())
-                                                                 .collect(Collectors.toList())));
+          .compoundModel(cm -> cm.discriminator(discriminator(context))
+              .subclassReferences(modelRefs.stream()
+                  .filter(c -> c.getModern().isPresent())
+                  .map(c -> c.getModern().get())
+                  .collect(Collectors.toList())));
     }
   }
 
-  private List<Compatibility<ModelReference, ReferenceModelSpecification>> subclassReferences(ModelContext context) {
+  private List<Compatibility<springfox.documentation.schema.ModelReference, ReferenceModelSpecification>>
+  subclassReferences(ModelContext context) {
     JsonSubTypes subTypes = AnnotationUtils.getAnnotation(forClass(context), JsonSubTypes.class);
-    List<Compatibility<ModelReference, ReferenceModelSpecification>> modelRefs = new ArrayList<>();
+    List<Compatibility<springfox.documentation.schema.ModelReference, ReferenceModelSpecification>> modelRefs
+        = new ArrayList<>();
     if (subTypes != null) {
       for (JsonSubTypes.Type each : subTypes.value()) {
         ResolvedType resolvedSubType = typeResolver.resolve(each.value());
@@ -103,7 +106,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
                 modelSpecifications.create(
                     context,
                     resolvedSubType).getReference()
-                                   .orElse(null)));
+                    .orElse(null)));
       }
     }
     return modelRefs;
@@ -114,7 +117,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
         return ofNullable(typeInfo.property()).filter(((Predicate<String>) String::isEmpty).negate())
-                                              .orElse(typeInfo.use().getDefaultPropertyName());
+            .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }
     return "";

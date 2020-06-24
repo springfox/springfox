@@ -79,9 +79,9 @@ public class BuilderDefaults {
    * @param <T>       - any type
    * @return non-null list
    */
+  @SuppressWarnings("unchecked")
   public static <T> T[] nullToEmptyArray(T[] newValues) {
     if (newValues == null) {
-      //noinspection unchecked
       return (T[]) new Object[] {};
     }
     return newValues;

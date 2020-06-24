@@ -39,6 +39,7 @@ public class OperationParameterRequestConditionReader extends AbstractOperationP
     super(resolver);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public void apply(OperationContext context) {
     Set<NameValueExpression<String>> params = context.params();

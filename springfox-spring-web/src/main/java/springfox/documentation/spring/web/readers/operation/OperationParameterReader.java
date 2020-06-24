@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.common.Compatibility;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -51,8 +50,8 @@ import static java.util.stream.Collectors.*;
 import static org.slf4j.LoggerFactory.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.schema.Types.*;
 
+@SuppressWarnings("deprecation")
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterReader implements OperationBuilderPlugin {
@@ -77,7 +76,8 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder().parameters(context.getGlobalOperationParameters());
-    List<Compatibility<Parameter, RequestParameter>> compatibilities = readParameters(context);
+    List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> compatibilities
+        = readParameters(context);
     context.operationBuilder().parameters(
         compatibilities.stream()
             .map(Compatibility::getLegacy)
@@ -99,9 +99,10 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     return true;
   }
 
-  private List<Compatibility<Parameter, RequestParameter>> readParameters(OperationContext context) {
+  private List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>>
+  readParameters(OperationContext context) {
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
-    List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
+    List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters = new ArrayList<>();
     LOGGER.debug("Reading parameters for method {} at path {}", context.getName(), context.requestMappingPattern());
 
     int index = 0;
@@ -130,12 +131,13 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         .collect(toList());
   }
 
-  private Predicate<Compatibility<Parameter, RequestParameter>> hiddenParameter() {
+  private Predicate<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> hiddenParameter() {
     return c -> c.getLegacy()
-        .map(Parameter::isHidden)
+        .map(springfox.documentation.service.Parameter::isHidden)
         .orElse(false);
   }
 
+  @SuppressWarnings({"rawtypes", "unchecked"})
   private boolean shouldIgnore(
       final ResolvedMethodParameter parameter,
       ResolvedType resolvedParameterType,
@@ -155,7 +157,8 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         && !parameter.hasParameterAnnotation(RequestPart.class)
         && !parameter.hasParameterAnnotation(RequestParam.class)
         && !parameter.hasParameterAnnotation(PathVariable.class)
-        && !isBaseType(typeNameFor(resolvedParamType.getErasedType()))
+        && !springfox.documentation.schema.Types.isBaseType(
+            springfox.documentation.schema.Types.typeNameFor(resolvedParamType.getErasedType()))
         && !enumTypeDeterminer.isEnum(resolvedParamType.getErasedType())
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);

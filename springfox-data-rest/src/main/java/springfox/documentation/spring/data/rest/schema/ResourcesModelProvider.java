@@ -24,9 +24,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
-import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelKeyBuilder;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.QualifiedModelName;
@@ -66,8 +64,9 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     this.modelSpecifications = modelSpecifications;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public Model create(ModelContext context) {
+  public springfox.documentation.schema.Model create(ModelContext context) {
     ResolvedType resourceType = resourceType(context.getType());
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
@@ -80,7 +79,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
                   .qualifiedType(type.getName())
                   .type(typeParameters.get(0))
                   .properties(properties(context).stream().collect(toMap(
-                      ModelProperty::getName,
+                      springfox.documentation.schema.ModelProperty::getName,
                       identity())))
                   .xml(new Xml()
                            .name("entities")
@@ -90,7 +89,8 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
   }
 
   @Override
-  public List<ModelProperty> properties(ModelContext context) {
+  @SuppressWarnings("deprecation")
+  public List<springfox.documentation.schema.ModelProperty> properties(ModelContext context) {
     ResolvedType resourceType = resourceType(context.getType());
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();

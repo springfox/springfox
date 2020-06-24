@@ -20,9 +20,6 @@ package springfox.documentation.spi.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.plugin.core.Plugin;
-import springfox.documentation.annotations.Incubating;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -32,9 +29,10 @@ import java.util.Set;
 
 /**
  * Plugin to generate custom models
+ *
  * @since 2.8.1
  */
-@Incubating("2.8.1")
+@SuppressWarnings("deprecation")
 public interface SyntheticModelProviderPlugin extends Plugin<ModelContext> {
   /**
    * Creates a synthetic model
@@ -42,7 +40,7 @@ public interface SyntheticModelProviderPlugin extends Plugin<ModelContext> {
    * @param context - context to create the model from
    * @return model - when the plugin indicates it supports it, it must return a model
    */
-  Model create(ModelContext context);
+  springfox.documentation.schema.Model create(ModelContext context);
 
   /**
    * Creates a synthetic model properties
@@ -50,7 +48,7 @@ public interface SyntheticModelProviderPlugin extends Plugin<ModelContext> {
    * @param context - context to create the model properties from
    * @return model - when the plugin indicates it supports it, it must provide properties by name
    */
-  List<ModelProperty> properties(ModelContext context);
+  List<springfox.documentation.schema.ModelProperty> properties(ModelContext context);
 
 
   /**

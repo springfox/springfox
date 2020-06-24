@@ -33,10 +33,8 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
@@ -71,15 +69,17 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
  * A builder which is intended to be the primary interface into the Springfox framework.
  * Provides sensible defaults and convenience methods for configuration.
  */
+@SuppressWarnings("deprecation")
 public class Docket implements DocumentationPlugin {
 
   public static final String DEFAULT_GROUP_NAME = "default";
 
   private final DocumentationType documentationType;
   private final List<SecurityContext> securityContexts = new ArrayList<>();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
+  private final Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> responseMessages
+      = new HashMap<>();
   private final Map<HttpMethod, List<Response>> responses = new HashMap<>();
-  private final List<Parameter> globalOperationParameters = new ArrayList<>();
+  private final List<springfox.documentation.service.Parameter> globalOperationParameters = new ArrayList<>();
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList<>();
   private final Set<Class> ignorableParameterTypes = new HashSet<>();
   private final Set<String> protocols = new HashSet<>();
@@ -203,7 +203,7 @@ public class Docket implements DocumentationPlugin {
   @Deprecated
   public Docket globalResponseMessage(
       RequestMethod requestMethod,
-      List<ResponseMessage> responseMessages) {
+      List<springfox.documentation.service.ResponseMessage> responseMessages) {
     this.responseMessages.put(requestMethod, responseMessages);
     return this;
   }
@@ -236,7 +236,7 @@ public class Docket implements DocumentationPlugin {
    * @deprecated
    */
   @Deprecated
-  public Docket globalOperationParameters(List<Parameter> operationParameters) {
+  public Docket globalOperationParameters(List<springfox.documentation.service.Parameter> operationParameters) {
     this.globalOperationParameters.addAll(nullToEmptyList(operationParameters));
     return this;
   }

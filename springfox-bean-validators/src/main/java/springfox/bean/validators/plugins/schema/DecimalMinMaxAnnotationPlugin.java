@@ -53,6 +53,7 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
     Optional<DecimalMin> min = extractAnnotation(context, DecimalMin.class);
     Optional<DecimalMax> max = extractAnnotation(context, DecimalMax.class);

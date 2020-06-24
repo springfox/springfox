@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.builders.ApiDescriptionBuilder;
-import springfox.documentation.schema.Model;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -44,6 +43,7 @@ import java.util.Set;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
+@SuppressWarnings("deprecation")
 public class RequestMappingContext {
   private final OperationModelContextsBuilder operationModelContextsBuilder;
   private final DocumentationContext documentationContext;
@@ -51,7 +51,7 @@ public class RequestMappingContext {
   private final String requestMappingPattern;
   private final ApiDescriptionBuilder apiDescriptionBuilder;
 
-  private final Map<String, Set<Model>> modelMap = new HashMap<>();
+  private final Map<String, Set<springfox.documentation.schema.Model>> modelMap = new HashMap<>();
 
   public RequestMappingContext(
       String requestMappingId,
@@ -89,7 +89,7 @@ public class RequestMappingContext {
       RequestHandler handler,
       OperationModelContextsBuilder operationModelContextsBuilder,
       String requestMappingPattern,
-      Map<String, Set<Model>> knownModels) {
+      Map<String, Set<springfox.documentation.schema.Model>> knownModels) {
 
     this.documentationContext = context;
     this.handler = handler;
@@ -107,7 +107,7 @@ public class RequestMappingContext {
     return requestMappingPattern;
   }
 
-  public Map<String, Set<Model>> getModelMap() {
+  public Map<String, Set<springfox.documentation.schema.Model>> getModelMap() {
     return unmodifiableMap(modelMap);
   }
 
@@ -135,7 +135,7 @@ public class RequestMappingContext {
         requestMappingPattern);
   }
 
-  public RequestMappingContext withKnownModels(Map<String, Set<Model>> knownModels) {
+  public RequestMappingContext withKnownModels(Map<String, Set<springfox.documentation.schema.Model>> knownModels) {
     return new RequestMappingContext(
         documentationContext,
         handler,

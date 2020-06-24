@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
@@ -43,6 +42,7 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@SuppressWarnings("deprecation")
 public class ApiModelBuilder implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
@@ -62,10 +62,11 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ModelContext context) {
     ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
     if (annotation != null) {
-      List<ModelReference> modelRefs = new ArrayList<>();
+      List<springfox.documentation.schema.ModelReference> modelRefs = new ArrayList<>();
       List<ReferenceModelSpecification> subclassKeys = new ArrayList<>();
       for (Class<?> each : annotation.subTypes()) {
         modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)

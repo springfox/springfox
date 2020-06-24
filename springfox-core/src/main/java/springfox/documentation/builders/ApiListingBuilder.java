@@ -20,7 +20,6 @@
 package springfox.documentation.builders;
 
 
-import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
@@ -43,6 +42,7 @@ import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.service.Tags.*;
 
+@SuppressWarnings("deprecation")
 public class ApiListingBuilder {
   private final Comparator<ApiDescription> descriptionOrdering;
   private String apiVersion;
@@ -60,7 +60,7 @@ public class ApiListingBuilder {
 
   private final Set<Tag> tags = new TreeSet<>(tagComparator());
   private final Set<String> tagNames = new TreeSet<>();
-  private final Map<String, Model> models = new TreeMap<>();
+  private final Map<String, springfox.documentation.schema.Model> models = new TreeMap<>();
   private final Map<String, Tag> tagLookup = new TreeMap<>();
   private final Map<String, ModelSpecification> modelSpecifications = new TreeMap<>();
   private ModelNamesRegistry modelNamesRegistry;
@@ -223,7 +223,7 @@ public class ApiListingBuilder {
    * @param models - model entries by name
    * @return this
    */
-  public ApiListingBuilder models(Map<String, Model> models) {
+  public ApiListingBuilder models(Map<String, springfox.documentation.schema.Model> models) {
     this.models.putAll(nullToEmptyMap(models));
     return this;
   }

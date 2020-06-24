@@ -47,6 +47,7 @@ import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
 @Order(OAS_PLUGIN_ORDER)
 @Component
+@SuppressWarnings("deprecation")
 public class OpenApiParameterBuilder implements ParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
   private final EnumTypeDeterminer enumTypeDeterminer;

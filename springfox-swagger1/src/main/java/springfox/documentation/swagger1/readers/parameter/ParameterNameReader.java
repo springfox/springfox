@@ -35,6 +35,7 @@ import static springfox.documentation.spring.web.readers.parameter.ParameterType
 
 @Component("swagger1ParameterNameReader")
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@SuppressWarnings("deprecation")
 public class ParameterNameReader implements ParameterBuilderPlugin {
 
   @Override

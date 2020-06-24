@@ -32,7 +32,6 @@ import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 
@@ -88,7 +87,7 @@ public class ModelMapper {
     model.setExample(source.getExample());
     model.setTitle(source.getName());
 
-    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
+    SortedMap<String, springfox.documentation.schema.ModelProperty> sortedProperties = sort(source.getProperties());
     Map<String, Property> modelProperties = mapProperties(sortedProperties);
     model.setProperties(modelProperties);
     return model;
@@ -102,13 +101,13 @@ public class ModelMapper {
         .name(source.getName())
         .xml(mapXml(source.getXml()));
 
-    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
+    SortedMap<String, springfox.documentation.schema.ModelProperty> sortedProperties = sort(source.getProperties());
     Map<String, Property> modelProperties = mapProperties(sortedProperties);
     model.setProperties(modelProperties);
 
     Stream<String> requiredFields = source.getProperties().values().stream()
-        .filter(ModelProperty::isRequired)
-        .map(ModelProperty::getName);
+        .filter(springfox.documentation.schema.ModelProperty::isRequired)
+        .map(springfox.documentation.schema.ModelProperty::getName);
     model.setRequired(requiredFields.collect(toList()));
     model.setSimple(false);
     model.setType(ModelImpl.OBJECT);
@@ -125,7 +124,8 @@ public class ModelMapper {
     return model;
   }
 
-  private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
+  private Map<String, Property> mapProperties(
+      SortedMap<String, springfox.documentation.schema.ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<>();
     properties.entrySet().stream()
         .filter(springfox.documentation.swagger2.mappers.Properties.voidProperties().negate())
@@ -140,9 +140,10 @@ public class ModelMapper {
    * @param modelProperties properties to sort
    * @return sorted properties by position and name
    */
-  private SortedMap<String, ModelProperty> sort(Map<String, ModelProperty> modelProperties) {
+  private SortedMap<String, springfox.documentation.schema.ModelProperty>
+  sort(Map<String, springfox.documentation.schema.ModelProperty> modelProperties) {
 
-    SortedMap<String, ModelProperty> sortedMap
+    SortedMap<String, springfox.documentation.schema.ModelProperty> sortedMap
         = new TreeMap<>(springfox.documentation.swagger2.mappers.Properties.defaultOrdering(modelProperties));
     sortedMap.putAll(modelProperties);
     return sortedMap;
@@ -164,7 +165,7 @@ public class ModelMapper {
   }
 
   @SuppressWarnings("NPathComplexity")
-  private Property mapProperty(ModelProperty source) {
+  private Property mapProperty(springfox.documentation.schema.ModelProperty source) {
     Property property = modelRefToProperty(source.getModelRef());
 
     maybeAddAllowableValues(property, source.getAllowableValues());

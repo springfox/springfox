@@ -27,9 +27,7 @@ import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
-import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelKeyBuilder;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.QualifiedModelName;
@@ -70,8 +68,9 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     this.modelSpecifications = modelSpecifications;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public Model create(ModelContext context) {
+  public springfox.documentation.schema.Model create(ModelContext context) {
     ResolvedType resourceType = resolver.resolve(context.getType());
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
@@ -83,7 +82,8 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
                   .name(name)
                   .qualifiedType(type.getName())
                   .type(typeParameters.get(0))
-                  .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
+                  .properties(properties(context).stream()
+                      .collect(toMap(springfox.documentation.schema.ModelProperty::getName, identity())))
                   .xml(new Xml()
                            .wrapped(true)
                            .name("content")
@@ -92,7 +92,8 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
   }
 
   @Override
-  public List<ModelProperty> properties(ModelContext context) {
+  @SuppressWarnings("deprecation")
+  public List<springfox.documentation.schema.ModelProperty> properties(ModelContext context) {
     ResolvedType resourceType = resolver.resolve(context.getType());
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();

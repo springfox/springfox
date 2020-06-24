@@ -46,6 +46,7 @@ public class NotNullAnnotationPlugin implements ParameterBuilderPlugin {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ParameterContext context) {
     Optional<NotNull> notNull = annotationFromParameter(context, NotNull.class);
 

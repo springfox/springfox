@@ -36,6 +36,7 @@ import static java.util.Optional.*;
 
 @Component
 @Qualifier("cachedModels")
+@SuppressWarnings("deprecation")
 public class CachingModelProvider implements ModelProvider, ModelSpecificationProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelProvider.class);
   private final Map<ModelContext, Optional<Model>> cache;

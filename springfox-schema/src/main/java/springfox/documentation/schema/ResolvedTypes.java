@@ -35,7 +35,6 @@ import java.util.function.Function;
 
 import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
 
 public class ResolvedTypes {
 
@@ -43,13 +42,14 @@ public class ResolvedTypes {
     throw new UnsupportedOperationException();
   }
 
+  @SuppressWarnings("deprecation")
   public static String simpleQualifiedTypeName(ResolvedType type) {
     if (type instanceof ResolvedPrimitiveType) {
       Type primitiveType = type.getErasedType();
-      return typeNameFor(primitiveType);
+      return Types.typeNameFor(primitiveType);
     }
     if (type instanceof ResolvedArrayType) {
-      return typeNameFor(type.getArrayElementType().getErasedType());
+      return Types.typeNameFor(type.getArrayElementType().getErasedType());
     }
 
     return type.getErasedType().getName();
@@ -69,6 +69,7 @@ public class ResolvedTypes {
     return ofNullable(resolvedType).map(ResolvedType::getSignature);
   }
 
+  @SuppressWarnings("deprecation")
   public static Function<ResolvedType, ModelReference> modelRefFactory(
       final ModelContext parentContext,
       final EnumTypeDeterminer enumTypeDeterminer,
@@ -82,6 +83,7 @@ public class ResolvedTypes {
         knownNames);
   }
 
+  @SuppressWarnings("deprecation")
   public static Function<ResolvedType, ModelReference> modelRefFactory(
       final ModelContext parentContext,
       final EnumTypeDeterminer enumTypeDeterminer,

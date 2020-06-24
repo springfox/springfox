@@ -69,6 +69,7 @@ class RequestExtractionUtils {
     return annotations;
   }
 
+  @SuppressWarnings({"ConstantConditions", "deprecation"})
   private static List<Annotation> handlerAnnotations(HandlerMethod handler) {
     List<Annotation> annotations = new ArrayList<>();
     if (handler != null) {
@@ -83,6 +84,7 @@ class RequestExtractionUtils {
     return annotations;
   }
 
+  @SuppressWarnings("ConstantConditions")
   static String propertyIdentifierName(PersistentProperty<?> property) {
     String propertyName = property.getName();
     if (property.isCollectionLike()) {

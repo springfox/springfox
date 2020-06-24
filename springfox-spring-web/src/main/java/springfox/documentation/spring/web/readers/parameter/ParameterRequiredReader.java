@@ -46,6 +46,7 @@ import static java.util.Optional.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
   private final SpringVersion springVersion;
   private final DescriptionResolver descriptions;

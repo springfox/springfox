@@ -33,9 +33,9 @@ import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
+@Deprecated
 class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private final TypeNameExtractor typeNameExtractor;
   private final EnumTypeDeterminer enumTypeDeterminer;
@@ -115,7 +115,9 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
 
   private String modelId(ModelContext context) {
     ResolvedType type = context.getType();
-    if (type instanceof ResolvedPrimitiveType || isBaseType(type) || isVoid(type)
+    if (type instanceof ResolvedPrimitiveType
+        || springfox.documentation.schema.Types.isBaseType(type)
+        || springfox.documentation.schema.Types.isVoid(type)
         || enumTypeDeterminer.isEnum(type.getErasedType())) {
       return null;
     }

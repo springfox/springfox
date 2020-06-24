@@ -36,6 +36,7 @@ import java.util.Optional;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ParameterDefaultReader implements ParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
 

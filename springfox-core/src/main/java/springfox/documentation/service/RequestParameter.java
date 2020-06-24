@@ -11,6 +11,7 @@ import java.util.Objects;
  * @since 3.0.0
  */
 public class RequestParameter {
+  public static final int DEFAULT_PRECEDENCE = 0;
   private final String name;
   private final int parameterIndex;
   private final ParameterType in;

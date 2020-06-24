@@ -22,7 +22,6 @@ package springfox.documentation.service;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.Ordered;
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
 import java.util.Map;
@@ -34,14 +33,13 @@ import java.util.StringJoiner;
  */
 @Deprecated
 public class Parameter implements Ordered {
-  public static final int DEFAULT_PRECEDENCE = 0;
-  
+
   private final String name;
   private final String description;
   private final String defaultValue;
   private final Boolean required;
   private final Boolean allowMultiple;
-  private final ModelReference modelRef;
+  private final springfox.documentation.schema.ModelReference modelRef;
   private final ResolvedType type;
   private final AllowableValues allowableValues;
   private final ParameterType paramType;
@@ -66,7 +64,7 @@ public class Parameter implements Ordered {
       boolean required,
       boolean allowMultiple,
       Boolean allowEmptyValue,
-      ModelReference modelRef,
+      springfox.documentation.schema.ModelReference modelRef,
       ResolvedType type,
       AllowableValues allowableValues,
       ParameterType paramType,
@@ -172,7 +170,7 @@ public class Parameter implements Ordered {
     return paramAccess;
   }
 
-  public ModelReference getModelRef() {
+  public springfox.documentation.schema.ModelReference getModelRef() {
     return modelRef;
   }
   

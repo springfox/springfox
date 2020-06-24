@@ -51,6 +51,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     this.modelSpecifications = modelSpecifications;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<ApiModelProperty> annotation = empty();

@@ -34,7 +34,9 @@ import static springfox.bean.validators.plugins.Validators.*;
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
+
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
     Optional<Pattern> pattern = extractAnnotation(context, Pattern.class);
     String patternValueFromAnnotation = createPatternValueFromAnnotation(pattern);

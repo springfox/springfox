@@ -42,6 +42,7 @@ import static springfox.documentation.schema.Annotations.findPropertyAnnotation;
 @Conditional(JacksonXmlPresentInClassPathCondition.class)
 public class JacksonXmlPropertyPlugin implements ModelPropertyBuilderPlugin {
 
+  @SuppressWarnings("deprecation")
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<JacksonXmlProperty> propertyAnnotation = findAnnotation(context, JacksonXmlProperty.class);
@@ -112,12 +113,10 @@ public class JacksonXmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private String propertyName(Optional<JacksonXmlProperty> property) {
-    if (property.isPresent()) {
-      return defaultToNull(ofNullable(property.get().localName())
-          .filter(((Predicate<String>) String::isEmpty).negate())
-          .orElse(null));
-    }
-    return null;
+    return property.map(jacksonXmlProperty -> defaultToNull(ofNullable(jacksonXmlProperty.localName())
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse(null)))
+        .orElse(null);
   }
 
   private String defaultToNull(String value) {

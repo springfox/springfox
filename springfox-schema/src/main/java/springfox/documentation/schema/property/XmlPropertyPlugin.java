@@ -42,6 +42,7 @@ import static springfox.documentation.schema.Annotations.*;
 @Conditional(JaxbPresentInClassPathCondition.class)
 public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
 
+  @SuppressWarnings("deprecation")
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<XmlElement> elementAnnotation = empty();
@@ -108,31 +109,25 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private String wrapperName(Optional<XmlElementWrapper> wrapper, Optional<XmlElement> element) {
-    if (wrapper.isPresent()) {
-      return ofNullable(defaultToNull(ofNullable(wrapper.get().name())
-          .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null)))
-          .orElse(ofNullable(elementName(element))
-              .orElse(null));
-    }
-    return elementName(element);
+    return wrapper.map(xmlElementWrapper -> ofNullable(defaultToNull(ofNullable(xmlElementWrapper.name())
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse(null)))
+        .orElse(ofNullable(elementName(element))
+            .orElse(null)))
+        .orElseGet(() -> elementName(element));
   }
 
   private String elementName(Optional<XmlElement> element) {
-    if (element.isPresent()) {
-      return defaultToNull(ofNullable(element.get().name())
-          .filter(((Predicate<String>) String::isEmpty).negate())
-          .orElse(null));
-    }
-    return null;
+    return element.map(xmlElement -> defaultToNull(ofNullable(xmlElement.name())
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse(null)))
+        .orElse(null);
   }
 
   private String attributeName(Optional<XmlAttribute> attribute) {
-    if (attribute.isPresent()) {
-      return defaultToNull(ofNullable(attribute.get().name())
-          .filter(((Predicate<String>) String::isEmpty).negate())
-          .orElse(null));
-    }
-    return null;
+    return attribute.map(xmlAttribute -> defaultToNull(ofNullable(xmlAttribute.name())
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse(null))).orElse(null);
   }
 
   private String defaultToNull(String value) {

@@ -46,7 +46,6 @@ import static java.util.function.Function.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.schema.property.PackageNames.*;
 
 @Component
@@ -79,6 +78,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
     this.modelSpecifications = modelSpecifications;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public Optional<ModelSpecification> modelSpecificationsFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateEvaluatedType();
@@ -86,7 +86,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
         || enumTypeDeterminer.isEnum(propertiesHost.getErasedType())
-        || isBaseType(propertiesHost)
+        || springfox.documentation.schema.Types.isBaseType(propertiesHost)
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug(
           "Skipping model of type {} as its either a container type, map, enum or base type, or its already "

@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @Component
 @Conditional(JaxbPresentInClassPathCondition.class)
+@SuppressWarnings("deprecation")
 public class XmlModelPlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
 

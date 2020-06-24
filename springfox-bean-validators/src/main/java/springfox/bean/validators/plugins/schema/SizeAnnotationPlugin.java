@@ -44,6 +44,7 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
     Optional<Size> size = extractAnnotation(context);
 

@@ -32,6 +32,7 @@ import static springfox.documentation.schema.Collections.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ParameterMultiplesReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {

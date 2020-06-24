@@ -40,6 +40,7 @@ import static org.springframework.util.StringUtils.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ParameterNameReader implements ParameterBuilderPlugin {
 
   @Override

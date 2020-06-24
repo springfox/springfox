@@ -64,6 +64,7 @@ public class ResolvedMethodParameter {
     return annotations.stream().anyMatch(annotation::isInstance);
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends Annotation> Optional<T> findAnnotation(final Class<T> annotation) {
     return (Optional<T>) annotations.stream().filter(annotation::isInstance).findFirst();
   }

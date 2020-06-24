@@ -49,6 +49,7 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 @Qualifier("default")
+@SuppressWarnings("deprecation")
 public class DefaultModelDependencyProvider implements ModelDependencyProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(DefaultModelDependencyProvider.class);
@@ -86,8 +87,6 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return resolvedType -> isBaseType(ModelContext.fromParent(modelContext, resolvedType));
   }
 
-
-  @SuppressWarnings("deprecation")
   private boolean isBaseType(ModelContext modelContext) {
     String typeName = nameExtractor.typeName(modelContext);
     return Types.isBaseType(typeName);
@@ -234,6 +233,4 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   private List<ModelProperty> propertiesFor(ModelContext modelContext, ResolvedType resolvedType) {
     return propertiesProvider.propertiesFor(resolvedType, modelContext);
   }
-
-
 }

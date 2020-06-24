@@ -34,6 +34,7 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("deprecation")
 public class DocumentationContext {
   private final DocumentationType documentationType;
   private final List<RequestHandler> handlerMappings;

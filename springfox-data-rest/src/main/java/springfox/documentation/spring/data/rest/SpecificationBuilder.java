@@ -31,7 +31,6 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.schema.Types;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
@@ -244,6 +243,7 @@ abstract class SpecificationBuilder {
       return src;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     SpecificationBuilder parameterType(ParameterType parameterType) {
 
@@ -267,19 +267,16 @@ abstract class SpecificationBuilder {
           RepositoryRestConfiguration configuration = context.getConfiguration();
           TypeResolver typeResolver = context.getTypeResolver();
 
-          //noinspection unchecked
           parameter(new ResolvedMethodParameter(
               0,
               configuration.getPageParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(Integer.class)));
-          //noinspection unchecked
           parameter(new ResolvedMethodParameter(
               1,
               configuration.getLimitParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(Integer.class)));
-          //noinspection unchecked
           parameter(new ResolvedMethodParameter(
               2,
               configuration.getSortParamName(),
@@ -316,6 +313,7 @@ abstract class SpecificationBuilder {
           );
     }
 
+    @SuppressWarnings("deprecation")
     private ResolvedType inferReturnType(
         EntityContext context,
         HandlerMethod handler) {
@@ -334,9 +332,9 @@ abstract class SpecificationBuilder {
             collectionElementType(methodReturnType));
       } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
         return resolver.resolve(CollectionModel.class, domainReturnType);
-      } else if (Types.isBaseType(domainReturnType)) {
+      } else if (springfox.documentation.schema.Types.isBaseType(domainReturnType)) {
         return domainReturnType;
-      } else if (Types.isVoid(domainReturnType)) {
+      } else if (springfox.documentation.schema.Types.isVoid(domainReturnType)) {
         return resolver.resolve(Void.TYPE);
       }
 
@@ -355,6 +353,7 @@ abstract class SpecificationBuilder {
           .collect(Collectors.toList());
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private Class<?> getType() {
       return context.entity().get().getType();
     }

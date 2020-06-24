@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.builders.ResponseBuilder;
-import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.ClassSupport;
 import springfox.documentation.schema.WildcardType;
@@ -37,7 +36,6 @@ import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Response;
-import springfox.documentation.service.ResponseMessage;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -54,10 +52,11 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
+@SuppressWarnings("deprecation")
 public class Defaults {
 
   private HashSet<Class> ignored;
-  private LinkedHashMap<RequestMethod, List<ResponseMessage>> responseMessages;
+  private LinkedHashMap<RequestMethod, List<springfox.documentation.service.ResponseMessage>> responseMessages;
   private Map<HttpMethod, List<Response>> responses = new LinkedHashMap<>();
   private List<Class<? extends Annotation>> annotations;
   private Comparator<Operation> operationOrdering;
@@ -80,7 +79,7 @@ public class Defaults {
    * Use {@link Defaults#defaultResponses()} instead
    */
   @Deprecated
-  public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
+  public Map<RequestMethod, List<springfox.documentation.service.ResponseMessage>> defaultResponseMessages() {
     return responseMessages;
   }
 
@@ -338,146 +337,146 @@ public class Defaults {
   private void initResponseMessages() {
     responseMessages = new LinkedHashMap<>();
     responseMessages.put(GET, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(OK.value())
             .message(OK.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NOT_FOUND.value())
             .message(NOT_FOUND.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null).build()));
 
     responseMessages.put(PUT, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(CREATED.value())
             .message(CREATED.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NOT_FOUND.value())
             .message(NOT_FOUND.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null).build()));
 
     responseMessages.put(POST, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(CREATED.value())
             .message(CREATED.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NOT_FOUND.value())
             .message(NOT_FOUND.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null).build()));
 
     responseMessages.put(DELETE, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null)
             .build()));
 
     responseMessages.put(PATCH, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
             .responseModel(null).build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null)
             .build()));
 
     responseMessages.put(TRACE, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null)
             .build()));
 
     responseMessages.put(OPTIONS, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null)
             .build()));
     responseMessages.put(HEAD, asList(
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(NO_CONTENT.value())
             .message(NO_CONTENT.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(FORBIDDEN.value())
             .message(FORBIDDEN.getReasonPhrase())
             .responseModel(null)
             .build(),
-        new ResponseMessageBuilder()
+        new springfox.documentation.builders.ResponseMessageBuilder()
             .code(UNAUTHORIZED.value())
             .message(UNAUTHORIZED.getReasonPhrase())
             .responseModel(null)

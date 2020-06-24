@@ -42,6 +42,7 @@ import static springfox.documentation.spring.web.readers.parameter.ParameterType
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@SuppressWarnings("deprecation")
 public class ParameterTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOGGER = LoggerFactory.getLogger(ParameterTypeReader.class);
 

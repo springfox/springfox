@@ -18,14 +18,14 @@
  */
 package springfox.documentation.service;
 
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ModelSpecification;
 
 import java.util.Objects;
 
+@SuppressWarnings("deprecation")
 public class Header {
   private final String name;
-  private final ModelReference modelReference;
+  private final springfox.documentation.schema.ModelReference modelReference;
   private final ModelSpecification modelSpecification;
   private final String description;
   private final Boolean required;
@@ -33,7 +33,7 @@ public class Header {
   public Header(
       String name,
       String description,
-      ModelReference modelReference,
+      springfox.documentation.schema.ModelReference modelReference,
       ModelSpecification modelSpecification) {
     this(name, description, modelReference, modelSpecification, true);
   }
@@ -41,7 +41,7 @@ public class Header {
   public Header(
       String name,
       String description,
-      ModelReference modelReference,
+      springfox.documentation.schema.ModelReference modelReference,
       ModelSpecification modelSpecification,
       Boolean required) {
     this.name = name;
@@ -55,7 +55,7 @@ public class Header {
     return name;
   }
 
-  public ModelReference getModelReference() {
+  public springfox.documentation.schema.ModelReference getModelReference() {
     return modelReference;
   }
 

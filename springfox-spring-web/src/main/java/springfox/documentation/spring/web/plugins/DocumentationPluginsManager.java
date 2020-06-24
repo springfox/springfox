@@ -28,7 +28,6 @@ import springfox.documentation.common.Compatibility;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
@@ -111,7 +110,9 @@ public class DocumentationPluginsManager {
     return plugins;
   }
 
-  public Compatibility<Parameter, RequestParameter> parameter(ParameterContext parameterContext) {
+  @SuppressWarnings("deprecation")
+  public Compatibility<springfox.documentation.service.Parameter, RequestParameter>
+  parameter(ParameterContext parameterContext) {
     for (ParameterBuilderPlugin each : parameterPlugins.getPluginsFor(parameterContext.getDocumentationType())) {
       each.apply(parameterContext);
     }
@@ -127,7 +128,9 @@ public class DocumentationPluginsManager {
     return responseContext.responseBuilder().build();
   }
 
-  public Compatibility<Parameter, RequestParameter> expandParameter(ParameterExpansionContext context) {
+  @SuppressWarnings("deprecation")
+  public Compatibility<springfox.documentation.service.Parameter, RequestParameter>
+  expandParameter(ParameterExpansionContext context) {
     for (ExpandedParameterBuilderPlugin each : parameterExpanderPlugins.getPluginsFor(context.getDocumentationType())) {
       each.apply(context);
     }

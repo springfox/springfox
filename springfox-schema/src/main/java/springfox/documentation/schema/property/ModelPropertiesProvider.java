@@ -22,7 +22,6 @@ package springfox.documentation.schema.property;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.context.ApplicationListener;
 import springfox.documentation.annotations.Cacheable;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -31,7 +30,12 @@ import java.util.List;
 
 public interface ModelPropertiesProvider extends ApplicationListener<ObjectMapperConfigured> {
   @Cacheable(value = "modelProperties")
-  List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext);
+  @Deprecated
+  /**
+   * Use {@link ModelPropertiesProvider#propertySpecificationsFor(ResolvedType, ModelContext)}
+   * @deprecated @since 3.0.0
+   */
+  List<springfox.documentation.schema.ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext);
 
   @Cacheable(value = "propertySpecifications")
   List<PropertySpecification> propertySpecificationsFor(

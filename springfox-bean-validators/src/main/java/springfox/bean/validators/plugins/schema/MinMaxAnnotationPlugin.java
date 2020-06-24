@@ -50,6 +50,7 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
     Optional<Min> min = extractMin(context);
     Optional<Max> max = extractMax(context);

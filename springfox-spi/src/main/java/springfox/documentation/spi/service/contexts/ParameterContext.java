@@ -20,7 +20,6 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.MethodParameter;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -33,7 +32,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterContext {
   @SuppressWarnings("deprecation")
-  private final ParameterBuilder parameterBuilder;
+  private final springfox.documentation.builders.ParameterBuilder parameterBuilder;
   private final ResolvedMethodParameter resolvedMethodParameter;
   private final DocumentationContext documentationContext;
   private final GenericTypeNamingStrategy genericNamingStrategy;
@@ -47,7 +46,7 @@ public class ParameterContext {
       GenericTypeNamingStrategy genericNamingStrategy,
       OperationContext operationContext,
       int parameterIndex) {
-    this.parameterBuilder = new ParameterBuilder();
+    this.parameterBuilder = new springfox.documentation.builders.ParameterBuilder();
     this.requestParameterBuilder = new RequestParameterBuilder()
         .accepts(nullToEmptyList(operationContext.consumes()))
         .parameterIndex(parameterIndex);
@@ -77,7 +76,7 @@ public class ParameterContext {
    * @return this
    */
   @Deprecated
-  public ParameterBuilder parameterBuilder() {
+  public springfox.documentation.builders.ParameterBuilder parameterBuilder() {
     return parameterBuilder;
   }
 

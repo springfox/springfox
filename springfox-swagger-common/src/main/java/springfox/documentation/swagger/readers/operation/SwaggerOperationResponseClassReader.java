@@ -44,6 +44,7 @@ import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@SuppressWarnings("deprecation")
 public class SwaggerOperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(SwaggerOperationResponseClassReader.class);
   private final TypeResolver typeResolver;

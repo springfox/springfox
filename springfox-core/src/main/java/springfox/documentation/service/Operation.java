@@ -23,7 +23,6 @@ package springfox.documentation.service;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.common.ExternalDocumentation;
-import springfox.documentation.schema.ModelReference;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +37,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
+@SuppressWarnings("deprecation")
 public class Operation implements Ordered {
   private final HttpMethod method;
   private final String summary;
@@ -56,7 +56,7 @@ public class Operation implements Ordered {
   private final int position;
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
-  private final ModelReference responseModel;
+  private final springfox.documentation.schema.ModelReference responseModel;
   private final Set<String> produces;
   private final Set<String> consumes;
   private final Set<String> protocol;
@@ -68,7 +68,7 @@ public class Operation implements Ordered {
       String summary,
       String notes,
       ExternalDocumentation externalDocumentation,
-      ModelReference responseModel,
+      springfox.documentation.schema.ModelReference responseModel,
       String uniqueId,
       int position,
       Set<String> tags,
@@ -119,7 +119,7 @@ public class Operation implements Ordered {
    * Use @see {@link Operation#getResponses()}
    */
   @Deprecated
-  public ModelReference getResponseModel() {
+  public springfox.documentation.schema.ModelReference getResponseModel() {
     return responseModel;
   }
 

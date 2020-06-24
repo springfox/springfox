@@ -19,9 +19,7 @@
 package springfox.documentation.spi.service.contexts;
 
 import springfox.documentation.PathProvider;
-import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 
 import java.util.ArrayList;
@@ -31,7 +29,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Incubating("2.1.0")
 public class PathContext {
 
   private final RequestMappingContext parent;
@@ -50,7 +47,8 @@ public class PathContext {
     return parent.getDocumentationContext().getPathProvider();
   }
 
-  public List<Parameter> getParameters() {
+  @SuppressWarnings("deprecation")
+  public List<springfox.documentation.service.Parameter> getParameters() {
     if (operation.isPresent()) {
       return operation.get().getParameters();
     }

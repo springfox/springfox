@@ -21,12 +21,9 @@ package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
 import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
@@ -42,18 +39,20 @@ import java.util.Set;
 
 import static java.util.Collections.*;
 import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.service.Parameter.*;
+import static springfox.documentation.service.RequestParameter.*;
 
+@SuppressWarnings("deprecation")
 public abstract class AbstractOperationParameterRequestConditionReader implements OperationBuilderPlugin {
-
   private final TypeResolver resolver;
 
   public AbstractOperationParameterRequestConditionReader(TypeResolver resolver) {
     this.resolver = resolver;
   }
 
-  public List<Parameter> getParameters(Set<NameValueExpression<String>> expressions, String parameterType) {
-    List<Parameter> parameters = new ArrayList<>();
+  public List<springfox.documentation.service.Parameter> getParameters(
+      Set<NameValueExpression<String>> expressions,
+      String parameterType) {
+    List<springfox.documentation.service.Parameter> parameters = new ArrayList<>();
     for (NameValueExpression<String> expression : expressions) {
       if (skipParameter(parameters, expression)) {
         continue;
@@ -64,14 +63,14 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
       if (!isEmpty(paramValue)) {
         allowableValues = new AllowableListValues(singletonList(paramValue), "string");
       }
-      Parameter parameter = new ParameterBuilder()
+      springfox.documentation.service.Parameter parameter = new springfox.documentation.builders.ParameterBuilder()
           .name(expression.getName())
           .description(null)
           .defaultValue(paramValue)
           .required(true)
           .allowMultiple(false)
           .type(resolver.resolve(String.class))
-          .modelRef(new ModelRef("string"))
+          .modelRef(new springfox.documentation.schema.ModelRef("string"))
           .allowableValues(allowableValues)
           .parameterType(parameterType)
           .order(DEFAULT_PRECEDENCE)
@@ -120,7 +119,8 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
     return parameters;
   }
 
-  private boolean skipParameter(List<Parameter> parameters, NameValueExpression<String> expression) {
+  private boolean skipParameter(List<springfox.documentation.service.Parameter> parameters,
+      NameValueExpression<String> expression) {
     return expression.isNegated() || parameterHandled(parameters, expression);
   }
 
@@ -130,7 +130,8 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
         .anyMatch(p -> Objects.equals(p.getName(), expression.getName()));
   }
 
-  private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {
+  private boolean parameterHandled(List<springfox.documentation.service.Parameter> parameters,
+      NameValueExpression<String> expression) {
     return parameters.stream().anyMatch(input -> expression.getName().equals(input.getName()));
   }
 

@@ -23,16 +23,15 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ApiListingBuilder;
-import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
+import springfox.documentation.service.ModelNamesRegistry;
 import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.ModelNamesRegistry;
-import springfox.documentation.spi.service.contexts.ModelSpecificationRegistry;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
+import springfox.documentation.spi.service.contexts.ModelSpecificationRegistry;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -64,6 +63,7 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
 import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
+@SuppressWarnings("deprecation")
 @Component
 public class ApiListingScanner {
   private static final Logger LOGGER = getLogger(ApiListingScanner.class);
@@ -135,7 +135,7 @@ public class ApiListingScanner {
 
     List<SecurityReference> securityReferences = new ArrayList<>();
 
-    Map<String, Set<Model>> globalModelMap = new HashMap<>();
+    Map<String, Set<springfox.documentation.schema.Model>> globalModelMap = new HashMap<>();
     for (ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
@@ -147,17 +147,19 @@ public class ApiListingScanner {
       ModelSpecificationRegistryBuilder modelRegistryBuilder = new ModelSpecificationRegistryBuilder();
 
 
-      final Map<String, Model> models = new LinkedHashMap<>();
+      final Map<String, springfox.documentation.schema.Model> models = new LinkedHashMap<>();
       List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
       for (RequestMappingContext each : sortedByMethods(requestMappings)) {
-        Map<String, Set<Model>> currentModelMap = apiModelReader.read(each.withKnownModels(globalModelMap));
+        Map<String, Set<springfox.documentation.schema.Model>> currentModelMap
+            = apiModelReader.read(each.withKnownModels(
+            globalModelMap));
         modelRegistryBuilder.addAll(
             modelSpecificationReader.read(each.withKnownModels(globalModelMap))
-                                   .stream()
-                                   .filter(m -> m.key().isPresent())
-                                   .collect(Collectors.toList()));
+                .stream()
+                .filter(m -> m.key().isPresent())
+                .collect(Collectors.toList()));
         currentModelMap.values().forEach(list -> {
-          for (Model model : list) {
+          for (springfox.documentation.schema.Model model : list) {
             models.put(
                 model.getName(),
                 model);
@@ -189,7 +191,7 @@ public class ApiListingScanner {
       ModelSpecificationRegistry modelRegistry = modelRegistryBuilder.build();
       ModelNamesRegistry modelNamesRegistry =
           pluginsManager.modelNamesGeneratorFactory(documentationContext.getDocumentationType())
-                                                              .modelNamesRegistry(modelRegistry);
+              .modelNamesRegistry(modelRegistry);
       LOGGER.trace("Models in the name registry {}", modelNamesRegistry.modelsByName().keySet());
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
           .apiVersion(documentationContext.getApiInfo().getVersion())

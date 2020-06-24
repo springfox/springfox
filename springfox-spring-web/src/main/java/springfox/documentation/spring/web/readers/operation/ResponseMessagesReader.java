@@ -26,12 +26,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
-import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
@@ -51,7 +48,6 @@ import java.util.Set;
 
 import static java.util.Collections.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -80,7 +76,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
+    List<springfox.documentation.service.ResponseMessage> responseMessages
+        = context.getGlobalResponseMessages(context.httpMethod().toString());
     context.operationBuilder().responseMessages(new HashSet<>(responseMessages));
 
     context.operationBuilder().responses(new HashSet<>(context.globalResponsesFor(context.httpMethod())));
@@ -96,7 +93,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ResolvedType returnType = context.alternateFor(context.getReturnType());
     int httpStatusCode = httpStatusCode(context);
     String message = message(context);
-    ModelReference modelRef = null;
+    springfox.documentation.schema.ModelReference modelRef = null;
 
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
@@ -104,7 +101,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ResponseContext responseContext = new ResponseContext(
         context.getDocumentationContext(),
         context);
-    if (!isVoid(returnType)) {
+    if (!springfox.documentation.schema.Types.isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
           viewProvider.viewFor(context));
@@ -131,7 +128,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
                   .representation(mediaType)
                   .apply(r -> r.model(m -> m.copyOf(modelSpecifications.create(modelContext, returnType)))));
     }
-    ResponseMessage built = new ResponseMessageBuilder()
+    springfox.documentation.service.ResponseMessage built =
+        new springfox.documentation.builders.ResponseMessageBuilder()
         .code(httpStatusCode)
         .message(message)
         .responseModel(modelRef)
