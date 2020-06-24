@@ -25,7 +25,7 @@ public class ExternalDocumentationBuilder {
     return this;
   }
 
-  public ExternalDocumentation createExternalDocumentation() {
+  public ExternalDocumentation build() {
     return new ExternalDocumentation(url, description, extensions);
   }
 }

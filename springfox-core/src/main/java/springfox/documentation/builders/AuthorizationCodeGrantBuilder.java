@@ -19,9 +19,12 @@
 
 package springfox.documentation.builders;
 
+import org.springframework.lang.NonNull;
 import springfox.documentation.service.AuthorizationCodeGrant;
 import springfox.documentation.service.TokenEndpoint;
 import springfox.documentation.service.TokenRequestEndpoint;
+
+import java.util.function.Consumer;
 
 public class AuthorizationCodeGrantBuilder {
   private TokenRequestEndpoint tokenRequestEndpoint;
@@ -32,9 +35,25 @@ public class AuthorizationCodeGrantBuilder {
    *
    * @param tokenRequestEndpoint - represents the token request endpoint along with the client id and secret
    * @return this
+   * @deprecated @since 3.0.0
+   * Prefer fluent builder api {@link AuthorizationCodeGrantBuilder#tokenRequestEndpoint(Consumer)}
    */
+  @Deprecated
   public AuthorizationCodeGrantBuilder tokenRequestEndpoint(TokenRequestEndpoint tokenRequestEndpoint) {
     this.tokenRequestEndpoint = BuilderDefaults.defaultIfAbsent(tokenRequestEndpoint, this.tokenRequestEndpoint);
+    return this;
+  }
+
+  /**
+   * Updates token request endpoint
+   *
+   * @param consumer - represents the token request endpoint along with the client id and secret
+   * @return this
+   */
+  public AuthorizationCodeGrantBuilder tokenRequestEndpoint(@NonNull Consumer<TokenRequestEndpointBuilder> consumer) {
+    TokenRequestEndpointBuilder endpoint = new TokenRequestEndpointBuilder();
+    consumer.accept(endpoint);
+    this.tokenRequestEndpoint = BuilderDefaults.defaultIfAbsent(endpoint.build(), this.tokenRequestEndpoint);
     return this;
   }
 
@@ -43,11 +62,28 @@ public class AuthorizationCodeGrantBuilder {
    *
    * @param tokenEndpoint - represents the token endpoint along with the token name
    * @return this
+   * @deprecated @since 3.0.0
+   * Prefer fluent builder api {@link AuthorizationCodeGrantBuilder#tokenEndpoint(Consumer)}
    */
+  @Deprecated
   public AuthorizationCodeGrantBuilder tokenEndpoint(TokenEndpoint tokenEndpoint) {
     this.tokenEndpoint = BuilderDefaults.defaultIfAbsent(tokenEndpoint, this.tokenEndpoint);
     return this;
   }
+
+  /**
+   * Updates token endpoint
+   *
+   * @param consumer - represents the token endpoint along with the token name
+   * @return this
+   */
+  public AuthorizationCodeGrantBuilder tokenEndpoint(@NonNull Consumer<TokenEndpointBuilder> consumer) {
+    TokenEndpointBuilder endpoint = new TokenEndpointBuilder();
+    consumer.accept(endpoint);
+    this.tokenEndpoint = BuilderDefaults.defaultIfAbsent(endpoint.build(), this.tokenEndpoint);
+    return this;
+  }
+
 
   public AuthorizationCodeGrant build() {
     return new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint);

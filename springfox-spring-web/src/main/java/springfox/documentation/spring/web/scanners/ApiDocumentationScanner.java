@@ -23,12 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
 import springfox.documentation.builders.DocumentationBuilder;
-import springfox.documentation.builders.ResourceListingBuilder;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.PathAdjuster;
-import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
@@ -49,8 +47,8 @@ import static springfox.documentation.spring.web.paths.Paths.*;
 @Component
 public class ApiDocumentationScanner {
 
-  private ApiListingReferenceScanner apiListingReferenceScanner;
-  private ApiListingScanner apiListingScanner;
+  private final ApiListingReferenceScanner apiListingReferenceScanner;
+  private final ApiListingScanner apiListingScanner;
 
   @Autowired
   public ApiDocumentationScanner(
@@ -83,16 +81,14 @@ public class ApiDocumentationScanner {
     Set<ApiListingReference> apiReferenceSet = new TreeSet<>(listingReferencePathComparator());
     apiReferenceSet.addAll(apiListingReferences(apiListings, context));
 
-    ResourceListing resourceListing = new ResourceListingBuilder()
-        .apiVersion(context.getApiInfo().getVersion())
-        .apis(apiReferenceSet.stream()
-            .sorted(context.getListingReferenceOrdering())
-            .collect(toList()))
-        .securitySchemes(context.getSecuritySchemes())
-        .info(context.getApiInfo())
-        .servers(context.getServers())
-        .build();
-    group.resourceListing(resourceListing);
+    group.resourceListing(r ->
+        r.apiVersion(context.getApiInfo().getVersion())
+            .apis(apiReferenceSet.stream()
+                .sorted(context.getListingReferenceOrdering())
+                .collect(toList()))
+            .securitySchemes(context.getSecuritySchemes())
+            .info(context.getApiInfo())
+            .servers(context.getServers()));
     return group.build();
   }
 

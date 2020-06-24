@@ -21,10 +21,12 @@ package springfox.documentation.builders;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import org.springframework.lang.NonNull;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class AlternateTypeBuilder {
   private String fullyQualifiedClassName;
@@ -36,13 +38,24 @@ public class AlternateTypeBuilder {
     return this;
   }
 
+  /**
+   * @param property - properties for the alternate type
+   * @return AlternateTypeBuilder
+   * @see AlternateTypeBuilder#property(Consumer)  instead
+   * @deprecated @since 3.0.0
+   */
+  @Deprecated
   public AlternateTypeBuilder property(AlternateTypePropertyBuilder property) {
     this.properties.add(property);
     return this;
   }
 
-  public AlternateTypeBuilder properties(List<AlternateTypePropertyBuilder> properties) {
-    this.properties.addAll(properties);
+  @SuppressWarnings("deprecation")
+  //Will go away when constructor becomes package private
+  public AlternateTypeBuilder property(@NonNull Consumer<AlternateTypePropertyBuilder> property) {
+    AlternateTypePropertyBuilder builder = new AlternateTypePropertyBuilder();
+    property.accept(builder);
+    this.properties.add(builder);
     return this;
   }
 
@@ -50,7 +63,6 @@ public class AlternateTypeBuilder {
     this.annotations.addAll(annotations);
     return this;
   }
-
 
   /**
    * @param properties - properties for the alternate type

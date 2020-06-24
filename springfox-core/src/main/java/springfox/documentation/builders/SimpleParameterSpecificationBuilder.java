@@ -1,5 +1,6 @@
 package springfox.documentation.builders;
 
+import org.springframework.lang.NonNull;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.NumericElementFacetBuilder;
@@ -18,7 +19,6 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.builders.ElementFacets.*;
 
 public class SimpleParameterSpecificationBuilder {
-  private final RequestParameterBuilder owner;
   private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
 
   private ParameterStyle style;
@@ -26,12 +26,8 @@ public class SimpleParameterSpecificationBuilder {
   private Boolean allowReserved;
   private Boolean allowEmptyValue;
   private String defaultValue;
-  private ModelSpecification model;
   private CollectionFormat collectionFormat;
-
-  SimpleParameterSpecificationBuilder(RequestParameterBuilder owner) {
-    this.owner = owner;
-  }
+  private final ModelSpecificationBuilder model = new ModelSpecificationBuilder();
 
   public SimpleParameterSpecificationBuilder style(ParameterStyle style) {
     this.style = style;
@@ -48,8 +44,8 @@ public class SimpleParameterSpecificationBuilder {
     return this;
   }
 
-  public SimpleParameterSpecificationBuilder model(ModelSpecification model) {
-    this.model = model;
+  public SimpleParameterSpecificationBuilder model(@NonNull Consumer<ModelSpecificationBuilder> consumer) {
+    consumer.accept(model);
     return this;
   }
 
@@ -76,25 +72,25 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder collectionFacet(
-      Consumer<CollectionElementFacetBuilder> facet) {
+      @NonNull Consumer<CollectionElementFacetBuilder> facet) {
     facet.accept(facetBuilder(CollectionElementFacetBuilder.class));
     return this;
   }
 
   public SimpleParameterSpecificationBuilder stringFacet(
-      Consumer<StringElementFacetBuilder> facet) {
+      @NonNull Consumer<StringElementFacetBuilder> facet) {
     facet.accept(facetBuilder(StringElementFacetBuilder.class));
     return this;
   }
 
   public SimpleParameterSpecificationBuilder numericFacet(
-      Consumer<NumericElementFacetBuilder> facet) {
+      @NonNull Consumer<NumericElementFacetBuilder> facet) {
     facet.accept(facetBuilder(NumericElementFacetBuilder.class));
     return this;
   }
 
   public SimpleParameterSpecificationBuilder enumerationFacet(
-      Consumer<EnumerationElementFacetBuilder> facet) {
+      @NonNull Consumer<EnumerationElementFacetBuilder> facet) {
     facet.accept(facetBuilder(EnumerationElementFacetBuilder.class));
     return this;
   }
@@ -105,10 +101,14 @@ public class SimpleParameterSpecificationBuilder {
         .map(ElementFacetBuilder::build)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
+    ModelSpecification builtModel = model.build();
+    if (builtModel == null) {
+      return null;
+    }
     if (explode != null
         && explode
-        && model.getCollection().isPresent()) {
-      model = model.getCollection().get().getModel();
+        && builtModel.getCollection().isPresent()) {
+      builtModel = builtModel.getCollection().get().getModel();
     }
     return new SimpleParameterSpecification(
         style,
@@ -117,7 +117,7 @@ public class SimpleParameterSpecificationBuilder {
         allowReserved,
         allowEmptyValue,
         defaultValue,
-        model,
+        builtModel,
         facets
     );
   }
@@ -133,7 +133,7 @@ public class SimpleParameterSpecificationBuilder {
         .allowReserved(simple.getAllowReserved())
         .defaultValue(simple.getDefaultValue())
         .explode(simple.getExplode())
-        .model(simple.getModel())
+        .model(m -> m.copyOf(simple.getModel()))
         .style(simple.getStyle());
   }
 }

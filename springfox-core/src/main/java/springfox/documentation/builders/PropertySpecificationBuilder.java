@@ -1,5 +1,6 @@
 package springfox.documentation.builders;
 
+import org.springframework.lang.NonNull;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.NumericElementFacetBuilder;
@@ -70,25 +71,25 @@ public class PropertySpecificationBuilder {
   }
 
   public PropertySpecificationBuilder collectionFacet(
-      Consumer<CollectionElementFacetBuilder> facet) {
+      @NonNull Consumer<CollectionElementFacetBuilder> facet) {
     facet.accept(facetBuilder(CollectionElementFacetBuilder.class));
     return this;
   }
 
   public PropertySpecificationBuilder stringFacet(
-      Consumer<StringElementFacetBuilder> facet) {
+      @NonNull Consumer<StringElementFacetBuilder> facet) {
     facet.accept(facetBuilder(StringElementFacetBuilder.class));
     return this;
   }
 
   public PropertySpecificationBuilder numericFacet(
-      Consumer<NumericElementFacetBuilder> facet) {
+      @NonNull Consumer<NumericElementFacetBuilder> facet) {
     facet.accept(facetBuilder(NumericElementFacetBuilder.class));
     return this;
   }
 
   public PropertySpecificationBuilder enumerationFacet(
-      Consumer<EnumerationElementFacetBuilder> facet) {
+      @NonNull Consumer<EnumerationElementFacetBuilder> facet) {
     facet.accept(facetBuilder(EnumerationElementFacetBuilder.class));
     return this;
   }

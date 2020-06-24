@@ -21,25 +21,24 @@ package springfox.service.model
 
 import spock.lang.Specification
 import springfox.documentation.builders.DocumentationBuilder
-import springfox.documentation.builders.ResourceListingBuilder
 import springfox.documentation.service.ApiKey
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 
 class DocumentationSpec extends Specification {
-  def "Groups are built correctly" () {
+  def "Groups are built correctly"() {
     given:
-      List<SecurityScheme> authorizations = [new ApiKey("api-key", "test", "header",)]
-      Documentation built = new DocumentationBuilder()
-              .resourceListing(new ResourceListingBuilder()
-                .securitySchemes(authorizations)
-                .apis([Mock(ApiListingReference)])
-                .build())
-              .apiListingsByResourceGroupName(new HashMap<>())
-              .build()
+    List<SecurityScheme> authorizations = [new ApiKey("api-key", "test", "header",)]
+    Documentation built = new DocumentationBuilder()
+        .resourceListing {
+          it.securitySchemes(authorizations)
+              .apis([Mock(ApiListingReference)])
+        }
+        .apiListingsByResourceGroupName(new HashMap<>())
+        .build()
     expect:
-      built.apiListings.size() == 0
-      built.resourceListing.securitySchemes.size() == 1
+    built.apiListings.size() == 0
+    built.resourceListing.securitySchemes.size() == 1
   }
 }

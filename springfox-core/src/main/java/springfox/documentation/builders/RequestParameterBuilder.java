@@ -1,6 +1,7 @@
 package springfox.documentation.builders;
 
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.ParameterSpecification;
@@ -79,12 +80,12 @@ public class RequestParameterBuilder {
 
   private SimpleParameterSpecificationBuilder queryBuilder() {
     if (simpleParameterBuilder == null) {
-      simpleParameterBuilder = new SimpleParameterSpecificationBuilder(this);
+      simpleParameterBuilder = new SimpleParameterSpecificationBuilder();
     }
     return simpleParameterBuilder;
   }
 
-  public RequestParameterBuilder query(Consumer<SimpleParameterSpecificationBuilder> parameter) {
+  public RequestParameterBuilder query(@NonNull Consumer<SimpleParameterSpecificationBuilder> parameter) {
     parameter.accept(queryBuilder());
     return this;
   }
@@ -159,7 +160,7 @@ public class RequestParameterBuilder {
             accepts,
             simpleParameterBuilder != null ? simpleParameterBuilder.build() : null,
             contentSpecificationBuilder != null ? contentSpecificationBuilder.build() : null,
-            new SimpleParameterSpecificationBuilder(this),
+            new SimpleParameterSpecificationBuilder(),
             new ContentSpecificationBuilder()));
 
     return new RequestParameter(

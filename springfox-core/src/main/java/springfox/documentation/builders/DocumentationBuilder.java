@@ -19,11 +19,11 @@
 
 package springfox.documentation.builders;
 
+import org.springframework.lang.NonNull;
 import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
-import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 
@@ -35,6 +35,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -47,7 +49,7 @@ public class DocumentationBuilder {
   private final Set<String> consumes = new TreeSet<>();
   private final Set<String> schemes = new TreeSet<>();
   private final List<VendorExtension> vendorExtensions = new ArrayList<>();
-  private final List<Server> servers = new ArrayList<>();
+  private final Map<String, ServerBuilder> servers = new TreeMap<>();
   private ResourceListing resourceListing;
   private String groupName;
   private String basePath;
@@ -95,11 +97,27 @@ public class DocumentationBuilder {
    *
    * @param resourceListing - resource listing
    * @return this
+   * @deprecated @since 3.0.0
+   * Prefer fluent builder api {@link DocumentationBuilder#resourceListing(Consumer)}
    */
+  @Deprecated
   public DocumentationBuilder resourceListing(ResourceListing resourceListing) {
     this.resourceListing = defaultIfAbsent(
         resourceListing,
         this.resourceListing);
+    return this;
+  }
+
+  /**
+   * Updates the resource listing
+   *
+   * @param consumer - consumer that provides a resource listing builder
+   * @return this
+   */
+  public DocumentationBuilder resourceListing(@NonNull Consumer<ResourceListingBuilder> consumer) {
+    ResourceListingBuilder builder = new ResourceListingBuilder();
+    consumer.accept(builder);
+    this.resourceListing = defaultIfAbsent(builder.build(), this.resourceListing);
     return this;
   }
 
@@ -111,8 +129,8 @@ public class DocumentationBuilder {
    */
   public DocumentationBuilder tags(Set<Tag> tags) {
     this.tags.addAll(nullToEmptySet(tags).stream()
-                                         .filter(Objects::nonNull)
-                                         .collect(toSet()));
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -124,8 +142,8 @@ public class DocumentationBuilder {
    */
   public DocumentationBuilder produces(Set<String> mediaTypes) {
     this.produces.addAll(nullToEmptySet(mediaTypes).stream()
-                                                   .filter(Objects::nonNull)
-                                                   .collect(toSet()));
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -137,8 +155,8 @@ public class DocumentationBuilder {
    */
   public DocumentationBuilder consumes(Set<String> mediaTypes) {
     this.consumes.addAll(nullToEmptySet(mediaTypes).stream()
-                                                   .filter(Objects::nonNull)
-                                                   .collect(toSet()));
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -163,8 +181,8 @@ public class DocumentationBuilder {
    */
   public DocumentationBuilder schemes(Set<String> schemes) {
     this.schemes.addAll(nullToEmptySet(schemes).stream()
-                                               .filter(Objects::nonNull)
-                                               .collect(toSet()));
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -195,23 +213,27 @@ public class DocumentationBuilder {
   /**
    * Adds servers information for this API
    *
-   * @param servers - servers
+   * @param name - servers
    * @return this
    */
-  public DocumentationBuilder servers(List<Server> servers) {
-    this.servers.addAll(nullToEmptyList(servers));
-    return this;
+  public Function<Consumer<ServerBuilder>, DocumentationBuilder> server(String name) {
+    return consumer -> {
+      consumer.accept(servers.computeIfAbsent(name, n -> new ServerBuilder().name(n)));
+      return this;
+    };
   }
 
   /**
    * Adds external documentation information for this API
    *
-   * @param externalDocumentation - external documentation reference
+   * @param consumer - external documentation reference
    * @return this
    */
-  public DocumentationBuilder externalDocumentation(ExternalDocumentation externalDocumentation) {
+  public DocumentationBuilder externalDocumentation(@NonNull Consumer<ExternalDocumentationBuilder> consumer) {
+    ExternalDocumentationBuilder builder = new ExternalDocumentationBuilder();
+    consumer.accept(builder);
     this.externalDocumentation = defaultIfAbsent(
-        externalDocumentation,
+        builder.build(),
         this.externalDocumentation);
     return this;
   }
@@ -231,7 +253,9 @@ public class DocumentationBuilder {
         consumes,
         host,
         schemes,
-        servers,
+        servers.values().stream()
+            .map(ServerBuilder::build)
+            .collect(toList()),
         externalDocumentation,
         vendorExtensions);
   }

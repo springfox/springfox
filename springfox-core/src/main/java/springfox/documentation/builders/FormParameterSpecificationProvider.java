@@ -36,25 +36,25 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
       MediaType finalMediaType = mediaType;
       contentSpecification
           = context.getContentSpecificationBuilder()
-                   .requestBody(true)
-                   .representation(mediaType)
-                   .apply(r -> {
-                     r.model(m -> m.copyOf(simpleParameter.getModel()));
-                     if (finalMediaType == MediaType.APPLICATION_FORM_URLENCODED) {
-                       r.encodings(null);
-                     } else {
-                       r.encoding(context.getName())
-                           .apply(e ->
-                               e.contentType(MediaType.TEXT_PLAIN_VALUE)
-                                   .style(ParameterStyle.SIMPLE));
-                     }
-                   })
-                   .build();
+          .requestBody(true)
+          .representation(mediaType)
+          .apply(r -> {
+            r.model(m -> m.copyOf(simpleParameter.getModel()));
+            if (finalMediaType == MediaType.APPLICATION_FORM_URLENCODED) {
+              r.clearEncodings();
+            } else {
+              r.encoding(context.getName())
+                  .apply(e ->
+                      e.contentType(MediaType.TEXT_PLAIN_VALUE)
+                          .style(ParameterStyle.SIMPLE));
+            }
+          })
+          .build();
 
     } else if (contentParameter != null) {
       Representation representation =
           contentParameter.representationFor(mediaType)
-                          .orElse(contentParameter.representationFor(MediaType.ALL).orElse(null));
+              .orElse(contentParameter.representationFor(MediaType.ALL).orElse(null));
       Collection<Encoding> encodings;
       ModelSpecification model;
       if (representation == null) {
@@ -62,27 +62,36 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
             .name(context.getName())
             .scalarModel(ScalarType.STRING)
             .build();
-        encodings = null;
+        contentSpecification = context.getContentSpecificationBuilder()
+            .requestBody(true)
+            .representation(mediaType)
+            .apply(r -> r.model(m -> m.copyOf(model))
+                .clearEncodings())
+            .build();
       } else {
         model = representation.getModel();
         encodings = representation.getEncodings();
+        contentSpecification = context.getContentSpecificationBuilder()
+            .requestBody(true)
+            .representation(mediaType)
+            .apply(r -> {
+              r.model(m -> m.copyOf(model));
+              encodings.forEach(each -> r.encoding(each.getPropertyRef())
+                  .apply(e -> e.copyOf(each)));
+            })
+            .build();
       }
-      contentSpecification = context.getContentSpecificationBuilder()
-                                    .requestBody(true)
-                                    .representation(mediaType)
-                                    .apply(r -> r.model(m -> m.copyOf(model))
-                                                 .encodings(encodings))
-                                    .build();
+
     } else {
       LOGGER.warn("Parameter should either be a simple or a content type");
       contentSpecification = context.getContentSpecificationBuilder()
-                                    .representation(mediaType)
-                                    .apply(r -> r.model(m -> m.copyOf(new ModelSpecificationBuilder()
-                                                                          .name(context.getName())
-                                                                          .scalarModel(ScalarType.STRING)
-                                                                          .build()))
-                                                 .encodings(null))
-                                    .build();
+          .representation(mediaType)
+          .apply(r -> r.model(m -> m.copyOf(new ModelSpecificationBuilder()
+              .name(context.getName())
+              .scalarModel(ScalarType.STRING)
+              .build()))
+              .clearEncodings())
+          .build();
     }
 
     return new ParameterSpecification(
@@ -96,12 +105,12 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
 
   private boolean supportsFormUrlEncoding(ParameterSpecificationContext context) {
     return context.getAccepts().stream()
-                  .anyMatch(mediaType -> mediaType.equalsTypeAndSubtype(MediaType.APPLICATION_FORM_URLENCODED));
+        .anyMatch(mediaType -> mediaType.equalsTypeAndSubtype(MediaType.APPLICATION_FORM_URLENCODED));
   }
 
   private boolean supportsMultipartFormData(ParameterSpecificationContext context) {
     return context.getAccepts().stream()
-                  .anyMatch(mediaType -> mediaType.equalsTypeAndSubtype(MediaType.MULTIPART_FORM_DATA)
-                      || mediaType.equals(MediaType.MULTIPART_MIXED));
+        .anyMatch(mediaType -> mediaType.equalsTypeAndSubtype(MediaType.MULTIPART_FORM_DATA)
+            || mediaType.equals(MediaType.MULTIPART_MIXED));
   }
 }

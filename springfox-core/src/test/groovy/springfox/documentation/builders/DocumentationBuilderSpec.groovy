@@ -53,7 +53,6 @@ class DocumentationBuilderSpec extends Specification {
     builderMethod                    | value                          | property
     'name'                           | 'group1'                       | 'groupName'
     'apiListingsByResourceGroupName' | multiMap()                     | 'apiListings'
-    'resourceListing'                | Mock(ResourceListing)          | 'resourceListing'
     'basePath'                       | 'urn:some-path'                | 'basePath'
     'produces'                       | ['application/json'] as Set    | 'produces'
     'consumes'                       | ['application/json'] as Set    | 'consumes'
@@ -88,7 +87,6 @@ class DocumentationBuilderSpec extends Specification {
     builderMethod                    | value                          | property
     'name'                           | 'group1'                       | 'groupName'
     'apiListingsByResourceGroupName' | multiMap()                     | 'apiListings'
-    'resourceListing'                | Mock(ResourceListing)          | 'resourceListing'
     'basePath'                       | 'urn:some-path'                | 'basePath'
     'produces'                       | ['application/json'] as Set    | 'produces'
     'consumes'                       | ['application/json'] as Set    | 'consumes'

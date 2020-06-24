@@ -1,5 +1,6 @@
 package springfox.documentation.builders;
 
+import org.springframework.lang.NonNull;
 import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.Example;
@@ -78,25 +79,25 @@ public class ModelFacetsBuilder {
   }
 
   public ModelFacetsBuilder collectionFacet(
-      Consumer<CollectionElementFacetBuilder> facet) {
+      @NonNull Consumer<CollectionElementFacetBuilder> facet) {
     facet.accept(facetBuilder(CollectionElementFacetBuilder.class));
     return this;
   }
 
   public ModelFacetsBuilder stringFacet(
-      Consumer<StringElementFacetBuilder> facet) {
+      @NonNull Consumer<StringElementFacetBuilder> facet) {
     facet.accept(facetBuilder(StringElementFacetBuilder.class));
     return this;
   }
 
   public ModelFacetsBuilder numericFacet(
-      Consumer<NumericElementFacetBuilder> facet) {
+      @NonNull Consumer<NumericElementFacetBuilder> facet) {
     facet.accept(facetBuilder(NumericElementFacetBuilder.class));
     return this;
   }
 
   public ModelFacetsBuilder enumerationFacet(
-      Consumer<EnumerationElementFacetBuilder> facet) {
+      @NonNull Consumer<EnumerationElementFacetBuilder> facet) {
     facet.accept(facetBuilder(EnumerationElementFacetBuilder.class));
     return this;
   }
@@ -108,10 +109,10 @@ public class ModelFacetsBuilder {
 
   public ModelFacets build() {
     List<ElementFacet> facets = facetBuilders.values().stream()
-                                             .filter(Objects::nonNull)
-                                             .map(ElementFacetBuilder::build)
-                                             .filter(Objects::nonNull)
-                                             .collect(Collectors.toList());
+        .filter(Objects::nonNull)
+        .map(ElementFacetBuilder::build)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
     return new ModelFacets(
         modelKey,
         title,
@@ -131,13 +132,13 @@ public class ModelFacetsBuilder {
           .copyOf(each);
     }
     return this.modelKey(other.getModelKey())
-               .title(other.getTitle())
-               .description(other.getDescription())
-               .nullable(other.getNullable())
-               .deprecated(other.getDeprecated())
-               .extensions(other.getExtensions())
-               .externalDocumentation(other.getExternalDocumentation())
-               .examples(other.getExamples())
-               .xml(other.getXml());
+        .title(other.getTitle())
+        .description(other.getDescription())
+        .nullable(other.getNullable())
+        .deprecated(other.getDeprecated())
+        .extensions(other.getExtensions())
+        .externalDocumentation(other.getExternalDocumentation())
+        .examples(other.getExamples())
+        .xml(other.getXml());
   }
 }

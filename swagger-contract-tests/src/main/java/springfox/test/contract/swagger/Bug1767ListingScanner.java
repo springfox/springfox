@@ -21,7 +21,6 @@ package springfox.test.contract.swagger;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.builders.ResponseBuilder;
@@ -100,11 +99,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                                  .name("description")
                                                  .required(true)
                                                  .in(ParameterType.QUERY)
-                                                 .query(q -> q.model(
-                                                     new ModelSpecificationBuilder() //<5b>
-                                                                                     .scalarModel(
-                                                                                         ScalarType.STRING)
-                                                                                     .build()))
+                                                 .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING))) //<5b>
                                                  .build()))
                                     .responses(responseMessages()) //<6>
                                     .responseModel(new springfox.documentation.schema.ModelRef("string")) //<7>

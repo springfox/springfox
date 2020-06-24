@@ -13,7 +13,12 @@ class AlternateTypePropertyBuilderSpec extends Specification {
     when:
     def built = sut
         .fullyQualifiedClassName(className)
-        .property(property(propertyName, canRead, canWrite))
+        .property {
+          it.name(propertyName)
+              .type(String)
+              .canRead(canRead)
+              .canWrite(canWrite)
+        }
         .annotations([])
         .build()
 
@@ -32,13 +37,5 @@ class AlternateTypePropertyBuilderSpec extends Specification {
 
   def hasMethod(Class<?> built, methodName) {
     built.declaredMethods.find { "${it.name}".toLowerCase() == methodName } != null
-  }
-
-  AlternateTypePropertyBuilder property(propertyName, canRead, canWrite) {
-    new AlternateTypePropertyBuilder()
-        .name(propertyName)
-        .type(String)
-        .canRead(canRead)
-        .canWrite(canWrite)
   }
 }

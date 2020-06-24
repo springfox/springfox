@@ -21,7 +21,6 @@ package springfox.documentation.builders;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
-import springfox.documentation.annotations.Incubating;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -29,13 +28,22 @@ import java.util.List;
 
 import static org.springframework.util.StringUtils.*;
 
-@Incubating("2.7.0")
 public class AlternateTypePropertyBuilder {
   private Class<?> clazz;
   private String name;
   private boolean canRead;
   private boolean canWrite;
   private List<Annotation> annotations;
+
+
+  /**
+   * Should use available fluent builders
+   *
+   * @deprecated @since 3.0.0
+   */
+  @Deprecated
+  public AlternateTypePropertyBuilder() {
+  }
 
   public AlternateTypePropertyBuilder type(Class<?> clazz) {
     this.clazz = clazz;

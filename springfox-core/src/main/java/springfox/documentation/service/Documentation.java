@@ -53,7 +53,7 @@ public class Documentation {
       Set<String> consumes,
       String host,
       Set<String> schemes,
-      List<Server> servers,
+      Collection<Server> servers,
       ExternalDocumentation externalDocumentation,
       Collection<VendorExtension> vendorExtensions) {
 

@@ -1,6 +1,6 @@
 package springfox.documentation.builders;
 
-import org.slf4j.Logger;
+import org.springframework.lang.NonNull;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.MapSpecification;
@@ -9,14 +9,15 @@ import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import static org.slf4j.LoggerFactory.*;
+import static springfox.documentation.builders.NoopValidator.*;
 
 public class ModelSpecificationBuilder {
-  private static final Logger LOGGER = getLogger(ModelSpecificationBuilder.class);
   private final ModelFacetsBuilder facetsBuilder = new ModelFacetsBuilder();
   private String name;
   private ScalarModelSpecification scalar;
@@ -24,13 +25,14 @@ public class ModelSpecificationBuilder {
   private MapSpecification map;
   private ReferenceModelSpecification reference;
   private CompoundModelSpecificationBuilder compoundModelBuilder;
+  private final Validator<ModelSpecificationBuilder> validator = this::validateSpecfication;
 
   public ModelSpecificationBuilder name(String name) {
     this.name = name;
     return this;
   }
 
-  public ModelSpecificationBuilder facets(Consumer<ModelFacetsBuilder> facets) {
+  public ModelSpecificationBuilder facets(@NonNull Consumer<ModelFacetsBuilder> facets) {
     facets.accept(facetsBuilder);
     return this;
   }
@@ -56,7 +58,7 @@ public class ModelSpecificationBuilder {
     return compoundModelBuilder;
   }
 
-  public ModelSpecificationBuilder compoundModel(Consumer<CompoundModelSpecificationBuilder> compound) {
+  public ModelSpecificationBuilder compoundModel(@NonNull Consumer<CompoundModelSpecificationBuilder> compound) {
     compound.accept(compoundModelBuilder());
     return this;
   }
@@ -79,12 +81,10 @@ public class ModelSpecificationBuilder {
   public ModelSpecification build() {
     CompoundModelSpecification compoundModel =
         compoundModelBuilder != null ? compoundModelBuilder.build() : null;
-    ensureValidSpecification(
-        scalar,
-        compoundModel,
-        reference,
-        collection,
-        map);
+    List<ValidationResult> results = validator.validate(this);
+    if (logProblems(results).size() > 0) {
+      return null;
+    }
     return new ModelSpecification(
         name,
         facetsBuilder.build(),
@@ -120,22 +120,30 @@ public class ModelSpecificationBuilder {
     return this;
   }
 
-  private void ensureValidSpecification(
-      Object... specs) {
-    long specCount = Arrays.stream(specs)
-                           .filter(Objects::nonNull)
-                           .count();
+  private List<ValidationResult> validateSpecfication(ModelSpecificationBuilder builder) {
+    List<ValidationResult> validationResults = new ArrayList<>();
+    CompoundModelSpecification compoundModel =
+        compoundModelBuilder != null ? compoundModelBuilder.build() : null;
+    long specCount = Arrays.asList(scalar,
+        compoundModel,
+        reference,
+        collection,
+        map).stream()
+        .filter(Objects::nonNull)
+        .count();
+
     if (specCount == 0) {
-      LOGGER.error(
-          "Error building model {}",
-          name);
-      throw new IllegalArgumentException("At least one type of specification is required");
+      validationResults.add(new ValidationResult(
+          "ModelSpecification",
+          "spec",
+          "At least one type of specification is required"));
     }
     if (specCount > 1) {
-      LOGGER.error(
-          "Error building model {}",
-          name);
-      throw new IllegalArgumentException("Only one of the specifications should be non null");
+      validationResults.add(new ValidationResult(
+          "ModelSpecification",
+          "spec",
+          "Only one of the specifications should be non null"));
     }
+    return validationResults;
   }
 }

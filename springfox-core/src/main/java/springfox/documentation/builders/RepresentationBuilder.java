@@ -1,9 +1,7 @@
 package springfox.documentation.builders;
 
-import springfox.documentation.service.Encoding;
 import springfox.documentation.service.Representation;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -38,20 +36,15 @@ public class RepresentationBuilder {
     return this;
   }
 
-  public RepresentationBuilder encodings(Collection<Encoding> encodings) {
-    if (encodings == null) {
-      this.encodings.clear();
-    } else {
-      encodings.forEach(encoding -> this.encoding(encoding.getPropertyRef())
-          .apply(e -> e.copyOf(encoding)));
-    }
+  public RepresentationBuilder clearEncodings() {
+    this.encodings.clear();
     return this;
   }
 
-  public EncodingBuilder encodingForProperty(String property) {
+  private EncodingBuilder encodingForProperty(String property) {
     return this.encodings.computeIfAbsent(
         property,
-        p -> new EncodingBuilder(this)
+        p -> new EncodingBuilder()
             .propertyRef(p));
   }
 

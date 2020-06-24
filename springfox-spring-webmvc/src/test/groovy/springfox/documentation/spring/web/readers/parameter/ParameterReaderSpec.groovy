@@ -23,10 +23,15 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import org.springframework.mock.env.MockEnvironment
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
 import spock.lang.Unroll
+import springfox.documentation.schema.ScalarType
 import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -63,6 +68,7 @@ class ParameterReaderSpec
     parameterContext.requestParameterBuilder()
         .name("test")
         .in(ParameterType.QUERY)
+        .query { q -> q.model { it.scalarModel(ScalarType.STRING) } }
         .build()
         .parameterSpecification
         ?.query
@@ -72,8 +78,9 @@ class ParameterReaderSpec
     where:
     parameterPlugin                         | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation | reqParamAnnot | expected
     new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | null          | null
-    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }]) | null          | null
-    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | reqParam([defaultValue: { -> 'defr' }]) | 'defr' }
+    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }])                                                                                                              | null          | null
+    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | reqParam([defaultValue: { -> 'defr' }])                                                                                                                              | 'defr'
+  }
 
   @Unroll
   def "should set parameter name and description correctly for #methodName"() {

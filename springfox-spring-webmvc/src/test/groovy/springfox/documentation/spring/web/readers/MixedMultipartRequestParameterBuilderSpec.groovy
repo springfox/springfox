@@ -91,10 +91,9 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("id")
         .query { q
           ->
-          q.model(
-              new ModelSpecificationBuilder()
-                  .scalarModel(ScalarType.UUID)
-                  .build())
+          q.model {
+            it.scalarModel(ScalarType.UUID)
+          }
         }
         .build()
   }
@@ -158,10 +157,10 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
               ->
               p.isHidden(hidden)
                   .type(
-                  new ModelSpecificationBuilder()
-                      .name("String")
-                      .scalarModel(ScalarType.STRING)
-                      .build())
+                      new ModelSpecificationBuilder()
+                          .name("String")
+                          .scalarModel(ScalarType.STRING)
+                          .build())
                   .xml(new Xml().name("id").namespace("urn:io:springfox").prefix("sf"))
             } as Consumer)
         .property("version")
@@ -170,10 +169,10 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
               ->
               p.isHidden(hidden)
                   .type(
-                  new ModelSpecificationBuilder()
-                      .name("String")
-                      .scalarModel(ScalarType.BIGDECIMAL)
-                      .build())
+                      new ModelSpecificationBuilder()
+                          .name("String")
+                          .scalarModel(ScalarType.BIGDECIMAL)
+                          .build())
                   .xml(new Xml().name("version").namespace("urn:io:springfox").prefix("sf"))
             } as Consumer)
         .maxProperties(2)

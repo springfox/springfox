@@ -19,13 +19,8 @@ public class EncodingBuilder {
   private ParameterStyle style;
   private Boolean explode;
   private Boolean allowReserved;
-  private Set<Header> headers = new HashSet<>();
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
-  private final RepresentationBuilder parent;
-
-  public EncodingBuilder(RepresentationBuilder parent) {
-    this.parent = parent;
-  }
+  private final Set<Header> headers = new HashSet<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   EncodingBuilder propertyRef(String propertyRef) {
     this.propertyRef = propertyRef;

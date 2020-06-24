@@ -123,7 +123,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .required(param.required())
             .in(in)
 //            .allowMultiple(param.allowMultiple())
-            .query(q -> q.model(modelRef.getModern().orElse(null))
+            .query(q -> q.model(m -> modelRef.getModern().ifPresent(m::copyOf))
                          .defaultValue(param.defaultValue())
                          .enumerationFacet(e -> e.allowedValues(allowableValueFromString(param.allowableValues())))
                          .collectionFacet(c -> c.collectionFormat(

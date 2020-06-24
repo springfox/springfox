@@ -29,6 +29,7 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.EnumerationFacet
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.NumericElementFacet
+import springfox.documentation.schema.ScalarType
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ParameterType
@@ -66,13 +67,14 @@ class ApiParamParameterBuilderSpec
     ApiParamParameterBuilder operationCommand =
         new ApiParamParameterBuilder(
             descriptions,
-            new JacksonEnumTypeDeterminer()
-        )
+            new JacksonEnumTypeDeterminer())
     operationCommand.apply(parameterContext)
-    AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
+    AllowableListValues allowableValues = parameterContext.parameterBuilder().build()
+        .allowableValues as AllowableListValues
     EnumerationFacet facet = parameterContext.requestParameterBuilder()
         .name("test")
         .in(ParameterType.QUERY)
+        .query { q -> q.model { it.scalarModel(ScalarType.STRING) } }
         .build()
         .parameterSpecification
         .query
@@ -116,6 +118,7 @@ class ApiParamParameterBuilderSpec
     EnumerationFacet facet = parameterContext.requestParameterBuilder()
         .name("test")
         .in(ParameterType.QUERY)
+        .query { q -> q.model { it.scalarModel(ScalarType.STRING) } }
         .build()
         .parameterSpecification
         .query
@@ -156,6 +159,7 @@ class ApiParamParameterBuilderSpec
     NumericElementFacet facet = parameterContext.requestParameterBuilder()
         .name("test")
         .in(ParameterType.QUERY)
+        .query { q -> q.model { it.scalarModel(ScalarType.STRING) } }
         .build()
         .parameterSpecification
         .query

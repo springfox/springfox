@@ -171,7 +171,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                                              .apply(r -> r.model(m -> m.copyOf(parameterModel)))));
     } else {
       context.requestParameterBuilder()
-             .query(q -> q.model(parameterModel));
+             .query(q -> q.model(m -> m.copyOf(parameterModel)));
     }
   }
 

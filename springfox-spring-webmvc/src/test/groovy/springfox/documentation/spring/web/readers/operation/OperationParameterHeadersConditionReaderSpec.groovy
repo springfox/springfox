@@ -24,7 +24,6 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
-import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.SimpleParameterSpecificationBuilder
 import springfox.documentation.schema.ScalarType
 import springfox.documentation.service.Parameter
@@ -114,19 +113,18 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
 
   private ParameterSpecification simpleParameter() {
     new ParameterSpecification(
-        new SimpleParameterSpecificationBuilder(null)
+        new SimpleParameterSpecificationBuilder()
             .style(null)
             .allowReserved(false)
             .defaultValue('testValue')
             .explode(false)
-            .enumerationFacet {e ->
+            .enumerationFacet { e ->
               e.allowedValues(['testValue'])
             }
-            .model(
-                new ModelSpecificationBuilder()
-                    .scalarModel(ScalarType.STRING)
-                    .name("test")
-                    .build())
+            .model {
+              it.scalarModel(ScalarType.STRING)
+                  .name("test")
+            }
             .build(),
         null)
   }

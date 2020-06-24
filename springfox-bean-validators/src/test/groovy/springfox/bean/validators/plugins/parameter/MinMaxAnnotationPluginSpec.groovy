@@ -5,6 +5,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
 import springfox.documentation.schema.NumericElementFacet
+import springfox.documentation.schema.ScalarType
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
@@ -42,6 +43,7 @@ class MinMaxAnnotationPluginSpec extends Specification implements AnnotationsSup
     def numericRange = context.requestParameterBuilder()
         .name("test")
         .in(ParameterType.QUERY)
+        .query { q -> q.model { it.scalarModel(ScalarType.LONG) } }
         .build()
         .parameterSpecification
         ?.getQuery()

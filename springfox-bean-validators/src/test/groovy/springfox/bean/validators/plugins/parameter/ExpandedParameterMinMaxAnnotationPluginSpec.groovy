@@ -9,6 +9,7 @@ import springfox.bean.validators.plugins.ReflectionSupport
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.schema.NumericElementFacet
+import springfox.documentation.schema.ScalarType
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ParameterType
 import springfox.documentation.spi.DocumentationType
@@ -54,10 +55,11 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
     def numericRange = context.requestParameterBuilder
         .name("test")
         .in(ParameterType.QUERY)
+        .query { q -> q.model { it.scalarModel(ScalarType.STRING) } }
         .build()
         .parameterSpecification
         ?.getQuery()
-        ?.flatMap {p -> p.facetOfType(NumericElementFacet) }
+        ?.flatMap { p -> p.facetOfType(NumericElementFacet) }
         ?.orElse(null)
 
 
@@ -72,7 +74,7 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
     numericRange?.maximum == expectedMax ?: new BigDecimal(expectedMax)
     numericRange?.exclusiveMaximum == exclusiveMax
     numericRange?.minimum == expectedMin ?: new BigDecimal(expectedMin)
-    numericRange?.exclusiveMinimum  == exclusiveMin
+    numericRange?.exclusiveMinimum == exclusiveMin
 
     where:
     fieldName      | expectedMin | exclusiveMin | expectedMax | exclusiveMax

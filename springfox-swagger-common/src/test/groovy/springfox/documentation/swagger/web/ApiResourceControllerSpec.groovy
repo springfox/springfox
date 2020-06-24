@@ -142,17 +142,13 @@ class ApiResourceControllerSpec extends Specification {
 
   def documentationCache() {
     def cache = new DocumentationCache()
-    ResourceListing listing = new ResourceListing(
-        "1.0",
-        [],
-        [],
-        ApiInfo.DEFAULT,
-        [])
     cache.addDocumentation(new DocumentationBuilder()
         .name("test")
         .basePath("/base")
-        .resourceListing(listing)
-        .build())
+        .resourceListing {
+          it.apiVersion("1.0")
+            .info(ApiInfo.DEFAULT)
+        }.build())
     cache
   }
 

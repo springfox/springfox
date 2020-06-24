@@ -18,12 +18,13 @@ class RequestParameterBuilderSpec extends Specification {
     def sut = baseRequestParameter(ParameterType.QUERY)
 
     when:
-    def actual = sut.query {q -> q.style(style)
-       .explode(explode)
-       .allowReserved(allowReserved)
-       .allowEmptyValue(allowEmpty)
-       .model(model)
-       .collectionFormat(collectionFormat)
+    def actual = sut.query { q ->
+      q.style(style)
+          .explode(explode)
+          .allowReserved(allowReserved)
+          .allowEmptyValue(allowEmpty)
+          .model { it.copyOf(model) }
+          .collectionFormat(collectionFormat)
     }.build()
 
     then:

@@ -323,7 +323,7 @@ public class OperationBuilder {
 
 
   /**
-   * Updates the operation request body
+   * Updates the operation request body. This overrides the one determined by the plugins
    *
    * @param requestBody - operation extensions
    * @return this

@@ -28,16 +28,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.builders.AlternateTypeBuilder;
-import springfox.documentation.builders.AlternateTypePropertyBuilder;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @Configuration
@@ -75,20 +72,19 @@ public class SpringDataRestConfiguration {
             String.format("%s.generated.%s",
                 Pageable.class.getPackage().getName(),
                 Pageable.class.getSimpleName()))
-        .properties(Stream.of(
-            property(Integer.class, restConfiguration.getPageParamName()),
-            property(Integer.class, restConfiguration.getLimitParamName()),
-            property(String.class, restConfiguration.getSortParamName())
-        ).collect(toList()))
+        .property(p -> p.name(restConfiguration.getPageParamName())
+            .type(Integer.class)
+            .canRead(true)
+            .canWrite(true))
+        .property(p -> p.name(restConfiguration.getLimitParamName())
+            .type(Integer.class)
+            .canRead(true)
+            .canWrite(true))
+        .property(p -> p.name(restConfiguration.getSortParamName())
+            .type(String.class)
+            .canRead(true)
+            .canWrite(true))
         .build();
-  }
-
-  private AlternateTypePropertyBuilder property(Class<?> type, String name) {
-    return new AlternateTypePropertyBuilder()
-        .name(name)
-        .type(type)
-        .canRead(true)
-        .canWrite(true);
   }
   // end::alternate-type-builder[]
 }

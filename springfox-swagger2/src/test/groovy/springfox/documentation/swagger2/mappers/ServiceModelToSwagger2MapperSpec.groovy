@@ -16,7 +16,6 @@ import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.RequestParameterBuilder
-import springfox.documentation.builders.ResourceListingBuilder
 import springfox.documentation.builders.ResponseBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
 import springfox.documentation.schema.Example
@@ -123,11 +122,10 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .basePath("base:uri")
         .produces(["application/json"] as Set)
         .name("doc-group")
-        .resourceListing(
-            new ResourceListingBuilder()
-                .apiVersion("1.0")
-                .info(ApiInfo.DEFAULT)
-                .build())
+        .resourceListing {
+          it.apiVersion("1.0")
+              .info(ApiInfo.DEFAULT)
+        }
         .build()
 
     when:
@@ -156,10 +154,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .basePath("base:uri")
         .produces(["application/json"] as Set)
         .name("doc-group")
-        .resourceListing(
-            new ResourceListingBuilder()
-                .apiVersion("1.0")
-                .build())
+        .resourceListing {
+          it.apiVersion("1.0")
+        }
         .apiListingsByResourceGroupName(listingLookup)
         .build()
 
@@ -281,10 +278,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                          ->
                          e.allowedValues(["FIRST", "SECOND"])
                        }
-                       .model(
-                           new ModelSpecificationBuilder()
-                               .scalarModel(ScalarType.STRING)
-                               .build())
+                       .model {
+                         it.scalarModel(ScalarType.STRING)
+                       }
                  }
                  .build()])
         .position(1)

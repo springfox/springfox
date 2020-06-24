@@ -115,9 +115,7 @@ public class Swagger2SpringBoot {
                 .description("Description of someGlobalParameter")
                 .in(ParameterType.QUERY)
                 .required(true)
-                .query(q -> q.model(new ModelSpecificationBuilder()
-                    .scalarModel(ScalarType.STRING)
-                    .build()))
+                .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
                 .build()))
         .tags(new Tag("Pet Service", "All apis relating to pets")) // <23>
         .additionalModels(typeResolver.resolve(AdditionalModel.class)); //<24>
