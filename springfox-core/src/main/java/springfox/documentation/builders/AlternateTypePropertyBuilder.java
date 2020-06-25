@@ -76,6 +76,7 @@ public class AlternateTypePropertyBuilder {
    * @see AlternateTypePropertyBuilder#type(Class)  instead
    * @deprecated @since 3.0.0
    */
+  @Deprecated
   public AlternateTypePropertyBuilder withType(Class<?> clazz) {
     this.clazz = clazz;
     return this;
@@ -87,6 +88,7 @@ public class AlternateTypePropertyBuilder {
    * @see AlternateTypePropertyBuilder#name(String)  instead
    * @deprecated @since 3.0.0
    */
+  @Deprecated
   public AlternateTypePropertyBuilder withName(String name) {
     this.name = name;
     return this;
@@ -98,6 +100,7 @@ public class AlternateTypePropertyBuilder {
    * @see AlternateTypePropertyBuilder#canRead(boolean)  instead
    * @deprecated @since 3.0.0
    */
+  @Deprecated
   public AlternateTypePropertyBuilder withCanRead(boolean canRead) {
     this.canRead = canRead;
     return this;
@@ -109,6 +112,7 @@ public class AlternateTypePropertyBuilder {
    * @see AlternateTypePropertyBuilder#canWrite(boolean)  instead
    * @deprecated @since 3.0.0
    */
+  @Deprecated
   public AlternateTypePropertyBuilder withCanWrite(boolean canWrite) {
     this.canWrite = canWrite;
     return this;
@@ -120,6 +124,7 @@ public class AlternateTypePropertyBuilder {
    * @see AlternateTypePropertyBuilder#annotations(List)  instead
    * @deprecated @since 3.0.0
    */
+  @Deprecated
   public AlternateTypePropertyBuilder withAnnotations(List<Annotation> annotations) {
     this.annotations = annotations;
     return this;
