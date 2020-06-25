@@ -31,8 +31,8 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
       - run:
-          name: Run Tests
-          command: ./gradlew clean check codeCoverageReport --no-daemon
+          name: Run Tests, run static analysis and code coverage
+          command: ./gradlew clean check sonarqube codeCoverageReport --no-daemon
           no_output_timeout: 900s
           environment:
             _JAVA_OPTIONS: -Xmx1024M -XX:ReservedCodeCacheSize=512M
@@ -62,6 +62,12 @@ jobs:
               ./gradlew publishSnapshot -x check
               ./gradlew publishDocs -i
             fi
+
+workflows:
+  main:
+    jobs:
+      - build:
+          context: SonarCloud
 notify:
   webhooks:
     - url: https://webhooks.gitter.im/e/b30a7db820817acfc6d8

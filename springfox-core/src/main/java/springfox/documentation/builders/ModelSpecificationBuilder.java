@@ -157,7 +157,7 @@ public class ModelSpecificationBuilder {
   private List<ValidationResult> validateSpecification(ModelSpecificationBuilder builder) {
     List<ValidationResult> validationResults = new ArrayList<>();
     long specCount = Stream.of(scalar,
-        safeCompountModelBuild(),
+        safeCompoundModelBuild(),
         safeCollectionBuild(),
         safeMapBuild(),
         safeReferenceBuild())
@@ -179,7 +179,7 @@ public class ModelSpecificationBuilder {
     return validationResults;
   }
 
-  private Object safeCompountModelBuild() {
+  private Object safeCompoundModelBuild() {
     return compoundModelBuilder != null ? compoundModelBuilder.build() : null;
   }
 
