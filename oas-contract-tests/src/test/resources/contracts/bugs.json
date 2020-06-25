@@ -26,6 +26,42 @@
         }
     ],
     "paths": {
+        "/bugs/3329": {
+            "get": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3329",
+                "operationId": "bug3329UsingGET",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "query",
+                        "description": "uuid",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "maxLength": 36,
+                            "minLength": 36,
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/3338": {
             "get": {
                 "tags": [

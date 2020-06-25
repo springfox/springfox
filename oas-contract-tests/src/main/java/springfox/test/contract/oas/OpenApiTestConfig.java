@@ -30,6 +30,7 @@ public class OpenApiTestConfig {
         .select()
         .paths(PathSelectors.regex("/.*")
             .and(PathSelectors.regex("/error").negate())
+            .and(PathSelectors.regex("/bugs/.*").negate())
             .and(PathSelectors.regex("/profile").negate()))
         .build()
         .enableUrlTemplating(false)

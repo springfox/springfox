@@ -21,10 +21,6 @@
     ],
     "tags": [
         {
-            "name": "bugs-controller",
-            "description": "Bugs Controller"
-        },
-        {
             "name": "home-controller",
             "description": "Home Controller"
         },
@@ -42,39 +38,6 @@
         }
     ],
     "paths": {
-        "/bugs/3338": {
-            "get": {
-                "tags": [
-                    "bugs-controller"
-                ],
-                "summary": "bug3338",
-                "operationId": "bug3338UsingGET_1",
-                "parameters": [
-                    {
-                        "name": "username",
-                        "in": "query",
-                        "description": "username",
-                        "required": true,
-                        "style": "form",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/": {
             "get": {
                 "tags": [
