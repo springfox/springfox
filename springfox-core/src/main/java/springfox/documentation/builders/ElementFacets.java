@@ -17,7 +17,7 @@ public class ElementFacets {
       Class<T> clazz) {
     return t -> {
       try {
-        return clazz.newInstance();
+        return clazz.getDeclaredConstructor().newInstance();
       } catch (Exception e) {
         LOGGER.error("Unable to create builder of type {}", clazz);
         throw new RuntimeException(String.format("Unable to create builder of type %s", clazz), e);

@@ -59,7 +59,8 @@ public class Validators {
     if (propertyDefinition.isPresent()) {
       Optional<Method> getter = extractGetterFromPropertyDefinition(propertyDefinition.get());
       Optional<Field> field = extractFieldFromPropertyDefinition(propertyDefinition.get());
-      notNull = findAnnotation(getter, annotationType).map(Optional::of).orElse(findAnnotation(field, annotationType));
+      notNull = findAnnotation(getter, annotationType)
+          .or(() -> findAnnotation(field, annotationType));
     }
 
     return notNull;

@@ -148,7 +148,7 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder securitySchemes(List<? extends SecurityScheme> securitySchemes) {
+  public DocumentationContextBuilder securitySchemes(List<SecurityScheme> securitySchemes) {
     this.securitySchemes.addAll(nullToEmptyList(securitySchemes));
     return this;
   }

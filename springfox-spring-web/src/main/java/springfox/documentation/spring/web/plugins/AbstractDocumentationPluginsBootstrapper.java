@@ -120,7 +120,7 @@ public class AbstractDocumentationPluginsBootstrapper {
     return ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
-  private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
+  private Function<RequestHandlerProvider, Iterable<RequestHandler>> handlers() {
     return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) RequestHandlerProvider::requestHandlers;
   }
 

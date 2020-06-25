@@ -194,12 +194,12 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       }
 
       @Override
-      Set<? extends MediaType> produces() {
+      Set<MediaType> produces() {
         return null
       }
 
       @Override
-      Set<? extends MediaType> consumes() {
+      Set<MediaType> consumes() {
         return null
       }
 
@@ -238,7 +238,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       }
 
       @Override
-      springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
+      springfox.documentation.spring.wrapper.RequestMappingInfo<?> getRequestMapping() {
         return null
       }
 

@@ -59,7 +59,7 @@ public class CombinedRequestHandler implements RequestHandler {
     return first.isAnnotatedWith(annotation) || second.isAnnotatedWith(annotation);
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
   public PatternsRequestCondition getPatternsCondition() {
     return first.getPatternsCondition().combine(second.getPatternsCondition());
@@ -84,7 +84,7 @@ public class CombinedRequestHandler implements RequestHandler {
   }
 
   @Override
-  public Set<? extends MediaType> produces() {
+  public Set<MediaType> produces() {
     return Stream.concat(
         ofNullable(first.produces()).orElse(emptySet()).stream(),
         ofNullable(second.produces()).orElse(emptySet()).stream())
@@ -92,7 +92,7 @@ public class CombinedRequestHandler implements RequestHandler {
   }
 
   @Override
-  public Set<? extends MediaType> consumes() {
+  public Set<MediaType> consumes() {
     return Stream.concat(
         ofNullable(first.consumes()).orElse(emptySet()).stream(),
         ofNullable(second.consumes()).orElse(emptySet()).stream())
@@ -147,7 +147,7 @@ public class CombinedRequestHandler implements RequestHandler {
   }
 
   @Override
-  public RequestMappingInfo getRequestMapping() {
+  public RequestMappingInfo<?> getRequestMapping() {
     return first.getRequestMapping();
   }
 

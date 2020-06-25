@@ -90,7 +90,7 @@ public class Docket implements DocumentationPlugin {
   private final List<Server> servers = new ArrayList<>();
 
   private PathProvider pathProvider;
-  private List<? extends SecurityScheme> securitySchemes;
+  private List<SecurityScheme> securitySchemes;
   private Comparator<ApiListingReference> apiListingReferenceOrdering;
   private Comparator<ApiDescription> apiDescriptionOrdering;
   private Comparator<Operation> operationOrdering;
@@ -143,7 +143,7 @@ public class Docket implements DocumentationPlugin {
    * @param securitySchemes a list of security schemes
    * @return this Docket
    */
-  public Docket securitySchemes(List<? extends SecurityScheme> securitySchemes) {
+  public Docket securitySchemes(List<SecurityScheme> securitySchemes) {
     this.securitySchemes = securitySchemes;
     return this;
   }

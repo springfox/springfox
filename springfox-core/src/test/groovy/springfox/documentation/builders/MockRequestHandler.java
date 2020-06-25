@@ -87,12 +87,12 @@ public class MockRequestHandler implements RequestHandler {
   }
 
   @Override
-  public Set<? extends MediaType> produces() {
+  public Set<MediaType> produces() {
     return null;
   }
 
   @Override
-  public Set<? extends MediaType> consumes() {
+  public Set<MediaType> consumes() {
     return null;
   }
 
@@ -132,7 +132,7 @@ public class MockRequestHandler implements RequestHandler {
   }
 
   @Override
-  public springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
+  public springfox.documentation.spring.wrapper.RequestMappingInfo<?> getRequestMapping() {
     return null;
   }
 }

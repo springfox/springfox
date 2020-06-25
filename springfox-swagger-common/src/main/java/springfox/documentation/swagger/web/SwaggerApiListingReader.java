@@ -22,6 +22,7 @@ package springfox.documentation.swagger.web;
 import io.swagger.annotations.Api;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.BuilderDefaults;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -33,7 +34,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.Optional.*;
@@ -52,13 +52,14 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
       Optional<Api> apiAnnotation = ofNullable(findAnnotation(controller.get(), Api.class));
       Set<Tag> oasTags = tagsFromOasAnnotations(controller.get());
       String description =
-          apiAnnotation.map(Api::description).filter(((Predicate<String>) String::isEmpty).negate())
+          apiAnnotation.map(Api::description)
+              .map(BuilderDefaults::emptyToNull)
               .orElse(null);
 
       Set<String> tagSet = new TreeSet<>();
       if (oasTags.isEmpty()) {
         tagSet.addAll(apiAnnotation.map(tags())
-                              .orElse(new TreeSet<>()));
+            .orElse(new TreeSet<>()));
         if (tagSet.isEmpty()) {
           tagSet.add(apiListingContext.getResourceGroup().getGroupName());
         }
@@ -76,7 +77,7 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
         findAnnotation(controller, io.swagger.v3.oas.annotations.tags.Tags.class);
     if (tags != null) {
       Arrays.stream(tags.value())
-            .forEach(t -> controllerTags.add(new Tag(t.name(), t.description())));
+          .forEach(t -> controllerTags.add(new Tag(t.name(), t.description())));
     }
     io.swagger.v3.oas.annotations.tags.Tag tag
         = findAnnotation(controller, io.swagger.v3.oas.annotations.tags.Tag.class);

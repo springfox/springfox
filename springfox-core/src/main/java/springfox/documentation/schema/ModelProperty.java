@@ -130,7 +130,7 @@ public class ModelProperty {
     return isHidden;
   }
 
-  public ModelProperty updateModelRef(Function<ResolvedType, ? extends ModelReference> modelRefFactory) {
+  public ModelProperty updateModelRef(Function<ResolvedType, ModelReference> modelRefFactory) {
     modelRef = modelRefFactory.apply(type);
     return this;
   }

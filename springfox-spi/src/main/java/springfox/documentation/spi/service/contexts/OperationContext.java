@@ -138,11 +138,11 @@ public class OperationContext {
     return getAlternateTypeProvider().alternateFor(resolved);
   }
 
-  public Set<? extends MediaType> produces() {
+  public Set<MediaType> produces() {
     return requestContext.produces();
   }
 
-  public Set<? extends MediaType> consumes() {
+  public Set<MediaType> consumes() {
     return requestContext.consumes();
   }
 

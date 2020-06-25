@@ -112,7 +112,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return dependencies;
   }
 
-  private Collection<? extends ResolvedType> resolvedSubclasses(ModelContext modelContext, ResolvedType resolvedType) {
+  private Collection<ResolvedType> resolvedSubclasses(ModelContext modelContext, ResolvedType resolvedType) {
     JsonSubTypes subTypes = AnnotationUtils.findAnnotation(
         resolvedType.getErasedType(),
         JsonSubTypes.class);
@@ -128,7 +128,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return subclasses;
   }
 
-  private Collection<? extends ResolvedType> resolvedMapType(ModelContext modelContext, ResolvedType resolvedType) {
+  private Collection<ResolvedType> resolvedMapType(ModelContext modelContext, ResolvedType resolvedType) {
     ResolvedType mapType = resolvedType.findSupertype(Map.class);
     if (mapType == null) {
       return new ArrayList<>();
@@ -136,7 +136,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return resolvedTypeParameters(modelContext, mapType);
   }
 
-  private List<? extends ResolvedType> resolvedArrayElementType(ModelContext modelContext, ResolvedType resolvedType) {
+  private List<ResolvedType> resolvedArrayElementType(ModelContext modelContext, ResolvedType resolvedType) {
     List<ResolvedType> parameters = new ArrayList<>();
     if (resolvedType.isArray()) {
       ResolvedType elementType = resolvedType.getArrayElementType();
@@ -148,7 +148,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return parameters;
   }
 
-  private Set<? extends ResolvedType> resolvedTypeParameters(ModelContext modelContext, ResolvedType resolvedType) {
+  private Set<ResolvedType> resolvedTypeParameters(ModelContext modelContext, ResolvedType resolvedType) {
     Set<ResolvedType> parameters = new HashSet<>();
     for (ResolvedType parameter : resolvedType.getTypeParameters()) {
       LOG.debug("Adding type for parameter {}", parameter.getSignature());

@@ -88,11 +88,11 @@ public class RequestHandlerSelectors {
    * @param basePackage - base package of the classes
    * @return this
    */
-  public static Predicate<RequestHandler> basePackage(final String basePackage) {
+  public static Predicate<RequestHandler> basePackage(String basePackage) {
     return input -> declaringClass(input).map(handlerPackage(basePackage)).orElse(true);
   }
 
-  private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
+  private static Optional<Class<?>> declaringClass(RequestHandler input) {
     return ofNullable(input.declaringClass());
   }
 

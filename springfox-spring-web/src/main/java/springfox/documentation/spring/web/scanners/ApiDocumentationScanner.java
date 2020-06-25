@@ -92,7 +92,7 @@ public class ApiDocumentationScanner {
     return group.build();
   }
 
-  private Collection<? extends ApiListingReference> apiListingReferences(
+  private Collection<ApiListingReference> apiListingReferences(
       Map<String, List<ApiListing>> apiListings,
       DocumentationContext context) {
     return apiListings.entrySet().stream().map(toApiListingReference(context)).collect(toSet());

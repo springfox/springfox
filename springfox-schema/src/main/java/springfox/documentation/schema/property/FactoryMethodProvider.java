@@ -47,9 +47,9 @@ public class FactoryMethodProvider {
     memberResolver = new MemberResolver(resolver);
   }
 
-  public Optional<? extends ResolvedParameterizedMember> in(
+  public Optional<? extends ResolvedParameterizedMember<?>> in(
       ResolvedType resolvedType,
-      Predicate<ResolvedParameterizedMember> predicate) {
+      Predicate<ResolvedParameterizedMember<?>> predicate) {
     return Stream.concat(
         constructors(resolvedType).stream(),
         delegatedFactoryMethods(resolvedType).stream())
@@ -57,7 +57,7 @@ public class FactoryMethodProvider {
         .findFirst();
   }
 
-  static Predicate<ResolvedParameterizedMember> factoryMethodOf(final AnnotatedParameter parameter) {
+  static Predicate<ResolvedParameterizedMember<?>> factoryMethodOf(final AnnotatedParameter parameter) {
     return input -> input.getRawMember().equals(parameter.getOwner().getMember());
   }
 

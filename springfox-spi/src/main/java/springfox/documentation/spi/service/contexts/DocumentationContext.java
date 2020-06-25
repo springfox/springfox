@@ -50,7 +50,7 @@ public class DocumentationContext {
   private final List<RequestParameter> globalParameters = new ArrayList<>();
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
-  private final List<? extends SecurityScheme> securitySchemes;
+  private final List<SecurityScheme> securitySchemes;
   private final Comparator<ApiListingReference> listingReferenceOrdering;
   private final Comparator<ApiDescription> apiDescriptionOrdering;
   private final Comparator<Operation> operationOrdering;
@@ -79,7 +79,7 @@ public class DocumentationContext {
       Map<HttpMethod, List<Response>> globalResponses,
       PathProvider pathProvider,
       List<SecurityContext> securityContexts,
-      List<? extends SecurityScheme> securitySchemes,
+      List<SecurityScheme> securitySchemes,
       List<AlternateTypeRule> alternateTypeRules,
       Comparator<ApiListingReference> listingReferenceOrdering,
       Comparator<ApiDescription> apiDescriptionOrdering,
@@ -172,7 +172,7 @@ public class DocumentationContext {
     return securityContexts;
   }
 
-  public List<? extends SecurityScheme> getSecuritySchemes() {
+  public List<SecurityScheme> getSecuritySchemes() {
     return securitySchemes.stream()
                           .filter(Objects::nonNull)
                           .collect(Collectors.toList());

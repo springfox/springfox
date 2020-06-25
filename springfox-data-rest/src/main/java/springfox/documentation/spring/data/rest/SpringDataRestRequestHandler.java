@@ -93,12 +93,12 @@ class SpringDataRestRequestHandler implements RequestHandler {
   }
 
   @Override
-  public Set<? extends MediaType> produces() {
+  public Set<MediaType> produces() {
     return actionSpecification.getProduces();
   }
 
   @Override
-  public Set<? extends MediaType> consumes() {
+  public Set<MediaType> consumes() {
     return actionSpecification.getConsumes();
   }
 
@@ -154,7 +154,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
   }
 
   @Override
-  public RequestMappingInfo getRequestMapping() {
+  public RequestMappingInfo<?> getRequestMapping() {
     throw new UnsupportedOperationException();
   }
 

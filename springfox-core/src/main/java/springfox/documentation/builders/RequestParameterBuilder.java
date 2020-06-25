@@ -133,7 +133,7 @@ public class RequestParameterBuilder {
     return this;
   }
 
-  public RequestParameterBuilder accepts(Collection<? extends MediaType> accepts) {
+  public RequestParameterBuilder accepts(Collection<MediaType> accepts) {
     this.accepts.addAll(accepts);
     return this;
   }

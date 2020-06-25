@@ -10,7 +10,6 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.wrapper.PatternsRequestCondition
 import springfox.documentation.spring.web.dummy.DummyClass
-import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 import springfox.documentation.spring.web.dummy.models.SameFancyPet
 import springfox.documentation.spring.web.ControllerNamingUtils
 import springfox.documentation.spring.web.dummy.controllers.GenericRestController;
@@ -27,7 +26,6 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.NameValueExpression
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 
 class OrderingsSpec extends Specification {
 
@@ -122,12 +120,12 @@ class OrderingsSpec extends Specification {
           }
 
           @Override
-          Set<? extends MediaType> produces() {
+          Set<MediaType> produces() {
             return null
           }
 
           @Override
-          Set<? extends MediaType> consumes() {
+          Set<MediaType> consumes() {
             return null
           }
 
@@ -166,7 +164,7 @@ class OrderingsSpec extends Specification {
           }
 
           @Override
-          springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
+          springfox.documentation.spring.wrapper.RequestMappingInfo<?> getRequestMapping() {
             return null
           }
 

@@ -171,11 +171,11 @@ public class RequestMappingContext {
     return handler.supportedMethods();
   }
 
-  public Set<? extends MediaType> produces() {
+  public Set<MediaType> produces() {
     return handler.produces();
   }
 
-  public Set<? extends MediaType> consumes() {
+  public Set<MediaType> consumes() {
     return handler.consumes();
   }
 

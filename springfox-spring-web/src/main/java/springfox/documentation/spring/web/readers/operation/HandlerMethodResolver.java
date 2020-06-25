@@ -249,7 +249,9 @@ public class HandlerMethodResolver {
   private ParameterNameDiscoverer parameterNameDiscoverer() {
     ParameterNameDiscoverer discoverer;
     try {
-      discoverer = (ParameterNameDiscoverer) Class.forName(SPRING4_DISCOVERER).newInstance();
+      discoverer = (ParameterNameDiscoverer) Class.forName(SPRING4_DISCOVERER)
+          .getDeclaredConstructor()
+          .newInstance();
     } catch (Exception e) {
       discoverer = new LocalVariableTableParameterNameDiscoverer();
     }

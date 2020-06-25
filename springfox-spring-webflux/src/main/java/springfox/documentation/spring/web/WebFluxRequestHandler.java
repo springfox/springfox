@@ -94,12 +94,12 @@ public class WebFluxRequestHandler implements RequestHandler {
   }
 
   @Override
-  public Set<? extends MediaType> produces() {
+  public Set<MediaType> produces() {
     return requestMapping.getProducesCondition().getProducibleMediaTypes();
   }
 
   @Override
-  public Set<? extends MediaType> consumes() {
+  public Set<MediaType> consumes() {
     return requestMapping.getConsumesCondition().getConsumableMediaTypes();
   }
 
@@ -130,7 +130,7 @@ public class WebFluxRequestHandler implements RequestHandler {
   }
 
   @Override
-  public springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
+  public springfox.documentation.spring.wrapper.RequestMappingInfo<?> getRequestMapping() {
     throw new UnsupportedOperationException();
   }
 

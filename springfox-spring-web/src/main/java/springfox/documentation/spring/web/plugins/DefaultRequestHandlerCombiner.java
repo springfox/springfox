@@ -62,7 +62,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
         .collect(toList());
   }
 
-  private Collection<? extends RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
+  private Collection<RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
     List<RequestHandler> source = new ArrayList<>(requestHandlers);
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;

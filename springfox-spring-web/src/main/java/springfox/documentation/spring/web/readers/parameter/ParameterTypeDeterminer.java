@@ -28,7 +28,7 @@ class ParameterTypeDeterminer {
     throw new UnsupportedOperationException();
   }
 
-  public static String determineScalarParameterType(Set<? extends MediaType> consumes, HttpMethod method) {
+  public static String determineScalarParameterType(Set<MediaType> consumes, HttpMethod method) {
     String parameterType = "query";
 
     if (consumes.contains(MediaType.APPLICATION_FORM_URLENCODED)

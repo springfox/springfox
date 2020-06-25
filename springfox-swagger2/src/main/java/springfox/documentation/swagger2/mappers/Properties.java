@@ -39,16 +39,13 @@ import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 
 import java.math.BigDecimal;
-import java.util.AbstractMap;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
-import static java.util.Collections.*;
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
@@ -59,23 +56,24 @@ import static springfox.documentation.swagger2.mappers.EnumMapper.*;
  */
 @Deprecated
 class Properties {
-  private static final Map<String, Function<String, ? extends Property>> TYPE_FACTORY
-      = unmodifiableMap(Stream.of(
-      new AbstractMap.SimpleEntry<>("int", newInstanceOf(IntegerProperty.class)),
-      new AbstractMap.SimpleEntry<>("long", newInstanceOf(LongProperty.class)),
-      new AbstractMap.SimpleEntry<>("float", newInstanceOf(FloatProperty.class)),
-      new AbstractMap.SimpleEntry<>("double", newInstanceOf(DoubleProperty.class)),
-      new AbstractMap.SimpleEntry<>("string", newInstanceOf(StringProperty.class)),
-      new AbstractMap.SimpleEntry<>("boolean", newInstanceOf(BooleanProperty.class)),
-      new AbstractMap.SimpleEntry<>("date", newInstanceOf(DateProperty.class)),
-      new AbstractMap.SimpleEntry<>("date-time", newInstanceOf(DateTimeProperty.class)),
-      new AbstractMap.SimpleEntry<>("bigdecimal", newInstanceOf(DecimalProperty.class)),
-      new AbstractMap.SimpleEntry<>("biginteger", newInstanceOf(LongProperty.class)),
-      new AbstractMap.SimpleEntry<>("uuid", newInstanceOf(UUIDProperty.class)),
-      new AbstractMap.SimpleEntry<>("object", newInstanceOf(ObjectProperty.class)),
-      new AbstractMap.SimpleEntry<>("byte", bytePropertyFactory()),
-      new AbstractMap.SimpleEntry<>("__file", filePropertyFactory()))
-      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
+  private static final Map<String, Function<String, Property>> TYPE_FACTORY = new HashMap<>();
+
+  static {
+    TYPE_FACTORY.put("int", newInstanceOf(IntegerProperty.class));
+    TYPE_FACTORY.put("long", newInstanceOf(LongProperty.class));
+    TYPE_FACTORY.put("float", newInstanceOf(FloatProperty.class));
+    TYPE_FACTORY.put("double", newInstanceOf(DoubleProperty.class));
+    TYPE_FACTORY.put("string", newInstanceOf(StringProperty.class));
+    TYPE_FACTORY.put("boolean", newInstanceOf(BooleanProperty.class));
+    TYPE_FACTORY.put("date", newInstanceOf(DateProperty.class));
+    TYPE_FACTORY.put("date-time", newInstanceOf(DateTimeProperty.class));
+    TYPE_FACTORY.put("bigdecimal", newInstanceOf(DecimalProperty.class));
+    TYPE_FACTORY.put("biginteger", newInstanceOf(LongProperty.class));
+    TYPE_FACTORY.put("uuid", newInstanceOf(UUIDProperty.class));
+    TYPE_FACTORY.put("object", newInstanceOf(ObjectProperty.class));
+    TYPE_FACTORY.put("byte", bytePropertyFactory());
+    TYPE_FACTORY.put("__file", filePropertyFactory());
+  }
 
   private Properties() {
     throw new UnsupportedOperationException();
@@ -97,7 +95,8 @@ class Properties {
       }
       return new ArrayProperty(
           maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel()
-              .orElseThrow(() -> new IllegalStateException("ModelRef that is a collection should have an itemModel"))),
+                  .orElseThrow(() ->
+                      new IllegalStateException("ModelRef that is a collection should have an itemModel"))),
               modelRef.getAllowableValues()));
     }
     return property(modelRef.getType());
@@ -107,16 +106,17 @@ class Properties {
     if (paramModel.isCollection()) {
       return new ArrayProperty(
           maybeAddAllowableValues(itemTypeProperty(paramModel.itemModel()
-              .orElseThrow(() -> new IllegalStateException("ModelRef that is a collection should have an itemModel"))),
+                  .orElseThrow(() ->
+                      new IllegalStateException("ModelRef that is a collection should have an itemModel"))),
               paramModel.getAllowableValues()));
     }
     return property(paramModel.getType());
   }
 
-  private static <T extends Property> Function<String, T> newInstanceOf(final Class<T> clazz) {
+  private static Function<String, Property> newInstanceOf(final Class<? extends Property> clazz) {
     return input -> {
       try {
-        return clazz.newInstance();
+        return clazz.getDeclaredConstructor().newInstance();
       } catch (Exception e) {
         //This is bad! should never come here
         throw new IllegalStateException(e);
@@ -128,8 +128,8 @@ class Properties {
     return byPosition(properties).thenComparing(byName());
   }
 
-  private static Function<String, ? extends Property> voidOrRef(final String typeName) {
-    return (Function<String, Property>) input -> {
+  private static Function<String, Property> voidOrRef(final String typeName) {
+    return input -> {
       if (typeName.equalsIgnoreCase("void")) {
         return null;
       }
@@ -137,8 +137,8 @@ class Properties {
     };
   }
 
-  private static Function<String, ? extends Property> bytePropertyFactory() {
-    return (Function<String, Property>) input -> {
+  private static Function<String, Property> bytePropertyFactory() {
+    return input -> {
       final IntegerProperty integerProperty = new IntegerProperty();
       integerProperty.setFormat("int32");
       integerProperty.setMaximum(BigDecimal.valueOf(Byte.MAX_VALUE));
@@ -147,8 +147,8 @@ class Properties {
     };
   }
 
-  private static Function<String, ? extends Property> filePropertyFactory() {
-    return (Function<String, Property>) input -> new FileProperty();
+  private static Function<String, Property> filePropertyFactory() {
+    return input -> new FileProperty();
   }
 
   private static Comparator<String> byName() {
@@ -178,7 +178,6 @@ class Properties {
     return isContainerType(type) && isVoid(collectionElementType(type));
   }
 
-  @SuppressWarnings("deprecation")
   private static boolean isVoid(ResolvedType resolvedType) {
     return springfox.documentation.schema.Types.isVoid(resolvedType);
   }

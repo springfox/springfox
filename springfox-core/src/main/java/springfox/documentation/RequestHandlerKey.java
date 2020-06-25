@@ -29,14 +29,14 @@ public class RequestHandlerKey {
 
   private final Set<String> pathMappings;
   private final Set<RequestMethod> supportedMethods;
-  private final Set<? extends MediaType> supportedMediaTypes;
-  private final Set<? extends MediaType> producibleMediaTypes;
+  private final Set<MediaType> supportedMediaTypes;
+  private final Set<MediaType> producibleMediaTypes;
 
   public RequestHandlerKey(
       Set<String> pathMappings,
       Set<RequestMethod> supportedMethods,
-      Set<? extends MediaType> supportedMediaTypes,
-      Set<? extends MediaType> producibleMediaTypes) {
+      Set<MediaType> supportedMediaTypes,
+      Set<MediaType> producibleMediaTypes) {
 
     this.pathMappings = pathMappings;
     this.supportedMethods = supportedMethods;
@@ -52,11 +52,11 @@ public class RequestHandlerKey {
     return supportedMethods;
   }
 
-  public Set<? extends MediaType> getSupportedMediaTypes() {
+  public Set<MediaType> getSupportedMediaTypes() {
     return supportedMediaTypes;
   }
 
-  public Set<? extends MediaType> getProducibleMediaTypes() {
+  public Set<MediaType> getProducibleMediaTypes() {
     return producibleMediaTypes;
   }
 
