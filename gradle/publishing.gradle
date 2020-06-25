@@ -1,4 +1,5 @@
 import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
+
 import java.text.SimpleDateFormat
 
 Date buildTimeAndDate = new Date()
@@ -34,8 +35,10 @@ apply plugin: "com.jfrog.artifactory"
 jar {
   manifest {
     attributes(
-        'Implementation-Title': "${project.name}",
-        'Implementation-Version': version.toString(),
+        'Implementation-Title': project.name,
+        'Implementation-Version': new Object() {
+          String toString() { project.version }
+        },
         'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
         'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
         'Build-Time': "${new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")}",
@@ -48,13 +51,13 @@ jar {
 def generatedSources = "$buildDir/generated/source/apt/main"
 
 task packageSources(type: Jar) {
-  archiveClassifier = 'sources'
+  archiveClassifier.set("sources")
   from sourceSets.main.allSource
   from generatedSources
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-  archiveClassifier = 'javadoc'
+  archiveClassifier.set("javadoc")
   from javadoc.destinationDir
 }
 
