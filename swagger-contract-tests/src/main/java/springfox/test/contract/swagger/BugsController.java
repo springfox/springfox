@@ -513,6 +513,18 @@ public class BugsController {
     // Empty body is sufficient for testing
   }
 
+  @GetMapping("/3321")
+  public void bug3321(
+      @ApiParam(allowableValues = "one, two, three")
+      @RequestParam(name = "expand", required = false) Set<NumberEnum> numbers) {
+  }
+
+  public enum NumberEnum {
+    ONE,
+    TWO,
+    THREE
+  }
+
   @SuppressWarnings("VisibilityModifier")
   public class Bug2423 {
     public String from;

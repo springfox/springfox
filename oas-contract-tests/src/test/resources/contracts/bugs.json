@@ -26,6 +26,41 @@
         }
     ],
     "paths": {
+        "/bugs/3321": {
+            "get": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3321",
+                "operationId": "bug3321UsingGET",
+                "parameters": [
+                    {
+                        "name": "expand",
+                        "in": "query",
+                        "description": "expand",
+                        "required": false,
+                        "style": "pipeDelimited",
+                        "schema": {
+                            "uniqueItems": true,
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "enum": [
+                                "one",
+                                "three",
+                                "two"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/3329": {
             "get": {
                 "tags": [

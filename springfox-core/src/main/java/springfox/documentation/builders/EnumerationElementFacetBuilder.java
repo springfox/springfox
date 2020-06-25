@@ -5,10 +5,8 @@ import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class EnumerationElementFacetBuilder implements ElementFacetBuilder {
@@ -20,7 +18,10 @@ public class EnumerationElementFacetBuilder implements ElementFacetBuilder {
   }
 
   public EnumerationElementFacetBuilder allowedValues(AllowableValues allowedValues) {
-    this.allowedValues.addAll(from(allowedValues));
+    if (!from(allowedValues).isEmpty()) {
+      this.allowedValues.clear();
+      this.allowedValues.addAll(from(allowedValues));
+    }
     return this;
   }
 
@@ -41,10 +42,10 @@ public class EnumerationElementFacetBuilder implements ElementFacetBuilder {
     return this.allowedValues(other.getAllowedValues());
   }
 
-  public static List<String> from(AllowableValues allowableValues) {
+  public static Set<String> from(AllowableValues allowableValues) {
     if (allowableValues instanceof AllowableListValues) {
-      return ((AllowableListValues) allowableValues).getValues();
+      return new HashSet<>(((AllowableListValues) allowableValues).getValues());
     }
-    return new ArrayList<>();
+    return new HashSet<>();
   }
 }

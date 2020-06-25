@@ -1663,6 +1663,43 @@
                 }
             }
         },
+        "/bugs/3321{?expand}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug3321",
+                "operationId": "bug3321UsingGET",
+                "parameters": [
+                    {
+                        "name": "expand",
+                        "in": "query",
+                        "description": "expand",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "ONE",
+                                "THREE",
+                                "TWO"
+                            ]
+                        },
+                        "collectionFormat": "csv",
+                        "enum": [
+                            "one",
+                            "three",
+                            "two"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
