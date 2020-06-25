@@ -241,7 +241,8 @@ public&nbsp;ApiResourceController&#8203;(<a href="SwaggerResourcesProvider.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>securityConfiguration</h4>
-<pre class="methodSignature">@RequestMapping("/configuration/security")
+<pre class="methodSignature">@GetMapping(value="/configuration/security",
+            produces="application/json")
 public&nbsp;org.springframework.http.ResponseEntity&lt;<a href="SecurityConfiguration.html" title="class in springfox.documentation.swagger.web">SecurityConfiguration</a>&gt;&nbsp;securityConfiguration()</pre>
 </li>
 </ul>
@@ -251,7 +252,8 @@ public&nbsp;org.springframework.http.ResponseEntity&lt;<a href="SecurityConfigur
 <ul class="blockList">
 <li class="blockList">
 <h4>uiConfiguration</h4>
-<pre class="methodSignature">@RequestMapping("/configuration/ui")
+<pre class="methodSignature">@GetMapping(value="/configuration/ui",
+            produces="application/json")
 public&nbsp;org.springframework.http.ResponseEntity&lt;<a href="UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a>&gt;&nbsp;uiConfiguration()</pre>
 </li>
 </ul>
@@ -261,7 +263,7 @@ public&nbsp;org.springframework.http.ResponseEntity&lt;<a href="UiConfiguration.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>swaggerResources</h4>
-<pre class="methodSignature">@RequestMapping
+<pre class="methodSignature">@GetMapping(produces="application/json")
 public&nbsp;org.springframework.http.ResponseEntity&lt;java.util.List&lt;<a href="SwaggerResource.html" title="class in springfox.documentation.swagger.web">SwaggerResource</a>&gt;&gt;&nbsp;swaggerResources()</pre>
 </li>
 </ul>
