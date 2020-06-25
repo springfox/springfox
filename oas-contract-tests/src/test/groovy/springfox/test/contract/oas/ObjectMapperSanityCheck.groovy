@@ -38,7 +38,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
-import springfox.documentation.oas.annotations.EnableOpenApiWebMvc
+import springfox.documentation.oas.annotations.EnableOpenApi
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 
@@ -73,7 +73,7 @@ class ObjectMapperSanityCheck extends Specification {
     }
 
     @Configuration
-    @EnableOpenApiWebMvc
+    @EnableOpenApi
     @ComponentScan(basePackageClasses = [OpenApiApplication.class])
     static class Config {
         @Bean

@@ -18,7 +18,6 @@ The artifacts can be viewed accessed at the following locations:
 Springfox has multiple modules and the dependencies will vary depending on the desired API specification standard.
 Below outlines how to include the springfox-swagger2 module which produces Swagger 2.0 API documentation.
 
-
 ==== Gradle
 ===== Release
 [source,groovy]
@@ -29,7 +28,10 @@ repositories {
 }
 
 dependencies {
-    implementation "io.springfox:springfox-swagger2:{releaseVersion}"
+//  For Spring boot Projects
+    implementation "io.springfox:springfox-boot-starter:{releaseVersion}"
+//  Uncomment for regular spring mvc projects and commend above dependency
+//    implementation "io.springfox:springfox-oas:{releaseVersion}"
 }
 ----
 
@@ -43,10 +45,13 @@ repositories {
 }
 
 dependencies {
-    implementation "io.springfox:springfox-swagger2:{snapshotVersion}"
+
+//  For Spring boot Projects
+    implementation "io.springfox:springfox-boot-starter:{releaseVersion}"
+//  Uncomment for regular spring mvc projects and commend above dependency
+//    implementation "io.springfox:springfox-oas:{snapshotVersion}"
 }
 ----
-
 
 ==== Maven
 ===== Release
@@ -54,19 +59,29 @@ dependencies {
 [source,xml]
 [subs="verbatim,attributes"]
 ----
-<repositories>
-    <repository>
-      <id>jcenter-snapshots</id>
-      <name>jcenter</name>
-      <url>https://jcenter.bintray.com/</url>
-    </repository>
-</repositories>
+<pom>
 
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger2</artifactId>
-    <version>{releaseVersion}</version>
-</dependency>
+    <repositories>
+        <repository>
+          <id>jcenter-snapshots</id>
+          <name>jcenter</name>
+          <url>https://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
+
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-boot-starter</artifactId>
+        <version>{releaseVersion}</version>
+    </dependency>
+<!--   Uncomment for regular spring mvc projects and commend above dependency
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-oas</artifactId>
+        <version>{releaseVersion}</version>
+    </dependency>
+-->
+</pom>
 ----
 
 ===== Snapshot
@@ -74,20 +89,48 @@ dependencies {
 [source,xml]
 [subs="verbatim,attributes"]
 ----
-<repositories>
-    <repository>
-      <id>jcenter-snapshots</id>
-      <name>jcenter</name>
-      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-    </repository>
-</repositories>
+<pom>
+    <repositories>
+        <repository>
+          <id>jcenter-snapshots</id>
+          <name>jcenter</name>
+          <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+        </repository>
+    </repositories>
 
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger2</artifactId>
-    <version>{snapshotVersion}</version>
-</dependency>
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-boot-starter</artifactId>
+        <version>{snapshotVersion}</version>
+    </dependency>
+<!--   Uncomment for regular spring mvc projects and commend above dependency
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-oas</artifactId>
+        <version>{snapshotVersion}</version>
+    </dependency>
+-->
+</pom>
 ----
+
+==== Migrating from existing 2.x version
+===== Spring Boot Applications
+1. Remove library inclusions of earlier
+2. Remove the `@EnableSwagger2` annotations
+3. Added the `springfox-boot-starter`
+4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
+and open api libraries for annotations and models) so if you used guava predicates/functions those will need to
+transition to java 8 function interfaces
+
+===== Regular spring mvc
+1. Remove library inclusions of earlier
+2. Add `@EnableOpenApi` for open API (and `@EnableSwagger2WebMvc` or `@EnableSwagger2WebFlux` for older versions)
+3. Added the `springfox-oas` library
+4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
+and open api libraries for annotations and models) so if you used guava predicates/functions those will need to
+transition to java 8 function interfaces
+
+NOTE: Would love feedback to make this experience better
 
 == Quick start guides
 === Springfox Spring MVC and Spring Boot
