@@ -103,6 +103,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
     class PropertyExampleSerializer extends StdSerializer<Object> {
 
+      @SuppressWarnings("java:S4784")
       private static final Pattern JSON_NUMBER_PATTERN =
           Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
 

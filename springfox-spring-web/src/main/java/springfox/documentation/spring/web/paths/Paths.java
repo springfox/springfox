@@ -89,6 +89,7 @@ public class Paths {
    * @param requestMappingPattern request mapping pattern
    * @return the request mapping endpoint
    */
+  @SuppressWarnings("java:S4784")
   public static String sanitizeRequestMappingPattern(String requestMappingPattern) {
     String result = requestMappingPattern;
     //remove regex portion '/{businessId:\\w+}'

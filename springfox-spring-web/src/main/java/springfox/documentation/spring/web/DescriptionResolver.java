@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import static org.springframework.util.StringUtils.*;
 
 public class DescriptionResolver {
+  @SuppressWarnings("java:S4784")
   private static final Pattern PATTERN = Pattern.compile("\\Q${\\E(.+?)(:(.*))?\\Q}\\E");
   private final Environment environment;
   private Map<String, String> cache;
