@@ -17,7 +17,7 @@ public class CollectionFormat {
           "of multiple values for a single insta = new CollectionFormatnce foo=bar&foo=baz. " +
           "This is valid only for parameters in \"query\" or \"formData\"");
 
-  public static final Map<String, CollectionFormat> KNOWN_FORMATS = new HashMap<String, CollectionFormat>() {{
+  private static final Map<String, CollectionFormat> KNOWN_FORMATS = new HashMap<String, CollectionFormat>() {{
     put(CSV.type, CSV);
     put(SSV.type, SSV);
     put(TSV.type, TSV);

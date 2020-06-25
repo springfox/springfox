@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RootParameterSpecificationProvider implements ParameterSpecificationProvider {
-  public static final Map<ParameterType, ParameterSpecificationProvider> SPECIFICATION_PROVIDER_LOOKUP =
+  static final Map<ParameterType, ParameterSpecificationProvider> SPECIFICATION_PROVIDER_LOOKUP =
       new HashMap<ParameterType, ParameterSpecificationProvider>() {{
         put(ParameterType.QUERY, new QueryParameterSpecificationProvider());
         put(ParameterType.COOKIE, new CookieParameterSpecificationProvider());

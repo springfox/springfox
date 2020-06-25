@@ -24,7 +24,7 @@ public class ScalarType {
   public static final ScalarType EMAIL = new ScalarType("string", "email");
   public static final ScalarType CURRENCY = new ScalarType("number", "bigdecimal");
 
-  public static final List<ScalarType> KNOWN_TYPES =
+  private static final List<ScalarType> KNOWN_TYPES =
       Arrays.asList(
           INTEGER,
           LONG,
@@ -43,8 +43,8 @@ public class ScalarType {
           EMAIL,
           CURRENCY);
 
-  private String type;
-  private String format;
+  private final String type;
+  private final String format;
 
   ScalarType(
       String type,

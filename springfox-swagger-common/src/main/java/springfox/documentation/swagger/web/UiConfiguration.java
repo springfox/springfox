@@ -539,10 +539,11 @@ public class UiConfiguration {
     return ofNullable(validatorUrl).orElse("");
   }
 
+  @SuppressWarnings("java:S2386")
   public static class Constants {
     public static final String[] DEFAULT_SUBMIT_METHODS = new String[] {
         "get", "put", "post",
-        "delete", "options", "head",
+        "delete", "options", "head",          
         "patch", "trace" };
 
     public static final String[] NO_SUBMIT_METHODS = new String[] {};

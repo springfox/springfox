@@ -11,13 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 class QueryParameterSpecificationProvider implements ParameterSpecificationProvider {
-  public static final List<ParameterStyle> VALID_COLLECTION_STYLES =
+  static final List<ParameterStyle> VALID_COLLECTION_STYLES =
       Arrays.asList(
           ParameterStyle.FORM,
           ParameterStyle.SPACEDELIMITED,
           ParameterStyle.PIPEDELIMITED
                    );
-  public static final List<ParameterStyle> VALID_OBJECT_STYLES =
+  static final List<ParameterStyle> VALID_OBJECT_STYLES =
       Arrays.asList(
           ParameterStyle.FORM,
           ParameterStyle.DEEPOBJECT

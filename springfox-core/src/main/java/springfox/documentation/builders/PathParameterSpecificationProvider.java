@@ -9,13 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PathParameterSpecificationProvider implements ParameterSpecificationProvider {
-  public static final List<ParameterStyle> VALID_COLLECTION_STYLES =
+  static final List<ParameterStyle> VALID_COLLECTION_STYLES =
       Arrays.asList(
           ParameterStyle.MATRIX,
           ParameterStyle.LABEL,
           ParameterStyle.SIMPLE
       );
-  public static final List<ParameterStyle> VALID_OBJECT_STYLES =
+  static final List<ParameterStyle> VALID_OBJECT_STYLES =
       Arrays.asList(
           ParameterStyle.MATRIX,
           ParameterStyle.LABEL
