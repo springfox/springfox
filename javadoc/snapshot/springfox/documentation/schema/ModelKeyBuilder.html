@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -158,13 +158,17 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html#qualifiedModelName-springfox.documentation.schema.QualifiedModelName-">qualifiedModelName</a></span>(<a href="../../../springfox/documentation/schema/QualifiedModelName.html" title="class in springfox.documentation.schema">QualifiedModelName</a>&nbsp;qualifiedModelName)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html#qualifiedModelName-java.util.function.Consumer-">qualifiedModelName</a></span>(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/QualifiedModelNameBuilder.html" title="class in springfox.documentation.builders">QualifiedModelNameBuilder</a>&gt;&nbsp;consumer)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html#validationGroupDiscriminators-java.util.Collection-">validationGroupDiscriminators</a></span>(java.util.Collection&lt;com.fasterxml.classmate.ResolvedType&gt;&nbsp;validationGroupDiscriminators)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html#qualifiedModelName-springfox.documentation.schema.QualifiedModelName-">qualifiedModelName</a></span>(<a href="../../../springfox/documentation/schema/QualifiedModelName.html" title="class in springfox.documentation.schema">QualifiedModelName</a>&nbsp;qualifiedModelName)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html#validationGroupDiscriminators-java.util.Collection-">validationGroupDiscriminators</a></span>(java.util.Collection&lt;com.fasterxml.classmate.ResolvedType&gt;&nbsp;validationGroupDiscriminators)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../springfox/documentation/schema/ModelKeyBuilder.html#viewDiscriminator-com.fasterxml.classmate.ResolvedType-">viewDiscriminator</a></span>(com.fasterxml.classmate.ResolvedType&nbsp;viewDiscriminator)</code>&nbsp;</td>
 </tr>
@@ -214,6 +218,15 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>qualifiedModelName</h4>
 <pre>public&nbsp;<a href="../../../springfox/documentation/schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a>&nbsp;qualifiedModelName(<a href="../../../springfox/documentation/schema/QualifiedModelName.html" title="class in springfox.documentation.schema">QualifiedModelName</a>&nbsp;qualifiedModelName)</pre>
+</li>
+</ul>
+<a name="qualifiedModelName-java.util.function.Consumer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>qualifiedModelName</h4>
+<pre>public&nbsp;<a href="../../../springfox/documentation/schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a>&nbsp;qualifiedModelName(java.util.function.Consumer&lt;<a href="../../../springfox/documentation/builders/QualifiedModelNameBuilder.html" title="class in springfox.documentation.builders">QualifiedModelNameBuilder</a>&gt;&nbsp;consumer)</pre>
 </li>
 </ul>
 <a name="viewDiscriminator-com.fasterxml.classmate.ResolvedType-">

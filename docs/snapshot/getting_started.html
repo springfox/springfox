@@ -768,12 +768,6 @@ dependencies {
 174
 175
 176
-177
-178
-179
-180
-181
-182
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -807,13 +801,9 @@ dependencies {
 <span class="keyword">import</span> <span class="include">org.springframework.http.MediaType</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.http.ResponseEntity</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.web.context.request.async.DeferredResult</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ModelSpecificationBuilder</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.PathSelectors</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.RequestHandlerSelectors</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.ResponseBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.schema.ModelKeyBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.schema.QualifiedModelName</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.schema.ReferenceModelSpecification</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.schema.ScalarType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.schema.WildcardType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.service.ApiKey</span>;
@@ -873,15 +863,13 @@ dependencies {
                 .code(<span class="string"><span class="delimiter">&quot;</span><span class="content">500</span><span class="delimiter">&quot;</span></span>)
                 .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">500 message</span><span class="delimiter">&quot;</span></span>)
                 .representation(MediaType.TEXT_XML)
-                .apply(r -&gt; r.model(m -&gt; <span class="keyword">new</span> ModelSpecificationBuilder()
-                    .referenceModel(
-                        <span class="keyword">new</span> ReferenceModelSpecification(
-                            <span class="keyword">new</span> ModelKeyBuilder()
-                                .qualifiedModelName(
-                                    <span class="keyword">new</span> QualifiedModelName(
-                                        <span class="string"><span class="delimiter">&quot;</span><span class="content">some:namespace</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="string"><span class="delimiter">&quot;</span><span class="content">ERROR</span><span class="delimiter">&quot;</span></span>))
-                                .build())))) <i class="conum" data-value="13"></i><b>(13)</b>
+                .apply(r -&gt;
+                    r.model(m -&gt;
+                        m.referenceModel(ref -&gt;
+                            ref.key(k -&gt;
+                                k.qualifiedModelName(q -&gt;
+                                    q.namespace(<span class="string"><span class="delimiter">&quot;</span><span class="content">some:namespace</span><span class="delimiter">&quot;</span></span>)
+                                        .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">ERROR</span><span class="delimiter">&quot;</span></span>)))))) <i class="conum" data-value="13"></i><b>(13)</b>
                 .build()))
         .securitySchemes(singletonList(apiKey())) <i class="conum" data-value="14"></i><b>(14)</b>
         .securityContexts(singletonList(securityContext())) <i class="conum" data-value="15"></i><b>(15)</b>
@@ -1547,7 +1535,7 @@ cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-06-24 15:41:54 UTC
+Last updated 2020-06-25 01:00:33 UTC
 </div>
 </div>
 <style>
