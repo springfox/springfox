@@ -24,6 +24,7 @@ import springfox.bean.validators.plugins.parameter.ExpandedParameterNotNullAnnot
 import springfox.bean.validators.plugins.parameter.ExpandedParameterPatternAnnotationPlugin
 import springfox.bean.validators.plugins.parameter.ExpandedParameterSizeAnnotationPlugin
 import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin
+import springfox.bean.validators.plugins.schema.IsNullAnnotationPlugin
 import springfox.bean.validators.plugins.schema.MinMaxAnnotationPlugin
 import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin
 import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin
@@ -36,6 +37,7 @@ class BeanValidatorPluginsConfigurationSpec extends Specification {
         def config = new BeanValidatorPluginsConfiguration()
         when:
         def minMaxPlugin = config.minMaxPlugin()
+        def isNullPlugin = config.isNullPlugin()
         def notNullPlugin = config.notNullPlugin()
         def patternPlugin = config.patternPlugin()
         def sizePlugin = config.sizePlugin()
@@ -53,6 +55,7 @@ class BeanValidatorPluginsConfigurationSpec extends Specification {
 
         then:
         minMaxPlugin instanceof  MinMaxAnnotationPlugin
+        isNullPlugin instanceof IsNullAnnotationPlugin
         notNullPlugin instanceof  NotNullAnnotationPlugin
         patternPlugin instanceof PatternAnnotationPlugin
         sizePlugin instanceof  SizeAnnotationPlugin
