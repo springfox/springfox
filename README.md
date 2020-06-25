@@ -40,20 +40,29 @@ For Gradle
 ```gradle 
   implementation "io.springfox:springfox-boot-starter:<version>"
 ```
+#### Migrating from earlier snapshot 
+#### Spring Boot Applications
+NOTE: Would love feedback to make this better
+1. Remove explicit dependencies on `springfox-swagger2`
+2. Remove any `@EnableSwagger2...` annotations
+3. Add the `springfox-boot-starter` dependency
+4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
+and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
+transition to java 8 function interfaces.
 
 #### Migrating from existing 2.x version
 #### Spring Boot Applications
 NOTE: Would love feedback to make this better
-1. Remove library inclusions of earlier
+1. Remove explicit dependencies on `springfox-swagger2`
 2. Remove the `@EnableSwagger2` annotations
-3. Added the `springfox-boot-starter` 
+3. Add the `springfox-boot-starter` dependency
 4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
 and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
 transition to java 8 function interfaces 
 
 #### Regular spring mvc  
 NOTE: Would love feedback to make this experience better
-1. Remove library inclusions of earlier
+1. Remove explicit dependencies on `springfox-swagger2`
 2. Add `@EnableOpenApi` for open API (and `@EnableSwagger2WebMvc` or `@EnableSwagger2WebFlux` for older versions)  
 3. Added the `springfox-oas` library 
 4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
