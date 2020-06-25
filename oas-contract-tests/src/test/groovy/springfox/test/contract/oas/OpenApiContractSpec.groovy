@@ -44,7 +44,7 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = OpenApiApplication)
-class FunctionContractSpec extends Specification implements FileAccess {
+class OpenApiContractSpec extends Specification implements FileAccess {
 
   @Shared
   def http = new TestRestTemplate(
@@ -95,6 +95,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     where:
     contractFile    | groupName
     'petstore.json' | 'petstore'
+    'bugs.json'     | 'bugs'
   }
 
   def "should list swagger resources for open api 3.0"() {
@@ -105,21 +106,26 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
     when:
     def response = http.exchange(
-            request,
-            String)
+        request,
+        String)
     def slurper = new JsonSlurper()
     def result = slurper.parseText(response.body)
 
     then:
     result.find {
+      it.name == 'bugs' &&
+          it.url == "$baseUrl/v3/api-docs?group=bugs" &&
+          it.swaggerVersion == '3.0.3'
+    }
+    result.find {
       it.name == 'petstore' &&
           it.url == "$baseUrl/v3/api-docs?group=petstore" &&
-          it.swaggerVersion == '3.0.1'
+          it.swaggerVersion == '3.0.3'
     }
     result.find {
       it.name == 'default' &&
           it.url == "$baseUrl/v3/api-docs" &&
-          it.swaggerVersion == '3.0.1'
+          it.swaggerVersion == '3.0.3'
     }
   }
 

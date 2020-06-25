@@ -88,7 +88,7 @@ public abstract class ServiceModelToOpenApiMapper {
   private static final Logger LOGGER = getLogger(ServiceModelToOpenApiMapper.class);
 
   @Mappings({
-      @Mapping(target = "openapi", constant = "3.0.1"),
+      @Mapping(target = "openapi", constant = "3.0.3"),
       @Mapping(target = "info", source = "resourceListing.info"),
       @Mapping(target = "externalDocs", source = "externalDocumentation"),
       @Mapping(target = "security", ignore = true),

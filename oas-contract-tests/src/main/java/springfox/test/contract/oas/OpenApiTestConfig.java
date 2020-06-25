@@ -29,11 +29,45 @@ public class OpenApiTestConfig {
         }})
         .select()
         .paths(PathSelectors.regex("/.*")
-                            .and(PathSelectors.regex("/error").negate())
-                            .and(PathSelectors.regex("/profile").negate()))
+            .and(PathSelectors.regex("/error").negate())
+            .and(PathSelectors.regex("/profile").negate()))
         .build()
         .enableUrlTemplating(false)
         .host("petstore.swagger.io")
+        .protocols(new HashSet<>(Arrays.asList(
+            "http",
+            "https")))
+        .securitySchemes(Arrays.asList(
+            new ApiKey("api_key", "api_key", "header"),
+            HttpAuthenticationScheme.BASIC_AUTH_BUILDER
+                .name("basicScheme")
+                .build(),
+            OAuth2Scheme.OAUTH2_IMPLICIT_FLOW_BUILDER
+                .name("petstore_auth")
+                .authorizationUrl("https://petstore3.swagger.io/oauth/authorize")
+                .scopes(Arrays.asList(
+                    new AuthorizationScope("write:pets", "Write scope"),
+                    new AuthorizationScope("read:pets", "Read scope")))
+                .build()));
+  }
+
+  @Bean
+  public Docket bugs(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.OAS_30)
+        .groupName("bugs")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .produces(new HashSet<String>() {{
+          add("application/xml");
+          add("application/json");
+        }})
+        .select()
+        .paths(PathSelectors.regex("/bugs/.*")
+            .and(PathSelectors.regex("/error").negate())
+            .and(PathSelectors.regex("/profile").negate()))
+        .build()
+        .enableUrlTemplating(false)
+        .host("bugs.springfox.io")
         .protocols(new HashSet<>(Arrays.asList(
             "http",
             "https")))

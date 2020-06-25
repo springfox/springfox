@@ -89,31 +89,31 @@ public class EnumMapper {
       SerializableParameter parameter,
       SimpleParameterSpecification parameterSpecification) {
 
-    parameterSpecification.facetOfType(EnumerationFacet.class).ifPresent(e -> {
-      parameter.setEnum(e.getAllowedValues());
-    });
-    parameterSpecification.facetOfType(NumericElementFacet.class).ifPresent(range -> {
-      parameterSpecification.getModel().getScalar().ifPresent(s -> {
-        if (s.getType() == ScalarType.STRING) {
-          parameter.setMinLength(safeConvertBigDecimalToInt(range.getMinimum()));
-          parameter.setMaxLength(safeConvertBigDecimalToInt(range.getMaximum()));
-        } else {
-          parameter.setMinimum(range.getMinimum());
-          parameter.setExclusiveMinimum(range.getExclusiveMinimum());
-          parameter.setMaximum(range.getMaximum());
-          parameter.setExclusiveMaximum(range.getExclusiveMaximum());
-        }
-      });
-    });
-    parameterSpecification.facetOfType(StringElementFacet.class).ifPresent(string -> {
-      parameterSpecification.getModel().getScalar().ifPresent(s -> {
-        if (s.getType() == ScalarType.STRING) {
-          parameter.setMinLength(string.getMinLength());
-          parameter.setMaxLength(string.getMaxLength());
-          parameter.setPattern(string.getPattern());
-        }
-      });
-    });
+    parameterSpecification.facetOfType(EnumerationFacet.class)
+        .ifPresent(e -> parameter.setEnum(e.getAllowedValues()));
+    parameterSpecification.facetOfType(NumericElementFacet.class)
+        .ifPresent(range -> parameterSpecification.getModel().getScalar()
+            .ifPresent(s -> {
+              if (s.getType() == ScalarType.STRING) {
+                parameter.setMinLength(safeConvertBigDecimalToInt(range.getMinimum()));
+                parameter.setMaxLength(safeConvertBigDecimalToInt(range.getMaximum()));
+              } else {
+                parameter.setMinimum(range.getMinimum());
+                parameter.setExclusiveMinimum(range.getExclusiveMinimum());
+                parameter.setMaximum(range.getMaximum());
+                parameter.setExclusiveMaximum(range.getExclusiveMaximum());
+              }
+            }));
+    parameterSpecification.facetOfType(StringElementFacet.class)
+        .ifPresent(string -> parameterSpecification.getModel()
+            .getScalar()
+            .ifPresent(s -> {
+              if (s.getType() == ScalarType.STRING) {
+                parameter.setMinLength(string.getMinLength());
+                parameter.setMaxLength(string.getMaxLength());
+                parameter.setPattern(string.getPattern());
+              }
+            }));
     parameterSpecification.getModel().getCollection()
         .flatMap(collection -> parameterSpecification
             .facetOfType(CollectionElementFacet.class))
@@ -196,7 +196,7 @@ public class EnumMapper {
     return property;
   }
 
-  @SuppressWarnings({ "NPathComplexity", "CyclomaticComplexity" })
+  @SuppressWarnings({"NPathComplexity", "CyclomaticComplexity"})
   static Property maybeAddFacets(
       Property property,
       ElementFacetSource facets) {

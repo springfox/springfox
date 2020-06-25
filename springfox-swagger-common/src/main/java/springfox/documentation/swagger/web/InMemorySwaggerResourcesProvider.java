@@ -107,7 +107,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
 
       if (oas3Available) {
         SwaggerResource swaggerResource = resource(swaggerGroup, oas3Url);
-        swaggerResource.setSwaggerVersion("3.0.1");
+        swaggerResource.setSwaggerVersion("3.0.3");
         resources.add(swaggerResource);
       }
     }

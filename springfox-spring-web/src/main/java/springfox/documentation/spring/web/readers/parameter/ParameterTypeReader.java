@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.spring.web.readers.parameter.ParameterTypeDeterminer.*;
 
@@ -45,6 +49,9 @@ import static springfox.documentation.spring.web.readers.parameter.ParameterType
 @SuppressWarnings("deprecation")
 public class ParameterTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOGGER = LoggerFactory.getLogger(ParameterTypeReader.class);
+  public static final List<HttpMethod> QUERTY_ONLY_HTTP_METHODS = Arrays.asList(HttpMethod.GET,
+      HttpMethod.OPTIONS,
+      HttpMethod.HEAD);
 
   @Override
   public void apply(ParameterContext context) {
@@ -91,7 +98,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
           parameterContext.getOperationContext().consumes(),
           parameterContext.getOperationContext().httpMethod());
     }
-    return "body";
+    return QUERTY_ONLY_HTTP_METHODS.contains(parameterContext.getOperationContext().httpMethod()) ? "query" : "body";
   }
 
   private static boolean isListOfFiles(ResolvedType parameterType) {
