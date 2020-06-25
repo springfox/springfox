@@ -66,7 +66,7 @@ workflows:
     jobs:
       - build:
           context: SonarCloud
-          filter:
+          filters:
             branches:
               ignore:
                 - gh-pages
