@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     branches:
@@ -64,6 +64,7 @@ jobs:
             fi
 
 workflows:
+  version: 2
   main:
     jobs:
       - build:
