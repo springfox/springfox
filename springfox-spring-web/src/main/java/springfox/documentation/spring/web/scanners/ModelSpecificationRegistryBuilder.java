@@ -34,7 +34,9 @@ public class ModelSpecificationRegistryBuilder {
     modelSpecification.key().ifPresent(key -> {
       if (!modelByKey.containsKey(key)) {
         modelByKey.put(key, modelSpecification);
-        modelByQName.addIfAbsent(key.getQualifiedModelName(), modelSpecification);
+        if (!modelByQName.containsKey(key.getQualifiedModelName())) {
+          modelByQName.add(key.getQualifiedModelName(), modelSpecification);
+        }
         List<ModelSpecification> specsWithSameName = modelByQName.get(key.getQualifiedModelName());
         if (!specsWithSameName.contains(modelSpecification)) {
           modelByQName.add(key.getQualifiedModelName(), modelSpecification);
@@ -259,8 +261,12 @@ public class ModelSpecificationRegistryBuilder {
     boolean isSame = sameModel(modelByKey.get(first), modelByKey.get(second), referenceKeyToEffectiveKey, seen);
     seen.put(Arrays.asList(first, second), isSame);
     if (isSame) {
-      referenceKeyToEffectiveKey.addIfAbsent(first, second);
-      referenceKeyToEffectiveKey.addIfAbsent(second, first);
+      if (!referenceKeyToEffectiveKey.containsKey(first)) {
+        referenceKeyToEffectiveKey.add(first, second);
+      }
+      if (!referenceKeyToEffectiveKey.containsKey(second)) {
+        referenceKeyToEffectiveKey.add(second, first);
+      }
     }
     return isSame;
   }
