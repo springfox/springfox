@@ -479,6 +479,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#gradle">2.1.1. Gradle</a></li>
 <li><a href="#maven">2.1.2. Maven</a></li>
+<li><a href="#migrating-from-existing-2-x-version">2.1.3. Migrating from existing 2.x version</a></li>
 </ul>
 </li>
 </ul>
@@ -914,7 +915,10 @@ Below outlines how to include the springfox-swagger2 module which produces Swagg
 }
 
 dependencies {
-    implementation <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:2.10.5</span><span class="delimiter">&quot;</span></span>
+<span class="comment">//  For Spring boot Projects</span>
+    implementation <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-boot-starter:2.10.5</span><span class="delimiter">&quot;</span></span>
+<span class="comment">//  Uncomment for regular spring mvc projects and commend above dependency</span>
+<span class="comment">//    implementation &quot;io.springfox:springfox-oas:2.10.5&quot;</span>
 }</code></pre>
 </div>
 </div>
@@ -928,7 +932,11 @@ dependencies {
 }
 
 dependencies {
-    implementation <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:3.0.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span>
+
+<span class="comment">//  For Spring boot Projects</span>
+    implementation <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-boot-starter:2.10.5</span><span class="delimiter">&quot;</span></span>
+<span class="comment">//  Uncomment for regular spring mvc projects and commend above dependency</span>
+<span class="comment">//    implementation &quot;io.springfox:springfox-oas:3.0.0-SNAPSHOT&quot;</span>
 }</code></pre>
 </div>
 </div>
@@ -940,19 +948,29 @@ dependencies {
 <h5 id="release-2">Release</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
-    <span class="tag">&lt;repository&gt;</span>
-      <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
-      <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
-      <span class="tag">&lt;url&gt;</span>https://jcenter.bintray.com/<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/repository&gt;</span>
-<span class="tag">&lt;/repositories&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;pom&gt;</span>
 
-<span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>2.10.5<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+    <span class="tag">&lt;repositories&gt;</span>
+        <span class="tag">&lt;repository&gt;</span>
+          <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
+          <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
+          <span class="tag">&lt;url&gt;</span>https://jcenter.bintray.com/<span class="tag">&lt;/url&gt;</span>
+        <span class="tag">&lt;/repository&gt;</span>
+    <span class="tag">&lt;/repositories&gt;</span>
+
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>springfox-boot-starter<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;version&gt;</span>2.10.5<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+<span class="comment">&lt;!--   Uncomment for regular spring mvc projects and commend above dependency
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+        &lt;artifactId&gt;springfox-oas&lt;/artifactId&gt;
+        &lt;version&gt;2.10.5&lt;/version&gt;
+    &lt;/dependency&gt;
+--&gt;</span>
+<span class="tag">&lt;/pom&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -960,20 +978,86 @@ dependencies {
 <h5 id="snapshot-3">Snapshot</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
-    <span class="tag">&lt;repository&gt;</span>
-      <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
-      <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
-      <span class="tag">&lt;url&gt;</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/repository&gt;</span>
-<span class="tag">&lt;/repositories&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;pom&gt;</span>
+    <span class="tag">&lt;repositories&gt;</span>
+        <span class="tag">&lt;repository&gt;</span>
+          <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
+          <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
+          <span class="tag">&lt;url&gt;</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="tag">&lt;/url&gt;</span>
+        <span class="tag">&lt;/repository&gt;</span>
+    <span class="tag">&lt;/repositories&gt;</span>
 
-<span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>3.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+    <span class="tag">&lt;dependency&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>springfox-boot-starter<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;version&gt;</span>3.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+<span class="comment">&lt;!--   Uncomment for regular spring mvc projects and commend above dependency
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+        &lt;artifactId&gt;springfox-oas&lt;/artifactId&gt;
+        &lt;version&gt;3.0.0-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+--&gt;</span>
+<span class="tag">&lt;/pom&gt;</span></code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="migrating-from-existing-2-x-version">2.1.3. Migrating from existing 2.x version</h4>
+<div class="sect4">
+<h5 id="spring-boot-applications">Spring Boot Applications</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Remove library inclusions of earlier</p>
+</li>
+<li>
+<p>Remove the <code>@EnableSwagger2</code> annotations</p>
+</li>
+<li>
+<p>Added the <code>springfox-boot-starter</code></p>
+</li>
+<li>
+<p>Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
+and open api libraries for annotations and models) so if you used guava predicates/functions those will need to
+transition to java 8 function interfaces</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="regular-spring-mvc">Regular spring mvc</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Remove library inclusions of earlier</p>
+</li>
+<li>
+<p>Add <code>@EnableOpenApi</code> for open API (and <code>@EnableSwagger2WebMvc</code> or <code>@EnableSwagger2WebFlux</code> for older versions)</p>
+</li>
+<li>
+<p>Added the <code>springfox-oas</code> library</p>
+</li>
+<li>
+<p>Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
+and open api libraries for annotations and models) so if you used guava predicates/functions those will need to
+transition to java 8 function interfaces</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Would love feedback to make this experience better
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -4802,7 +4886,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-06-25 01:00:33 UTC
+Last updated 2020-06-25 01:52:48 UTC
 </div>
 </div>
 <style>
