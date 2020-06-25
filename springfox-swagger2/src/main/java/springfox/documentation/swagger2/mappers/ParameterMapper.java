@@ -151,7 +151,8 @@ public class ParameterMapper {
         files.items(new FileProperty());
         return files;
       }
-      springfox.documentation.schema.ModelReference itemModel = modelRef.itemModel().get();
+      springfox.documentation.schema.ModelReference itemModel = modelRef.itemModel()
+          .orElseThrow(() -> new IllegalStateException("ModelRef that is a collection should have an itemModel"));
       return new ArrayModel()
           .items(maybeAddAllowableValues(
               springfox.documentation.swagger2.mappers.Properties.itemTypeProperty(itemModel),
@@ -159,7 +160,8 @@ public class ParameterMapper {
     }
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();
-      springfox.documentation.schema.ModelReference itemModel = modelRef.itemModel().get();
+      springfox.documentation.schema.ModelReference itemModel = modelRef.itemModel()
+          .orElseThrow(() -> new IllegalStateException("ModelRef that is a map should have an itemModel"));
       baseModel.additionalProperties(
           maybeAddAllowableValues(
               springfox.documentation.swagger2.mappers.Properties.itemTypeProperty(itemModel),

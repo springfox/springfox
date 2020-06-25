@@ -211,7 +211,9 @@ abstract class SpecificationBuilder {
     }
 
     private Class<?> getType() {
-      return context.getEntityContext().entity().get().getType();
+      return context.getEntityContext().entity()
+          .map(PersistentEntity::getType)
+          .orElseThrow(() -> new IllegalStateException("Expecting that the entity exists here"));
     }
 
     private ResolvedType returnType(TypeResolver resolver) {
@@ -353,7 +355,7 @@ abstract class SpecificationBuilder {
           .collect(Collectors.toList());
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    @SuppressWarnings({"OptionalGetWithoutIsPresent", "java:S3655"})
     private Class<?> getType() {
       return context.entity().get().getType();
     }

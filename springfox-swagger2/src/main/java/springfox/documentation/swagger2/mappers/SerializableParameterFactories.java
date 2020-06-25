@@ -88,7 +88,8 @@ public class SerializableParameterFactories {
       } else {
         toReturn.setCollectionFormat(collectionFormat(source));
         toReturn.setType("array");
-        springfox.documentation.schema.ModelReference paramItemModelRef = paramModel.itemModel().get();
+        springfox.documentation.schema.ModelReference paramItemModelRef = paramModel.itemModel()
+            .orElseThrow(() -> new IllegalStateException("ModelRef that is a collection should have an itemModel"));
         Property itemProperty
             = maybeAddAllowableValues(
             springfox.documentation.swagger2.mappers.Properties.itemTypeProperty(paramItemModelRef),
@@ -97,7 +98,8 @@ public class SerializableParameterFactories {
         maybeAddAllowableValuesToParameter(toReturn, itemProperty, paramItemModelRef.getAllowableValues());
       }
     } else if (paramModel.isMap()) {
-      springfox.documentation.schema.ModelReference paramItemModelRef = paramModel.itemModel().get();
+      springfox.documentation.schema.ModelReference paramItemModelRef = paramModel.itemModel()
+          .orElseThrow(() -> new IllegalStateException("ModelRef that is a map should have an itemModel"));
       Property itemProperty =
           new MapProperty(springfox.documentation.swagger2.mappers.Properties.itemTypeProperty(paramItemModelRef));
       toReturn.setItems(itemProperty);

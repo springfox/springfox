@@ -248,7 +248,8 @@ public class ModelMapper {
       responseProperty = springfox.documentation.swagger2.mappers.Properties.property(modelRef);
     } else if (modelRef.isMap()) {
       responseProperty =
-          new MapProperty(springfox.documentation.swagger2.mappers.Properties.property(modelRef.itemModel().get()));
+          new MapProperty(springfox.documentation.swagger2.mappers.Properties.property(modelRef.itemModel()
+              .orElseThrow(() -> new IllegalStateException("ModelRef that is a map should have an itemModel"))));
     } else {
       responseProperty = springfox.documentation.swagger2.mappers.Properties.property(modelRef.getType());
     }

@@ -476,8 +476,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private boolean isInActiveView(
       AnnotatedMember member,
       ModelContext givenContext) {
-    if (givenContext.getView()
-        .isPresent()) {
+    if (givenContext.getView().isPresent()) {
       Class<?>[] typeViews = annotationIntrospector.findViews(member);
       if (typeViews == null) {
         typeViews = new Class<?>[0];
@@ -485,9 +484,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       if (typeViews.length == 0 && objectMapper.isEnabled(MapperFeature.DEFAULT_VIEW_INCLUSION)) {
         return true;
       }
-      Class<?> activeView = givenContext.getView()
-          .get()
-          .getErasedType();
+      Class<?> activeView = givenContext.getView().get().getErasedType();
       int i = 0;
       int len = typeViews.length;
       for (; i < len; ++i) {

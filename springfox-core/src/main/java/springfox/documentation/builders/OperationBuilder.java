@@ -388,7 +388,7 @@ public class OperationBuilder {
 
   private Response mergeResponses(List<Response> responses) {
     if (responses.size() == 1) {
-      return responses.stream().findFirst().get();
+      return responses.get(0);
     }
     Response response = null;
     for (Response each : responses) {

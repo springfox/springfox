@@ -27,6 +27,7 @@ import springfox.documentation.common.ExternalDocumentation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -232,7 +233,9 @@ public class Operation implements Ordered {
   private RequestBody toBody(RequestParameter parameter) {
     return new RequestBody(
         parameter.getDescription(),
-        parameter.getParameterSpecification().getContent().get().getRepresentations(),
+        parameter.getParameterSpecification().getContent()
+            .map(ContentSpecification::getRepresentations)
+            .orElse(new HashSet<>()), //TODO: Log this?
         parameter.getRequired(),
         parameter.getExtensions());
   }

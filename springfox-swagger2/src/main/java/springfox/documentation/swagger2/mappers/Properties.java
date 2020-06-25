@@ -88,14 +88,17 @@ class Properties {
 
   public static Property property(springfox.documentation.schema.ModelReference modelRef) {
     if (modelRef.isMap()) {
-      return new MapProperty(property(modelRef.itemModel().get()));
+      return new MapProperty(property(modelRef.itemModel()
+          .orElseThrow(() -> new IllegalStateException("ModelRef that is a map should have an itemModel"))));
     } else if (modelRef.isCollection()) {
       if ("byte".equals(modelRef.itemModel()
           .map(springfox.documentation.schema.ModelReference::getType).orElse(""))) {
         return new ByteArrayProperty();
       }
       return new ArrayProperty(
-          maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
+          maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel()
+              .orElseThrow(() -> new IllegalStateException("ModelRef that is a collection should have an itemModel"))),
+              modelRef.getAllowableValues()));
     }
     return property(modelRef.getType());
   }
@@ -103,7 +106,9 @@ class Properties {
   public static Property itemTypeProperty(springfox.documentation.schema.ModelReference paramModel) {
     if (paramModel.isCollection()) {
       return new ArrayProperty(
-          maybeAddAllowableValues(itemTypeProperty(paramModel.itemModel().get()), paramModel.getAllowableValues()));
+          maybeAddAllowableValues(itemTypeProperty(paramModel.itemModel()
+              .orElseThrow(() -> new IllegalStateException("ModelRef that is a collection should have an itemModel"))),
+              paramModel.getAllowableValues()));
     }
     return property(paramModel.getType());
   }

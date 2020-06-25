@@ -92,8 +92,8 @@ public abstract class ServiceModelToOpenApiMapper {
       @Mapping(target = "info", source = "resourceListing.info"),
       @Mapping(target = "externalDocs", source = "externalDocumentation"),
       @Mapping(target = "security", ignore = true),
-      @Mapping(target = "paths", source = "apiListings", qualifiedByName = { "PathsMapping" }),
-      @Mapping(target = "components.schemas", source = "apiListings", qualifiedByName = { "ModelsMapping" }),
+      @Mapping(target = "paths", source = "apiListings", qualifiedByName = {"PathsMapping"}),
+      @Mapping(target = "components.schemas", source = "apiListings", qualifiedByName = {"ModelsMapping"}),
       @Mapping(target = "components.securitySchemes", source = "resourceListing.securitySchemes"),
       @Mapping(target = "extensions", source = "vendorExtensions")
   })
@@ -147,8 +147,8 @@ public abstract class ServiceModelToOpenApiMapper {
   public void afterMappingParameter(
       RequestParameter from,
       @MappingTarget Parameter target) {
-    if (from.getParameterSpecification().getQuery().isPresent()) {
-      for (ElementFacet facet : from.getParameterSpecification().getQuery().get().getFacets()) {
+    from.getParameterSpecification().getQuery().ifPresent(query -> {
+      for (ElementFacet facet : query.getFacets()) {
         if (facet instanceof NumericElementFacet) {
           target.getSchema().maximum(((NumericElementFacet) facet).getMaximum());
           target.getSchema().minimum(((NumericElementFacet) facet).getMinimum());
@@ -166,7 +166,7 @@ public abstract class ServiceModelToOpenApiMapper {
           target.getSchema().uniqueItems(((CollectionElementFacet) facet).getUniqueItems());
         }
       }
-    }
+    });
   }
 
   protected Parameter.StyleEnum parameterStyle(ParameterStyle from) {
@@ -180,8 +180,8 @@ public abstract class ServiceModelToOpenApiMapper {
       Optional<SimpleParameterSpecification> value,
       @Context ModelNamesRegistry modelNamesRegistry) {
     return value.map(s -> Mappers.getMapper(SchemaMapper.class)
-                                 .mapModel(s.getModel(), modelNamesRegistry))
-                .orElse(null);
+        .mapModel(s.getModel(), modelNamesRegistry))
+        .orElse(null);
   }
 
   protected ApiResponses map(
@@ -228,18 +228,18 @@ public abstract class ServiceModelToOpenApiMapper {
   Paths mapPaths(Map<String, List<ApiListing>> apiListings) {
     Paths paths = new Paths();
     apiListings.values()
-               .stream()
-               .flatMap(Collection::stream)
-               .forEachOrdered(each -> {
-                 for (ApiDescription api : each.getApis()) {
-                   paths.addPathItem(
-                       api.getPath(),
-                       mapOperations(
-                           api,
-                           paths.get(api.getPath()),
-                           each.getModelNamesRegistry()));
-                 }
-               });
+        .stream()
+        .flatMap(Collection::stream)
+        .forEachOrdered(each -> {
+          for (ApiDescription api : each.getApis()) {
+            paths.addPathItem(
+                api.getPath(),
+                mapOperations(
+                    api,
+                    paths.get(api.getPath()),
+                    each.getModelNamesRegistry()));
+          }
+        });
     return paths;
   }
 
@@ -288,15 +288,15 @@ public abstract class ServiceModelToOpenApiMapper {
       Collection<springfox.documentation.service.Encoding> encodings,
       @Context ModelNamesRegistry namesRegistry) {
     return encodings.stream()
-                    .collect(Collectors.toMap(
-                        springfox.documentation.service.Encoding::getPropertyRef,
-                        e -> mapEncoding(e, namesRegistry)));
+        .collect(Collectors.toMap(
+            springfox.documentation.service.Encoding::getPropertyRef,
+            e -> mapEncoding(e, namesRegistry)));
   }
 
   @Mappings({
       @Mapping(target = "style", source = "style", qualifiedByName = {
           "StyleEnumSelector",
-          "EncodingStyleEnum" })
+          "EncodingStyleEnum"})
   })
   protected abstract Encoding mapEncoding(
       springfox.documentation.service.Encoding from,
@@ -306,9 +306,9 @@ public abstract class ServiceModelToOpenApiMapper {
       Collection<springfox.documentation.service.Header> headers,
       @Context ModelNamesRegistry modelNamesRegistry) {
     return headers.stream()
-                  .collect(Collectors.toMap(
-                      springfox.documentation.service.Header::getName,
-                      h -> mapHeader(h, modelNamesRegistry)));
+        .collect(Collectors.toMap(
+            springfox.documentation.service.Header::getName,
+            h -> mapHeader(h, modelNamesRegistry)));
   }
 
   //
@@ -332,7 +332,7 @@ public abstract class ServiceModelToOpenApiMapper {
       @Mapping(target = "license", source = "from",
           qualifiedBy = {
               LicenseMapper.LicenseTranslator.class,
-              LicenseMapper.License.class }),
+              LicenseMapper.License.class}),
       @Mapping(target = "contact", source = "from.contact"),
       @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
       @Mapping(target = "extensions", source = "vendorExtensions")
@@ -359,9 +359,9 @@ public abstract class ServiceModelToOpenApiMapper {
       Collection<springfox.documentation.service.ServerVariable> serverVariables) {
     ServerVariables variables = new ServerVariables();
     variables.putAll(serverVariables.stream()
-                                    .collect(Collectors.toMap(
-                                        springfox.documentation.service.ServerVariable::getName,
-                                        this::mapServerVariable)));
+        .collect(Collectors.toMap(
+            springfox.documentation.service.ServerVariable::getName,
+            this::mapServerVariable)));
     return variables;
   }
 

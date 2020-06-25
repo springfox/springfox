@@ -49,7 +49,7 @@ public class RequestParameterMapper {
   private static final VendorExtensionsMapper VENDOR_EXTENSIONS_MAPPER = new VendorExtensionsMapper();
   private final PropertyMapper propertyMapper = Mappers.getMapper(PropertyMapper.class);
 
-  @SuppressWarnings({ "CyclomaticComplexity", "JavaNCSS", "NestedIfDepth" })
+  @SuppressWarnings({"CyclomaticComplexity", "JavaNCSS", "NestedIfDepth"})
   Optional<Parameter> mapParameter(
       RequestParameter from,
       @Context ModelNamesRegistry modelNamesRegistry) {
@@ -150,10 +150,10 @@ public class RequestParameterMapper {
         .name(source.getName())
         .description(source.getDescription());
     Optional<ContentSpecification> content = source.getParameterSpecification().getContent();
-    content.get().getRepresentations().stream()
+    content.ifPresent(c -> c.getRepresentations().stream()
         .findFirst()
         .map(Representation::getModel)
-        .ifPresent(m -> parameter.setProperty(propertyMapper.fromModel(m, namesRegistry)));
+        .ifPresent(m -> parameter.setProperty(propertyMapper.fromModel(m, namesRegistry))));
 
     if (!SUPPORTED_FORM_DATA_TYPES.contains(parameter.getType())
         || "array".equals(parameter.getType())
@@ -188,7 +188,8 @@ public class RequestParameterMapper {
       RequestParameter source,
       ModelNamesRegistry namesRegistry) {
     Model schema = toSchema(source, namesRegistry);
-    if (source.getScalarExample() != null) {
+    if (schema != null
+        && source.getScalarExample() != null) {
       schema.setExample(
           String.valueOf(source.getScalarExample().getValue()));
     }
@@ -214,12 +215,12 @@ public class RequestParameterMapper {
       RequestParameter source,
       ModelNamesRegistry namesRegistry) {
     return source.getParameterSpecification().getContent()
-                 .map(c -> Mappers.getMapper(ModelSpecificationMapper.class)
-                                  .mapModels(
-                                      c.getRepresentations().stream().findFirst()
-                                       .map(Representation::getModel)
-                                       .orElse(null),
-                                      namesRegistry))
-                 .orElse(null);
+        .map(c -> Mappers.getMapper(ModelSpecificationMapper.class)
+            .mapModels(
+                c.getRepresentations().stream().findFirst()
+                    .map(Representation::getModel)
+                    .orElse(null),
+                namesRegistry))
+        .orElse(null);
   }
 }

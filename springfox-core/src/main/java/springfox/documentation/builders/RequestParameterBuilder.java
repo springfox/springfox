@@ -181,13 +181,12 @@ public class RequestParameterBuilder {
   public RequestParameterBuilder copyOf(RequestParameter source) {
     source.getParameterSpecification()
         .getQuery()
-        .map(simple -> {
+        .ifPresent(simple -> {
           this.query(q -> q.copyOf(simple));
-          return simple;
         });
     source.getParameterSpecification()
         .getContent()
-        .map(content -> this.content(c -> c.copyOf(content)));
+        .ifPresent(content -> this.content(c -> c.copyOf(content)));
     return this.in(source.getIn())
         .required(source.getRequired())
         .hidden(source.getHidden())

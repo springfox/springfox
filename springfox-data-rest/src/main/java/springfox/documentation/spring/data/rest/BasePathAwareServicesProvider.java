@@ -57,7 +57,9 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
     contextPath = contextPath(servletContext.getContextPath());
   }
 
+  @SuppressWarnings("java:S1872")
   private static boolean isEntitySchemaService(HandlerMethod input) {
+    //For ensuring this bean is in the path (version conflict)
     return input.getBeanType().getSimpleName().equals("RepositorySchemaController");
   }
 

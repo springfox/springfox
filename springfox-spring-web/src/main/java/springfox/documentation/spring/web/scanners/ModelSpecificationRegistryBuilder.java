@@ -60,20 +60,17 @@ public class ModelSpecificationRegistryBuilder {
             "Starting comparison of model with name {}. Models to compare {}", eachEntry.getKey(), models.size());
         for (int i = 0; i < (models.size() - 1); i++) {
           for (int j = 1; j < models.size(); j++) {
-            seen.putIfAbsent(
-                Arrays.asList(
-                    models.get(i).getCompound()
-                          .map(CompoundModelSpecification::getModelKey).get(),
-                    models.get(j).getCompound()
-                          .map(CompoundModelSpecification::getModelKey).get()),
-                true);
-            if (sameModel(models.get(i), models.get(j), referenceKeyToEffectiveKey, seen)) {
-              LOGGER.trace(
-                  "Models were equivalent {} and {}",
-                  models.get(i).key().get(),
-                  models.get(j).key().get());
-              referenceKeyToEffectiveKey.add(models.get(i).key().get(), models.get(j).key().get());
-              referenceKeyToEffectiveKey.add(models.get(j).key().get(), models.get(i).key().get());
+            if (models.get(i).key().isPresent() && models.get(j).key().isPresent()) {
+              ModelKey first = models.get(j).key().get();
+              ModelKey second = models.get(i).key().get();
+              seen.putIfAbsent(Arrays.asList(second, first), true);
+              if (sameModel(models.get(i), models.get(j), referenceKeyToEffectiveKey, seen)) {
+                LOGGER.trace("Models were equivalent {} and {}", second, first);
+                referenceKeyToEffectiveKey.add(second, first);
+                referenceKeyToEffectiveKey.add(first, second);
+              } else {
+                LOGGER.trace("Models were different {} and {}", second, first);
+              }
             } else {
               LOGGER.trace(
                   "Models were different {} and {}",

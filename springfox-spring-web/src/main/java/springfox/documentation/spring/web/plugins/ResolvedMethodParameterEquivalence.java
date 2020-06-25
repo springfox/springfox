@@ -57,9 +57,16 @@ class ResolvedMethodParameterEquivalence implements BiPredicate<ResolvedMethodPa
     }
 
     @Override
-    public boolean equals(Object other) {
-      return equivalence.equals(((Wrapper) other).equivalence) && equivalence.test(parameter,
-          ((Wrapper) other).parameter);
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      Wrapper wrapper = (Wrapper) o;
+      return Objects.equals(equivalence, wrapper.equivalence)
+          && equivalence.test(parameter, wrapper.parameter);
     }
   }
 }

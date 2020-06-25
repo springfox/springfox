@@ -80,7 +80,10 @@ public class OperationModelContextsBuilder {
       return returnValue;
     }
 
-    return contexts.stream().filter(context -> context.equals(returnValue)).findFirst().get();
+    return contexts.stream()
+        .filter(context -> context.equals(returnValue))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("Expecting at least one matching model context"));
   }
 
   public ModelContext addInputParam(ResolvedType type) {
@@ -107,7 +110,10 @@ public class OperationModelContextsBuilder {
       return inputParam;
     }
 
-    return contexts.stream().filter(context -> context.equals(inputParam)).findFirst().get();
+    return contexts.stream()
+        .filter(context -> context.equals(inputParam))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("Expecting at least one matching model context"));
   }
 
   public Set<ModelContext> build() {

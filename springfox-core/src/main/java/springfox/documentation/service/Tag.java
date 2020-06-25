@@ -24,9 +24,6 @@ import org.springframework.core.Ordered;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-
-import static java.util.Optional.*;
 
 public class Tag implements Ordered {
   private final String name;
@@ -34,20 +31,32 @@ public class Tag implements Ordered {
   private final int order;
   private final List<VendorExtension> vendorExtensions;
 
-  public Tag(String name, String description) {
+  public Tag(
+      String name,
+      String description) {
     this(name, description, Integer.MAX_VALUE);
   }
 
-  public Tag(String name, String description, int order) {
+  public Tag(
+      String name,
+      String description,
+      int order) {
     this(name, description, order, new ArrayList<>());
   }
 
-  public Tag(String name, String description, List<VendorExtension> vendorExtensions) {
+  public Tag(
+      String name,
+      String description,
+      List<VendorExtension> vendorExtensions) {
     this(name, description, Integer.MAX_VALUE, vendorExtensions);
   }
 
-  public Tag(String name, String description, int order, List<VendorExtension> vendorExtensions) {
-    this.name = of(name).filter(((Predicate<String>) String::isEmpty).negate()).get();
+  public Tag(
+      String name,
+      String description,
+      int order,
+      List<VendorExtension> vendorExtensions) {
+    this.name = Objects.requireNonNull(name);
     this.description = description;
     this.order = order;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);
