@@ -128,7 +128,7 @@ class ParameterRequiredReaderSpec
     pathVariable("optional-param", false)
   }
 
-  def "should detect java.util.Optional parameters"() {
+  def "should detect java_util_Optional parameters"() {
     given:
     def resolvedMethodParameter = new ResolvedMethodParameter(
         0,
@@ -136,8 +136,7 @@ class ParameterRequiredReaderSpec
         paramAnnotations,
         new TypeResolver().resolve(Object.class))
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter
-        ,
+        resolvedMethodParameter,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
         Mock(OperationContext), 0)
@@ -145,7 +144,7 @@ class ParameterRequiredReaderSpec
     when:
     def operationCommand = new ParameterRequiredReader(description) {
       @Override
-      def boolean isOptional(ResolvedMethodParameter input) {
+      boolean isOptional(ResolvedMethodParameter input) {
         true
       }
     }

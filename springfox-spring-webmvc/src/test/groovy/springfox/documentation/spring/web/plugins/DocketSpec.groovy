@@ -20,11 +20,14 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.ResolvedType
+import com.fasterxml.jackson.core.util.VersionUtil
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
+import org.springframework.boot.system.JavaVersion
 import org.springframework.http.ResponseEntity
 import springfox.documentation.builders.PathSelectors
+import springfox.documentation.common.Version
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ApiDescription
@@ -158,8 +161,8 @@ class DocketSpec extends DocumentationContextSpec {
 
   def "Model substitution registers new rules"() {
     when:
-    def isjdk8 = System.getProperty("java.version").startsWith("1.8")
-    def jdk8RuleCount = (isjdk8 ? 6 : 0)
+    def isPostjdk8 = JavaVersion.getJavaVersion().isEqualOrNewerThan(JavaVersion.EIGHT)
+    def jdk8RuleCount = (isPostjdk8 ? 6 : 0)
     new Docket(DocumentationType.SWAGGER_12)
         ."${method}"(*args)
         .configure(contextBuilder)

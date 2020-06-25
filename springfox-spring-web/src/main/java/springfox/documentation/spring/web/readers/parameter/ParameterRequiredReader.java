@@ -48,7 +48,6 @@ import static java.util.Optional.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @SuppressWarnings("deprecation")
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
-  private final SpringVersion springVersion;
   private final DescriptionResolver descriptions;
 
   @Autowired
@@ -58,7 +57,6 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   ParameterRequiredReader(DescriptionResolver descriptions, SpringVersion springVersion) {
     this.descriptions = descriptions;
-    this.springVersion = springVersion;
   }
 
   @Override
@@ -79,7 +77,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
       OperationContext operationContext,
       ResolvedMethodParameter methodParameter) {
 
-    Set<Boolean> requiredSet = new HashSet<Boolean>();
+    Set<Boolean> requiredSet = new HashSet<>();
 
     // when the type is Optional, the required property of @RequestParam/@RequestHeader doesn't matter,
     // since the value is always a non-null Optional after conversion

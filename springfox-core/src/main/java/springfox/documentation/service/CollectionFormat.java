@@ -17,13 +17,15 @@ public class CollectionFormat {
           "of multiple values for a single insta = new CollectionFormatnce foo=bar&foo=baz. " +
           "This is valid only for parameters in \"query\" or \"formData\"");
 
-  private static final Map<String, CollectionFormat> KNOWN_FORMATS = new HashMap<String, CollectionFormat>() {{
-    put(CSV.type, CSV);
-    put(SSV.type, SSV);
-    put(TSV.type, TSV);
-    put(PIPES.type, PIPES);
-    put(MULTI.type, MULTI);
-  }};
+  private static final Map<String, CollectionFormat> KNOWN_FORMATS = new HashMap<>();
+
+  static {
+    KNOWN_FORMATS.put(CSV.type, CSV);
+    KNOWN_FORMATS.put(SSV.type, SSV);
+    KNOWN_FORMATS.put(TSV.type, TSV);
+    KNOWN_FORMATS.put(PIPES.type, PIPES);
+    KNOWN_FORMATS.put(MULTI.type, MULTI);
+  };
 
   private final String type;
   private final String description;

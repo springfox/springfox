@@ -164,9 +164,11 @@ public class RequestParameterMapper {
     }
 
     parameter.setIn(source.getIn().getIn());
-    Optional<Representation> urlEncoded = content.get().getRepresentations().stream()
-        .filter(r -> r.getMediaType() == MediaType.APPLICATION_FORM_URLENCODED)
+    Optional<Representation> urlEncoded = content.map(c -> c.getRepresentations().stream()
+        .filter(r -> r.getMediaType() == MediaType.APPLICATION_FORM_URLENCODED))
+        .orElse(Stream.of())
         .findFirst();
+    
     urlEncoded.flatMap(m -> m.getModel().getFacets().flatMap(mf -> mf.elementFacet(StringElementFacet.class)))
         .ifPresent(sf -> parameter.setPattern(sf.getPattern()));
     parameter.setRequired(source.getRequired());

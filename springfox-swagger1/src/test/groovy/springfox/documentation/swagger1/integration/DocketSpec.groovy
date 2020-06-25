@@ -152,7 +152,8 @@ class DocketSpec extends DocumentationContextSpec {
         new TypeResolver(),
         new DefaultPathProvider())
         .create(DocumentationType.SWAGGER_12)
-    def isjdk8 = System.getProperty("java.version").startsWith("1.8")
+    def javaVersion = System.getProperty("java.version")
+    def isjdk8 = javaVersion.startsWith("1.8") || javaVersion.startsWith("11")
     def jdk8RuleCount = (isjdk8 ? 6 : 0)
 
     and:
