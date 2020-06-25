@@ -18,7 +18,7 @@ configurations {
   all*.exclude group: 'ch.qos.logback'
 }
 
-ext['groovy.version'] = '2.5.4'
+ext['groovy.version'] = '2.5.12'
 ext {
   limits = [
       'instruction': 89.5,

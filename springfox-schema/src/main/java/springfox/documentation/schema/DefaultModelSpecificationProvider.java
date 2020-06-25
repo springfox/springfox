@@ -135,9 +135,9 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
     modelContext.getModelSpecificationBuilder()
         .name(typeName)
         .compoundModel(cm -> cm.modelKey(new ModelKeyBuilder()
-            .qualifiedModelName(new QualifiedModelName(
-                safeGetPackageName(propertiesHost),
-                typeName))
+            .qualifiedModelName(q ->
+                q.namespace(safeGetPackageName(propertiesHost))
+                    .name(typeName))
             .viewDiscriminator(modelContext.getView().orElse(null))
             .validationGroupDiscriminators(modelContext.getValidationGroups())
             .isResponse(modelContext.isReturnType())
@@ -190,9 +190,8 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                           valueContext,
                           valueType)))
               .facets(f -> f.modelKey(new ModelKeyBuilder()
-                  .qualifiedModelName(new QualifiedModelName(
-                      safeGetPackageName(resolvedType),
-                      typeName))
+                  .qualifiedModelName(q -> q.namespace(safeGetPackageName(resolvedType))
+                      .name(typeName))
                   .viewDiscriminator(mapContext.getView().orElse(null))
                   .validationGroupDiscriminators(mapContext.getValidationGroups())
                   .isResponse(mapContext.isReturnType())
@@ -211,9 +210,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       ResolvedType propertiesHost) {
     String typeName = typeNameExtractor.typeName(context);
     context.getEffectiveModelKeyBuilder()
-        .qualifiedModelName(new QualifiedModelName(
-            safeGetPackageName(propertiesHost),
-            typeName));
+        .qualifiedModelName(q -> q.namespace(safeGetPackageName(propertiesHost)).name(typeName));
     return propertiesProvider.propertySpecificationsFor(
         propertiesHost,
         context);

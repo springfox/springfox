@@ -3,13 +3,12 @@ package springfox.documentation.schema.property;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.stereotype.Service;
 import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.builders.ReferenceModelSpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.MapSpecification;
-import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelSpecification;
-import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
@@ -36,7 +35,9 @@ public class ModelSpecificationFactory {
     this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
-  public ModelSpecification create(ModelContext modelContext, ResolvedType resolvedType) {
+  public ModelSpecification create(
+      ModelContext modelContext,
+      ResolvedType resolvedType) {
     ReferenceModelSpecification reference = null;
     CollectionSpecification collectionSpecification =
         new CollectionSpecificationProvider(this)
@@ -65,18 +66,18 @@ public class ModelSpecificationFactory {
           enumerationFacet = new EnumerationFacet(((AllowableListValues) allowableValues).getValues());
         }
       } else {
-        reference = new ReferenceModelSpecification(
-            new ModelKeyBuilder()
-                .qualifiedModelName(new QualifiedModelName(
-                    safeGetPackageName(resolvedType),
-                    typeNameExtractor.typeName(
-                        ModelContext.fromParent(
-                            modelContext,
-                            resolvedType))))
+        reference = new ReferenceModelSpecificationBuilder()
+            .key(k -> k.qualifiedModelName(q ->
+                q.namespace(safeGetPackageName(resolvedType))
+                    .name(
+                        typeNameExtractor.typeName(
+                            ModelContext.fromParent(
+                                modelContext,
+                                resolvedType))).build())
                 .viewDiscriminator(modelContext.getView().orElse(null))
                 .validationGroupDiscriminators(modelContext.getValidationGroups())
-                .isResponse(modelContext.isReturnType())
-                .build());
+                .isResponse(modelContext.isReturnType()))
+            .build();
       }
     }
     EnumerationFacet finalEnumerationFacet = enumerationFacet;

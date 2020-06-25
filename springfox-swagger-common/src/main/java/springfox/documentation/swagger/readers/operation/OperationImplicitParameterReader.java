@@ -29,13 +29,10 @@ import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.common.Compatibility;
-import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelSpecification;
-import springfox.documentation.schema.QualifiedModelName;
-import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.CollectionFormat;
@@ -124,11 +121,11 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .in(in)
 //            .allowMultiple(param.allowMultiple())
             .query(q -> q.model(m -> modelRef.getModern().ifPresent(m::copyOf))
-                         .defaultValue(param.defaultValue())
-                         .enumerationFacet(e -> e.allowedValues(allowableValueFromString(param.allowableValues())))
-                         .collectionFacet(c -> c.collectionFormat(
-                             CollectionFormat.convert(param.collectionFormat())
-                                             .orElse(null))))
+                .defaultValue(param.defaultValue())
+                .enumerationFacet(e -> e.allowedValues(allowableValueFromString(param.allowableValues())))
+                .collectionFacet(c -> c.collectionFormat(
+                    CollectionFormat.convert(param.collectionFormat())
+                        .orElse(null))))
             .precedence(SWAGGER_PLUGIN_ORDER)
             .example(new ExampleBuilder().value(param.example()).build())
             .examples(examples(param.examples()).entrySet().stream()
@@ -180,12 +177,10 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .map(scalar -> {
           if (param.allowMultiple()) {
             return new ModelSpecificationBuilder()
-                .collectionModel(
-                    new CollectionSpecification(
-                        new ModelSpecificationBuilder()
-                            .scalarModel(scalar)
-                            .build(),
-                        CollectionType.LIST))
+                .collectionModel(c ->
+                    c.model(m ->
+                        m.scalarModel(scalar))
+                        .collectionType(CollectionType.LIST))
                 .build();
           }
           return new ModelSpecificationBuilder()
@@ -195,7 +190,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .orElse(null);
     if (modelSpecification == null) {
       ModelKey dataTypeKey = new ModelKeyBuilder()
-          .qualifiedModelName(new QualifiedModelName(safeGetPackageName(clazz), clazz.getSimpleName()))
+          .qualifiedModelName(q -> q.namespace(safeGetPackageName(clazz)).name(clazz.getSimpleName()))
           .build();
       modelSpecification = referenceModelSpecification(dataTypeKey, param.allowMultiple());
     }
@@ -207,16 +202,16 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
       boolean allowMultiple) {
     if (allowMultiple) {
       return new ModelSpecificationBuilder()
-          .collectionModel(
-              new CollectionSpecification(
-                  new ModelSpecificationBuilder()
-                      .referenceModel(new ReferenceModelSpecification(dataTypeKey))
-                      .build(),
-                  CollectionType.LIST))
+          .collectionModel(c ->
+              c.model(m ->
+                  m.referenceModel(r ->
+                      r.key(k ->
+                          k.copyOf(dataTypeKey))))
+                  .collectionType(CollectionType.LIST))
           .build();
     }
     return new ModelSpecificationBuilder()
-        .referenceModel(new ReferenceModelSpecification(dataTypeKey))
+        .referenceModel(r -> r.key(k -> k.copyOf(dataTypeKey)))
         .build();
   }
 

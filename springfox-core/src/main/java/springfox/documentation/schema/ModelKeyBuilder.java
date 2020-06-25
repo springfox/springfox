@@ -1,19 +1,26 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import springfox.documentation.builders.QualifiedModelNameBuilder;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ModelKeyBuilder {
-  private QualifiedModelName qualifiedModelName;
-  private ResolvedType viewDiscriminator;
+  private final QualifiedModelNameBuilder qualifiedModelName = new QualifiedModelNameBuilder();
   private final Set<ResolvedType> validationGroupDiscriminators = new HashSet<>();
+  private ResolvedType viewDiscriminator;
   private boolean isResponse;
 
   public ModelKeyBuilder qualifiedModelName(QualifiedModelName qualifiedModelName) {
-    this.qualifiedModelName = qualifiedModelName;
+    this.qualifiedModelName.copyOf(qualifiedModelName);
+    return this;
+  }
+
+  public ModelKeyBuilder qualifiedModelName(Consumer<QualifiedModelNameBuilder> consumer) {
+    consumer.accept(qualifiedModelName);
     return this;
   }
 
@@ -34,13 +41,16 @@ public class ModelKeyBuilder {
 
   public ModelKey build() {
     return new ModelKey(
-        qualifiedModelName,
+        qualifiedModelName.build(),
         viewDiscriminator,
         validationGroupDiscriminators,
         isResponse);
   }
 
   public ModelKeyBuilder copyOf(ModelKey other) {
+    if (other == null) {
+      return this;
+    }
     return this.qualifiedModelName(other.getQualifiedModelName())
         .viewDiscriminator(other.getViewDiscriminator().orElse(null))
         .validationGroupDiscriminators(other.getValidationGroupDiscriminators())

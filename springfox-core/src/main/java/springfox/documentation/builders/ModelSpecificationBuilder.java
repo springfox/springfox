@@ -10,10 +10,10 @@ import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static springfox.documentation.builders.NoopValidator.*;
 
@@ -21,11 +21,11 @@ public class ModelSpecificationBuilder {
   private ModelFacetsBuilder facetsBuilder;
   private String name;
   private ScalarModelSpecification scalar;
-  private CollectionSpecification collection;
-  private MapSpecification map;
-  private ReferenceModelSpecification reference;
+  private CollectionSpecificationBuilder collection;
+  private MapSpecificationBuilder map;
+  private ReferenceModelSpecificationBuilder referenceModel;
   private CompoundModelSpecificationBuilder compoundModelBuilder;
-  private final Validator<ModelSpecificationBuilder> validator = this::validateSpecfication;
+  private final Validator<ModelSpecificationBuilder> validator = this::validateSpecification;
 
   public ModelSpecificationBuilder name(String name) {
     this.name = name;
@@ -47,13 +47,6 @@ public class ModelSpecificationBuilder {
     return this;
   }
 
-  public ModelSpecificationBuilder scalarModel(ScalarModelSpecification scalarModelSpecification) {
-    if (scalarModelSpecification != null) {
-      this.scalar = scalarModelSpecification;
-    }
-    return this;
-  }
-
   private CompoundModelSpecificationBuilder compoundModelBuilder() {
     if (compoundModelBuilder == null) {
       this.compoundModelBuilder = new CompoundModelSpecificationBuilder(this);
@@ -67,18 +60,54 @@ public class ModelSpecificationBuilder {
   }
 
   public ModelSpecificationBuilder collectionModel(CollectionSpecification collection) {
-    this.collection = collection;
+    collectionBuilder().copyOf(collection);
     return this;
+  }
+
+  public ModelSpecificationBuilder collectionModel(Consumer<CollectionSpecificationBuilder> consumer) {
+    consumer.accept(collectionBuilder());
+    return this;
+  }
+
+  private CollectionSpecificationBuilder collectionBuilder() {
+    if (collection == null) {
+      collection = new CollectionSpecificationBuilder();
+    }
+    return collection;
   }
 
   public ModelSpecificationBuilder mapModel(MapSpecification map) {
-    this.map = map;
+    mapBuilder().copyOf(map);
     return this;
   }
 
-  public ModelSpecificationBuilder referenceModel(ReferenceModelSpecification reference) {
-    this.reference = reference;
+  public ModelSpecificationBuilder mapModel(Consumer<MapSpecificationBuilder> consumer) {
+    consumer.accept(mapBuilder());
     return this;
+  }
+
+  private MapSpecificationBuilder mapBuilder() {
+    if (map == null) {
+      map = new MapSpecificationBuilder();
+    }
+    return map;
+  }
+
+  public ModelSpecificationBuilder referenceModel(ReferenceModelSpecification reference) {
+    this.referenceModelBuilder().copyOf(reference);
+    return this;
+  }
+
+  public ModelSpecificationBuilder referenceModel(Consumer<ReferenceModelSpecificationBuilder> modelKey) {
+    modelKey.accept(referenceModelBuilder());
+    return this;
+  }
+
+  private ReferenceModelSpecificationBuilder referenceModelBuilder() {
+    if (referenceModel == null) {
+      referenceModel = new ReferenceModelSpecificationBuilder();
+    }
+    return referenceModel;
   }
 
   public ModelSpecification build() {
@@ -93,14 +122,16 @@ public class ModelSpecificationBuilder {
         facetsBuilder != null ? facetsBuilder.build() : null,
         scalar,
         compoundModel,
-        collection,
-        map,
-        reference);
+        collection != null ? collection.build() : null,
+        map != null ? map.build() : null,
+        referenceModel != null ? referenceModel.build() : null);
   }
 
   public ModelSpecificationBuilder copyOf(ModelSpecification other) {
     if (other != null) {
-      ScalarModelSpecification scalar = other.getScalar().orElse(null);
+      ScalarType scalar = other.getScalar()
+          .map(ScalarModelSpecification::getType)
+          .orElse(null);
       ReferenceModelSpecification reference = other.getReference().orElse(null);
       CompoundModelSpecification compound = other.getCompound().orElse(null);
       CollectionSpecification collection = other.getCollection().orElse(null);
@@ -109,29 +140,27 @@ public class ModelSpecificationBuilder {
       this.scalar = null;
       this.map = null;
       this.collection = null;
-      this.reference = null;
+      this.referenceModel = null;
       this.compoundModelBuilder = new CompoundModelSpecificationBuilder(this);
 
       this.name(other.getName())
           .scalarModel(scalar)
-          .referenceModel(reference)
+          .referenceModel(r -> r.copyOf(reference))
           .compoundModel(cm -> cm.copyOf(compound))
-          .collectionModel(collection)
-          .mapModel(map)
+          .collectionModel(c -> c.copyOf(collection))
+          .mapModel(m -> m.copyOf(map))
           .facets(f -> f.copyOf(other.getFacets().orElse(null)));
     }
     return this;
   }
 
-  private List<ValidationResult> validateSpecfication(ModelSpecificationBuilder builder) {
+  private List<ValidationResult> validateSpecification(ModelSpecificationBuilder builder) {
     List<ValidationResult> validationResults = new ArrayList<>();
-    CompoundModelSpecification compoundModel =
-        compoundModelBuilder != null ? compoundModelBuilder.build() : null;
-    long specCount = Arrays.asList(scalar,
-        compoundModel,
-        reference,
-        collection,
-        map).stream()
+    long specCount = Stream.of(scalar,
+        safeCompountModelBuild(),
+        safeCollectionBuild(),
+        safeMapBuild(),
+        safeReferenceBuild())
         .filter(Objects::nonNull)
         .count();
 
@@ -148,5 +177,21 @@ public class ModelSpecificationBuilder {
           "Only one of the specifications should be non null"));
     }
     return validationResults;
+  }
+
+  private Object safeCompountModelBuild() {
+    return compoundModelBuilder != null ? compoundModelBuilder.build() : null;
+  }
+
+  private Object safeCollectionBuild() {
+    return collection != null ? collection.build() : null;
+  }
+
+  private Object safeMapBuild() {
+    return map != null ? map.build() : null;
+  }
+
+  private Object safeReferenceBuild() {
+    return referenceModel != null ? referenceModel.build() : null;
   }
 }

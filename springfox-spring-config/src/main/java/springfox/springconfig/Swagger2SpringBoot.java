@@ -30,13 +30,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
-import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
-import springfox.documentation.schema.ModelKeyBuilder;
-import springfox.documentation.schema.QualifiedModelName;
-import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
@@ -96,15 +92,13 @@ public class Swagger2SpringBoot {
                 .code("500")
                 .description("500 message")
                 .representation(MediaType.TEXT_XML)
-                .apply(r -> r.model(m -> new ModelSpecificationBuilder()
-                    .referenceModel(
-                        new ReferenceModelSpecification(
-                            new ModelKeyBuilder()
-                                .qualifiedModelName(
-                                    new QualifiedModelName(
-                                        "some:namespace",
-                                        "ERROR"))
-                                .build())))) //<13>
+                .apply(r ->
+                    r.model(m ->
+                        m.referenceModel(ref ->
+                            ref.key(k ->
+                                k.qualifiedModelName(q ->
+                                    q.namespace("some:namespace")
+                                        .name("ERROR")))))) //<13>
                 .build()))
         .securitySchemes(singletonList(apiKey())) //<14>
         .securityContexts(singletonList(securityContext())) //<15>

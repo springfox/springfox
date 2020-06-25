@@ -9,7 +9,6 @@ import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.service.ModelNamesRegistry;
 
-
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.*;
@@ -28,8 +27,9 @@ public class ReferenceModelSpecificationToPropertyConverter
   public Property convert(ReferenceModelSpecification source) {
     ObjectProperty objectProperty = new ObjectProperty();
 
-    if (source.getKey().getQualifiedModelName()
-        .equals(new QualifiedModelName("java.lang", "object"))) {
+    QualifiedModelName qualifiedModelName = source.getKey().getQualifiedModelName();
+    if ("java.lang".equals(qualifiedModelName.getNamespace())
+        && "object".equals(qualifiedModelName.getName())) {
       return objectProperty;
     }
     if (emptyToNull(source.getKey().getQualifiedModelName().getName()) != null) {

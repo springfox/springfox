@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
+
 @Mapper(componentModel = "spring", uses = VendorExtensionsMapper.class)
 public interface ExamplesMapper {
   default Map<String, io.swagger.v3.oas.models.examples.Example> mapExamples(Collection<Example> from) {

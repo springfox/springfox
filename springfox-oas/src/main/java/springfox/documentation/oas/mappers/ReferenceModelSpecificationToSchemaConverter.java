@@ -18,14 +18,14 @@ public class ReferenceModelSpecificationToSchemaConverter implements Converter<R
   public Schema<?> convert(ReferenceModelSpecification source) {
     ObjectSchema objectSchema = new ObjectSchema();
 
-    if (source.getKey().getQualifiedModelName()
-        .equals(new QualifiedModelName("java.lang", "object"))) {
+    QualifiedModelName qualifiedModelName = source.getKey().getQualifiedModelName();
+    if ("java.lang".equals(qualifiedModelName.getNamespace())
+        && "object".equals(qualifiedModelName.getName())) {
       return objectSchema;
     }
     return objectSchema
         .type(null)
         .$ref(modelNamesRegistry.nameByKey(source.getKey())
-            .orElse("Error-" + source.getKey()
-                .getQualifiedModelName()));
+            .orElse("Error-" + qualifiedModelName));
   }
 }

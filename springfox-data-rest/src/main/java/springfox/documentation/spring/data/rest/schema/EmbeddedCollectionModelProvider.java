@@ -25,12 +25,10 @@ import org.springframework.hateoas.server.LinkRelationProvider;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
-import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
 import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
-import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
@@ -76,19 +74,19 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     String name = typeNameExtractor.typeName(context);
     return context.getBuilder()
-                  .description(String.format(
-                      "Embedded collection of %s",
-                      type.getSimpleName()))
-                  .name(name)
-                  .qualifiedType(type.getName())
-                  .type(typeParameters.get(0))
-                  .properties(properties(context).stream()
-                      .collect(toMap(springfox.documentation.schema.ModelProperty::getName, identity())))
-                  .xml(new Xml()
-                           .wrapped(true)
-                           .name("content")
-                      )
-                  .build();
+        .description(String.format(
+            "Embedded collection of %s",
+            type.getSimpleName()))
+        .name(name)
+        .qualifiedType(type.getName())
+        .type(typeParameters.get(0))
+        .properties(properties(context).stream()
+            .collect(toMap(springfox.documentation.schema.ModelProperty::getName, identity())))
+        .xml(new Xml()
+            .wrapped(true)
+            .name("content")
+        )
+        .build();
   }
 
   @Override
@@ -117,23 +115,22 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     String name = typeNameExtractor.typeName(context);
     return context.getModelSpecificationBuilder()
-                  .name(name)
-                  .facets(f -> f.description(String.format(
-                      "Embedded collection of %s",
-                      type.getSimpleName()))
-                                .xml(new Xml()
-                                         .wrapped(true)
-                                         .name("content")))
-                  .compoundModel(cm ->
-                                     cm.properties(propertySpecifications(context))
-                                       .modelKey(new ModelKeyBuilder()
-                                                     .isResponse(context.isReturnType())
-                                                     .qualifiedModelName(
-                                                         new QualifiedModelName(
-                                                             "springfox.documentation.spring.data.rest.schema",
-                                                             name))
-                                                     .build()))
-                  .build();
+        .name(name)
+        .facets(f -> f.description(String.format(
+            "Embedded collection of %s",
+            type.getSimpleName()))
+            .xml(new Xml()
+                .wrapped(true)
+                .name("content")))
+        .compoundModel(cm ->
+            cm.properties(propertySpecifications(context))
+                .modelKey(new ModelKeyBuilder()
+                    .isResponse(context.isReturnType())
+                    .qualifiedModelName(q ->
+                        q.namespace("springfox.documentation.spring.data.rest.schema")
+                            .name(name))
+                    .build()))
+        .build();
   }
 
   @Override
@@ -142,9 +139,10 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
     ModelSpecification modelSpecification = new ModelSpecificationBuilder()
-        .collectionModel(new CollectionSpecification(
-            modelSpecifications.create(context, typeParameters.get(0)),
-            CollectionType.LIST))
+        .collectionModel(c ->
+            c.model(m -> m.copyOf(modelSpecifications.create(context,
+                typeParameters.get(0))))
+                .collectionType(CollectionType.LIST))
         .build();
     return singletonList(
         new PropertySpecificationBuilder(relProvider.getCollectionResourceRelFor(type).value())
@@ -169,8 +167,8 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
   public boolean supports(ModelContext delimiter) {
     return EmbeddedCollection.class.equals(resolver.resolve(delimiter.getType()).getErasedType())
         && (delimiter.getDocumentationType() == DocumentationType.SWAGGER_2
-                || delimiter.getDocumentationType() == DocumentationType.OAS_30
-                || delimiter.getDocumentationType() == DocumentationType.SPRING_WEB);
+        || delimiter.getDocumentationType() == DocumentationType.OAS_30
+        || delimiter.getDocumentationType() == DocumentationType.SPRING_WEB);
   }
 
 }

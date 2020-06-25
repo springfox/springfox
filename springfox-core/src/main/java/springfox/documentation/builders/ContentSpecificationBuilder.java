@@ -11,8 +11,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ContentSpecificationBuilder {
-  private static final org.springframework.http.MediaType DEFAULT_MEDIA_TYPE =
-      new org.springframework.http.MediaType("application", "springfox");
   private final Map<org.springframework.http.MediaType, RepresentationBuilder> representations = new HashMap<>();
   private boolean requestBody = false;
 

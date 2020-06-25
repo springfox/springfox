@@ -1,6 +1,7 @@
 package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
+import springfox.documentation.builders.CollectionSpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
 import springfox.documentation.schema.Collections;
@@ -30,7 +31,9 @@ public class CollectionSpecificationProvider {
       return Optional.empty();
     }
     ModelSpecification itemModel = models.create(modelContext, itemType);
-    return Optional.of(new CollectionSpecification(itemModel, collectionType));
+    return Optional.of(new CollectionSpecificationBuilder()
+        .model(m -> m.copyOf(itemModel))
+        .collectionType(collectionType)
+        .build());
   }
-
 }

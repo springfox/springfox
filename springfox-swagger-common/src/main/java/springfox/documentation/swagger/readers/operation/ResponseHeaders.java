@@ -22,12 +22,8 @@ import io.swagger.annotations.ResponseHeader;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.util.StringUtils;
 import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CollectionType;
-import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelSpecification;
-import springfox.documentation.schema.QualifiedModelName;
-import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.schema.property.PackageNames;
@@ -84,20 +80,17 @@ public class ResponseHeaders {
           .build();
     } else {
       itemSpecification = new ModelSpecificationBuilder()
-          .referenceModel(new ReferenceModelSpecification(
-              new ModelKeyBuilder()
-                  .qualifiedModelName(
-                      new QualifiedModelName(
-                          PackageNames.safeGetPackageName(each.response()),
-                          each.response().getSimpleName()))
-                  .build()))
+          .referenceModel(r -> r.key(k ->
+              k.qualifiedModelName(q -> q.namespace(PackageNames.safeGetPackageName(each.response()))
+                  .name(each.response().getSimpleName()))))
           .build();
     }
     if (collectionTypeFromEnum(each.responseContainer()) == null) {
       new ModelSpecificationBuilder()
-          .collectionModel(new CollectionSpecification(
-              itemSpecification,
-              collectionTypeFromEnum(each.responseContainer())))
+          .collectionModel(c ->
+              c.model(m ->
+                  m.copyOf(itemSpecification))
+                  .collectionType(collectionTypeFromEnum(each.responseContainer())))
           .build();
     }
     return itemSpecification;
@@ -156,21 +149,18 @@ public class ResponseHeaders {
           .facets(f -> f.deprecated(each.deprecated())).build();
     } else {
       itemSpecification = new ModelSpecificationBuilder()
-          .referenceModel(new ReferenceModelSpecification(
-              new ModelKeyBuilder()
-                  .qualifiedModelName(
-                      new QualifiedModelName(
-                          PackageNames.safeGetPackageName(type),
-                          type.getSimpleName()))
-                  .build()))
+          .referenceModel(r ->
+              r.key(k ->
+                  k.qualifiedModelName(q ->
+                      q.namespace(PackageNames.safeGetPackageName(type))
+                          .name(type.getSimpleName()))))
           .facets(f -> f.deprecated(each.deprecated()))
           .build();
     }
     if (each.schema().multipleOf() > 0) {
       return new ModelSpecificationBuilder()
-          .collectionModel(new CollectionSpecification(
-              itemSpecification,
-              CollectionType.ARRAY))
+          .collectionModel(c -> c.model(m -> m.copyOf(itemSpecification))
+              .collectionType(CollectionType.ARRAY))
           .facets(f -> f.deprecated(each.deprecated()))
           .build();
     }

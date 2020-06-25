@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 public class ScalarModelSpecification {
-  private ScalarType type;
+  private final ScalarType type;
 
   public ScalarModelSpecification(ScalarType type) {
     this.type = type;
