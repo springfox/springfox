@@ -1,9 +1,6 @@
 version: 2.1
 jobs:
   build:
-    branches:
-      ignore:
-        - gh-pages
     working_directory: ~/code
     docker:
       - image: circleci/openjdk:8-jdk-node-browsers
@@ -64,11 +61,14 @@ jobs:
             fi
 
 workflows:
-  version: 2
+  version: 2.1
   main:
     jobs:
       - build:
           context: SonarCloud
+          branches:
+            ignore:
+              - gh-pages
 notify:
   webhooks:
     - url: https://webhooks.gitter.im/e/b30a7db820817acfc6d8
