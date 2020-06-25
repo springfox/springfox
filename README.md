@@ -24,8 +24,43 @@ For more information on this project visit the [Springfox Website](http://spring
 - [Development Environment](http://springfox.github.io/springfox/docs/current/#development-environment)
 - [Release Instructions](http://springfox.github.io/springfox/docs/current/#releasing)
 
-## Transitioning to 2.x
-Here is [some preliminary documentation](docs/transitioning-to-v2.md) to help transition to 2.x
+### Getting Started
+
+#### For new projects
+For Maven
+```xml 
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-boot-starter</artifactId>
+    <version><version></version>
+</dependency>
+
+```
+
+For Gradle
+```gradle 
+  implementation "io.springfox:springfox-boot-starter:<version>"
+```
+
+#### Migrating from existing 2.x version
+#### Spring Boot Applications
+NOTE: Would love feedback to make this better
+1. Remove library inclusions of earlier
+2. Remove the `@EnableSwagger2` annotations
+3. Added the `springfox-boot-starter` 
+4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
+and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
+transition to java 8 function interfaces 
+
+#### Regular spring mvc  
+NOTE: Would love feedback to make this experience better
+1. Remove library inclusions of earlier
+2. Add `@EnableOpenApi` for open API (and `@EnableSwagger2WebMvc` or `@EnableSwagger2WebFlux` for older versions)  
+3. Added the `springfox-oas` library 
+4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
+and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
+transition to java 8 function interfaces 
+
 
 License
 -------
