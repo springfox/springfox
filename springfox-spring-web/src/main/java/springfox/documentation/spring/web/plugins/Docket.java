@@ -131,7 +131,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket apiInfo(ApiInfo apiInfo) {
-    this.apiInfo = defaultIfAbsent(apiInfo, apiInfo);
+    this.apiInfo = defaultIfAbsent(apiInfo, this.apiInfo);
     return this;
   }
 
