@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":42,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":42,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":42,"i18":42};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -176,7 +176,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String%5B%5D,java.lang.String)">UiConfiguration</a></span>&#8203;(java.lang.Boolean&nbsp;deepLinking,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String%5B%5D,java.lang.String,java.lang.String)">UiConfiguration</a></span>&#8203;(java.lang.Boolean&nbsp;deepLinking,
                java.lang.Boolean&nbsp;displayOperationId,
                java.lang.Integer&nbsp;defaultModelsExpandDepth,
                java.lang.Integer&nbsp;defaultModelExpandDepth,
@@ -190,84 +190,10 @@ extends java.lang.Object</pre>
                java.lang.Boolean&nbsp;showCommonExtensions,
                <a href="TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a>&nbsp;tagsSorter,
                java.lang.String[]&nbsp;supportedSubmitMethods,
-               java.lang.String&nbsp;validatorUrl)</code></th>
+               java.lang.String&nbsp;validatorUrl,
+               java.lang.String&nbsp;swaggerBaseUiUrl)</code></th>
 <td class="colLast">
 <div class="block">Default constructor</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String)">UiConfiguration</a></span>&#8203;(java.lang.Boolean&nbsp;deepLinking,
-               java.lang.Boolean&nbsp;displayOperationId,
-               java.lang.Integer&nbsp;defaultModelsExpandDepth,
-               java.lang.Integer&nbsp;defaultModelExpandDepth,
-               <a href="ModelRendering.html" title="enum in springfox.documentation.swagger.web">ModelRendering</a>&nbsp;defaultModelRendering,
-               java.lang.Boolean&nbsp;displayRequestDuration,
-               <a href="DocExpansion.html" title="enum in springfox.documentation.swagger.web">DocExpansion</a>&nbsp;docExpansion,
-               java.lang.Object&nbsp;filter,
-               java.lang.Integer&nbsp;maxDisplayedTags,
-               <a href="OperationsSorter.html" title="enum in springfox.documentation.swagger.web">OperationsSorter</a>&nbsp;operationsSorter,
-               java.lang.Boolean&nbsp;showExtensions,
-               <a href="TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a>&nbsp;tagsSorter,
-               java.lang.String&nbsp;validatorUrl)</code></th>
-<td class="colLast">
-<div class="block">Default constructor</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String%5B%5D,java.lang.String)">UiConfiguration</a></span>&#8203;(java.lang.Boolean&nbsp;deepLinking,
-               java.lang.Boolean&nbsp;displayOperationId,
-               java.lang.Integer&nbsp;defaultModelsExpandDepth,
-               java.lang.Integer&nbsp;defaultModelExpandDepth,
-               <a href="ModelRendering.html" title="enum in springfox.documentation.swagger.web">ModelRendering</a>&nbsp;defaultModelRendering,
-               java.lang.Boolean&nbsp;displayRequestDuration,
-               <a href="DocExpansion.html" title="enum in springfox.documentation.swagger.web">DocExpansion</a>&nbsp;docExpansion,
-               java.lang.Object&nbsp;filter,
-               java.lang.Integer&nbsp;maxDisplayedTags,
-               <a href="OperationsSorter.html" title="enum in springfox.documentation.swagger.web">OperationsSorter</a>&nbsp;operationsSorter,
-               java.lang.Boolean&nbsp;showExtensions,
-               <a href="TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a>&nbsp;tagsSorter,
-               java.lang.String[]&nbsp;supportedSubmitMethods,
-               java.lang.String&nbsp;validatorUrl)</code></th>
-<td class="colLast">
-<div class="block">Default constructor</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">UiConfiguration</a></span>&#8203;(java.lang.String&nbsp;validatorUrl)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String%5B%5D)">UiConfiguration</a></span>&#8203;(java.lang.String&nbsp;validatorUrl,
-               java.lang.String[]&nbsp;supportedSubmitMethods)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,boolean,boolean)">UiConfiguration</a></span>&#8203;(java.lang.String&nbsp;validatorUrl,
-               java.lang.String&nbsp;docExpansion,
-               java.lang.String&nbsp;apisSorter,
-               java.lang.String&nbsp;defaultModelRendering,
-               java.lang.String[]&nbsp;supportedSubmitMethods,
-               boolean&nbsp;jsonEditor,
-               boolean&nbsp;showRequestHeaders)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,boolean,boolean,java.lang.Long)">UiConfiguration</a></span>&#8203;(java.lang.String&nbsp;validatorUrl,
-               java.lang.String&nbsp;docExpansion,
-               java.lang.String&nbsp;apisSorter,
-               java.lang.String&nbsp;defaultModelRendering,
-               java.lang.String[]&nbsp;supportedSubmitMethods,
-               boolean&nbsp;jsonEditor,
-               boolean&nbsp;showRequestHeaders,
-               java.lang.Long&nbsp;requestTimeout)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </td>
 </tr>
 </table>
@@ -282,114 +208,91 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getApisSorter()">getApisSorter</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.Boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDeepLinking()">getDeepLinking</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.Integer</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultModelExpandDepth()">getDefaultModelExpandDepth</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="ModelRendering.html" title="enum in springfox.documentation.swagger.web">ModelRendering</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultModelRendering()">getDefaultModelRendering</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.Integer</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultModelsExpandDepth()">getDefaultModelsExpandDepth</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.Boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayOperationId()">getDisplayOperationId</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.Boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayRequestDuration()">getDisplayRequestDuration</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="DocExpansion.html" title="enum in springfox.documentation.swagger.web">DocExpansion</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDocExpansion()">getDocExpansion</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.lang.Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFilter()">getFilter</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.Integer</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaxDisplayedTags()">getMaxDisplayedTags</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="OperationsSorter.html" title="enum in springfox.documentation.swagger.web">OperationsSorter</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOperationsSorter()">getOperationsSorter</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>java.lang.Long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRequestTimeout()">getRequestTimeout</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</td>
-</tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.lang.Boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShowCommonExtensions()">getShowCommonExtensions</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.lang.Boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShowExtensions()">getShowExtensions</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSupportedSubmitMethods()">getSupportedSubmitMethods</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSwaggerBaseUiUrl()">getSwaggerBaseUiUrl</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTagsSorter()">getTagsSorter</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValidatorUrl()">getValidatorUrl</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isJsonEditor()">isJsonEditor</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</td>
-</tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isShowRequestHeaders()">isShowRequestHeaders</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -415,251 +318,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>UiConfiguration</h4>
-<pre>public&nbsp;UiConfiguration&#8203;(java.lang.String&nbsp;validatorUrl)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>validatorUrl</code> - - validator url</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.0. Use the <a href="UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(java.lang.String,java.lang.String[])">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>UiConfiguration</h4>
-<pre>public&nbsp;UiConfiguration&#8203;(java.lang.String&nbsp;validatorUrl,
-                       java.lang.String[]&nbsp;supportedSubmitMethods)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>validatorUrl</code> - - validator url</dd>
-<dd><code>supportedSubmitMethods</code> - - supported http methods (get,post etc.)</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.0. Use the <a href="UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String[],boolean,boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>UiConfiguration</h4>
-<pre>@Deprecated
-public&nbsp;UiConfiguration&#8203;(java.lang.String&nbsp;validatorUrl,
-                       java.lang.String&nbsp;docExpansion,
-                       java.lang.String&nbsp;apisSorter,
-                       java.lang.String&nbsp;defaultModelRendering,
-                       java.lang.String[]&nbsp;supportedSubmitMethods,
-                       boolean&nbsp;jsonEditor,
-                       boolean&nbsp;showRequestHeaders)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Use the default constructor instead (with requestTimeout)
- <a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,boolean,boolean,java.lang.Long)"><code>UiConfiguration(String, String, String, String, String[], boolean, boolean, Long)</code></a> )}</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>validatorUrl</code> - By default, Swagger-UI attempts to validate specs against swagger.io's online
-                               validator. You can use this parameter to set a different validator URL, for example
-                               for locally deployed validators (Validator Badge). Setting it to null will disable
-                               validation. This parameter is relevant for Swagger 2.0 specs only.</dd>
-<dd><code>docExpansion</code> - Controls how the API listing is displayed. It can be set to 'none' (default),
-                               'list' (shows operations for each resource), or 'full' (fully expanded: shows
-                               operations and their details).</dd>
-<dd><code>apisSorter</code> - Apply a sort to the API/tags list. It can be 'alpha' (sort by name) or a function
-                               (see Array.prototype.sort() to know how sort function works). Default is the order
-                               returned by the server unchanged.</dd>
-<dd><code>defaultModelRendering</code> - Controls how models are shown when the API is first rendered. (The user can
-                               always switch the rendering for a given model by clicking the 'Model' and 'Model
-                               Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.</dd>
-<dd><code>supportedSubmitMethods</code> - List of HTTP methods that have the Try it out feature enabled. An empty array
-                               disables Try it out for all operations. This does not filter the operations from the
-                               display.</dd>
-<dd><code>jsonEditor</code> - Enables a graphical view for editing complex bodies. Defaults to false.</dd>
-<dd><code>showRequestHeaders</code> - Whether or not to show the headers that were sent when making a request via the
-                               'Try it out!' option. Defaults to false.</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.6.1. Use the <a href="UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String[],boolean,boolean,java.lang.Long)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>UiConfiguration</h4>
-<pre>@Deprecated
-public&nbsp;UiConfiguration&#8203;(java.lang.String&nbsp;validatorUrl,
-                       java.lang.String&nbsp;docExpansion,
-                       java.lang.String&nbsp;apisSorter,
-                       java.lang.String&nbsp;defaultModelRendering,
-                       java.lang.String[]&nbsp;supportedSubmitMethods,
-                       boolean&nbsp;jsonEditor,
-                       boolean&nbsp;showRequestHeaders,
-                       java.lang.Long&nbsp;requestTimeout)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Default constructor</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>validatorUrl</code> - By default, Swagger-UI attempts to validate specs against swagger.io's online
-                               validator. You can use this parameter to set a different validator URL, for example
-                               for locally deployed validators (Validator Badge). Setting it to null will disable
-                               validation. This parameter is relevant for Swagger 2.0 specs only.</dd>
-<dd><code>docExpansion</code> - Controls how the API listing is displayed. It can be set to 'none' (default),
-                               'list' (shows operations for each resource), or 'full' (fully expanded: shows
-                               operations and their details).</dd>
-<dd><code>apisSorter</code> - Apply a sort to the API/tags list. It can be 'alpha' (sort by name) or a function
-                               (see Array.prototype.sort() to know how sort function works). Default is the order
-                               returned by the server unchanged.</dd>
-<dd><code>defaultModelRendering</code> - Controls how models are shown when the API is first rendered. (The user can
-                               always switch the rendering for a given model by clicking the 'Model' and 'Model
-                               Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.</dd>
-<dd><code>supportedSubmitMethods</code> - List of HTTP methods that have the Try it out feature enabled. An empty array
-                               disables Try it out for all operations. This does not filter the operations from the
-                               display.</dd>
-<dd><code>jsonEditor</code> - Enables a graphical view for editing complex bodies. Defaults to false.</dd>
-<dd><code>showRequestHeaders</code> - Whether or not to show the headers that were sent when making a request via the
-                               'Try it out!' option. Defaults to false.</dd>
-<dd><code>requestTimeout</code> - - XHR timeout</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.0. Use the <a href="UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web"><code>UiConfigurationBuilder</code></a> instead</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>UiConfiguration</h4>
-<pre>public&nbsp;UiConfiguration&#8203;(java.lang.Boolean&nbsp;deepLinking,
-                       java.lang.Boolean&nbsp;displayOperationId,
-                       java.lang.Integer&nbsp;defaultModelsExpandDepth,
-                       java.lang.Integer&nbsp;defaultModelExpandDepth,
-                       <a href="ModelRendering.html" title="enum in springfox.documentation.swagger.web">ModelRendering</a>&nbsp;defaultModelRendering,
-                       java.lang.Boolean&nbsp;displayRequestDuration,
-                       <a href="DocExpansion.html" title="enum in springfox.documentation.swagger.web">DocExpansion</a>&nbsp;docExpansion,
-                       java.lang.Object&nbsp;filter,
-                       java.lang.Integer&nbsp;maxDisplayedTags,
-                       <a href="OperationsSorter.html" title="enum in springfox.documentation.swagger.web">OperationsSorter</a>&nbsp;operationsSorter,
-                       java.lang.Boolean&nbsp;showExtensions,
-                       <a href="TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a>&nbsp;tagsSorter,
-                       java.lang.String&nbsp;validatorUrl)</pre>
-<div class="block">Default constructor</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>deepLinking</code> - If set to true, enables deep linking for tags and operations. See the Deep Linking
-                                 documentation for more information.</dd>
-<dd><code>displayOperationId</code> - Controls the display of operationId in operations list. The default is false.</dd>
-<dd><code>defaultModelsExpandDepth</code> - The default expansion depth for models (set to -1 completely hide the models).</dd>
-<dd><code>defaultModelExpandDepth</code> - The default expansion depth for the model on the model-example section.</dd>
-<dd><code>defaultModelRendering</code> - Controls how the model is shown when the API is first rendered. (The user can
-                                 always switch the rendering for a given model by clicking the 'Model' and 'Example
-                                 Value' links.)</dd>
-<dd><code>displayRequestDuration</code> - Controls the display of the request duration (in milliseconds) for Try-It-Out
-                                 requests.</dd>
-<dd><code>docExpansion</code> - Controls the default expansion setting for the operations and tags. It can be
-                                 'list' (expands only the tags), 'full' (expands the tags and operations) or 'none'
-                                 (expands nothing).</dd>
-<dd><code>filter</code> - If set, enables filtering. The top bar will show an edit box that you can use to
-                                 filter the tagged operations that are shown. Can be Boolean to enable or disable,
-                                 or a string, in which case filtering will be enabled using that string as the
-                                 filter expression. Filtering is case sensitive matching the filter expression
-                                 anywhere inside the tag.</dd>
-<dd><code>maxDisplayedTags</code> - If set, limits the number of tagged operations displayed to at most this many. The
-                                 default is to show all operations.</dd>
-<dd><code>operationsSorter</code> - Apply a sort to the operation list of each API. It can be 'alpha' (sort by paths
-                                 alphanumerically), 'method' (sort by HTTP method) or a function (see
-                                 Array.prototype.sort() to know how sort function works). Default is the order
-                                 returned by the server unchanged.</dd>
-<dd><code>showExtensions</code> - Controls the display of vendor extension (x-) fields and values for Operations,
-                                 Parameters, and Schema.</dd>
-<dd><code>tagsSorter</code> - Apply a sort to the tag list of each API. It can be 'alpha' (sort by paths
-                                 alphanumerically) or a function (see Array.prototype.sort() to learn how to write a
-                                 sort function). Two tag name strings are passed to the sorter for each pass.
-                                 Default is the order determined by Swagger-UI.</dd>
-<dd><code>validatorUrl</code> - By default, Swagger-UI attempts to validate specs against swagger.io's online
-                                 validator. You can use this parameter to set a different validator URL, for example
-                                 for locally deployed validators (Validator Badge). Setting it to null will disable
-                                 validation. This parameter is relevant for Swagger 2.0 specs only.</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String[],java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>UiConfiguration</h4>
-<pre>public&nbsp;UiConfiguration&#8203;(java.lang.Boolean&nbsp;deepLinking,
-                       java.lang.Boolean&nbsp;displayOperationId,
-                       java.lang.Integer&nbsp;defaultModelsExpandDepth,
-                       java.lang.Integer&nbsp;defaultModelExpandDepth,
-                       <a href="ModelRendering.html" title="enum in springfox.documentation.swagger.web">ModelRendering</a>&nbsp;defaultModelRendering,
-                       java.lang.Boolean&nbsp;displayRequestDuration,
-                       <a href="DocExpansion.html" title="enum in springfox.documentation.swagger.web">DocExpansion</a>&nbsp;docExpansion,
-                       java.lang.Object&nbsp;filter,
-                       java.lang.Integer&nbsp;maxDisplayedTags,
-                       <a href="OperationsSorter.html" title="enum in springfox.documentation.swagger.web">OperationsSorter</a>&nbsp;operationsSorter,
-                       java.lang.Boolean&nbsp;showExtensions,
-                       <a href="TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a>&nbsp;tagsSorter,
-                       java.lang.String[]&nbsp;supportedSubmitMethods,
-                       java.lang.String&nbsp;validatorUrl)</pre>
-<div class="block">Default constructor</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>deepLinking</code> - If set to true, enables deep linking for tags and operations. See the Deep Linking
-                                 documentation for more information.</dd>
-<dd><code>displayOperationId</code> - Controls the display of operationId in operations list. The default is false.</dd>
-<dd><code>defaultModelsExpandDepth</code> - The default expansion depth for models (set to -1 completely hide the models).</dd>
-<dd><code>defaultModelExpandDepth</code> - The default expansion depth for the model on the model-example section.</dd>
-<dd><code>defaultModelRendering</code> - Controls how the model is shown when the API is first rendered. (The user can
-                                 always switch the rendering for a given model by clicking the 'Model' and 'Example
-                                 Value' links.)</dd>
-<dd><code>displayRequestDuration</code> - Controls the display of the request duration (in milliseconds) for Try-It-Out
-                                 requests.</dd>
-<dd><code>docExpansion</code> - Controls the default expansion setting for the operations and tags. It can be
-                                 'list' (expands only the tags), 'full' (expands the tags and operations) or 'none'
-                                 (expands nothing).</dd>
-<dd><code>filter</code> - If set, enables filtering. The top bar will show an edit box that you can use to
-                                 filter the tagged operations that are shown. Can be Boolean to enable or disable,
-                                 or a string, in which case filtering will be enabled using that string as the
-                                 filter expression. Filtering is case sensitive matching the filter expression
-                                 anywhere inside the tag.</dd>
-<dd><code>maxDisplayedTags</code> - If set, limits the number of tagged operations displayed to at most this many. The
-                                 default is to show all operations.</dd>
-<dd><code>operationsSorter</code> - Apply a sort to the operation list of each API. It can be 'alpha' (sort by paths
-                                 alphanumerically), 'method' (sort by HTTP method) or a function (see
-                                 Array.prototype.sort() to know how sort function works). Default is the order
-                                 returned by the server unchanged.</dd>
-<dd><code>showExtensions</code> - Controls the display of vendor extension (x-) fields and values for Operations,
-                                 Parameters, and Schema.</dd>
-<dd><code>tagsSorter</code> - Apply a sort to the tag list of each API. It can be 'alpha' (sort by paths
-                                 alphanumerically) or a function (see Array.prototype.sort() to learn how to write a
-                                 sort function). Two tag name strings are passed to the sorter for each pass.
-                                 Default is the order determined by Swagger-UI.</dd>
-<dd><code>supportedSubmitMethods</code> - List of HTTP methods that have the Try it out feature enabled. An empty array
-                                 disables Try it out for all operations. This does not filter the operations from
-                                 the
-                                 display.</dd>
-<dd><code>validatorUrl</code> - By default, Swagger-UI attempts to validate specs against swagger.io's online
-                                 validator. You can use this parameter to set a different validator URL, for example
-                                 for locally deployed validators (Validator Badge). Setting it to null will disable
-                                 validation. This parameter is relevant for Swagger 2.0 specs only.</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String[],java.lang.String)">
+<a id="&lt;init&gt;(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String[],java.lang.String,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -679,7 +338,8 @@ public&nbsp;UiConfiguration&#8203;(java.lang.String&nbsp;validatorUrl,
                        java.lang.Boolean&nbsp;showCommonExtensions,
                        <a href="TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a>&nbsp;tagsSorter,
                        java.lang.String[]&nbsp;supportedSubmitMethods,
-                       java.lang.String&nbsp;validatorUrl)</pre>
+                       java.lang.String&nbsp;validatorUrl,
+                       java.lang.String&nbsp;swaggerBaseUiUrl)</pre>
 <div class="block">Default constructor</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -709,7 +369,7 @@ public&nbsp;UiConfiguration&#8203;(java.lang.String&nbsp;validatorUrl,
                                  returned by the server unchanged.</dd>
 <dd><code>showExtensions</code> - Controls the display of vendor extension (x-) fields and values for Operations,
                                  Parameters, and Schema.</dd>
-<dd><code>showCommonExtensions</code> - Controls the display of extensions (pattern, maxLength, minLength, maximum, 
+<dd><code>showCommonExtensions</code> - Controls the display of extensions (pattern, maxLength, minLength, maximum,
                                  minimum) fields and values for Parameters.</dd>
 <dd><code>tagsSorter</code> - Apply a sort to the tag list of each API. It can be 'alpha' (sort by paths
                                  alphanumerically) or a function (see Array.prototype.sort() to learn how to write a
@@ -736,74 +396,6 @@ public&nbsp;UiConfiguration&#8203;(java.lang.String&nbsp;validatorUrl,
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getApisSorter()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getApisSorter</h4>
-<pre class="methodSignature">@Deprecated
-public&nbsp;java.lang.String&nbsp;getApisSorter()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>apisSorter</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.0</dd>
-</dl>
-</li>
-</ul>
-<a id="isJsonEditor()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isJsonEditor</h4>
-<pre class="methodSignature">@Deprecated
-public&nbsp;boolean&nbsp;isJsonEditor()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>jsonEditor</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.0</dd>
-</dl>
-</li>
-</ul>
-<a id="isShowRequestHeaders()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isShowRequestHeaders</h4>
-<pre class="methodSignature">@Deprecated
-public&nbsp;boolean&nbsp;isShowRequestHeaders()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>showRequestHeaders</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.0</dd>
-</dl>
-</li>
-</ul>
-<a id="getRequestTimeout()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRequestTimeout</h4>
-<pre class="methodSignature">@Deprecated
-public&nbsp;java.lang.Long&nbsp;getRequestTimeout()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>requestTimeout</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.0</dd>
-</dl>
-</li>
-</ul>
 <a id="getDeepLinking()">
 <!--   -->
 </a>
@@ -933,10 +525,19 @@ public&nbsp;java.lang.Long&nbsp;getRequestTimeout()</pre>
 <a id="getValidatorUrl()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getValidatorUrl</h4>
 <pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getValidatorUrl()</pre>
+</li>
+</ul>
+<a id="getSwaggerBaseUiUrl()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getSwaggerBaseUiUrl</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getSwaggerBaseUiUrl()</pre>
 </li>
 </ul>
 </li>

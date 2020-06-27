@@ -155,7 +155,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(springfox.documentation.swagger.web.SwaggerResourcesProvider)">ApiResourceController</a></span>&#8203;(<a href="SwaggerResourcesProvider.html" title="interface in springfox.documentation.swagger.web">SwaggerResourcesProvider</a>&nbsp;swaggerResources)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(springfox.documentation.swagger.web.SwaggerResourcesProvider,java.lang.String)">ApiResourceController</a></span>&#8203;(<a href="SwaggerResourcesProvider.html" title="interface in springfox.documentation.swagger.web">SwaggerResourcesProvider</a>&nbsp;swaggerResources,
+                     java.lang.String&nbsp;swaggerUiBaseUrl)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -215,14 +216,16 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(springfox.documentation.swagger.web.SwaggerResourcesProvider)">
+<a id="&lt;init&gt;(springfox.documentation.swagger.web.SwaggerResourcesProvider,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ApiResourceController</h4>
 <pre>@Autowired
-public&nbsp;ApiResourceController&#8203;(<a href="SwaggerResourcesProvider.html" title="interface in springfox.documentation.swagger.web">SwaggerResourcesProvider</a>&nbsp;swaggerResources)</pre>
+public&nbsp;ApiResourceController&#8203;(<a href="SwaggerResourcesProvider.html" title="interface in springfox.documentation.swagger.web">SwaggerResourcesProvider</a>&nbsp;swaggerResources,
+                             @Value("${springfox.documentation.swagger-ui.base-url:}")
+                             java.lang.String&nbsp;swaggerUiBaseUrl)</pre>
 </li>
 </ul>
 </li>

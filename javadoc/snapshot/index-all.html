@@ -546,7 +546,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><a href="springfox/documentation/swagger/web/ApiResourceController.html" title="class in springfox.documentation.swagger.web"><span class="typeNameLink">ApiResourceController</span></a> - Class in <a href="springfox/documentation/swagger/web/package-summary.html">springfox.documentation.swagger.web</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/ApiResourceController.html#%3Cinit%3E(springfox.documentation.swagger.web.SwaggerResourcesProvider)">ApiResourceController(SwaggerResourcesProvider)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/ApiResourceController.html" title="class in springfox.documentation.swagger.web">ApiResourceController</a></dt>
+<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/ApiResourceController.html#%3Cinit%3E(springfox.documentation.swagger.web.SwaggerResourcesProvider,java.lang.String)">ApiResourceController(SwaggerResourcesProvider, String)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/ApiResourceController.html" title="class in springfox.documentation.swagger.web">ApiResourceController</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/ApiSelectorBuilder.html#apis(java.util.function.Predicate)">apis(Predicate&lt;RequestHandler&gt;)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/ApiSelectorBuilder.html" title="class in springfox.documentation.spring.web.plugins">ApiSelectorBuilder</a></dt>
 <dd>&nbsp;</dd>
@@ -615,6 +615,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/DecimalMinMaxAnnotationPlugin.html#apply(springfox.documentation.spi.schema.contexts.ModelPropertyContext)">apply(ModelPropertyContext)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/DecimalMinMaxAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">DecimalMinMaxAnnotationPlugin</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/IsNullAnnotationPlugin.html#apply(springfox.documentation.spi.schema.contexts.ModelPropertyContext)">apply(ModelPropertyContext)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/IsNullAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">IsNullAnnotationPlugin</a></dt>
+<dd>
+<div class="block">read NotNull annotation</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/MinMaxAnnotationPlugin.html#apply(springfox.documentation.spi.schema.contexts.ModelPropertyContext)">apply(ModelPropertyContext)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/MinMaxAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">MinMaxAnnotationPlugin</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/NotBlankAnnotationPlugin.html#apply(springfox.documentation.spi.schema.contexts.ModelPropertyContext)">apply(ModelPropertyContext)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/NotBlankAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">NotBlankAnnotationPlugin</a></dt>
@@ -1415,6 +1419,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ResponseBuilder.html#copyOf(springfox.documentation.service.Response)">copyOf(Response)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ResponseBuilder.html" title="class in springfox.documentation.builders">ResponseBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#copyOf(springfox.documentation.service.SimpleParameterSpecification)">copyOf(SimpleParameterSpecification)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/SecurityConfigurationBuilder.html#copyOf(springfox.documentation.swagger.web.SecurityConfiguration)">copyOf(SecurityConfiguration)</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/SecurityConfigurationBuilder.html" title="class in springfox.documentation.swagger.web">SecurityConfigurationBuilder</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html#copyOf(springfox.documentation.swagger.web.UiConfiguration)">copyOf(UiConfiguration)</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web">UiConfigurationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/service/contexts/RequestMappingContext.html#copyPatternUsing(java.lang.String)">copyPatternUsing(String)</a></span> - Method in class springfox.documentation.spi.service.contexts.<a href="springfox/documentation/spi/service/contexts/RequestMappingContext.html" title="class in springfox.documentation.spi.service.contexts">RequestMappingContext</a></dt>
 <dd>&nbsp;</dd>
@@ -2561,10 +2569,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/service/contexts/DocumentationContext.html#getApiSelector()">getApiSelector()</a></span> - Method in class springfox.documentation.spi.service.contexts.<a href="springfox/documentation/spi/service/contexts/DocumentationContext.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContext</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#getApisSorter()">getApisSorter()</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/service/ApiListing.html#getApiVersion()">getApiVersion()</a></span> - Method in class springfox.documentation.service.<a href="springfox/documentation/service/ApiListing.html" title="class in springfox.documentation.service">ApiListing</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/service/ResourceListing.html#getApiVersion()">getApiVersion()</a></span> - Method in class springfox.documentation.service.<a href="springfox/documentation/service/ResourceListing.html" title="class in springfox.documentation.service">ResourceListing</a></dt>
@@ -3673,10 +3677,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/readers/operation/AbstractOperationParameterRequestConditionReader.html#getRequestParameters(java.util.Set,springfox.documentation.service.ParameterType)">getRequestParameters(Set&lt;NameValueExpression&lt;String&gt;&gt;, ParameterType)</a></span> - Method in class springfox.documentation.spring.web.readers.operation.<a href="springfox/documentation/spring/web/readers/operation/AbstractOperationParameterRequestConditionReader.html" title="class in springfox.documentation.spring.web.readers.operation">AbstractOperationParameterRequestConditionReader</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#getRequestTimeout()">getRequestTimeout()</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/PropertySpecification.html#getRequired()">getRequired()</a></span> - Method in class springfox.documentation.schema.<a href="springfox/documentation/schema/PropertySpecification.html" title="class in springfox.documentation.schema">PropertySpecification</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/service/Header.html#getRequired()">getRequired()</a></span> - Method in class springfox.documentation.service.<a href="springfox/documentation/service/Header.html" title="class in springfox.documentation.service">Header</a></dt>
@@ -3848,6 +3848,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#getSupportedSubmitMethods()">getSupportedSubmitMethods()</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SpringfoxConfigurationProperties.html#getSwagger()">getSwagger()</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SpringfoxConfigurationProperties.html" title="class in springfox.boot.starter.autoconfigure">SpringfoxConfigurationProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#getSwaggerBaseUiUrl()">getSwaggerBaseUiUrl()</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SpringfoxConfigurationProperties.html#getSwaggerUi()">getSwaggerUi()</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SpringfoxConfigurationProperties.html" title="class in springfox.boot.starter.autoconfigure">SpringfoxConfigurationProperties</a></dt>
 <dd>&nbsp;</dd>
@@ -4547,10 +4549,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/PropertySpecificationBuilder.html#isHidden(java.lang.Boolean)">isHidden(Boolean)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#isJsonEditor()">isJsonEditor()</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/common/Version.html#isLessThan(springfox.documentation.common.Version)">isLessThan(Version)</a></span> - Method in class springfox.documentation.common.<a href="springfox/documentation/common/Version.html" title="class in springfox.documentation.common">Version</a></dt>
 <dd>
 <div class="block">Returns whether the current <a href="springfox/documentation/common/Version.html" title="class in springfox.documentation.common"><code>Version</code></a> is less (older) than the given one.</div>
@@ -4574,6 +4572,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/WebMvcNameValueExpressionWrapper.html#isNegated()">isNegated()</a></span> - Method in class springfox.documentation.spring.web.<a href="springfox/documentation/spring/web/WebMvcNameValueExpressionWrapper.html" title="class in springfox.documentation.spring.web">WebMvcNameValueExpressionWrapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/wrapper/NameValueExpression.html#isNegated()">isNegated()</a></span> - Method in interface springfox.documentation.spring.wrapper.<a href="springfox/documentation/spring/wrapper/NameValueExpression.html" title="interface in springfox.documentation.spring.wrapper">NameValueExpression</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="springfox/bean/validators/plugins/schema/IsNullAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema"><span class="typeNameLink">IsNullAnnotationPlugin</span></a> - Class in <a href="springfox/bean/validators/plugins/schema/package-summary.html">springfox.bean.validators.plugins.schema</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/IsNullAnnotationPlugin.html#%3Cinit%3E()">IsNullAnnotationPlugin()</a></span> - Constructor for class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/IsNullAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">IsNullAnnotationPlugin</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/bean/validators/configuration/BeanValidatorPluginsConfiguration.html#isNullPlugin()">isNullPlugin()</a></span> - Method in class springfox.bean.validators.configuration.<a href="springfox/bean/validators/configuration/BeanValidatorPluginsConfiguration.html" title="class in springfox.bean.validators.configuration">BeanValidatorPluginsConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/ModelProperty.html#isReadOnly()">isReadOnly()</a></span> - Method in class springfox.documentation.schema.<a href="springfox/documentation/schema/ModelProperty.html" title="class in springfox.documentation.schema">ModelProperty</a></dt>
 <dd>
@@ -4613,10 +4617,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/property/bean/Accessors.html#isSetter(java.lang.reflect.Method)">isSetter(Method)</a></span> - Static method in class springfox.documentation.schema.property.bean.<a href="springfox/documentation/schema/property/bean/Accessors.html" title="class in springfox.documentation.schema.property.bean">Accessors</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#isShowRequestHeaders()">isShowRequestHeaders()</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger1/dto/ContainerDataType.html#isUniqueItems()">isUniqueItems()</a></span> - Method in class springfox.documentation.swagger1.dto.<a href="springfox/documentation/swagger1/dto/ContainerDataType.html" title="class in springfox.documentation.swagger1.dto">ContainerDataType</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/service/contexts/DocumentationContext.html#isUriTemplatesEnabled()">isUriTemplatesEnabled()</a></span> - Method in class springfox.documentation.spi.service.contexts.<a href="springfox/documentation/spi/service/contexts/DocumentationContext.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContext</a></dt>
@@ -7316,6 +7316,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/DecimalMinMaxAnnotationPlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/DecimalMinMaxAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">DecimalMinMaxAnnotationPlugin</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/IsNullAnnotationPlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/IsNullAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">IsNullAnnotationPlugin</a></dt>
+<dd>
+<div class="block">support all documentationTypes</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/MinMaxAnnotationPlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/MinMaxAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">MinMaxAnnotationPlugin</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/schema/NotBlankAnnotationPlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.bean.validators.plugins.schema.<a href="springfox/bean/validators/plugins/schema/NotBlankAnnotationPlugin.html" title="class in springfox.bean.validators.plugins.schema">NotBlankAnnotationPlugin</a></dt>
@@ -7544,27 +7548,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/readers/operation/SwaggerResponseMessageReader.html#%3Cinit%3E(springfox.documentation.spi.schema.EnumTypeDeterminer,springfox.documentation.schema.TypeNameExtractor,com.fasterxml.classmate.TypeResolver,springfox.documentation.schema.property.ModelSpecificationFactory,springfox.documentation.spring.web.plugins.DocumentationPluginsManager)">SwaggerResponseMessageReader(EnumTypeDeterminer, TypeNameExtractor, TypeResolver, ModelSpecificationFactory, DocumentationPluginsManager)</a></span> - Constructor for class springfox.documentation.swagger.readers.operation.<a href="springfox/documentation/swagger/readers/operation/SwaggerResponseMessageReader.html" title="class in springfox.documentation.swagger.readers.operation">SwaggerResponseMessageReader</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html#swaggerUiBaseUrl(java.lang.String)">swaggerUiBaseUrl(String)</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web">UiConfigurationBuilder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SpringfoxConfigurationProperties.SwaggerUiConfigurationProperties.html#%3Cinit%3E()">SwaggerUiConfigurationProperties()</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SpringfoxConfigurationProperties.SwaggerUiConfigurationProperties.html" title="class in springfox.boot.starter.autoconfigure">SpringfoxConfigurationProperties.SwaggerUiConfigurationProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfiguration.html#swaggerUiConfigurer(springfox.boot.starter.autoconfigure.SwaggerUiWebMvcTransformer)">swaggerUiConfigurer(SwaggerUiWebMvcTransformer)</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfiguration.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebMvcConfiguration</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfiguration.html#swaggerUiTransformer()">swaggerUiTransformer()</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfiguration.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebMvcConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfiguration.html#swaggerUiConfigurer()">swaggerUiConfigurer()</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfiguration.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebMvcConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html" title="class in springfox.boot.starter.autoconfigure"><span class="typeNameLink">SwaggerUiWebFluxConfiguration</span></a> - Class in <a href="springfox/boot/starter/autoconfigure/package-summary.html">springfox.boot.starter.autoconfigure</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html#%3Cinit%3E()">SwaggerUiWebFluxConfiguration()</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxConfiguration</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html#swaggerUiWebfluxConfigurer(springfox.boot.starter.autoconfigure.SwaggerUiWebFluxTransformer)">swaggerUiWebfluxConfigurer(SwaggerUiWebFluxTransformer)</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html#swaggerUiWebfluxConfigurer()">swaggerUiWebfluxConfigurer()</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.html" title="class in springfox.boot.starter.autoconfigure"><span class="typeNameLink">SwaggerUiWebFluxConfigurer</span></a> - Class in <a href="springfox/boot/starter/autoconfigure/package-summary.html">springfox.boot.starter.autoconfigure</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.html#%3Cinit%3E(java.lang.String,org.springframework.web.reactive.resource.ResourceTransformer)">SwaggerUiWebFluxConfigurer(String, ResourceTransformer)</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxConfigurer</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html#swaggerUiWebFluxTransformer()">swaggerUiWebFluxTransformer()</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfiguration.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxConfiguration</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxTransformer.html" title="class in springfox.boot.starter.autoconfigure"><span class="typeNameLink">SwaggerUiWebFluxTransformer</span></a> - Class in <a href="springfox/boot/starter/autoconfigure/package-summary.html">springfox.boot.starter.autoconfigure</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxTransformer.html#%3Cinit%3E(java.lang.String)">SwaggerUiWebFluxTransformer(String)</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxTransformer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxTransformer</a></dt>
+<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.html#%3Cinit%3E(java.lang.String)">SwaggerUiWebFluxConfigurer(String)</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxConfigurer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfiguration.html" title="class in springfox.boot.starter.autoconfigure"><span class="typeNameLink">SwaggerUiWebMvcConfiguration</span></a> - Class in <a href="springfox/boot/starter/autoconfigure/package-summary.html">springfox.boot.starter.autoconfigure</a></dt>
 <dd>&nbsp;</dd>
@@ -7572,11 +7570,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.html" title="class in springfox.boot.starter.autoconfigure"><span class="typeNameLink">SwaggerUiWebMvcConfigurer</span></a> - Class in <a href="springfox/boot/starter/autoconfigure/package-summary.html">springfox.boot.starter.autoconfigure</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.html#%3Cinit%3E(java.lang.String,org.springframework.web.servlet.resource.ResourceTransformer)">SwaggerUiWebMvcConfigurer(String, ResourceTransformer)</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebMvcConfigurer</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcTransformer.html" title="class in springfox.boot.starter.autoconfigure"><span class="typeNameLink">SwaggerUiWebMvcTransformer</span></a> - Class in <a href="springfox/boot/starter/autoconfigure/package-summary.html">springfox.boot.starter.autoconfigure</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcTransformer.html#%3Cinit%3E(java.lang.String)">SwaggerUiWebMvcTransformer(String)</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcTransformer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebMvcTransformer</a></dt>
+<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.html#%3Cinit%3E(java.lang.String)">SwaggerUiWebMvcConfigurer(String)</a></span> - Constructor for class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebMvcConfigurer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/SchemaPluginsManager.html#syntheticModel(springfox.documentation.spi.schema.contexts.ModelContext)">syntheticModel(ModelContext)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/SchemaPluginsManager.html" title="class in springfox.documentation.schema.plugins">SchemaPluginsManager</a></dt>
 <dd>
@@ -7876,10 +7870,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/service/Tags.html#toTags(java.util.Map)">toTags(Map&lt;String, List&lt;ApiListing&gt;&gt;)</a></span> - Static method in class springfox.documentation.service.<a href="springfox/documentation/service/Tags.html" title="class in springfox.documentation.service">Tags</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcTransformer.html#transform(javax.servlet.http.HttpServletRequest,org.springframework.core.io.Resource,org.springframework.web.servlet.resource.ResourceTransformerChain)">transform(HttpServletRequest, Resource, ResourceTransformerChain)</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebMvcTransformer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebMvcTransformer</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxTransformer.html#transform(org.springframework.web.server.ServerWebExchange,org.springframework.core.io.Resource,org.springframework.web.reactive.resource.ResourceTransformerChain)">transform(ServerWebExchange, Resource, ResourceTransformerChain)</a></span> - Method in class springfox.boot.starter.autoconfigure.<a href="springfox/boot/starter/autoconfigure/SwaggerUiWebFluxTransformer.html" title="class in springfox.boot.starter.autoconfigure">SwaggerUiWebFluxTransformer</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/service/CollectionFormat.html#TSV">TSV</a></span> - Static variable in class springfox.documentation.service.<a href="springfox/documentation/service/CollectionFormat.html" title="class in springfox.documentation.service">CollectionFormat</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelBuilder.html#type(com.fasterxml.classmate.ResolvedType)">type(ResolvedType)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelBuilder.html" title="class in springfox.documentation.builders">ModelBuilder</a></dt>
@@ -7944,33 +7934,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web"><span class="typeNameLink">UiConfiguration</span></a> - Class in <a href="springfox/documentation/swagger/web/package-summary.html">springfox.documentation.swagger.web</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String%5B%5D,java.lang.String)">UiConfiguration(Boolean, Boolean, Integer, Integer, ModelRendering, Boolean, DocExpansion, Object, Integer, OperationsSorter, Boolean, Boolean, TagsSorter, String[], String)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String%5B%5D,java.lang.String,java.lang.String)">UiConfiguration(Boolean, Boolean, Integer, Integer, ModelRendering, Boolean, DocExpansion, Object, Integer, OperationsSorter, Boolean, Boolean, TagsSorter, String[], String, String)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
 <dd>
 <div class="block">Default constructor</div>
-</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String)">UiConfiguration(Boolean, Boolean, Integer, Integer, ModelRendering, Boolean, DocExpansion, Object, Integer, OperationsSorter, Boolean, TagsSorter, String)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="block">Default constructor</div>
-</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.Boolean,java.lang.Boolean,java.lang.Integer,java.lang.Integer,springfox.documentation.swagger.web.ModelRendering,java.lang.Boolean,springfox.documentation.swagger.web.DocExpansion,java.lang.Object,java.lang.Integer,springfox.documentation.swagger.web.OperationsSorter,java.lang.Boolean,springfox.documentation.swagger.web.TagsSorter,java.lang.String%5B%5D,java.lang.String)">UiConfiguration(Boolean, Boolean, Integer, Integer, ModelRendering, Boolean, DocExpansion, Object, Integer, OperationsSorter, Boolean, TagsSorter, String[], String)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="block">Default constructor</div>
-</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.String)">UiConfiguration(String)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.String,java.lang.String%5B%5D)">UiConfiguration(String, String[])</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,boolean,boolean)">UiConfiguration(String, String, String, String, String[], boolean, boolean)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
-</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfiguration.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,boolean,boolean,java.lang.Long)">UiConfiguration(String, String, String, String, String[], boolean, boolean, Long)</a></span> - Constructor for class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfiguration.html" title="class in springfox.documentation.swagger.web">UiConfiguration</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </dd>
 <dt><a href="springfox/documentation/swagger/web/UiConfiguration.Constants.html" title="class in springfox.documentation.swagger.web"><span class="typeNameLink">UiConfiguration.Constants</span></a> - Class in <a href="springfox/documentation/swagger/web/package-summary.html">springfox.documentation.swagger.web</a></dt>
 <dd>&nbsp;</dd>

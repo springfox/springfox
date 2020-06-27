@@ -137,7 +137,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>@RestController
-@RequestMapping("${springfox.documentation.swagger-ui.base-url:}${springfox.documentation.open-api.v3.path:/v3/api-docs}")
+@RequestMapping("${springfox.documentation.open-api.v3.path:/v3/api-docs}")
 @ConditionalOnWebApplication(type=SERVLET)
 public class <span class="typeNameLabel">OpenApiControllerWebMvc</span>
 extends <a href="OpenApiControllerWeb.html" title="class in springfox.documentation.oas.web">OpenApiControllerWeb</a></pre>
@@ -249,7 +249,7 @@ extends <a href="OpenApiControllerWeb.html" title="class in springfox.documentat
 public&nbsp;OpenApiControllerWebMvc&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
                                <a href="../mappers/ServiceModelToOpenApiMapper.html" title="class in springfox.documentation.oas.mappers">ServiceModelToOpenApiMapper</a>&nbsp;mapper,
                                <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer,
-                               @Value("${springfox.documentation.swagger-ui.base-url:}${springfox.documentation.open-api.v3.path:/v3/api-docs}")
+                               @Value("${springfox.documentation.open-api.v3.path:/v3/api-docs}")
                                java.lang.String&nbsp;oasPath)</pre>
 </li>
 </ul>

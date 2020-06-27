@@ -133,7 +133,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>@Configuration
 @ComponentScan(basePackages="springfox.documentation.spring.data.rest")
-@ConditionalOnWebApplication(type=SERVLET)
+@ConditionalOnClass(org.springframework.data.rest.core.config.RepositoryRestConfiguration.class)
 public class <span class="typeNameLabel">SpringDataRestConfiguration</span>
 extends java.lang.Object</pre>
 </li>
