@@ -55,15 +55,16 @@ public class Validators {
       Class<T> annotationType) {
 
     Optional<BeanPropertyDefinition> propertyDefinition = context.getBeanPropertyDefinition();
-    Optional<T> notNull = empty();
     if (propertyDefinition.isPresent()) {
-      Optional<Method> getter = extractGetterFromPropertyDefinition(propertyDefinition.get());
-      Optional<Field> field = extractFieldFromPropertyDefinition(propertyDefinition.get());
-      notNull = findAnnotation(getter, annotationType)
-          .or(() -> findAnnotation(field, annotationType));
+      Optional<T> fromGetter = extractGetterFromPropertyDefinition(propertyDefinition.get())
+          .map(m -> AnnotationUtils.findAnnotation(m, annotationType));
+      if (fromGetter.isPresent()) {
+        return fromGetter;
+      }
+      return extractFieldFromPropertyDefinition(propertyDefinition.get())
+          .map(f -> AnnotationUtils.findAnnotation(f, annotationType));
     }
-
-    return notNull;
+    return Optional.empty();
   }
 
   public static <T extends Annotation> Optional<T> annotationFromField(
