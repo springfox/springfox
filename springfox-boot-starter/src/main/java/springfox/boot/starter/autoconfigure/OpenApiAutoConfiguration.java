@@ -1,6 +1,11 @@
 package springfox.boot.starter.autoconfigure;
 
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -20,6 +25,8 @@ import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfi
     SwaggerUiWebFluxConfiguration.class,
     SwaggerUiWebMvcConfiguration.class
 })
+@AutoConfigureAfter({ WebMvcAutoConfiguration.class, JacksonAutoConfiguration.class,
+    HttpMessageConvertersAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class })
 public class OpenApiAutoConfiguration {
 
 }
