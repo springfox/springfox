@@ -5,7 +5,6 @@ import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelFacets;
-import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.service.VendorExtension;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 import static springfox.documentation.builders.ElementFacets.*;
 
 public class ModelFacetsBuilder {
-  private ModelKey modelKey;
   private String title;
   private String description;
   private Boolean nullable;
@@ -31,11 +29,6 @@ public class ModelFacetsBuilder {
   private final List<VendorExtension> extensions = new ArrayList<>();
   private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
   private Xml xml;
-
-  public ModelFacetsBuilder modelKey(ModelKey modelKey) {
-    this.modelKey = modelKey;
-    return this;
-  }
 
   public ModelFacetsBuilder title(String title) {
     this.title = title;
@@ -118,7 +111,6 @@ public class ModelFacetsBuilder {
       return null;
     }
     return new ModelFacets(
-        modelKey,
         title,
         description,
         nullable,
@@ -131,8 +123,7 @@ public class ModelFacetsBuilder {
   }
 
   private boolean isBuilderUntouched(List<ElementFacet> facets) {
-    return modelKey == null
-        && title == null
+    return title == null
         && facets.isEmpty()
         && nullable == null
         && description == null
@@ -151,8 +142,7 @@ public class ModelFacetsBuilder {
       this.facetBuilder(each.facetBuilder())
           .copyOf(each);
     }
-    return this.modelKey(other.getModelKey())
-        .title(other.getTitle())
+    return this.title(other.getTitle())
         .description(other.getDescription())
         .nullable(other.getNullable())
         .deprecated(other.getDeprecated())

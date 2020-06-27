@@ -1,10 +1,15 @@
 package springfox.test.contract.oas.bugs;
 
 import io.swagger.annotations.ApiParam;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,5 +33,10 @@ public class BugsController {
   public void bug3321(
       @ApiParam(allowableValues = "one, two, three")
       @RequestParam(name = "expand", required = false) Set<NumberEnum> numbers) {
+  }
+
+  @GetMapping(value = "/3348/{callId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public Mono<ResponseEntity<InputStreamResource>> bug3348(@PathVariable("callId") String callId) {
+    return null;
   }
 } 

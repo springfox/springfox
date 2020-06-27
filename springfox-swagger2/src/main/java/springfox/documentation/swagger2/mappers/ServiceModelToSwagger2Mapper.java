@@ -82,32 +82,32 @@ public abstract class ServiceModelToSwagger2Mapper {
   boolean useModelV3;
 
   @Mappings({
-                @Mapping(target = "info", source = "resourceListing.info"),
-                @Mapping(target = "paths", source = "apiListings"),
-                @Mapping(target = "host", source = "host"),
-                @Mapping(target = "schemes", source = "schemes"),
-                @Mapping(target = "definitions", source = "apiListings"),
-                @Mapping(target = "securityDefinitions", source = "resourceListing"),
-                @Mapping(target = "securityRequirement", ignore = true),
-                @Mapping(target = "security", ignore = true),
-                @Mapping(target = "swagger", ignore = true),
-                @Mapping(target = "parameters", ignore = true),
-                @Mapping(target = "responses", ignore = true),
-                @Mapping(target = "externalDocs", ignore = true),
-                @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
-                @Mapping(target = "tag", ignore = true),
-                @Mapping(target = "scheme", ignore = true)
-            })
+      @Mapping(target = "info", source = "resourceListing.info"),
+      @Mapping(target = "paths", source = "apiListings"),
+      @Mapping(target = "host", source = "host"),
+      @Mapping(target = "schemes", source = "schemes"),
+      @Mapping(target = "definitions", source = "apiListings"),
+      @Mapping(target = "securityDefinitions", source = "resourceListing"),
+      @Mapping(target = "securityRequirement", ignore = true),
+      @Mapping(target = "security", ignore = true),
+      @Mapping(target = "swagger", ignore = true),
+      @Mapping(target = "parameters", ignore = true),
+      @Mapping(target = "responses", ignore = true),
+      @Mapping(target = "externalDocs", ignore = true),
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
+      @Mapping(target = "tag", ignore = true),
+      @Mapping(target = "scheme", ignore = true)
+  })
   public abstract Swagger mapDocumentation(Documentation from);
 
   @Mappings({
-                @Mapping(target = "license", source = "from",
-                         qualifiedBy = { LicenseMapper.LicenseTranslator.class, LicenseMapper.License.class }),
-                @Mapping(target = "contact", source = "from.contact"),
-                @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
-                @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
-                @Mapping(target = "mergeWith", ignore = true)
-            })
+      @Mapping(target = "license", source = "from",
+          qualifiedBy = {LicenseMapper.LicenseTranslator.class, LicenseMapper.License.class}),
+      @Mapping(target = "contact", source = "from.contact"),
+      @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
+      @Mapping(target = "mergeWith", ignore = true)
+  })
   protected abstract Info mapApiInfo(ApiInfo from);
 
   protected abstract Contact map(springfox.documentation.service.Contact from);
@@ -136,27 +136,27 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   @Mappings({
-                @Mapping(target = "description", source = "notes"),
-                @Mapping(target = "operationId", source = "uniqueId"),
-                @Mapping(target = "schemes", source = "protocol"),
-                @Mapping(target = "security", source = "securityReferences"),
-                @Mapping(target = "responses", ignore = true),
-                @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
-                @Mapping(target = "externalDocs", ignore = true),
-                @Mapping(target = "scheme", ignore = true),
-                @Mapping(target = "defaultResponse", ignore = true),
-                @Mapping(target = "tag", ignore = true),
-                @Mapping(target = "parameter", ignore = true),
-                @Mapping(target = "parameters", ignore = true)
-            })
+      @Mapping(target = "description", source = "notes"),
+      @Mapping(target = "operationId", source = "uniqueId"),
+      @Mapping(target = "schemes", source = "protocol"),
+      @Mapping(target = "security", source = "securityReferences"),
+      @Mapping(target = "responses", ignore = true),
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
+      @Mapping(target = "externalDocs", ignore = true),
+      @Mapping(target = "scheme", ignore = true),
+      @Mapping(target = "defaultResponse", ignore = true),
+      @Mapping(target = "tag", ignore = true),
+      @Mapping(target = "parameter", ignore = true),
+      @Mapping(target = "parameters", ignore = true)
+  })
   protected abstract Operation mapOperation(
       springfox.documentation.service.Operation from,
       @Context ModelNamesRegistry modelNames);
 
   @Mappings({
-                @Mapping(target = "externalDocs", ignore = true),
-                @Mapping(target = "vendorExtensions", source = "vendorExtensions")
-            })
+      @Mapping(target = "externalDocs", ignore = true),
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions")
+  })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
@@ -177,6 +177,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   /**
    * Not required when using {@link ServiceModelToSwagger2Mapper#mapResponses(Set, ModelNamesRegistry)} instead
+   *
    * @deprecated @since 3.0.0
    */
   @Deprecated

@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
+import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
@@ -46,6 +47,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 abstract class SpecificationBuilder {
@@ -315,7 +317,6 @@ abstract class SpecificationBuilder {
           );
     }
 
-    @SuppressWarnings("deprecation")
     private ResolvedType inferReturnType(
         EntityContext context,
         HandlerMethod handler) {
@@ -334,9 +335,9 @@ abstract class SpecificationBuilder {
             collectionElementType(methodReturnType));
       } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
         return resolver.resolve(CollectionModel.class, domainReturnType);
-      } else if (springfox.documentation.schema.Types.isBaseType(domainReturnType)) {
+      } else if (ScalarTypes.builtInScalarType(domainReturnType).isPresent()) {
         return domainReturnType;
-      } else if (springfox.documentation.schema.Types.isVoid(domainReturnType)) {
+      } else if (isVoid(domainReturnType)) {
         return resolver.resolve(Void.TYPE);
       }
 

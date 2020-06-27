@@ -252,7 +252,7 @@ public abstract class ServiceModelToOpenApiMapper {
       path = new PathItem();
     }
     for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
-      LOGGER.info("Mapping operation {}", api.getPath());
+      LOGGER.debug("Mapping operation {}", api.getPath());
       Operation operation = mapOperation(each, modelNamesRegistry);
       path.operation(
           mapHttpMethod(each.getMethod()),

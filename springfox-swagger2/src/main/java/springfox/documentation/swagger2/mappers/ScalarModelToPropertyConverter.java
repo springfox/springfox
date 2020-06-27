@@ -10,6 +10,7 @@ import io.swagger.models.properties.DoubleProperty;
 import io.swagger.models.properties.FloatProperty;
 import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.LongProperty;
+import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
@@ -43,6 +44,9 @@ public class ScalarModelToPropertyConverter implements Converter<ScalarModelSpec
     SCALAR_SCHEMA_FACTORY.put(ScalarType.DATE, any -> new DateProperty());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.DATE_TIME, any -> new DateTimeProperty());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.UUID, any -> new UUIDProperty());
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.URI, any -> new StringProperty(StringProperty.Format.URI));
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.URL, any -> new StringProperty(StringProperty.Format.URL));
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.OBJECT, any -> new ObjectProperty());
   }
 
   @Override

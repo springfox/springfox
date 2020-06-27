@@ -117,7 +117,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     ResolvedType type = context.getType();
     if (type instanceof ResolvedPrimitiveType
         || springfox.documentation.schema.Types.isBaseType(type)
-        || springfox.documentation.schema.Types.isVoid(type)
+        || isVoid(type)
         || enumTypeDeterminer.isEnum(type.getErasedType())) {
       return null;
     }

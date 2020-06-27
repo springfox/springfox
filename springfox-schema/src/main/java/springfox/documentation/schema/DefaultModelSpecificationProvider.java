@@ -77,7 +77,6 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
     this.modelSpecifications = modelSpecifications;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public Optional<ModelSpecification> modelSpecificationsFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateEvaluatedType();
@@ -85,7 +84,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
         || enumTypeDeterminer.isEnum(propertiesHost.getErasedType())
-        || springfox.documentation.schema.Types.isBaseType(propertiesHost)
+        || ScalarTypes.builtInScalarType(propertiesHost).isPresent()
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug(
           "Skipping model of type {} as its either a container type, map, enum or base type, or its already "
@@ -177,8 +176,6 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       ModelContext valueContext = ModelContext.fromParent(
           mapContext,
           valueType);
-      String typeName = typeNameExtractor.typeName(valueContext);
-
       return of(
           mapContext.getModelSpecificationBuilder()
               .mapModel(
@@ -189,17 +186,6 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                       modelSpecifications.create(
                           valueContext,
                           valueType)))
-              .facets(f -> f.modelKey(new ModelKeyBuilder()
-                  .qualifiedModelName(q -> q.namespace(safeGetPackageName(resolvedType))
-                      .name(typeName))
-                  .viewDiscriminator(mapContext.getView().orElse(null))
-                  .validationGroupDiscriminators(mapContext.getValidationGroups())
-                  .isResponse(mapContext.isReturnType())
-                  .build())
-                  .title(typeName)
-                  .description("Key of type " + typeName)
-                  .nullable(false)
-                  .deprecated(false))
               .build());
     }
     return empty();

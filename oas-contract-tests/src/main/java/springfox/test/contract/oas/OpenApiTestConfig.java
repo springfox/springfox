@@ -1,7 +1,11 @@
 package springfox.test.contract.oas;
 
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -11,9 +15,12 @@ import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+
+import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @Configuration
 public class OpenApiTestConfig {
@@ -53,7 +60,9 @@ public class OpenApiTestConfig {
   }
 
   @Bean
-  public Docket bugs(List<SecurityScheme> authorizationTypes) {
+  public Docket bugs(
+      List<SecurityScheme> authorizationTypes,
+      TypeResolver resolver) {
     return new Docket(DocumentationType.OAS_30)
         .groupName("bugs")
         .useDefaultResponseMessages(false)
@@ -68,6 +77,10 @@ public class OpenApiTestConfig {
             .and(PathSelectors.regex("/profile").negate()))
         .build()
         .enableUrlTemplating(false)
+        .alternateTypeRules(
+            newRule(resolver.resolve(Mono.class,
+                resolver.resolve(ResponseEntity.class, InputStreamResource.class)),
+                resolver.resolve(File.class)))
         .host("bugs.springfox.io")
         .protocols(new HashSet<>(Arrays.asList(
             "http",

@@ -24,6 +24,7 @@ import java.util.function.Function;
 import static java.util.Optional.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.schema.Annotations.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 @Order(SwaggerPluginSupport.OAS_PLUGIN_ORDER)
@@ -51,7 +52,7 @@ public class OpenApiSchemaPropertyBuilder implements ModelPropertyBuilderPlugin 
     if (annotation != null) {
       ModelSpecification modelSpecification = null;
       ResolvedType type = toType(context.getResolver()).apply(annotation);
-      if (!springfox.documentation.schema.Types.isVoid(type)) {
+      if (!isVoid(type)) {
         modelSpecification =
             modelSpecifications.create(context.getOwner(), type);
       }

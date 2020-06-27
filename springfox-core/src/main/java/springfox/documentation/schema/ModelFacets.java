@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public class ModelFacets implements ElementFacetSource {
-  private final ModelKey modelKey;
   private final String title;
   private final String description;
   private final Boolean nullable;
@@ -25,7 +24,6 @@ public class ModelFacets implements ElementFacetSource {
 
   @SuppressWarnings("ParameterNumber")
   public ModelFacets(
-      ModelKey modelKey,
       String title,
       String description,
       Boolean nullable,
@@ -35,7 +33,6 @@ public class ModelFacets implements ElementFacetSource {
       ExternalDocumentation externalDocumentation,
       List<Example> examples,
       List<VendorExtension> extensions) {
-    this.modelKey = modelKey;
     this.title = title;
     this.nullable = nullable;
     this.deprecated = deprecated;
@@ -45,10 +42,6 @@ public class ModelFacets implements ElementFacetSource {
     this.description = description;
     this.examples.addAll(examples);
     this.extensions.addAll(extensions);
-  }
-
-  public ModelKey getModelKey() {
-    return modelKey;
   }
 
   public String getTitle() {
@@ -107,8 +100,7 @@ public class ModelFacets implements ElementFacetSource {
       return false;
     }
     ModelFacets that = (ModelFacets) o;
-    return Objects.equals(modelKey, that.modelKey) &&
-        Objects.equals(title, that.title) &&
+    return Objects.equals(title, that.title) &&
         Objects.equals(description, that.description) &&
         Objects.equals(nullable, that.nullable) &&
         Objects.equals(deprecated, that.deprecated) &&
@@ -122,7 +114,6 @@ public class ModelFacets implements ElementFacetSource {
   @Override
   public int hashCode() {
     return Objects.hash(
-        modelKey,
         title,
         description,
         nullable,
@@ -137,8 +128,7 @@ public class ModelFacets implements ElementFacetSource {
   @Override
   public String toString() {
     return "ModelFacets{" +
-        "modelKey=" + modelKey +
-        ", title='" + title + '\'' +
+        "title='" + title + '\'' +
         ", description='" + description + '\'' +
         ", nullable=" + nullable +
         ", deprecated=" + deprecated +

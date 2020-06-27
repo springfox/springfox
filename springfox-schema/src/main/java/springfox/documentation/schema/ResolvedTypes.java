@@ -69,6 +69,13 @@ public class ResolvedTypes {
     return ofNullable(resolvedType).map(ResolvedType::getSignature);
   }
 
+  public static boolean isVoid(ResolvedType returnType) {
+    if (returnType == null) {
+      return false;
+    }
+    return Void.class.equals(returnType.getErasedType()) || Void.TYPE.equals(returnType.getErasedType());
+  }
+
   @SuppressWarnings("deprecation")
   public static Function<ResolvedType, ModelReference> modelRefFactory(
       final ModelContext parentContext,

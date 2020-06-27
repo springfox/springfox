@@ -38,7 +38,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
 
   private final DefaultConfiguration defaultConfiguration;
-  private TypeResolver typeResolver;
+  private final TypeResolver typeResolver;
 
   public SwaggerDefaultConfiguration(
       Defaults defaults,

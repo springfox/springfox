@@ -59,83 +59,88 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
     this.operationNames = operationNames;
   }
 
-  //@formatter:off
   @Override
   public List<ApiDescription> apply(DocumentationContext context) {
     return new ArrayList<>(
         Arrays.asList( //<1>
-                       new ApiDescription(
-                           "test",
-                           "/bugs/1767",
-                           "This is a bug summary",
-                           "This is a bug",
-                           Collections.singletonList( //<2>
-                                new OperationBuilder(operationNames)
-                                    .authorizations(new ArrayList<>())
-                                    .codegenMethodNameStem("bug1767GET") //<3>
-                                    .method(HttpMethod.GET)
-                                    .notes("This is a test method")
-                                    .parameters(
-                                        Collections.singletonList( //<4>
-                                             new springfox.documentation.builders.ParameterBuilder()
-                                                 .description(
-                                                     "search by "
-                                                         + "description")
-                                                 .type(new TypeResolver()
-                                                           .resolve(String.class))
-                                                 .name("description")
-                                                 .parameterType("query")
-                                                 .parameterAccess("access")
-                                                 .required(true)
-                                                 .modelRef(new springfox.documentation.schema.ModelRef(
-                                                     "string")) //<5>
-                                                 .build()))
-                                    .requestParameters(
-                                        Collections.singletonList( //<4a>
-                                             new RequestParameterBuilder()
-                                                 .description(
-                                                     "search by "
-                                                         + "description")
-                                                 .name("description")
-                                                 .required(true)
-                                                 .in(ParameterType.QUERY)
-                                                 .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING))) //<5b>
-                                                 .build()))
-                                    .responses(responseMessages()) //<6>
-                                    .responseModel(new springfox.documentation.schema.ModelRef("string")) //<7>
-                                    .responses(responses()) //<6b>
-                                    .build()),
-                           false),
-                       new ApiDescription(
-                           "different-group",
-                           //<8>
-                           "/different/2219",
-                           "This is a bug summary",
-                           "This is a bug",
-                           Collections.singletonList(
-                               new OperationBuilder(
-                                   operationNames)
-                                   .authorizations(new ArrayList<>())
-                                   .codegenMethodNameStem("bug2219GET")
-                                   .method(HttpMethod.GET)
-                                   .notes("This is a test method")
-                                   .parameters(
-                                       Collections.singletonList(
-                                           new springfox.documentation.builders.ParameterBuilder()
-                                               .description("description of bug 2219")
-                                               .type(new TypeResolver().resolve(String.class))
-                                               .name("description")
-                                               .parameterType("query")
-                                               .parameterAccess("access")
-                                               .required(true)
-                                               .modelRef(new springfox.documentation.schema.ModelRef("string"))
-                                               .build()))
-                                   .responses(responseMessages())
-                                   .responseModel(new springfox.documentation.schema.ModelRef("string"))
-                                   .build()),
-                           false)));
+            new ApiDescription(
+                "test",
+                "/bugs/1767",
+                "This is a bug summary",
+                "This is a bug",
+                Collections.singletonList( //<2>
+                    new OperationBuilder(operationNames)
+                        .authorizations(new ArrayList<>())
+                        .codegenMethodNameStem("bug1767GET") //<3>
+                        .method(HttpMethod.GET)
+                        .notes("This is a test method")
+                        .parameters(
+                            Collections.singletonList( //<4>
+                                new springfox.documentation.builders.ParameterBuilder()
+                                    .description(
+                                        "search by "
+                                            + "description")
+                                    .type(new TypeResolver()
+                                        .resolve(String.class))
+                                    .name("description")
+                                    .parameterType("query")
+                                    .parameterAccess("access")
+                                    .required(true)
+                                    .modelRef(new springfox.documentation.schema.ModelRef(
+                                        "string")) //<5>
+                                    .build()))
+                        .requestParameters(
+                            Collections.singletonList( //<4a>
+                                new RequestParameterBuilder()
+                                    .description("search by description")
+                                    .name("description")
+                                    .required(true)
+                                    .in(ParameterType.QUERY)
+                                    .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING))) //<5b>
+                                    .build()))
+                        .responses(responseMessages()) //<6>
+                        .responseModel(new springfox.documentation.schema.ModelRef("string")) //<7>
+                        .responses(responses()) //<6b>
+                        .build()),
+                false),
+            new ApiDescription(
+                "different-group",
+                //<8>
+                "/different/2219",
+                "This is a bug summary",
+                "This is a bug",
+                Collections.singletonList(
+                    new OperationBuilder(
+                        operationNames)
+                        .authorizations(new ArrayList<>())
+                        .codegenMethodNameStem("bug2219GET")
+                        .method(HttpMethod.GET)
+                        .notes("This is a test method")
+                        .parameters(
+                            Collections.singletonList(
+                                new springfox.documentation.builders.ParameterBuilder()
+                                    .description("description of bug 2219")
+                                    .type(new TypeResolver().resolve(String.class))
+                                    .name("description")
+                                    .parameterType("query")
+                                    .parameterAccess("access")
+                                    .required(true)
+                                    .modelRef(new springfox.documentation.schema.ModelRef("string"))
+                                    .build()))
+                        .requestParameters(
+                            Collections.singletonList(
+                                new RequestParameterBuilder()
+                                    .description("description of bug 2219")
+                                    .name("description")
+                                    .in("query")
+                                    .required(true)
+                                    .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
+                                    .build()))
+                        .responses(responseMessages())
+                        .responseModel(new springfox.documentation.schema.ModelRef("string"))
+                        .build()),
+                false)));
   }
-//  @formatter:on
 
   /**
    * @return Set of response messages that overide the default/global response messages

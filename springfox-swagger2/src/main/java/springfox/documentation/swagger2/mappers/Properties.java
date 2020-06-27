@@ -47,6 +47,7 @@ import java.util.function.Predicate;
 
 import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
 /**
@@ -167,18 +168,11 @@ class Properties {
   static Predicate<Map.Entry<String, springfox.documentation.schema.ModelProperty>> voidProperties() {
     return input -> isVoid(input.getValue().getType())
         || collectionOfVoid(input.getValue().getType())
-        || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());
-  }
-
-  private static boolean arrayTypeOfVoid(ResolvedType arrayElementType) {
-    return arrayElementType != null && isVoid(arrayElementType);
+        || isVoid(input.getValue().getType().getArrayElementType());
   }
 
   private static boolean collectionOfVoid(ResolvedType type) {
     return isContainerType(type) && isVoid(collectionElementType(type));
   }
 
-  private static boolean isVoid(ResolvedType resolvedType) {
-    return springfox.documentation.schema.Types.isVoid(resolvedType);
-  }
 }

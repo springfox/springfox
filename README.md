@@ -9,6 +9,15 @@
 |---|---|---|
 |[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![codecov](https://codecov.io/gh/springfox/springfox/branch/master/graph/badge.svg)](https://codecov.io/gh/springfox/springfox) |[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=alert_status)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
 
+| Sonar Cloud |
+|------------ |
+|[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=security_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+|[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+|[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+|[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+|[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=sqale_index)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+|[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=coverage)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+
 ### About
 For more information on this project visit the [Springfox Website](http://springfox.io) or
  [http://springfox.github.io/springfox/](http://springfox.github.io/springfox/)
