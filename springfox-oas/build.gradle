@@ -24,7 +24,6 @@ dependencies {
   api project(':springfox-swagger-common')
   api libs.core
   api libs.spring
-  implementation libs.clientProvided
 
   implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
@@ -33,6 +32,7 @@ dependencies {
   compileOnly "org.springframework:spring-webflux:$spring"
   compileOnly "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
   compileOnly "javax.servlet:javax.servlet-api:$servlet"
+  compileOnly libs.clientProvided
 
   testImplementation project(':springfox-core').sourceSets.test.output
   testImplementation project(':springfox-schema').sourceSets.test.output
@@ -40,4 +40,5 @@ dependencies {
 
   testImplementation libs.test
   testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"
+  testImplementation libs.clientProvided
 }

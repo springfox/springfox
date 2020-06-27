@@ -79,6 +79,7 @@ subprojects {
 
   test {
     jvmArgs "-Dorg.spockframework.mock.ignoreByteBuddy=true"
+    finalizedBy jacocoTestReport
   }
 }
 

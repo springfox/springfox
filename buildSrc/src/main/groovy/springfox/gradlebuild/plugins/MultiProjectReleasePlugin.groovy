@@ -102,9 +102,9 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
     publishTask.dependsOn checkGitBranchTask
 
     project.afterEvaluate { evaluatedProject ->
-      def buildTasks = evaluatedProject.getTasksByName('build', true)
+      def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
       def bintrayUploadTasks = evaluatedProject.getTasksByName('bintrayUpload', true)
-      publishTask.dependsOn buildTasks
+      publishTask.dependsOn javaCheckTasks
       publishTask.dependsOn bintrayUploadTasks
     }
     bumpAndTagTask.dependsOn publishTask

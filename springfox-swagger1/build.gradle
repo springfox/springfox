@@ -40,9 +40,9 @@ dependencies {
   api libs.core
   api libs.spring
   api libs.swagger2Core
-  implementation libs.springProvidedWithMvc
-  implementation libs.clientProvided
-  implementation "javax.servlet:javax.servlet-api:$servlet"
+  compileOnly libs.springProvidedWithMvc
+  compileOnly libs.clientProvided
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
   implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
@@ -53,6 +53,9 @@ dependencies {
   testImplementation project(':springfox-spring-web').sourceSets.test.output
   testImplementation project(':springfox-spring-webmvc').sourceSets.test.output
   testImplementation libs.test
+  testImplementation libs.springProvidedWithMvc
+  testImplementation libs.clientProvided
+  testImplementation "javax.servlet:javax.servlet-api:$servlet"
 
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output

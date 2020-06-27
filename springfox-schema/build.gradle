@@ -13,10 +13,13 @@ dependencies {
   api project(':springfox-core')
   api project(':springfox-spi')
 
-  implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson}"
-  implementation libs.springProvided
-  implementation libs.clientProvided
+  compileOnly "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson}"
+  compileOnly libs.springProvided
+  compileOnly libs.clientProvided
 
   testImplementation libs.test
   testImplementation project(':springfox-core').sourceSets.test.output
+  testImplementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson}"
+  testImplementation libs.springProvided
+  testImplementation libs.clientProvided
 }

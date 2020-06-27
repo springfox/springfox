@@ -25,10 +25,10 @@ dependencies {
   api libs.spring
   api libs.swagger2Core
 
-  implementation libs.springProvidedWithMvc
   compileOnly "org.springframework:spring-webflux:$spring"
-  implementation libs.clientProvided
   compileOnly libs.springBootProvided
+  compileOnly libs.springProvidedWithMvc
+  compileOnly libs.clientProvided
   compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
 
@@ -43,6 +43,8 @@ dependencies {
   testImplementation project(':springfox-spring-webmvc').sourceSets.test.output
   testImplementation "javax.servlet:javax.servlet-api:$servlet"
   testImplementation "org.springframework:spring-webflux:$spring"
+  testImplementation libs.springProvidedWithMvc
+  testImplementation libs.clientProvided
 
   testImplementation libs.test
 }

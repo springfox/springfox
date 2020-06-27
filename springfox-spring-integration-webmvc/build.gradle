@@ -18,7 +18,7 @@ dependencies {
   api project(':springfox-spring-webmvc')
   api project(':springfox-spring-integration')
 
-  implementation libs.clientProvided
+  compileOnly libs.clientProvided
   compileOnly libs.springProvidedWithSpringIntegration
   compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
@@ -31,4 +31,5 @@ dependencies {
   testImplementation project(':springfox-core').sourceSets.test.output
   testImplementation project(':springfox-schema').sourceSets.test.output
   testImplementation "javax.servlet:javax.servlet-api:$servlet"
+  implementation libs.clientProvided
 }

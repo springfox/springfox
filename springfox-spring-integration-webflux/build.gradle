@@ -18,15 +18,17 @@ dependencies {
 
   api libs.core
   api libs.spring
-  implementation libs.clientProvided
+  compileOnly libs.clientProvided
   compileOnly libs.springProvidedWithSpringIntegration
 
   testImplementation "javax.validation:validation-api:$validationApiVersion"
   testImplementation project(':springfox-core')
   testImplementation project(':springfox-spring-web').sourceSets.test.output
+  testImplementation project(':springfox-core').sourceSets.test.output
+  testImplementation project(':springfox-schema').sourceSets.test.output
+
+  testImplementation libs.clientProvided
   testImplementation libs.springProvidedWithSpringIntegration
   testImplementation libs.test
   testImplementation libs.swagger2Core
-  testImplementation project(':springfox-core').sourceSets.test.output
-  testImplementation project(':springfox-schema').sourceSets.test.output
 }

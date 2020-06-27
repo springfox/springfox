@@ -28,9 +28,13 @@ dependencies {
   api libs.spring
   api project(':springfox-spring-web')
 
-  implementation "javax.validation:validation-api:$validationApiVersion"
-  implementation libs.springProvided
-  implementation libs.clientProvided
+  compileOnly "javax.validation:validation-api:$validationApiVersion"
+  compileOnly libs.springProvided
+  compileOnly libs.clientProvided
+  compileOnly libs.springBootProvided
 
   testImplementation libs.test
+  testImplementation "javax.validation:validation-api:$validationApiVersion"
+  testImplementation libs.springProvided
+  testImplementation libs.clientProvided
 }

@@ -107,30 +107,38 @@ task customizeSwaggerUi {
       from "${projectDir}/src/web/fonts"
       into "${buildDir}/${swaggerUiExplodedDir}/fonts"
     }
-    copy {
-      from "${projectDir}/src/web/swagger-ui.html"
-      into "${buildDir}/swagger-ui-${swaggerUiVersion}"
-      filter(ReplaceTokens, tokens: [VERSION: "${project.version}".toString()])
-    }
     delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
     delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
+    copy {
+      from "${projectDir}/src/web/swagger-ui.html"
+      into "${buildDir}/${swaggerUiExplodedDir}"
+      rename { String fileName ->
+        // a simple way is to remove the "-$version" from the jar filename
+        // but you can customize the filename replacement rule as you wish.
+        fileName.replace("swagger-ui", "index")
+      }
+      filter(ReplaceTokens, tokens: [VERSION: "${project.version}".toString()])
+    }
   }
 }
 
 jar {
-  from("${buildDir}/swagger-ui-${swaggerUiVersion}/swagger-ui.html") {
-    into "META-INF/resources"
-  }
-
   from("${buildDir}/${swaggerUiExplodedDir}") {
     into "META-INF/resources/webjars/${project.name}"
   }
 
   manifest {
     attributes(
-        "Implementation-Title": project.name,
-        "Implementation-Version": project.version,
+        'Implementation-Title': project.name,
+        'Implementation-Version': new Object() {
+          String toString() { project.version }
+        },
         "SwaggerUi-Version": swaggerUiVersion,
+        'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
+        'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
+        'Build-Time': "${new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")}",
+        'Built-By': System.getProperty('user.name'),
+        'Built-On': "${InetAddress.localHost.hostName}/${InetAddress.localHost.hostAddress}",
     )
   }
 }
