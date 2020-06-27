@@ -44,6 +44,7 @@ jobs:
            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
            cp -R swagger-contract-tests/build/reports/tests ~/reports/webmvc
            cp -R swagger-contract-tests-webflux/build/reports/tests ~/reports/webflux
+           cp -R oas-contract-tests/build/reports/tests ~/reports/openapi
           when: always
       - store_test_results:
           path: ~/junit
