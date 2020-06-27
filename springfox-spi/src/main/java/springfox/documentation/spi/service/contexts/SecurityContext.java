@@ -40,15 +40,6 @@ public class SecurityContext {
 
   public SecurityContext(
       List<SecurityReference> securityReferences,
-      Predicate<String> selector) {
-
-    this.securityReferences = securityReferences;
-    this.selector = selector;
-    this.methodSelector = (item) -> true;
-  }
-
-  public SecurityContext(
-      List<SecurityReference> securityReferences,
       Predicate<String> selector,
       Predicate<HttpMethod> methodSelector) {
 
@@ -57,35 +48,12 @@ public class SecurityContext {
     this.methodSelector = methodSelector;
   }
 
-  /**
-   * Use securityForOperation instead
-   * @since 2.8.1
-   * @param path path to secure
-   * @return list of applicable security references
-   * @deprecated {@link SecurityContext#securityForOperation}
-   */
-  @Deprecated
-  public List<SecurityReference> securityForPath(String path) {
-    if (selector.test(path)) {
-      return securityReferences;
-    }
-    return new ArrayList<SecurityReference>();
-  }
-
   public List<SecurityReference> securityForOperation(OperationContext operationContext) {
     if (selector.test(operationContext.requestMappingPattern())
         && methodSelector.test(operationContext.httpMethod())) {
       return securityReferences;
     }
-    return new ArrayList<SecurityReference>();
-  }
-
-  public List<SecurityReference> getSecurityReferences() {
-    return securityReferences;
-  }
-
-  public Predicate<HttpMethod> getMethodSelector() {
-    return methodSelector;
+    return new ArrayList<>();
   }
 
   public static SecurityContextBuilder builder() {

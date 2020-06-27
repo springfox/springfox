@@ -31,9 +31,6 @@ public class SecurityContextBuilder {
   private Predicate<String> pathSelector = (each) -> true;
   private Predicate<HttpMethod> methodSelector;
 
-  SecurityContextBuilder() {
-  }
-
   public SecurityContextBuilder securityReferences(
       List<SecurityReference> securityReferences) {
     this.securityReferences = securityReferences;
