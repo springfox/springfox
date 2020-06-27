@@ -26,12 +26,10 @@ import springfox.documentation.OperationNameGenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 @Component
 public class CachingOperationNameGenerator implements OperationNameGenerator {
   private static final Logger LOG = LoggerFactory.getLogger(CachingOperationNameGenerator.class);
-  private Map<String, Integer> generated = new HashMap<>();
+  private final Map<String, Integer> generated = new HashMap<>();
 
   @Override
   public String startingWith(String prefix) {

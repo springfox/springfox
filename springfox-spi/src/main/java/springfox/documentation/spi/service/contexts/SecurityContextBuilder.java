@@ -34,8 +34,7 @@ public class SecurityContextBuilder {
   private Predicate<HttpMethod> methodSelector;
   private Predicate<OperationContext> operationSelector;
 
-  public SecurityContextBuilder securityReferences(
-      List<SecurityReference> securityReferences) {
+  public SecurityContextBuilder securityReferences(List<SecurityReference> securityReferences) {
     this.securityReferences.addAll(nullToEmptyList(securityReferences));
     return this;
   }

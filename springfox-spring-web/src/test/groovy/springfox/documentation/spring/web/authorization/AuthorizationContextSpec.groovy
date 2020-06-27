@@ -18,26 +18,43 @@
  */
 
 package springfox.documentation.spring.web.authorization
+
+import org.springframework.http.HttpMethod
+import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
-import springfox.documentation.spring.web.mixins.AuthSupport
+import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.PathSelectors
+import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spi.service.contexts.SecurityContext
+import springfox.documentation.spring.web.mixins.AuthSupport
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 class AuthorizationContextSpec extends Specification implements AuthSupport {
 
-   def "scala authorizations"() {
+  def "Authorizations work as expected"() {
     given:
-      SecurityContext authorizationContext = SecurityContext.builder()
-              .securityReferences(auth)
-              .forPaths(PathSelectors.any())
-              .build()
+    SecurityContext authorizationContext = SecurityContext.builder()
+        .forPaths(PathSelectors.any())
+        .forHttpMethods { true }
+        .operationSelector { o -> o.httpMethod() == HttpMethod.GET }
+        .securityReferences(auth)
+        .build()
     expect:
-      authorizationContext.getSecurityReferences().size() == expected
+    authorizationContext.securityForOperation(operationContext()).size() == expected
 
     where:
-      auth          | expected
-      defaultAuth() | 1
-      []            | 0
-   }
+    auth          | expected
+    defaultAuth() | 1
+    []            | 0
+  }
+
+  private OperationContext operationContext() {
+    new OperationContext(new OperationBuilder(
+        new CachingOperationNameGenerator()),
+        RequestMethod.GET,
+        Mock(RequestMappingContext),
+        1)
+  }
 
 }
