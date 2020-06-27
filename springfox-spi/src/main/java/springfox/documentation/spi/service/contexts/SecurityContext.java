@@ -34,21 +34,27 @@ import java.util.function.Predicate;
  */
 public class SecurityContext {
 
-  private final List<SecurityReference> securityReferences;
+  private final List<SecurityReference> securityReferences = new ArrayList<>();
   private final Predicate<String> selector;
   private final Predicate<HttpMethod> methodSelector;
+  private final Predicate<OperationContext> operationSelector;
 
   public SecurityContext(
       List<SecurityReference> securityReferences,
       Predicate<String> selector,
-      Predicate<HttpMethod> methodSelector) {
+      Predicate<HttpMethod> methodSelector,
+      Predicate<OperationContext> operationSelector) {
 
-    this.securityReferences = securityReferences;
+    this.securityReferences.addAll(securityReferences);
     this.selector = selector;
     this.methodSelector = methodSelector;
+    this.operationSelector = operationSelector;
   }
 
   public List<SecurityReference> securityForOperation(OperationContext operationContext) {
+    if (operationSelector != null && operationSelector.test(operationContext)) {
+      return securityReferences;
+    }
     if (selector.test(operationContext.requestMappingPattern())
         && methodSelector.test(operationContext.httpMethod())) {
       return securityReferences;

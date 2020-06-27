@@ -106,7 +106,7 @@ public class OperationContext {
   }
 
   private Predicate<SecurityContext> pathMatches() {
-    return input -> input.securityForOperation(OperationContext.this) != null;
+    return input -> !input.securityForOperation(OperationContext.this).isEmpty();
   }
 
   public String requestMappingPattern() {
