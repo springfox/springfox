@@ -45,31 +45,14 @@ public class SecurityConfigurationBuilder {
 
   public SecurityConfiguration build() {
     return new SecurityConfiguration(
-        defaultIfAbsent(
-            clientId,
-            null),
-        defaultIfAbsent(
-            clientSecret,
-            null),
-        defaultIfAbsent(
-            realm,
-            null),
-        defaultIfAbsent(
-            appName,
-            null),
-        defaultIfAbsent(
-            scopeSeparator,
-            null),
-        defaultIfAbsent(
-            additionalQueryStringParams,
-            null),
-        defaultIfAbsent(
-            useBasicAuthenticationWithAccessCodeGrant,
-            null),
-        defaultIfAbsent(
-            enableCsrfSupport,
-            null)
-    );
+        defaultIfAbsent(clientId, null),
+        defaultIfAbsent(clientSecret, null),
+        defaultIfAbsent(realm, null),
+        defaultIfAbsent(appName, null),
+        defaultIfAbsent(scopeSeparator, null),
+        defaultIfAbsent(additionalQueryStringParams, null),
+        defaultIfAbsent(useBasicAuthenticationWithAccessCodeGrant, null),
+        defaultIfAbsent(enableCsrfSupport, null));
   }
 
   /**
@@ -149,5 +132,19 @@ public class SecurityConfigurationBuilder {
   public SecurityConfigurationBuilder enableCsrfSupport(Boolean enableCsrfSupport) {
     this.enableCsrfSupport = enableCsrfSupport;
     return this;
+  }
+
+  public SecurityConfigurationBuilder copyOf(SecurityConfiguration other) {
+    if (other == null) {
+      return this;
+    }
+    return this.clientId(other.getClientId())
+        .clientSecret(other.getClientSecret())
+        .realm(other.getRealm())
+        .appName(other.getAppName())
+        .scopeSeparator(other.scopeSeparator())
+        .additionalQueryStringParams(other.getAdditionalQueryStringParams())
+        .useBasicAuthenticationWithAccessCodeGrant(other.getUseBasicAuthenticationWithAccessCodeGrant())
+        .enableCsrfSupport(other.getEnableCsrfSupport());
   }
 }

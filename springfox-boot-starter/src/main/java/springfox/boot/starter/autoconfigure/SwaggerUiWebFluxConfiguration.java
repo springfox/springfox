@@ -18,14 +18,8 @@ public class SwaggerUiWebFluxConfiguration {
   private String swaggerBaseUrl;
 
   @Bean
-  public SwaggerUiWebFluxConfigurer swaggerUiWebfluxConfigurer(SwaggerUiWebFluxTransformer transformer) {
-    return new SwaggerUiWebFluxConfigurer(fixup(swaggerBaseUrl), transformer);
-  }
-
-  @Bean
-  @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-  public SwaggerUiWebFluxTransformer swaggerUiWebFluxTransformer() {
-    return new SwaggerUiWebFluxTransformer(fixup(swaggerBaseUrl));
+  public SwaggerUiWebFluxConfigurer swaggerUiWebfluxConfigurer() {
+    return new SwaggerUiWebFluxConfigurer(fixup(swaggerBaseUrl));
   }
 
   private String fixup(String swaggerBaseUrl) {

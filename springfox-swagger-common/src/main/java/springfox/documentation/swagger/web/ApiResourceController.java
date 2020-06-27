@@ -20,17 +20,17 @@
 package springfox.documentation.swagger.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
-
-import static java.util.Optional.*;
 
 @RestController
 @ApiIgnore
@@ -47,20 +47,26 @@ public class ApiResourceController {
 
   @Autowired
   public ApiResourceController(
-      SwaggerResourcesProvider swaggerResources) {
+      SwaggerResourcesProvider swaggerResources,
+      @Value("${springfox.documentation.swagger-ui.base-url:}") String swaggerUiBaseUrl) {
     this.swaggerResources = swaggerResources;
+    this.uiConfiguration = UiConfigurationBuilder.builder()
+        .copyOf(uiConfiguration)
+        .swaggerUiBaseUrl(StringUtils.trimTrailingCharacter(swaggerUiBaseUrl, '/'))
+        .build();
+    this.securityConfiguration = SecurityConfigurationBuilder.builder()
+        .copyOf(securityConfiguration)
+        .build();
   }
 
   @GetMapping(value = "/configuration/security", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<SecurityConfiguration> securityConfiguration() {
-    return new ResponseEntity<>(
-        ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
+    return new ResponseEntity<>(securityConfiguration, HttpStatus.OK);
   }
 
   @GetMapping(value = "/configuration/ui", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<UiConfiguration> uiConfiguration() {
-    return new ResponseEntity<>(
-        ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
+    return new ResponseEntity<>(uiConfiguration, HttpStatus.OK);
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

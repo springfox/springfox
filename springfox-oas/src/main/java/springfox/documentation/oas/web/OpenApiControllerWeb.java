@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class OpenApiControllerWeb {
   public static final String OPEN_API_SPECIFICATION_PATH
-      = "${springfox.documentation.swagger-ui.base-url:}${springfox.documentation.open-api.v3.path:/v3/api-docs}";
+      = "${springfox.documentation.open-api.v3.path:/v3/api-docs}";
   protected static final String HAL_MEDIA_TYPE = "application/hal+json";
   private final DocumentationCache documentationCache;
   private final ServiceModelToOpenApiMapper mapper;

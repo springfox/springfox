@@ -23,7 +23,6 @@ import io.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -55,7 +54,7 @@ import static springfox.documentation.swagger2.web.Swagger2ControllerWebMvc.*;
 @RequestMapping(SWAGGER2_SPECIFICATION_PATH)
 public class Swagger2ControllerWebMvc {
   public static final String SWAGGER2_SPECIFICATION_PATH
-      = "${springfox.documentation.swagger-ui.base-url:}${springfox.documentation.swagger.v2.path:/v2/api-docs}";
+      = "${springfox.documentation.swagger.v2.path:/v2/api-docs}";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2ControllerWebMvc.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
@@ -64,9 +63,6 @@ public class Swagger2ControllerWebMvc {
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
   private final JsonSerializer jsonSerializer;
-
-  @Value(SWAGGER2_SPECIFICATION_PATH)
-  private String path;
 
   @Autowired
   public Swagger2ControllerWebMvc(

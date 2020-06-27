@@ -50,8 +50,7 @@ public class OpenApiControllerWebMvc extends OpenApiControllerWeb {
       DocumentationCache documentationCache,
       ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
-      @Value(OPEN_API_SPECIFICATION_PATH)
-          String oasPath) {
+      @Value(OPEN_API_SPECIFICATION_PATH) String oasPath) {
     super(documentationCache, mapper, jsonSerializer, oasPath);
   }
 

@@ -20,13 +20,8 @@ public class SwaggerUiWebMvcConfiguration {
   private String swaggerBaseUrl;
 
   @Bean
-  public SwaggerUiWebMvcConfigurer swaggerUiConfigurer(SwaggerUiWebMvcTransformer transformer) {
-    return new SwaggerUiWebMvcConfigurer(fixup(swaggerBaseUrl), transformer);
-  }
-
-  @Bean
-  public SwaggerUiWebMvcTransformer swaggerUiTransformer() {
-    return new SwaggerUiWebMvcTransformer(fixup(swaggerBaseUrl));
+  public SwaggerUiWebMvcConfigurer swaggerUiConfigurer() {
+    return new SwaggerUiWebMvcConfigurer(fixup(swaggerBaseUrl));
   }
 
   private String fixup(String swaggerBaseUrl) {

@@ -31,10 +31,10 @@ class InMemorySwaggerResourcesProviderSpec extends Specification {
     "/"     | ""      | "/"
     "/"     | "/"     | "/"
     "/"     | "/path" | "/path"
-    "/path" | null    | "/path/v3/api-docs"
-    "/path" | ""      | "/path"
-    "/path" | "/"     | "/path"
-    "/path" | "/path" | "/path/path"
+    "/path" | null    | "/v3/api-docs"
+    "/path" | ""      | "/"
+    "/path" | "/"     | "/"
+    "/path" | "/path" | "/path"
   }
 
   def mockEnv(baseUrl, oasPath) {

@@ -1,31 +1,23 @@
 package springfox.boot.starter.autoconfigure;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.reactive.resource.ResourceTransformer;
 
 public class SwaggerUiWebFluxConfigurer implements WebFluxConfigurer {
   private final String baseUrl;
-  private final ResourceTransformer transformer;
 
   public SwaggerUiWebFluxConfigurer(
-      String baseUrl,
-      ResourceTransformer transformer) {
+      String baseUrl) {
     this.baseUrl = baseUrl;
-    this.transformer = transformer;
   }
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    String baseUrl = StringUtils.trimTrailingCharacter(this.baseUrl, '/');
     registry.
-        addResourceHandler(baseUrl + "/swagger-ui.html**")
-        .addResourceLocations("classpath:/META-INF/resources/swagger-ui.html")
-        .resourceChain(false)
-        .addTransformer(transformer);
-    registry.
-        addResourceHandler(baseUrl + "/webjars/**")
-        .addResourceLocations("classpath:/META-INF/resources/webjars/")
-        .resourceChain(false)
-        .addTransformer(transformer);
+        addResourceHandler(baseUrl + "/swagger-ui/**")
+        .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
+        .resourceChain(false);
   }
 }

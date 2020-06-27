@@ -28,9 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
 import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.ResourceListing
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
@@ -51,9 +49,6 @@ class ApiResourceControllerSpec extends Specification {
     "enableCsrfSupport": true
 }"""
   def ui = """{
-    "apisSorter":"alpha",
-    "jsonEditor":false,
-    "showRequestHeaders":false, 
     "deepLinking": true,
     "displayOperationId": false,
     "defaultModelsExpandDepth": 1,
@@ -88,7 +83,7 @@ class ApiResourceControllerSpec extends Specification {
   def sut
 
   def setup() {
-    sut = new ApiResourceController(inMemorySwaggerResources())
+    sut = new ApiResourceController(inMemorySwaggerResources(), "/")
     sut.with {
       securityConfiguration = SecurityConfigurationBuilder.builder()
           .clientId("client")
@@ -147,7 +142,7 @@ class ApiResourceControllerSpec extends Specification {
         .basePath("/base")
         .resourceListing {
           it.apiVersion("1.0")
-            .info(ApiInfo.DEFAULT)
+              .info(ApiInfo.DEFAULT)
         }.build())
     cache
   }

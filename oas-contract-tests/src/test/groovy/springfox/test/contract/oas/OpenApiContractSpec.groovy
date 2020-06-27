@@ -62,7 +62,7 @@ class OpenApiContractSpec extends Specification implements FileAccess {
   def 'should honor open api 3.0 resource listing #groupName'() {
     given:
     RequestEntity<Void> request = RequestEntity.get(
-        new URI("http://localhost:$port$baseUrl/v3/api-docs?group=$groupName"))
+        new URI("http://localhost:$port/v3/api-docs?group=$groupName"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
     String contract = fileContents("/contracts/$contractFile")
@@ -114,17 +114,17 @@ class OpenApiContractSpec extends Specification implements FileAccess {
     then:
     result.find {
       it.name == 'bugs' &&
-          it.url == "$baseUrl/v3/api-docs?group=bugs" &&
+          it.url == "/v3/api-docs?group=bugs" &&
           it.swaggerVersion == '3.0.3'
     }
     result.find {
       it.name == 'petstore' &&
-          it.url == "$baseUrl/v3/api-docs?group=petstore" &&
+          it.url == "/v3/api-docs?group=petstore" &&
           it.swaggerVersion == '3.0.3'
     }
     result.find {
       it.name == 'default' &&
-          it.url == "$baseUrl/v3/api-docs" &&
+          it.url == "/v3/api-docs" &&
           it.swaggerVersion == '3.0.3'
     }
   }
