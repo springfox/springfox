@@ -45,6 +45,10 @@ public class ScalarTypes {
     SCALAR_TYPE_LOOKUP.put(Currency.class, ScalarType.BIGDECIMAL);
     SCALAR_TYPE_LOOKUP.put(UUID.class, ScalarType.UUID);
     SCALAR_TYPE_LOOKUP.put(MultipartFile.class, ScalarType.BINARY);
+    SCALAR_TYPE_LOOKUP.put(File.class, ScalarType.BINARY);
+    SCALAR_TYPE_LOOKUP.put(URL.class, ScalarType.URL);
+    SCALAR_TYPE_LOOKUP.put(URI.class, ScalarType.URI);
+    SCALAR_TYPE_LOOKUP.put(Object.class, ScalarType.OBJECT);
   }
 
   private ScalarTypes() {

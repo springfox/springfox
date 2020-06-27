@@ -23,6 +23,9 @@ public class ScalarType {
   public static final ScalarType UUID = new ScalarType("string", "uuid");
   public static final ScalarType EMAIL = new ScalarType("string", "email");
   public static final ScalarType CURRENCY = new ScalarType("number", "bigdecimal");
+  public static final ScalarType URI = new ScalarType("string", "uri");
+  public static final ScalarType URL = new ScalarType("string", "url");
+  public static final ScalarType OBJECT = new ScalarType("object");
 
   private static final List<ScalarType> KNOWN_TYPES =
       Arrays.asList(
@@ -41,7 +44,10 @@ public class ScalarType {
           BIGDECIMAL,
           UUID,
           EMAIL,
-          CURRENCY);
+          CURRENCY,
+          URI,
+          URL,
+          OBJECT);
 
   private final String type;
   private final String format;

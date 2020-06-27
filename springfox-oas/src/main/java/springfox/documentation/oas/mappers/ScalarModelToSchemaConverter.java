@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.media.DateSchema;
 import io.swagger.v3.oas.models.media.DateTimeSchema;
 import io.swagger.v3.oas.models.media.IntegerSchema;
 import io.swagger.v3.oas.models.media.NumberSchema;
+import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.media.UUIDSchema;
@@ -36,6 +37,9 @@ public class ScalarModelToSchemaConverter implements Converter<ScalarModelSpecif
     SCALAR_SCHEMA_FACTORY.put(ScalarType.DATE, any -> new DateSchema());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.DATE_TIME, any -> new DateTimeSchema());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.UUID, any -> new UUIDSchema());
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.URL, any -> new StringSchema().format("url"));
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.URI, any -> new StringSchema().format("uri"));
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.OBJECT, any -> new ObjectSchema());
   }
 
   @Override

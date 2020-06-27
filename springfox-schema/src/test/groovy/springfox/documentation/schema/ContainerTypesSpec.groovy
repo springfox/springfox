@@ -134,7 +134,7 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
     "enums"           | ScalarType.STRING
     "aliasOfIntegers" | ScalarType.INTEGER
     "strings"         | ScalarType.STRING
-    "objects"         | Object
+    "objects"         | ScalarType.OBJECT
     "substituted"     | Substituted
   }
 
@@ -238,7 +238,7 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
     "enums"           | ScalarType.STRING
     "aliasOfIntegers" | ScalarType.INTEGER
     "strings"         | ScalarType.STRING
-    "objects"         | Object
+    "objects"         | ScalarType.OBJECT
   }
 
   @Unroll
@@ -288,7 +288,7 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
     "enums"           | ScalarType.STRING
     "aliasOfIntegers" | ScalarType.INTEGER
     "strings"         | ScalarType.STRING
-    "objects"         | Object
+    "objects"         | ScalarType.OBJECT
     "substituted"     | Substituted
   }
 
