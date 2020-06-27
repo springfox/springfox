@@ -63,7 +63,7 @@ public class AbstractDocumentationPluginsBootstrapper {
       Defaults defaults,
       TypeResolver typeResolver,
       PathProvider pathProvider) {
-    
+
     this.documentationPluginsManager = documentationPluginsManager;
     this.handlerProviders = handlerProviders;
     this.scanned = scanned;
@@ -110,8 +110,7 @@ public class AbstractDocumentationPluginsBootstrapper {
         .map(AlternateTypeRuleConvention::rules)
         .flatMap((rule) -> StreamSupport.stream(rule.spliterator(), false))
         .collect(toList());
-    return documentationPluginsManager
-        .createContextBuilder(documentationType, defaultConfiguration)
+    return documentationPluginsManager.createContextBuilder(documentationType, defaultConfiguration)
         .rules(rules)
         .requestHandlers(combiner().combine(requestHandlers));
   }

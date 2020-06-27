@@ -64,7 +64,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -289,9 +288,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       String namePrefix) {
 
     return input -> {
-      ResolvedType type = paramOrReturnType(
-          typeResolver,
-          input);
+      ResolvedType type = paramOrReturnType(typeResolver, input);
       if (!givenContext.canIgnore(type)) {
         if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
           return propertySpecificationsFor(
@@ -416,7 +413,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
               namePrefix));
     }
     return properties.stream()
-        .filter(hiddenProperties())
+        .filter(input -> !input.isHidden())
         .collect(toList());
   }
 
@@ -495,10 +492,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       return false;
     }
     return true;
-  }
-
-  private static Predicate<? super springfox.documentation.schema.ModelProperty> hiddenProperties() {
-    return (Predicate<springfox.documentation.schema.ModelProperty>) input -> !input.isHidden();
   }
 
   private Optional<ResolvedField> findField(

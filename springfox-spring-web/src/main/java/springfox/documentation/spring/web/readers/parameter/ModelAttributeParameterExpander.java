@@ -144,9 +144,7 @@ public class ModelAttributeParameterExpander {
     });
 
     Stream<ModelAttributeField> simpleFields = attributes.stream().filter(simpleType());
-    simpleFields.forEach((each) -> {
-      parameters.add(simpleFields(context.getParentName(), context, each));
-    });
+    simpleFields.forEach(each -> parameters.add(simpleFields(context.getParentName(), context, each)));
     return parameters.stream()
         .filter(hiddenParameter().negate())
         .filter(voidParameters().negate())
@@ -155,7 +153,7 @@ public class ModelAttributeParameterExpander {
 
   private Predicate<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> hiddenParameter() {
     return c -> c.getLegacy()
-        .map(p -> p.isHidden())
+        .map(Parameter::isHidden)
         .orElse(false);
   }
 
@@ -205,7 +203,7 @@ public class ModelAttributeParameterExpander {
     LOG.debug("Attempting to expand field: {}", each);
     String dataTypeName =
         ofNullable(springfox.documentation.schema.Types.typeNameFor(each.getFieldType().getErasedType()))
-        .orElse(each.getFieldType().getErasedType().getSimpleName());
+            .orElse(each.getFieldType().getErasedType().getSimpleName());
     LOG.debug("Building parameter for field: {}, with type: {}", each, each.getFieldType());
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,
@@ -274,7 +272,9 @@ public class ModelAttributeParameterExpander {
     return input -> methods.contains(input.getRawMember());
   }
 
-  private String nestedParentName(String parentName, ModelAttributeField attribute) {
+  private String nestedParentName(
+      String parentName,
+      ModelAttributeField attribute) {
     String name = attribute.getName();
     ResolvedType fieldType = attribute.getFieldType();
     if (isContainerType(fieldType) &&
@@ -288,7 +288,9 @@ public class ModelAttributeParameterExpander {
     return String.format("%s.%s", parentName, name);
   }
 
-  private ResolvedType fieldType(AlternateTypeProvider alternateTypeProvider, ResolvedMethod method) {
+  private ResolvedType fieldType(
+      AlternateTypeProvider alternateTypeProvider,
+      ResolvedMethod method) {
     return alternateTypeProvider.alternateFor(method.getType());
   }
 
@@ -320,7 +322,7 @@ public class ModelAttributeParameterExpander {
     return pluginsManager;
   }
 
-  public void setPluginsManager(DocumentationPluginsManager pluginsManager) {
+  void setPluginsManager(DocumentationPluginsManager pluginsManager) {
     this.pluginsManager = pluginsManager;
   }
 }
