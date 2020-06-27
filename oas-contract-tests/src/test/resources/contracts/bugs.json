@@ -129,6 +129,40 @@
                     }
                 }
             }
+        },
+        "/bugs/3348/{callId}": {
+            "get": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3348",
+                "operationId": "bug3348UsingGET",
+                "parameters": [
+                    {
+                        "name": "callId",
+                        "in": "path",
+                        "description": "callId",
+                        "required": true,
+                        "style": "simple",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/octet-stream": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
