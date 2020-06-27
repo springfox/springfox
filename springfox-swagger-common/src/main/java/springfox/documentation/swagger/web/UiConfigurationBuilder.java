@@ -36,14 +36,15 @@ public class UiConfigurationBuilder {
   private Integer maxDisplayedTags;
   private OperationsSorter operationsSorter;
   private Boolean showExtensions;
-  private Boolean showCommonExtensions;
+  private Boolean showCommonExtensions = false;
   private TagsSorter tagsSorter;
 
   /*--------------------------------------------*\
    * Network
   \*--------------------------------------------*/
-  private String[] supportedSubmitMethods;
+  private String[] supportedSubmitMethods = UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS;
   private String validatorUrl;
+  private String swaggerUiBaseUrl;
 
   private UiConfigurationBuilder() {
   }
@@ -68,7 +69,8 @@ public class UiConfigurationBuilder {
         defaultIfAbsent(showCommonExtensions, false),
         defaultIfAbsent(tagsSorter, TagsSorter.ALPHA),
         defaultIfAbsent(supportedSubmitMethods, UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS),
-        defaultIfAbsent(validatorUrl, null)
+        defaultIfAbsent(validatorUrl, null),
+        defaultIfAbsent(swaggerUiBaseUrl, null)
     );
   }
 
@@ -225,5 +227,33 @@ public class UiConfigurationBuilder {
   public UiConfigurationBuilder validatorUrl(String validatorUrl) {
     this.validatorUrl = validatorUrl;
     return this;
+  }
+
+  public UiConfigurationBuilder swaggerUiBaseUrl(String swaggerUiBaseUrl) {
+    this.swaggerUiBaseUrl = swaggerUiBaseUrl;
+    return this;
+  }
+
+  public UiConfigurationBuilder copyOf(UiConfiguration other) {
+    if (other == null) {
+      return this;
+    }
+    return this.deepLinking(other.getDeepLinking())
+        .defaultModelExpandDepth(other.getDefaultModelExpandDepth())
+        .defaultModelRendering(other.getDefaultModelRendering())
+        .displayOperationId(other.getDisplayOperationId())
+        .defaultModelsExpandDepth(other.getDefaultModelsExpandDepth())
+        .displayRequestDuration(other.getDisplayRequestDuration())
+        .docExpansion(other.getDocExpansion())
+        .filter(other.getFilter())
+        .maxDisplayedTags(other.getMaxDisplayedTags())
+        .operationsSorter(other.getOperationsSorter())
+        .showCommonExtensions(other.getShowCommonExtensions())
+        .defaultModelExpandDepth(other.getDefaultModelExpandDepth())
+        .showExtensions(other.getShowExtensions())
+        .supportedSubmitMethods(other.getSupportedSubmitMethods())
+        .tagsSorter(other.getTagsSorter())
+        .validatorUrl(other.getValidatorUrl())
+        .swaggerUiBaseUrl(other.getSwaggerBaseUiUrl());
   }
 }

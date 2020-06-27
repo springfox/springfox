@@ -26,26 +26,21 @@ import spock.lang.Specification
 
 class UiConfigurationBuilderSpec extends Specification {
   def uiConfig = UiConfigurationBuilder.builder().build()
-  def expected = "{\n" +
-      "    \"apisSorter\":\"alpha\"," +
-      "    \"jsonEditor\":false," +
-      "    \"showRequestHeaders\":false," +
-      "    \"deepLinking\": true,\n" +
-      "    \"displayOperationId\": false,\n" +
-      "    \"defaultModelsExpandDepth\": 1,\n" +
-      "    \"defaultModelExpandDepth\": 1,\n" +
-      "    \"defaultModelRendering\": \"example\",\n" +
-      "    \"displayRequestDuration\": false,\n" +
-      "    \"docExpansion\": \"none\",\n" +
-      "    \"filter\": false,\n" +
-      "    \"operationsSorter\": \"alpha\",\n" +
-      "    \"showCommonExtensions\": false,\n" +
-      "    \"showExtensions\": false,\n" +
-      "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"supportedSubmitMethods\": [\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\"," +
-      "\"trace\"],\n" +
-      "    \"validatorUrl\": \"\"\n" +
-      "}"
+  def expected = "{" +
+      "\"deepLinking\":true," +
+      "\"displayOperationId\":false," +
+      "\"defaultModelsExpandDepth\":1," +
+      "\"defaultModelExpandDepth\":1," +
+      "\"defaultModelRendering\":\"example\"," +
+      "\"displayRequestDuration\":false," +
+      "\"docExpansion\":\"none\"," +
+      "\"filter\":false," +
+      "\"operationsSorter\":\"alpha\"," +
+      "\"showExtensions\":false," +
+      "\"showCommonExtensions\":false," +
+      "\"tagsSorter\":\"alpha\"," +
+      "\"validatorUrl\":\"\"," +
+      "\"supportedSubmitMethods\":[\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\",\"trace\"]}"
 
   def "Renders non-null values using default ObjectMapper"() {
     given:
