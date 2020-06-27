@@ -32,7 +32,7 @@ import springfox.documentation.service.TokenRequestEndpoint
 import static java.util.Collections.*
 
 trait AuthSupport {
-  def defaultAuth() {
+  List<SecurityReference> defaultAuth() {
     AuthorizationScope authorizationScope =
             new AuthorizationScope("global", "accessEverything")
     AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];

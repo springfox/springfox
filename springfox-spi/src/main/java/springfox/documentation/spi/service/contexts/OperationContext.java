@@ -86,7 +86,7 @@ public class OperationContext {
   }
 
   /**
-   * Use {@link OperationContext#getRequestParameters()} instead
+   * Use {@link OperationContext#getGlobalRequestParameters()} instead
    * @deprecated @since 3.0
    * @return List
    */
@@ -95,7 +95,7 @@ public class OperationContext {
     return nullToEmptyList(getDocumentationContext().getGlobalRequestParameters());
   }
 
-  public List<RequestParameter> getRequestParameters() {
+  public List<RequestParameter> getGlobalRequestParameters() {
     return nullToEmptyList(getDocumentationContext().getGlobalParameters());
   }
 
@@ -106,7 +106,7 @@ public class OperationContext {
   }
 
   private Predicate<SecurityContext> pathMatches() {
-    return input -> input.securityForOperation(OperationContext.this) != null;
+    return input -> !input.securityForOperation(OperationContext.this).isEmpty();
   }
 
   public String requestMappingPattern() {

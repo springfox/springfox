@@ -34,58 +34,32 @@ import java.util.function.Predicate;
  */
 public class SecurityContext {
 
-  private final List<SecurityReference> securityReferences;
+  private final List<SecurityReference> securityReferences = new ArrayList<>();
   private final Predicate<String> selector;
   private final Predicate<HttpMethod> methodSelector;
-
-  public SecurityContext(
-      List<SecurityReference> securityReferences,
-      Predicate<String> selector) {
-
-    this.securityReferences = securityReferences;
-    this.selector = selector;
-    this.methodSelector = (item) -> true;
-  }
+  private final Predicate<OperationContext> operationSelector;
 
   public SecurityContext(
       List<SecurityReference> securityReferences,
       Predicate<String> selector,
-      Predicate<HttpMethod> methodSelector) {
+      Predicate<HttpMethod> methodSelector,
+      Predicate<OperationContext> operationSelector) {
 
-    this.securityReferences = securityReferences;
+    this.securityReferences.addAll(securityReferences);
     this.selector = selector;
     this.methodSelector = methodSelector;
-  }
-
-  /**
-   * Use securityForOperation instead
-   * @since 2.8.1
-   * @param path path to secure
-   * @return list of applicable security references
-   * @deprecated {@link SecurityContext#securityForOperation}
-   */
-  @Deprecated
-  public List<SecurityReference> securityForPath(String path) {
-    if (selector.test(path)) {
-      return securityReferences;
-    }
-    return new ArrayList<SecurityReference>();
+    this.operationSelector = operationSelector;
   }
 
   public List<SecurityReference> securityForOperation(OperationContext operationContext) {
+    if (operationSelector != null && operationSelector.test(operationContext)) {
+      return securityReferences;
+    }
     if (selector.test(operationContext.requestMappingPattern())
         && methodSelector.test(operationContext.httpMethod())) {
       return securityReferences;
     }
-    return new ArrayList<SecurityReference>();
-  }
-
-  public List<SecurityReference> getSecurityReferences() {
-    return securityReferences;
-  }
-
-  public Predicate<HttpMethod> getMethodSelector() {
-    return methodSelector;
+    return new ArrayList<>();
   }
 
   public static SecurityContextBuilder builder() {

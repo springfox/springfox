@@ -47,8 +47,6 @@ public class SecurityReference {
   }
 
   public static class SecurityReferenceBuilder {
-    SecurityReferenceBuilder() {
-    }
 
     private String reference;
     private AuthorizationScope[] scopes;

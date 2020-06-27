@@ -84,7 +84,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList()));
-    context.operationBuilder().requestParameters(new HashSet<>(context.getRequestParameters()));
+    context.operationBuilder().requestParameters(new HashSet<>(context.getGlobalRequestParameters()));
     Collection<RequestParameter> requestParameters = compatibilities.stream()
         .map(Compatibility::getModern)
         .filter(Optional::isPresent)
