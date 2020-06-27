@@ -101,7 +101,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ResponseContext responseContext = new ResponseContext(
         context.getDocumentationContext(),
         context);
-    if (!springfox.documentation.schema.Types.isVoid(returnType)) {
+    if (!isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
           viewProvider.viewFor(context));

@@ -27,7 +27,7 @@ class TypesSpec extends Specification {
     given:
       def typeResolver = new TypeResolver()
     expect:
-      Types.isVoid(typeResolver.resolve(type)) == isVoid
+      ResolvedTypes.isVoid(typeResolver.resolve(type)) == isVoid
     where:
       type        | isVoid
       Void.class  | true

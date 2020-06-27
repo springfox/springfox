@@ -26,6 +26,9 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 @Component
 public class JacksonEnumTypeDeterminer implements EnumTypeDeterminer {
   public boolean isEnum(Class<?> type) {
+    if (type == null) {
+      return false;
+    }
     if (type.isEnum()) {
       JsonFormat annotation = type.getAnnotation(JsonFormat.class);
       if (annotation != null) {

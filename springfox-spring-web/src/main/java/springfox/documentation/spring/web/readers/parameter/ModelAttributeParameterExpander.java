@@ -31,8 +31,10 @@ import org.springframework.util.ClassUtils;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.Maps;
+import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.schema.property.bean.AccessorsProvider;
 import springfox.documentation.schema.property.field.FieldProvider;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -63,6 +65,7 @@ import static java.util.function.Function.*;
 import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spring.web.readers.parameter.ParameterTypeDeterminer.*;
 
 @Component
@@ -129,7 +132,10 @@ public class ModelAttributeParameterExpander {
       LOG.debug("Attempting to expand collection/array field: {}", each.getName());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
-      if (springfox.documentation.schema.Types.isBaseType(itemType)
+      if (itemType == null) {
+        return;
+      }
+      if (ScalarTypes.builtInScalarType(itemType).isPresent()
           || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
         parameters.add(simpleFields(context.getParentName(), context, each));
       } else {
@@ -187,8 +193,8 @@ public class ModelAttributeParameterExpander {
   }
 
   private Predicate<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> voidParameters() {
-    return input -> springfox.documentation.schema.Types.isVoid(input.getLegacy()
-        .flatMap(l -> l.getType())
+    return input -> isVoid(input.getLegacy()
+        .flatMap(Parameter::getType)
         .orElse(null));
   }
 
@@ -250,7 +256,7 @@ public class ModelAttributeParameterExpander {
   }
 
   private Predicate<ModelAttributeField> isBaseType() {
-    return input -> springfox.documentation.schema.Types.isBaseType(input.getFieldType())
+    return input -> ScalarTypes.builtInScalarType(input.getFieldType()).isPresent()
         || input.getFieldType().isPrimitive();
   }
 
@@ -278,7 +284,7 @@ public class ModelAttributeParameterExpander {
     String name = attribute.getName();
     ResolvedType fieldType = attribute.getFieldType();
     if (isContainerType(fieldType) &&
-        !springfox.documentation.schema.Types.isBaseType(collectionElementType(fieldType))) {
+        !ScalarTypes.builtInScalarType(collectionElementType(fieldType)).isPresent()) {
       name += "[0]";
     }
 
