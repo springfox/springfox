@@ -7,8 +7,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 public class SwaggerUiWebFluxConfigurer implements WebFluxConfigurer {
   private final String baseUrl;
 
-  public SwaggerUiWebFluxConfigurer(
-      String baseUrl) {
+  public SwaggerUiWebFluxConfigurer(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 

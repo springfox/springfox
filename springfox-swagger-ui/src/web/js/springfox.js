@@ -134,7 +134,7 @@ window.onload = () => {
   };
 
   const getBaseURL = () => {
-    const urlMatches = /(.*)\/swagger-ui\/index.html.*/.exec(window.location.href);
+    const urlMatches = /(.*)\/swagger-ui(\/index.html.*)*/.exec(window.location.href);
     return urlMatches[1];
   };
 
