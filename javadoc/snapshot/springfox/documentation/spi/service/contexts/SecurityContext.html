@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":42};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":9,"i1":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -156,14 +156,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List,java.util.function.Predicate)">SecurityContext</a></span>&#8203;(java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;securityReferences,
-               java.util.function.Predicate&lt;java.lang.String&gt;&nbsp;selector)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List,java.util.function.Predicate,java.util.function.Predicate)">SecurityContext</a></span>&#8203;(java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;securityReferences,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List,java.util.function.Predicate,java.util.function.Predicate,java.util.function.Predicate)">SecurityContext</a></span>&#8203;(java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;securityReferences,
                java.util.function.Predicate&lt;java.lang.String&gt;&nbsp;selector,
-               java.util.function.Predicate&lt;org.springframework.http.HttpMethod&gt;&nbsp;methodSelector)</code></th>
+               java.util.function.Predicate&lt;org.springframework.http.HttpMethod&gt;&nbsp;methodSelector,
+               java.util.function.Predicate&lt;<a href="OperationContext.html" title="class in springfox.documentation.spi.service.contexts">OperationContext</a>&gt;&nbsp;operationSelector)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -178,7 +174,7 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -190,28 +186,9 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.function.Predicate&lt;org.springframework.http.HttpMethod&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMethodSelector()">getMethodSelector</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSecurityReferences()">getSecurityReferences</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#securityForOperation(springfox.documentation.spi.service.contexts.OperationContext)">securityForOperation</a></span>&#8203;(<a href="OperationContext.html" title="class in springfox.documentation.spi.service.contexts">OperationContext</a>&nbsp;operationContext)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#securityForPath(java.lang.String)">securityForPath</a></span>&#8203;(java.lang.String&nbsp;path)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment"><a href="#securityForOperation(springfox.documentation.spi.service.contexts.OperationContext)"><code>securityForOperation(springfox.documentation.spi.service.contexts.OperationContext)</code></a></div>
-</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -237,17 +214,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.util.List,java.util.function.Predicate)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>SecurityContext</h4>
-<pre>public&nbsp;SecurityContext&#8203;(java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;securityReferences,
-                       java.util.function.Predicate&lt;java.lang.String&gt;&nbsp;selector)</pre>
-</li>
-</ul>
-<a id="&lt;init&gt;(java.util.List,java.util.function.Predicate,java.util.function.Predicate)">
+<a id="&lt;init&gt;(java.util.List,java.util.function.Predicate,java.util.function.Predicate,java.util.function.Predicate)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -255,7 +222,8 @@ extends java.lang.Object</pre>
 <h4>SecurityContext</h4>
 <pre>public&nbsp;SecurityContext&#8203;(java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;securityReferences,
                        java.util.function.Predicate&lt;java.lang.String&gt;&nbsp;selector,
-                       java.util.function.Predicate&lt;org.springframework.http.HttpMethod&gt;&nbsp;methodSelector)</pre>
+                       java.util.function.Predicate&lt;org.springframework.http.HttpMethod&gt;&nbsp;methodSelector,
+                       java.util.function.Predicate&lt;<a href="OperationContext.html" title="class in springfox.documentation.spi.service.contexts">OperationContext</a>&gt;&nbsp;operationSelector)</pre>
 </li>
 </ul>
 </li>
@@ -268,28 +236,6 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="securityForPath(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>securityForPath</h4>
-<pre class="methodSignature">@Deprecated
-public&nbsp;java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;securityForPath&#8203;(java.lang.String&nbsp;path)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment"><a href="#securityForOperation(springfox.documentation.spi.service.contexts.OperationContext)"><code>securityForOperation(springfox.documentation.spi.service.contexts.OperationContext)</code></a></div>
-</div>
-<div class="block">Use securityForOperation instead</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>path</code> - path to secure</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>list of applicable security references</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2.8.1</dd>
-</dl>
-</li>
-</ul>
 <a id="securityForOperation(springfox.documentation.spi.service.contexts.OperationContext)">
 <!--   -->
 </a>
@@ -297,24 +243,6 @@ public&nbsp;java.util.List&lt;<a href="../../../service/SecurityReference.html" 
 <li class="blockList">
 <h4>securityForOperation</h4>
 <pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;securityForOperation&#8203;(<a href="OperationContext.html" title="class in springfox.documentation.spi.service.contexts">OperationContext</a>&nbsp;operationContext)</pre>
-</li>
-</ul>
-<a id="getSecurityReferences()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getSecurityReferences</h4>
-<pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../../../service/SecurityReference.html" title="class in springfox.documentation.service">SecurityReference</a>&gt;&nbsp;getSecurityReferences()</pre>
-</li>
-</ul>
-<a id="getMethodSelector()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getMethodSelector</h4>
-<pre class="methodSignature">public&nbsp;java.util.function.Predicate&lt;org.springframework.http.HttpMethod&gt;&nbsp;getMethodSelector()</pre>
 </li>
 </ul>
 <a id="builder()">
