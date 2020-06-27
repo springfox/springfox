@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -184,6 +184,11 @@ implements org.springframework.web.servlet.config.annotation.WebMvcConfigurer</p
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry)">addResourceHandlers</a></span>&#8203;(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry&nbsp;registry)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewControllers(org.springframework.web.servlet.config.annotation.ViewControllerRegistry)">addViewControllers</a></span>&#8203;(org.springframework.web.servlet.config.annotation.ViewControllerRegistry&nbsp;registry)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -197,7 +202,7 @@ implements org.springframework.web.servlet.config.annotation.WebMvcConfigurer</p
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.springframework.web.servlet.config.annotation.WebMvcConfigurer</h3>
-<code>addArgumentResolvers, addCorsMappings, addFormatters, addInterceptors, addReturnValueHandlers, addViewControllers, configureAsyncSupport, configureContentNegotiation, configureDefaultServletHandling, configureHandlerExceptionResolvers, configureMessageConverters, configurePathMatch, configureViewResolvers, extendHandlerExceptionResolvers, extendMessageConverters, getMessageCodesResolver, getValidator</code></li>
+<code>addArgumentResolvers, addCorsMappings, addFormatters, addInterceptors, addReturnValueHandlers, configureAsyncSupport, configureContentNegotiation, configureDefaultServletHandling, configureHandlerExceptionResolvers, configureMessageConverters, configurePathMatch, configureViewResolvers, extendHandlerExceptionResolvers, extendMessageConverters, getMessageCodesResolver, getValidator</code></li>
 </ul>
 </li>
 </ul>
@@ -237,13 +242,26 @@ implements org.springframework.web.servlet.config.annotation.WebMvcConfigurer</p
 <a id="addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>addResourceHandlers</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addResourceHandlers&#8203;(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry&nbsp;registry)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>addResourceHandlers</code>&nbsp;in interface&nbsp;<code>org.springframework.web.servlet.config.annotation.WebMvcConfigurer</code></dd>
+</dl>
+</li>
+</ul>
+<a id="addViewControllers(org.springframework.web.servlet.config.annotation.ViewControllerRegistry)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>addViewControllers</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addViewControllers&#8203;(org.springframework.web.servlet.config.annotation.ViewControllerRegistry&nbsp;registry)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>addViewControllers</code>&nbsp;in interface&nbsp;<code>org.springframework.web.servlet.config.annotation.WebMvcConfigurer</code></dd>
 </dl>
 </li>
 </ul>
