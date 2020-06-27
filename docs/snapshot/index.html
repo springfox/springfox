@@ -3421,119 +3421,129 @@ is applied to the parameter.</td>
 110
 111
 112
+113
+114
+115
+116
+117
 </pre></td>
-  <td class="code"><pre>  <span class="directive">private</span> <span class="directive">final</span> CachingOperationNameGenerator operationNames;
+  <td class="code"><pre><span class="directive">private</span> <span class="directive">final</span> CachingOperationNameGenerator operationNames;
 
-  <span class="comment">/**
-   * @param operationNames - CachingOperationNameGenerator is a component bean
-   *                       that is available to be autowired
-   */</span>
-  <span class="directive">public</span> Bug1767ListingScanner(CachingOperationNameGenerator operationNames) {<i class="conum" data-value="9"></i><b>(9)</b>
-    <span class="local-variable">this</span>.operationNames = operationNames;
-  }
+<span class="comment">/**
+ * @param operationNames - CachingOperationNameGenerator is a component bean
+ *                       that is available to be autowired
+ */</span>
+<span class="directive">public</span> Bug1767ListingScanner(CachingOperationNameGenerator operationNames) {<i class="conum" data-value="9"></i><b>(9)</b>
+  <span class="local-variable">this</span>.operationNames = operationNames;
+}
 
-  <span class="comment">//@formatter:off</span>
-  <span class="annotation">@Override</span>
-  <span class="directive">public</span> <span class="predefined-type">List</span>&lt;ApiDescription&gt; apply(DocumentationContext context) {
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;(
-        <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="1"></i><b>(1)</b>
-                       <span class="keyword">new</span> ApiDescription(
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">/bugs/1767</span><span class="delimiter">&quot;</span></span>,
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug summary</span><span class="delimiter">&quot;</span></span>,
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
-                           <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="2"></i><b>(2)</b>
-                                <span class="keyword">new</span> OperationBuilder(operationNames)
-                                    .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
-                                    .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug1767GET</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
-                                    .method(HttpMethod.GET)
-                                    .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
-                                    .parameters(
-                                        <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="4"></i><b>(4)</b>
-                                             <span class="keyword">new</span> springfox.documentation.builders.ParameterBuilder()
-                                                 .description(
-                                                     <span class="string"><span class="delimiter">&quot;</span><span class="content">search by </span><span class="delimiter">&quot;</span></span>
-                                                         + <span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
-                                                 .type(<span class="keyword">new</span> TypeResolver()
-                                                           .resolve(<span class="predefined-type">String</span>.class))
-                                                 .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
-                                                 .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
-                                                 .parameterAccess(<span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>)
-                                                 .required(<span class="predefined-constant">true</span>)
-                                                 .modelRef(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(
-                                                     <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="5"></i><b>(5)</b>
-                                                 .build()))
-                                    .requestParameters(
-                                        <span class="predefined-type">Collections</span>.singletonList( <span class="comment">//&lt;4a&gt;</span>
-                                             <span class="keyword">new</span> RequestParameterBuilder()
-                                                 .description(
-                                                     <span class="string"><span class="delimiter">&quot;</span><span class="content">search by </span><span class="delimiter">&quot;</span></span>
-                                                         + <span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
-                                                 .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
-                                                 .required(<span class="predefined-constant">true</span>)
-                                                 .in(ParameterType.QUERY)
-                                                 .query(q -&gt; q.model(m -&gt; m.scalarModel(ScalarType.STRING))) <span class="comment">//&lt;5b&gt;</span>
-                                                 .build()))
-                                    .responses(responseMessages()) <i class="conum" data-value="6"></i><b>(6)</b>
-                                    .responseModel(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="7"></i><b>(7)</b>
-                                    .responses(responses()) <span class="comment">//&lt;6b&gt;</span>
-                                    .build()),
-                           <span class="predefined-constant">false</span>),
-                       <span class="keyword">new</span> ApiDescription(
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">different-group</span><span class="delimiter">&quot;</span></span>,
-                           <i class="conum" data-value="8"></i><b>(8)</b>
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">/different/2219</span><span class="delimiter">&quot;</span></span>,
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug summary</span><span class="delimiter">&quot;</span></span>,
-                           <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
-                           <span class="predefined-type">Collections</span>.singletonList(
-                               <span class="keyword">new</span> OperationBuilder(
-                                   operationNames)
-                                   .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
-                                   .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug2219GET</span><span class="delimiter">&quot;</span></span>)
-                                   .method(HttpMethod.GET)
-                                   .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
-                                   .parameters(
-                                       <span class="predefined-type">Collections</span>.singletonList(
-                                           <span class="keyword">new</span> springfox.documentation.builders.ParameterBuilder()
-                                               .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">description of bug 2219</span><span class="delimiter">&quot;</span></span>)
-                                               .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
-                                               .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
-                                               .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
-                                               .parameterAccess(<span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>)
-                                               .required(<span class="predefined-constant">true</span>)
-                                               .modelRef(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
-                                               .build()))
-                                   .responses(responseMessages())
-                                   .responseModel(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
-                                   .build()),
-                           <span class="predefined-constant">false</span>)));
-  }
-<span class="comment">//  @formatter:on</span>
+<span class="annotation">@Override</span>
+<span class="directive">public</span> <span class="predefined-type">List</span>&lt;ApiDescription&gt; apply(DocumentationContext context) {
+  <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;(
+      <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="keyword">new</span> ApiDescription(
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>,
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">/bugs/1767</span><span class="delimiter">&quot;</span></span>,
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug summary</span><span class="delimiter">&quot;</span></span>,
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
+              <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="2"></i><b>(2)</b>
+                  <span class="keyword">new</span> OperationBuilder(operationNames)
+                      .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
+                      .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug1767GET</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
+                      .method(HttpMethod.GET)
+                      .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
+                      .parameters(
+                          <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="4"></i><b>(4)</b>
+                              <span class="keyword">new</span> springfox.documentation.builders.ParameterBuilder()
+                                  .description(
+                                      <span class="string"><span class="delimiter">&quot;</span><span class="content">search by </span><span class="delimiter">&quot;</span></span>
+                                          + <span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
+                                  .type(<span class="keyword">new</span> TypeResolver()
+                                      .resolve(<span class="predefined-type">String</span>.class))
+                                  .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
+                                  .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
+                                  .parameterAccess(<span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>)
+                                  .required(<span class="predefined-constant">true</span>)
+                                  .modelRef(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(
+                                      <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="5"></i><b>(5)</b>
+                                  .build()))
+                      .requestParameters(
+                          <span class="predefined-type">Collections</span>.singletonList( <span class="comment">//&lt;4a&gt;</span>
+                              <span class="keyword">new</span> RequestParameterBuilder()
+                                  .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">search by description</span><span class="delimiter">&quot;</span></span>)
+                                  .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
+                                  .required(<span class="predefined-constant">true</span>)
+                                  .in(ParameterType.QUERY)
+                                  .query(q -&gt; q.model(m -&gt; m.scalarModel(ScalarType.STRING))) <span class="comment">//&lt;5b&gt;</span>
+                                  .build()))
+                      .responses(responseMessages()) <i class="conum" data-value="6"></i><b>(6)</b>
+                      .responseModel(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="7"></i><b>(7)</b>
+                      .responses(responses()) <span class="comment">//&lt;6b&gt;</span>
+                      .build()),
+              <span class="predefined-constant">false</span>),
+          <span class="keyword">new</span> ApiDescription(
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">different-group</span><span class="delimiter">&quot;</span></span>,
+              <i class="conum" data-value="8"></i><b>(8)</b>
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">/different/2219</span><span class="delimiter">&quot;</span></span>,
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug summary</span><span class="delimiter">&quot;</span></span>,
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
+              <span class="predefined-type">Collections</span>.singletonList(
+                  <span class="keyword">new</span> OperationBuilder(
+                      operationNames)
+                      .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
+                      .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug2219GET</span><span class="delimiter">&quot;</span></span>)
+                      .method(HttpMethod.GET)
+                      .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
+                      .parameters(
+                          <span class="predefined-type">Collections</span>.singletonList(
+                              <span class="keyword">new</span> springfox.documentation.builders.ParameterBuilder()
+                                  .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">description of bug 2219</span><span class="delimiter">&quot;</span></span>)
+                                  .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
+                                  .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
+                                  .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
+                                  .parameterAccess(<span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>)
+                                  .required(<span class="predefined-constant">true</span>)
+                                  .modelRef(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
+                                  .build()))
+                      .requestParameters(
+                          <span class="predefined-type">Collections</span>.singletonList(
+                              <span class="keyword">new</span> RequestParameterBuilder()
+                                  .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">description of bug 2219</span><span class="delimiter">&quot;</span></span>)
+                                  .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
+                                  .in(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
+                                  .required(<span class="predefined-constant">true</span>)
+                                  .query(q -&gt; q.model(m -&gt; m.scalarModel(ScalarType.STRING)))
+                                  .build()))
+                      .responses(responseMessages())
+                      .responseModel(<span class="keyword">new</span> springfox.documentation.schema.ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
+                      .build()),
+              <span class="predefined-constant">false</span>)));
+}
 
-  <span class="comment">/**
-   * @return Set of response messages that overide the default/global response messages
-   */</span>
-  <span class="directive">private</span> <span class="predefined-type">Set</span>&lt;Response&gt; responseMessages() { <i class="conum" data-value="8"></i><b>(8)</b>
-    <span class="keyword">return</span> singleton(<span class="keyword">new</span> springfox.documentation.builders.ResponseBuilder()
-        .code(<span class="string"><span class="delimiter">&quot;</span><span class="content">200</span><span class="delimiter">&quot;</span></span>)
-        .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully received bug 1767 or 2219 response</span><span class="delimiter">&quot;</span></span>)
-        .representation(MediaType.TEXT_PLAIN)
-        .apply(r -&gt; r.model(m -&gt; m.scalarModel(ScalarType.STRING)))
-        .build());
-  }
+<span class="comment">/**
+ * @return Set of response messages that overide the default/global response messages
+ */</span>
+<span class="directive">private</span> <span class="predefined-type">Set</span>&lt;Response&gt; responseMessages() { <i class="conum" data-value="8"></i><b>(8)</b>
+  <span class="keyword">return</span> singleton(<span class="keyword">new</span> springfox.documentation.builders.ResponseBuilder()
+      .code(<span class="string"><span class="delimiter">&quot;</span><span class="content">200</span><span class="delimiter">&quot;</span></span>)
+      .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully received bug 1767 or 2219 response</span><span class="delimiter">&quot;</span></span>)
+      .representation(MediaType.TEXT_PLAIN)
+      .apply(r -&gt; r.model(m -&gt; m.scalarModel(ScalarType.STRING)))
+      .build());
+}
 
-  <span class="comment">/**
-   * @return Set of response messages that overide the default/global response messages
-   */</span>
-  <span class="directive">private</span> <span class="predefined-type">Collection</span>&lt;Response&gt; responses() { <span class="comment">//&lt;8b&gt;</span>
-    <span class="keyword">return</span> singletonList(<span class="keyword">new</span> ResponseBuilder()
-        .code(<span class="string"><span class="delimiter">&quot;</span><span class="content">200</span><span class="delimiter">&quot;</span></span>)
-        .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully received bug 1767 or 2219 response</span><span class="delimiter">&quot;</span></span>)
-        .representation(MediaType.ALL)
-        .apply(r -&gt; r.model(m -&gt; m.scalarModel(ScalarType.STRING))
-            .build())
-        .build());
-  }</pre></td>
+<span class="comment">/**
+ * @return Set of response messages that overide the default/global response messages
+ */</span>
+<span class="directive">private</span> <span class="predefined-type">Collection</span>&lt;Response&gt; responses() { <span class="comment">//&lt;8b&gt;</span>
+  <span class="keyword">return</span> singletonList(<span class="keyword">new</span> ResponseBuilder()
+      .code(<span class="string"><span class="delimiter">&quot;</span><span class="content">200</span><span class="delimiter">&quot;</span></span>)
+      .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully received bug 1767 or 2219 response</span><span class="delimiter">&quot;</span></span>)
+      .representation(MediaType.ALL)
+      .apply(r -&gt; r.model(m -&gt; m.scalarModel(ScalarType.STRING))
+          .build())
+      .build());
+}</pre></td>
 </tr></table></code></pre>
 </div>
 </div>
@@ -4886,7 +4896,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-06-27 03:23:46 UTC
+Last updated 2020-06-27 15:59:08 UTC
 </div>
 </div>
 <style>
