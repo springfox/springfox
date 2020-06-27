@@ -176,8 +176,6 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       ModelContext valueContext = ModelContext.fromParent(
           mapContext,
           valueType);
-      String typeName = typeNameExtractor.typeName(valueContext);
-
       return of(
           mapContext.getModelSpecificationBuilder()
               .mapModel(
@@ -188,17 +186,6 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                       modelSpecifications.create(
                           valueContext,
                           valueType)))
-              .facets(f -> f.modelKey(new ModelKeyBuilder()
-                  .qualifiedModelName(q -> q.namespace(safeGetPackageName(resolvedType))
-                      .name(typeName))
-                  .viewDiscriminator(mapContext.getView().orElse(null))
-                  .validationGroupDiscriminators(mapContext.getValidationGroups())
-                  .isResponse(mapContext.isReturnType())
-                  .build())
-                  .title(typeName)
-                  .description("Key of type " + typeName)
-                  .nullable(false)
-                  .deprecated(false))
               .build());
     }
     return empty();
