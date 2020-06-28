@@ -185,9 +185,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String)">OpenApiControllerWeb</a></span>&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String,java.lang.String)">OpenApiControllerWeb</a></span>&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
                     <a href="../mappers/ServiceModelToOpenApiMapper.html" title="class in springfox.documentation.oas.mappers">ServiceModelToOpenApiMapper</a>&nbsp;mapper,
                     <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer,
+                    java.lang.String&nbsp;contextPath,
                     java.lang.String&nbsp;oasPath)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -216,8 +217,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../service/Server.html" title="class in springfox.documentation.service">Server</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inferredServer(java.lang.String,java.lang.String)">inferredServer</a></span>&#8203;(java.lang.String&nbsp;apiDocsUrl,
-              java.lang.String&nbsp;requestUrl)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inferredServer(java.lang.String)">inferredServer</a></span>&#8203;(java.lang.String&nbsp;requestUrl)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -286,7 +286,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String)">
+<a id="&lt;init&gt;(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -295,6 +295,7 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;OpenApiControllerWeb&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
                             <a href="../mappers/ServiceModelToOpenApiMapper.html" title="class in springfox.documentation.oas.mappers">ServiceModelToOpenApiMapper</a>&nbsp;mapper,
                             <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer,
+                            java.lang.String&nbsp;contextPath,
                             java.lang.String&nbsp;oasPath)</pre>
 </li>
 </ul>
@@ -318,14 +319,13 @@ extends java.lang.Object</pre>
                                                                        java.lang.String&nbsp;requestUrl)</pre>
 </li>
 </ul>
-<a id="inferredServer(java.lang.String,java.lang.String)">
+<a id="inferredServer(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>inferredServer</h4>
-<pre class="methodSignature">protected&nbsp;<a href="../../service/Server.html" title="class in springfox.documentation.service">Server</a>&nbsp;inferredServer&#8203;(java.lang.String&nbsp;apiDocsUrl,
-                                java.lang.String&nbsp;requestUrl)</pre>
+<pre class="methodSignature">protected&nbsp;<a href="../../service/Server.html" title="class in springfox.documentation.service">Server</a>&nbsp;inferredServer&#8203;(java.lang.String&nbsp;requestUrl)</pre>
 </li>
 </ul>
 <a id="decode(java.lang.String)">
