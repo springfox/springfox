@@ -50,8 +50,9 @@ public class OpenApiControllerWebMvc extends OpenApiControllerWeb {
       DocumentationCache documentationCache,
       ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
+      @Value("${server.servlet.context-path:}") String contextPath,
       @Value(OPEN_API_SPECIFICATION_PATH) String oasPath) {
-    super(documentationCache, mapper, jsonSerializer, oasPath);
+    super(documentationCache, mapper, jsonSerializer, contextPath, oasPath);
   }
 
   @GetMapping(

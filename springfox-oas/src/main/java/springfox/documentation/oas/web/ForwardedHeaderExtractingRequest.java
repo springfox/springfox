@@ -39,7 +39,6 @@ class ForwardedHeaderExtractingRequest {
   private final int port;
   private final ForwardedPrefixExtractor forwardedPrefixExtractor;
 
-
   ForwardedHeaderExtractingRequest(
       HttpServletRequest request,
       UrlPathHelper pathHelper) {

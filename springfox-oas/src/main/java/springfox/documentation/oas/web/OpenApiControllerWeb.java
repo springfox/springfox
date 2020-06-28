@@ -3,6 +3,7 @@ package springfox.documentation.oas.web;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import springfox.documentation.builders.ServerBuilder;
 import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.service.Documentation;
@@ -24,17 +25,20 @@ public class OpenApiControllerWeb {
   private final DocumentationCache documentationCache;
   private final ServiceModelToOpenApiMapper mapper;
   private final JsonSerializer jsonSerializer;
-  private final String oasPath;
+  private final String requestPrefix;
 
   public OpenApiControllerWeb(
       DocumentationCache documentationCache,
       ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
+      String contextPath,
       String oasPath) {
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
-    this.oasPath = oasPath;
+    this.requestPrefix = String.format("%s%s",
+        StringUtils.trimTrailingCharacter(contextPath, '/'),
+        StringUtils.trimTrailingCharacter(oasPath, '/'));
   }
 
   protected ResponseEntity<Json> toJsonResponse(
@@ -45,19 +49,15 @@ public class OpenApiControllerWeb {
     if (documentation == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    documentation.addServer(inferredServer(oasPath, requestUrl));
+    documentation.addServer(inferredServer(requestUrl));
     OpenAPI oas = mapper.mapDocumentation(documentation);
     Json json = jsonSerializer.toJson(oas);
-    return new ResponseEntity<>(
-        json,
-        HttpStatus.OK);
+    return new ResponseEntity<>(json, HttpStatus.OK);
   }
 
-  protected Server inferredServer(
-      String apiDocsUrl,
-      String requestUrl) {
+  protected Server inferredServer(String requestUrl) {
     return new ServerBuilder()
-        .url(requestUrl.substring(0, requestUrl.length() - apiDocsUrl.length()))
+        .url(requestUrl.replace(requestPrefix, ""))
         .description("Inferred Url")
         .build();
   }

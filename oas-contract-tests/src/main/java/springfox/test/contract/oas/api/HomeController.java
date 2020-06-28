@@ -18,6 +18,7 @@
 
 package springfox.test.contract.oas.api;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -30,7 +31,7 @@ import static org.springframework.web.servlet.view.UrlBasedViewResolver.*;
 @Controller
 public class HomeController {
 
-  //@Value(SWAGGER_UI_PATH)
+  @Value("${springfox.documentation.swagger-ui.base-url:}/swagger-ui/")
   private String swaggerUiPath;
 
   @GetMapping(DEFAULT_PATH_SEPARATOR)
