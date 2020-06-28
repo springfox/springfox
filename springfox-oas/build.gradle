@@ -42,3 +42,10 @@ dependencies {
   testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"
   testImplementation libs.clientProvided
 }
+
+compileJava {
+  options.compilerArgs += [
+      "-Amapstruct.defaultComponentModel=spring",
+      "-Amapstruct.unmappedTargetPolicy=ERROR"
+  ]
+}

@@ -20,11 +20,11 @@
 package springfox.documentation.swagger1.dto
 
 class ApiDescriptionSpec extends InternalJsonSerializationSpec {
-  final ApiDescription description = new ApiDescription('p', 'd', [], true)
+  ApiDescription description = new ApiDescription('p', 'd', [], true)
 
   def "should serialize"() {
     expect:
-      writePretty(description) == """{
+    writePretty(description) == """{
   "description" : "d",
   "operations" : [ ],
   "path" : "p"
@@ -33,9 +33,9 @@ class ApiDescriptionSpec extends InternalJsonSerializationSpec {
 
   def "should pass coverage"() {
     expect:
-      description.getDescription()
-      description.getOperations() == []
-      description.getPath()
-      description.isHidden()
+    description.getDescription()
+    description.getOperations() == []
+    description.getPath()
+    description.isHidden()
   }
 }

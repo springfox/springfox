@@ -66,8 +66,11 @@ artifacts {
   archives javadocJar
 }
 
-if (JavaVersion.current().isJava8Compatible()) {
-  tasks.withType(Javadoc) {
+javadoc {
+  if (JavaVersion.current().isJava9Compatible()) {
+    options.addBooleanOption('html5', true)
+  }
+  if (JavaVersion.current().isJava8Compatible()) {
     options.addStringOption('Xdoclint:none', '-quiet')
   }
 }

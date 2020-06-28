@@ -59,8 +59,7 @@ subprojects {
 
   checkstyleMain.source = "src/main/java"
 
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
+
   group = 'io.springfox'
   version = project.rootProject.version
 
@@ -80,6 +79,11 @@ subprojects {
   test {
     jvmArgs "-Dorg.spockframework.mock.ignoreByteBuddy=true"
     finalizedBy jacocoTestReport
+  }
+  
+  compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
   }
 }
 

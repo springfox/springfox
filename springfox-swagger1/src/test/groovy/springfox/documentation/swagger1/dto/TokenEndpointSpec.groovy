@@ -20,12 +20,11 @@
 package springfox.documentation.swagger1.dto
 
 class TokenEndpointSpec extends InternalJsonSerializationSpec {
-
-  final TokenEndpoint tokenEndpoint = new TokenEndpoint("u", "tok")
+  TokenEndpoint tokenEndpoint = new TokenEndpoint("u", "tok")
 
   def "should serialize"() {
     expect:
-      writePretty(tokenEndpoint) == """{
+    writePretty(tokenEndpoint) == """{
   "tokenName" : "tok",
   "url" : "u"
 }"""
@@ -33,7 +32,7 @@ class TokenEndpointSpec extends InternalJsonSerializationSpec {
 
   def "should pass coverage"() {
     expect:
-      tokenEndpoint.tokenName
-      tokenEndpoint.url
+    tokenEndpoint.tokenName
+    tokenEndpoint.url
   }
 }

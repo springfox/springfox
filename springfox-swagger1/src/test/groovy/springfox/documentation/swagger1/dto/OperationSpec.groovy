@@ -21,24 +21,24 @@ package springfox.documentation.swagger1.dto
 
 class OperationSpec extends InternalJsonSerializationSpec {
 
-  final Operation operation = new Operation('PUT'
-          ,'updatePet'
-          ,'updatePet'
-          ,'void'
-          ,'updatePetUsingPUT'
-          ,0
-          ,["*/*"]
-          ,['application/json']
-          ,[]
-          ,[]
-          ,[new Parameter('pet', 'pet', '', false, false, 'Pet', null, 'body', null)]
-          ,[new ResponseMessage(200, 'ok', null)] as Set
-          ,"false"
-          )
+  Operation operation = new Operation('PUT'
+      , 'updatePet'
+      , 'updatePet'
+      , 'void'
+      , 'updatePetUsingPUT'
+      , 0
+      , ["*/*"]
+      , ['application/json']
+      , []
+      , []
+      , [new Parameter('pet', 'pet', '', false, false, 'Pet', null, 'body', null)]
+      , [new ResponseMessage(200, 'ok', null)] as Set
+      , "false"
+  )
 
   def "should serialize an operation"() {
     expect:
-      writePretty(operation) == '''{
+    writePretty(operation) == '''{
   "method" : "PUT",
   "summary" : "updatePet",
   "notes" : "updatePet",
@@ -65,19 +65,19 @@ class OperationSpec extends InternalJsonSerializationSpec {
 
   def "should pass coverage"() {
     expect:
-      operation.with {
-        getAuthorizations()
-        getConsumes()
-        getDeprecated()
-        getMethod()
-        getNickname()
-        getNotes()
-        getParameters()
-        getPosition()
-        getProduces()
-        getProtocol()
-        getResponseMessages()
-        getSummary()
-      }
+    operation.with {
+      getAuthorizations()
+      getConsumes()
+      getDeprecated()
+      getMethod()
+      getNickname()
+      getNotes()
+      getParameters()
+      getPosition()
+      getProduces()
+      getProtocol()
+      getResponseMessages()
+      getSummary()
+    }
   }
 }

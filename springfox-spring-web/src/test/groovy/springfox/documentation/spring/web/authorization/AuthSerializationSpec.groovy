@@ -29,11 +29,7 @@ import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.AuthSupport
 
 class AuthSerializationSpec extends Specification implements AuthSupport {
-   final ObjectMapper mapper = new ObjectMapper();
-
-   def setup() {
-//      mapper.registerModule(new DefaultScalaModule())
-   }
+   ObjectMapper mapper = new ObjectMapper()
 
    def "Basic write"() {
     expect:

@@ -21,13 +21,13 @@ package springfox.documentation.swagger1.dto
 
 class ApiKeySpec extends InternalJsonSerializationSpec {
 
-  final ApiKey headerKey = new ApiKey('myKey')
-  final ApiKey customKey = new ApiKey('myKey', 'cookie')
+  ApiKey headerKey = new ApiKey('myKey')
+  ApiKey customKey = new ApiKey('myKey', 'cookie')
 
   def "should produce a header key"() {
     expect:
-      writePretty(headerKey) ==
-              """{
+    writePretty(headerKey) ==
+        """{
   "keyname" : "myKey",
   "passAs" : "header",
   "type" : "apiKey"
@@ -36,8 +36,8 @@ class ApiKeySpec extends InternalJsonSerializationSpec {
 
   def "should produce a custom key"() {
     expect:
-      writePretty(customKey) ==
-              """{
+    writePretty(customKey) ==
+        """{
   "keyname" : "myKey",
   "passAs" : "cookie",
   "type" : "apiKey"
@@ -46,8 +46,8 @@ class ApiKeySpec extends InternalJsonSerializationSpec {
 
   def "should pass coverage"() {
     expect:
-      customKey.getKeyname() == 'myKey'
-      customKey.getPassAs() == 'cookie'
-      customKey.getType() == 'apiKey'
+    customKey.getKeyname() == 'myKey'
+    customKey.getPassAs() == 'cookie'
+    customKey.getType() == 'apiKey'
   }
 }

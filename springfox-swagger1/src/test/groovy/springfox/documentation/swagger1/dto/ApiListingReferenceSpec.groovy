@@ -20,12 +20,11 @@
 package springfox.documentation.swagger1.dto
 
 class ApiListingReferenceSpec extends InternalJsonSerializationSpec {
-
-  final ApiListingReference apiListingReference = new ApiListingReference('/path', 'desc', 2)
+  ApiListingReference apiListingReference = new ApiListingReference('/path', 'desc', 2)
 
   def "should serialize"() {
     expect:
-      writePretty(apiListingReference) == """{
+    writePretty(apiListingReference) == """{
   "description" : "desc",
   "path" : "/path",
   "position" : 2
@@ -35,8 +34,8 @@ class ApiListingReferenceSpec extends InternalJsonSerializationSpec {
 
   def "should pass coverage"() {
     expect:
-      apiListingReference.getDescription()
-      apiListingReference.getPath()
-      apiListingReference.getPosition()
+    apiListingReference.getDescription()
+    apiListingReference.getPath()
+    apiListingReference.getPosition()
   }
 }
