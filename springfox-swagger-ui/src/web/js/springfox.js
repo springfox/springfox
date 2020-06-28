@@ -98,7 +98,7 @@ window.onload = () => {
       /*--------------------------------------------*\
        * Network
       \*--------------------------------------------*/
-      oauth2RedirectUrl: baseUrl + "/webjars/springfox-swagger-ui/oauth2-redirect.html",
+      oauth2RedirectUrl: "./oauth2-redirect.html",
       requestInterceptor: (a => a),
       responseInterceptor: (a => a),
       showMutatedRequest: true,
