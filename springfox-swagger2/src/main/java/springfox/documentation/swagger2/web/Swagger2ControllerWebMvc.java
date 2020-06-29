@@ -95,7 +95,6 @@ public class Swagger2ControllerWebMvc {
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
-    swagger.basePath(isEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
     if (isEmpty(swagger.getHost())) {
       swagger.host(hostName(uriComponents));
     }
