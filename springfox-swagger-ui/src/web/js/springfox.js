@@ -38,6 +38,8 @@ window.onload = () => {
           });
       const resources = await resourcesResponse.json();
       window.ui = getUI(baseUrl, prependBaseUrl(baseUrl.replace(configUI.swaggerBaseUiUrl, ""), resources), configUI, configSecurity);
+      window.uiConfig = configUI;
+      window.securityConfig = configSecurity;
     } catch (e) {
       const retryURL = await prompt(
         "Unable to infer base url. This is common when using dynamic servlet registration or when" +
@@ -140,9 +142,11 @@ window.onload = () => {
 
   /* Entry Point */
   (async () => {
-    await buildSystemAsync(getBaseURL());
+    const baseURL = getBaseURL();
+    await buildSystemAsync(baseURL);
+    const springBaseUrl = baseURL.replace(window.uiConfig.swaggerBaseUiUrl, "");
     if (window.ui.getConfigs().custom.enableCsrfSupport) {
-      await csrfSupport(getBaseURL());
+      await csrfSupport(springBaseUrl);
     }
   })();
 
