@@ -107,8 +107,8 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     where:
     prefix        | expectedPath
     "/fooservice" | "/fooservice/servletPath"
-    "/"           | "/contextPath/servletPath"
-    ""            | "/contextPath/servletPath"
+    "/"           | "/servletPath"
+    ""            | "/servletPath"
   }
 
   def "Should omit port number if it is -1"() {
