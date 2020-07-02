@@ -38,8 +38,7 @@ class NotBlankAnnotationPluginSpec extends Specification implements AnnotationsS
     types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
-  @Unroll
-  def "@NotBlank annotations are reflected in the model #propertyName that are AnnotatedElements"() {
+  def "@NotBlank annotations are reflected in the model that are AnnotatedElements"() {
     given:
     def sut = new NotBlankAnnotationPlugin()
     def resolvedMethodParameter =

@@ -22,8 +22,7 @@ class JacksonXmlModelPluginSpec extends Specification {
     sut.supports(DocumentationType.SWAGGER_2)
   }
 
-  @Unroll
-  def "Xml model plugin parses #type.localName annotation as expected"() {
+  def "Xml model plugin parses #type annotation as expected"() {
     given:
     def resolver = new TypeResolver()
     JacksonXmlModelPlugin sut = new JacksonXmlModelPlugin(resolver)

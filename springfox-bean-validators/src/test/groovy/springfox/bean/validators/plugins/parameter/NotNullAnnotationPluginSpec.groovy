@@ -38,8 +38,7 @@ class NotNullAnnotationPluginSpec extends Specification implements AnnotationsSu
     types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
-  @Unroll
-  def "@NotNull annotations are reflected in the model #propertyName that are AnnotatedElements"() {
+  def "@NotNull annotations are reflected in the model that are AnnotatedElements"() {
     given:
     def sut = new NotNullAnnotationPlugin()
     def resolvedMethodParameter =
@@ -52,14 +51,14 @@ class NotNullAnnotationPluginSpec extends Specification implements AnnotationsSu
 
     when:
     sut.apply(context)
-    def property = context.parameterBuilder().build()
+    def deprecatedParameter = context.parameterBuilder().build()
     def parameter = context.requestParameterBuilder()
         .name("test")
         .in(ParameterType.QUERY)
         .build()
 
     then:
-    property.required == required
+    deprecatedParameter.required == required
     parameter?.required == required
     
     where:

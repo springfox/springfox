@@ -8,7 +8,6 @@ import spock.lang.Unroll
 
 
 class PropertyExampleSerializerMixinSpec extends Specification {
-  @Unroll("#example")
   def "detects string literals correctly"() {
     given:
     def property = Mock(Property)
