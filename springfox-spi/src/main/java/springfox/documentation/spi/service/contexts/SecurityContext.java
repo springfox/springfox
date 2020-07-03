@@ -52,11 +52,12 @@ public class SecurityContext {
   }
 
   public List<SecurityReference> securityForOperation(OperationContext operationContext) {
-    if (operationSelector != null && operationSelector.test(operationContext)) {
-      return securityReferences;
-    }
-    if (selector.test(operationContext.requestMappingPattern())
-        && methodSelector.test(operationContext.httpMethod())) {
+    if (operationSelector == null) {
+      if (selector.test(operationContext.requestMappingPattern())
+          && methodSelector.test(operationContext.httpMethod())) {
+        return securityReferences;
+      }
+    } else if (operationSelector.test(operationContext)) {
       return securityReferences;
     }
     return new ArrayList<>();

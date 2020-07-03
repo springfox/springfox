@@ -30,8 +30,8 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class SecurityContextBuilder {
   private List<SecurityReference> securityReferences = new ArrayList<>();
-  private Predicate<String> pathSelector = (each) -> true;
-  private Predicate<HttpMethod> methodSelector;
+  private Predicate<String> pathSelector = each -> true;
+  private Predicate<HttpMethod> methodSelector = each -> true;
   private Predicate<OperationContext> operationSelector;
 
   public SecurityContextBuilder securityReferences(List<SecurityReference> securityReferences) {
@@ -47,7 +47,7 @@ public class SecurityContextBuilder {
    */
   @Deprecated
   public SecurityContextBuilder forPaths(Predicate<String> selector) {
-    this.pathSelector = selector;
+    this.pathSelector = defaultIfAbsent(selector, this.pathSelector);
     return this;
   }
 
@@ -59,7 +59,7 @@ public class SecurityContextBuilder {
    */
   @Deprecated
   public SecurityContextBuilder forHttpMethods(Predicate<HttpMethod> methodSelector) {
-    this.methodSelector = methodSelector;
+    this.methodSelector = defaultIfAbsent(methodSelector, this.methodSelector);
     return this;
   }
 
@@ -71,9 +71,6 @@ public class SecurityContextBuilder {
   public SecurityContext build() {
     if (securityReferences == null) {
       securityReferences = new ArrayList<>();
-    }
-    if (methodSelector == null) {
-      methodSelector = (each) -> true;
     }
     return new SecurityContext(
         securityReferences,
