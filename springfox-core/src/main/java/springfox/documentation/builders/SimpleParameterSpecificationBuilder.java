@@ -40,7 +40,7 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder allowReserved(Boolean allowReserved) {
-    this.allowReserved = allowReserved;
+    this.allowReserved = defaultIfAbsent(allowReserved, this.allowReserved);
     return this;
   }
 
@@ -55,7 +55,7 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder defaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
+    this.defaultValue = defaultIfAbsent(emptyToNull(defaultValue), this.defaultValue);
     return this;
   }
 

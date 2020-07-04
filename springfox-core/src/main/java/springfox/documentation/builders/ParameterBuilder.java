@@ -97,7 +97,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder name(String name) {
-    this.name = defaultIfAbsent(name, this.name);
+    this.name = defaultIfAbsent(emptyToNull(name), this.name);
     return this;
   }
 
@@ -108,7 +108,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder description(String description) {
-    this.description = defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(emptyToNull(description), this.description);
     return this;
   }
 
@@ -119,7 +119,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder defaultValue(String defaultValue) {
-    this.defaultValue = defaultIfAbsent(defaultValue, this.defaultValue);
+    this.defaultValue = defaultIfAbsent(emptyToNull(defaultValue), this.defaultValue);
     return this;
   }
 
@@ -191,7 +191,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder parameterAccess(String paramAccess) {
-    this.paramAccess = defaultIfAbsent(paramAccess, this.paramAccess);
+    this.paramAccess = defaultIfAbsent(emptyToNull(paramAccess), this.paramAccess);
     return this;
   }
 
