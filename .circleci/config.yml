@@ -5,8 +5,8 @@ jobs:
     docker:
       - image: circleci/openjdk:11-jdk-node-browsers
     environment:
-      JVM_OPTIONS: -Xmx3G -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512M
-      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3G -XX:+HeapDumpOnOutOfMemoryError"'
+      JVM_OPTIONS: -Xmx2G -XX:ReservedCodeCacheSize=1G
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xms256m -Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
     steps:
       - checkout
       - restore_cache:

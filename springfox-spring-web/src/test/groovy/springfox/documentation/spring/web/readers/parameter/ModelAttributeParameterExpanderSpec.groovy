@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
+import org.junit.Ignore
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
@@ -36,6 +37,7 @@ import java.beans.IntrospectionException
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
+@spock.lang.Ignore
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   TypeResolver typeResolver
   EnumTypeDeterminer enumTypeDeterminer
@@ -158,7 +160,6 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     then:
     parameters.size() == 0
   }
-
 
   def "should handle expansion of Book"() {
     given:
