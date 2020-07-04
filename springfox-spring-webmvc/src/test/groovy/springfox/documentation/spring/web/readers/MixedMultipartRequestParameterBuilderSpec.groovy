@@ -31,11 +31,12 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
    *           address:
    *             # default is application/json
    *             type: object
-   *             properties: {..}*           historyMetadata:
-   *           # need to declare XML format!
-   *           description: metadata in XML format
+   *             properties:
+   *           historyMetadata:
+   *             description: metadata in XML format
    *             type: object
-   *             properties: {...}*           profileImage:
+   *             properties:
+   *           profileImage:
    *             # default is application/octet-stream, need to declare an image type only!
    *             type: string
    *             format: binary
@@ -81,7 +82,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
 
   }
 
-  private RequestParameter idParameter() {
+  RequestParameter idParameter() {
     new RequestParameterBuilder()
         .accepts([MediaType.MULTIPART_FORM_DATA])
         .in(ParameterType.FORMDATA)
@@ -95,7 +96,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .build()
   }
 
-  private RequestParameter addressParameter() {
+  RequestParameter addressParameter() {
     new RequestParameterBuilder()
         .accepts([MediaType.MULTIPART_FORM_DATA])
         .in(ParameterType.FORMDATA)
@@ -126,7 +127,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .build()
   }
 
-  private RequestParameter historyMetadataParameter() {
+  RequestParameter historyMetadataParameter() {
     new RequestParameterBuilder()
         .accepts([MediaType.MULTIPART_FORM_DATA])
         .in(ParameterType.FORMDATA)
@@ -149,8 +150,17 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .build()
   }
 
-  private CompoundModelSpecificationBuilder historyMetadataBuilder(CompoundModelSpecificationBuilder cm, hidden = null) {
-    cm.property("id")
+  CompoundModelSpecificationBuilder historyMetadataBuilder(CompoundModelSpecificationBuilder cm, hidden = null) {
+    cm
+        .modelKey {
+          mk ->
+            mk.qualifiedModelName {
+              qn ->
+                qn.name("HistoryMetadata")
+                    .namespace("some:namespace")
+            }
+        }
+        .property("id")
         .apply(
             { p
               ->
