@@ -16,12 +16,12 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
           ParameterStyle.FORM,
           ParameterStyle.SPACEDELIMITED,
           ParameterStyle.PIPEDELIMITED
-                   );
+      );
   static final List<ParameterStyle> VALID_OBJECT_STYLES =
       Arrays.asList(
           ParameterStyle.FORM,
           ParameterStyle.DEEPOBJECT
-                   );
+      );
 
   @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
   @Override
@@ -41,10 +41,10 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
         } else if (model.getCollection().isPresent()) {
           ParameterStyle style =
               VALID_COLLECTION_STYLES.contains(simpleParameter.getStyle())
-              ? simpleParameter.getStyle()
-              : simpleParameter.nullSafeIsExplode()
-                ? ParameterStyle.FORM
-                : ParameterStyle.PIPEDELIMITED;
+                  ? simpleParameter.getStyle()
+                  : simpleParameter.nullSafeIsExplode()
+                  ? ParameterStyle.FORM
+                  : ParameterStyle.PIPEDELIMITED;
 
           validSimpleParameter =
               context.getSimpleParameterSpecificationBuilder()
@@ -53,15 +53,15 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
                   .style(style)
                   .collectionFormat(
                       simpleParameter.nullSafeIsExplode()
-                      ? CollectionFormat.MULTI
-                      : CollectionFormat.CSV)
+                          ? CollectionFormat.MULTI
+                          : CollectionFormat.CSV)
                   .build();
         }
       }
       if (validSimpleParameter == null) {
         ParameterStyle style = VALID_OBJECT_STYLES.contains(simpleParameter.getStyle())
-                               ? simpleParameter.getStyle()
-                               : simpleParameter.nullSafeIsExplode() ? ParameterStyle.FORM : ParameterStyle.DEEPOBJECT;
+            ? simpleParameter.getStyle()
+            : simpleParameter.nullSafeIsExplode() ? ParameterStyle.FORM : ParameterStyle.DEEPOBJECT;
         validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
             .copyOf(simpleParameter)
             .explode(style == ParameterStyle.DEEPOBJECT ? Boolean.TRUE : simpleParameter.getExplode())
@@ -73,8 +73,8 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
 
     if (context.getContentParameter() != null) {
       validContentEncoding = context.getContentSpecificationBuilder()
-                                    .copyOf(context.getContentParameter())
-                                    .build();
+          .copyOf(context.getContentParameter())
+          .build();
     }
     return new ParameterSpecification(
         validSimpleParameter,

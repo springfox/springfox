@@ -27,7 +27,6 @@ import io.swagger.v3.oas.models.media.StringSchema
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 import springfox.documentation.oas.mappers.SchemaMapper
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ModelTestingSupport
@@ -39,7 +38,6 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
-  @Unroll
   def "Property #property on ComplexType is inferred correctly"() {
     given:
     def provider = defaultModelSpecificationProvider()
@@ -105,7 +103,6 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     "parent" | new ObjectSchema().type(null).$ref("RecursiveType")
   }
 
-  @Unroll
   def "Inherited property #property is inferred correctly"() {
     given:
     def complexType = resolver.resolve(inheritedComplexType())

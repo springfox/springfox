@@ -35,7 +35,6 @@ import org.springframework.http.RequestEntity
 import org.springframework.http.converter.StringHttpMessageConverter
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 import springfox.documentation.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
@@ -58,8 +57,7 @@ class OpenApiContractSpec extends Specification implements FileAccess {
   @Value('${springfox.documentation.swagger-ui.base-url}')
   String baseUrl;
 
-  @Unroll
-  def 'should honor open api 3.0 resource listing #groupName'() {
+  def 'should honor open api 3.0 resource listing'() {
     given:
     RequestEntity<Void> request = RequestEntity.get(
         new URI("http://localhost:$port/v3/api-docs?group=$groupName"))

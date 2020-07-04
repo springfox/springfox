@@ -56,12 +56,12 @@ public class ParameterBuilder {
   private springfox.documentation.schema.ModelReference modelRef;
   private boolean hidden;
   private String pattern;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
   private String collectionFormat = null;
   private Boolean allowEmptyValue;
   private int order = Ordered.LOWEST_PRECEDENCE;
   private Object scalarExample;
-  private Map<String, List<Example>> examples = new HashMap<>();
+  private final Map<String, List<Example>> examples = new HashMap<>();
   private ParameterStyle style;
   private Boolean explode;
   private Boolean allowReserved;
