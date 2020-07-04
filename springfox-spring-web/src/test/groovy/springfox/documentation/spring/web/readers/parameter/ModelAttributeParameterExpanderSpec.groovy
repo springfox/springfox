@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
-import org.junit.Ignore
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
@@ -37,7 +36,6 @@ import java.beans.IntrospectionException
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-@spock.lang.Ignore
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   TypeResolver typeResolver
   EnumTypeDeterminer enumTypeDeterminer
@@ -168,7 +166,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
             "",
             typeResolver.resolve(Book),
             context()))
-        .collect { it -> it.legacy.get() }
+        .collect { it.legacy.get() }
 
     expect:
     parameters.size() == 3
@@ -177,7 +175,6 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     parameters.find { it.name == 'authors[0].books[0].id' }
   }
 
-
   def "should handle expansion item with public fields"() {
     given:
     def parameters = sut.expand(
@@ -185,7 +182,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
             "",
             typeResolver.resolve(Bug2423),
             context()))
-        .collect { it -> it.legacy.get() }
+        .collect { it.legacy.get() }
 
     expect:
     parameters.size() == 2

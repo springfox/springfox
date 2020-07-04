@@ -80,16 +80,6 @@ subprojects {
     jvmArgs "-Dorg.spockframework.mock.ignoreByteBuddy=true"
     finalizedBy jacocoTestReport
     useJUnitPlatform()
-
-    afterSuite { desc, result ->
-      if (!desc.parent) {
-        if (result.testCount == 0) {
-          if (!desc.displayName.contains('springfox-spring-webflux:')) {
-            throw new IllegalStateException("No tests were found for $desc.displayName. Failing the build")
-          }
-        }
-      }
-    }
   }
 
   sourceCompatibility = JavaVersion.VERSION_1_8
