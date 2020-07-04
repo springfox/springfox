@@ -65,11 +65,11 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     response.properties[property] == responseType
 
     where:
-    property            | requestType                            | responseType
-    "name"              | new StringSchema()                     | new StringSchema()
-    "age"               | new IntegerSchema()                    | new IntegerSchema()
-    "category"          | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
-    "customType"        | new NumberSchema()                     | new NumberSchema()
+    property     | requestType                                    | responseType
+    "name"       | new StringSchema()                             | new StringSchema()
+    "age"        | new IntegerSchema()                            | new IntegerSchema()
+    "category"   | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
+    "customType" | new NumberSchema().format("bigdecimal")        | new NumberSchema().format("bigdecimal")
   }
 
   def "recursive type properties are inferred correctly"() {
@@ -130,11 +130,11 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     response.properties[property] == responseType
 
     where:
-    property            | requestType                            | responseType
-    "name"              | new StringSchema()                     | new StringSchema()
-    "age"               | new IntegerSchema()                    | new IntegerSchema()
-    "category"          | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
-    "customType"        | new NumberSchema()                     | new NumberSchema()
-    "inheritedProperty" | new StringSchema()                     | new StringSchema()
+    property            | requestType                                   | responseType
+    "name"              | new StringSchema()                            | new StringSchema()
+    "age"               | new IntegerSchema()                           | new IntegerSchema()
+    "category"          | new ObjectSchema().type(null).$ref("Category")| new ObjectSchema().type(null).$ref("Category")
+    "customType"        | new NumberSchema().format("bigdecimal")       | new NumberSchema().format("bigdecimal")
+    "inheritedProperty" | new StringSchema()                            | new StringSchema()
   }
 }

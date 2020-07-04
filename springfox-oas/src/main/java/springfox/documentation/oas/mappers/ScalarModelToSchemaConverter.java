@@ -40,6 +40,9 @@ public class ScalarModelToSchemaConverter implements Converter<ScalarModelSpecif
     SCALAR_SCHEMA_FACTORY.put(ScalarType.URL, any -> new StringSchema().format("url"));
     SCALAR_SCHEMA_FACTORY.put(ScalarType.URI, any -> new StringSchema().format("uri"));
     SCALAR_SCHEMA_FACTORY.put(ScalarType.OBJECT, any -> new ObjectSchema());
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.PASSWORD, any -> new StringSchema().format("password"));
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.EMAIL, any -> new StringSchema().format("email"));
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.CURRENCY, any -> new NumberSchema().format("bigdecimal"));
   }
 
   @Override

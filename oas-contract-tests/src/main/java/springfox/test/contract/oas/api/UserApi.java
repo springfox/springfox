@@ -165,11 +165,14 @@ public interface UserApi {
           "application/json"})
   default ResponseEntity<String> loginUser(
       @NotNull @Parameter(description = "The user name for login",
-                          required = false) @javax.validation.Valid @RequestParam(value = "username",
-                                                                                  required = false) String username,
-      @NotNull @Parameter(description = "The password for login in clear text",
-                          required = false) @javax.validation.Valid @RequestParam(value = "password",
-                                                                                  required = false) String password) {
+          required = false) @javax.validation.Valid @RequestParam(value = "username",
+          required = false) String username,
+      @NotNull
+      @Parameter(description = "The password for login in clear text",
+          required = false,
+          schema = @Schema(type = "string", format = "password"))
+      @javax.validation.Valid
+      @RequestParam(value = "password", required = false) String password) {
     return getDelegate().loginUser(username, password);
   }
 
