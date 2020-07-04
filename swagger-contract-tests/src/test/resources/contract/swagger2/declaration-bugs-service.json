@@ -1700,6 +1700,45 @@
                 }
             }
         },
+        "/bugs/3351/{id}": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "createPost",
+                "operationId": "createPostUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "in": "body",
+                        "name": "post",
+                        "description": "post",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
@@ -2387,6 +2426,22 @@
                 }
             },
             "title": "NestedType"
+        },
+        "Pet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Pet"
         },
         "ProductVO": {
             "type": "object",

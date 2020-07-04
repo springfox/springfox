@@ -163,9 +163,125 @@
                     }
                 }
             }
+        },
+        "/bugs/3351/{id}": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "createPost",
+                "operationId": "createPostUsingPOST",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "style": "simple",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pet"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
+        "schemas": {
+            "Category": {
+                "title": "Category",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Dogs"
+                    }
+                }
+            },
+            "Pet": {
+                "title": "Pet",
+                "required": [
+                    "name",
+                    "photoUrls"
+                ],
+                "type": "object",
+                "properties": {
+                    "category": {
+                        "$ref": "#/components/schemas/Category"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 10
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "doggie"
+                    },
+                    "photoUrls": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "pet status in the store",
+                        "enum": [
+                            "available",
+                            "pending",
+                            "sold"
+                        ]
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Tag"
+                        }
+                    }
+                }
+            },
+            "Tag": {
+                "title": "Tag",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "securitySchemes": {
             "petstore_auth": {
                 "type": "oauth2",
