@@ -29,10 +29,13 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
       - run:
           name: Run Tests, run static analysis and code coverage
-          command: ./gradlew clean check codeCoverageReport sonarqube --no-daemon
+          command: |
+            java -XX:+PrintFlagsFinal -Xmx1g -version | grep -Ei "maxheapsize|maxram"
+            ./gradlew clean check codeCoverageReport sonarqube --no-daemon
           no_output_timeout: 900s
           environment:
-            _JAVA_OPTIONS: -Xmx1024M -XX:ReservedCodeCacheSize=512M
+            _JAVA_OPTIONS: -Xmx2048M -XX:ReservedCodeCacheSize=512M
+            GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
       - run:
           name: Post test
           command: ./node_modules/.bin/codecov
