@@ -28,6 +28,7 @@ import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.Example;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
@@ -86,6 +87,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
             .value(annotation.example())
             .build();
       }
+      Optional<ScalarType> scalarType = ScalarType.from(annotation.type(), annotation.format());
       context.parameterBuilder()
           .name(annotation.name())
           .description(descriptions.resolve(annotation.value()))
@@ -105,12 +107,13 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .required(annotation.required())
           .hidden(annotation.hidden())
           .precedence(SWAGGER_PLUGIN_ORDER)
-          .query(q -> q.collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
-              .defaultValue(
-                  annotation.defaultValue().isEmpty()
-                      ? null
-                      : annotation.defaultValue())
-              .allowEmptyValue(annotation.allowEmptyValue()))
+          .query(q ->
+              q.model(m -> scalarType.ifPresent(m::maybeConvertToScalar))
+                  .collectionFormat(CollectionFormat.convert(annotation.collectionFormat())
+                      .orElse(null))
+                  .defaultValue(annotation.defaultValue())
+                  .allowEmptyValue(annotation.allowEmptyValue())
+          )
           .example(example)
           .examples(allExamples(annotation.examples()));
     }

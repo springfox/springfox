@@ -26,6 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ParameterStyle;
@@ -77,20 +78,19 @@ public class OpenApiParameterBuilder implements ParameterBuilderPlugin {
             .value(annotation.example())
             .build();
       }
+      Optional<ScalarType> scalarType = ScalarType.from(annotation.schema().type(), annotation.schema().format());
       context.requestParameterBuilder()
           .name(annotation.name())
           .description(descriptions.resolve(annotation.description()))
           .required(annotation.required())
           .hidden(annotation.hidden())
           .precedence(OAS_PLUGIN_ORDER)
-          .query(q -> q.defaultValue(
-              annotation.schema().defaultValue().isEmpty()
-                  ? null
-                  : annotation.schema().defaultValue())
-//             .collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
-              .allowEmptyValue(annotation.allowEmptyValue())
-              .explode(translateExplodeOption(annotation.explode()))
-              .style(translateStyle(annotation.style())))
+          .query(q ->
+              q.model(m -> scalarType.ifPresent(m::maybeConvertToScalar))
+                  .defaultValue(annotation.schema().defaultValue())
+                  .allowEmptyValue(annotation.allowEmptyValue())
+                  .explode(translateExplodeOption(annotation.explode()))
+                  .style(translateStyle(annotation.style())))
           .example(example)
           .examples(allExamples("", annotation.examples()))
           .examples(contentExamples(annotation.content()));

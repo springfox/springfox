@@ -897,7 +897,8 @@
                         "required": true,
                         "style": "form",
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "password"
                         }
                     }
                 ],
