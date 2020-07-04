@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.Ordered;
+import org.springframework.util.StringUtils;
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ParameterStyle;
@@ -165,7 +166,7 @@ public class ParameterBuilder {
    */
   @Deprecated
   public ParameterBuilder parameterType(String paramType) {
-    if (paramType != null && paramType.length() > 0) {
+    if (!StringUtils.isEmpty(paramType)) {
       this.paramType = defaultIfAbsent(ParameterType.valueOf(paramType.toUpperCase()), this.paramType);
     }
     return this;

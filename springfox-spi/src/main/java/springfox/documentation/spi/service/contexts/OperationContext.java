@@ -87,8 +87,9 @@ public class OperationContext {
 
   /**
    * Use {@link OperationContext#getGlobalRequestParameters()} instead
-   * @deprecated @since 3.0
+   *
    * @return List
+   * @deprecated @since 3.0
    */
   @Deprecated
   public List<springfox.documentation.service.Parameter> getGlobalOperationParameters() {

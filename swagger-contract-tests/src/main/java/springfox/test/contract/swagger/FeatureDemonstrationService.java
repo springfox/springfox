@@ -202,7 +202,7 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "addFiles", method = RequestMethod.POST)
   @ApiOperation(value = "Add a new contact with file attachment")
   public ResponseEntity<Void> addFiles(@RequestPart("files") MultipartFile[] files) {
-    return new ResponseEntity<Void>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @RequestMapping(value = "/modelAttributes", method = RequestMethod.GET)
