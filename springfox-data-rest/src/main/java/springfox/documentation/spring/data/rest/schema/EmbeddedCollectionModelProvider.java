@@ -26,7 +26,6 @@ import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.schema.CollectionType;
-import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -124,12 +123,12 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
                 .name("content")))
         .compoundModel(cm ->
             cm.properties(propertySpecifications(context))
-                .modelKey(new ModelKeyBuilder()
-                    .isResponse(context.isReturnType())
-                    .qualifiedModelName(q ->
-                        q.namespace("springfox.documentation.spring.data.rest.schema")
-                            .name(name))
-                    .build()))
+                .modelKey(m ->
+                    m.isResponse(context.isReturnType())
+                        .qualifiedModelName(q ->
+                            q.namespace("springfox.documentation.spring.data.rest.schema")
+                                .name(name))
+                        .build()))
         .build();
   }
 

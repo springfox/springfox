@@ -133,17 +133,18 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         propertiesHost));
     modelContext.getModelSpecificationBuilder()
         .name(typeName)
-        .compoundModel(cm -> cm.modelKey(new ModelKeyBuilder()
-            .qualifiedModelName(q ->
-                q.namespace(safeGetPackageName(propertiesHost))
-                    .name(typeName))
-            .viewDiscriminator(modelContext.getView().orElse(null))
-            .validationGroupDiscriminators(modelContext.getValidationGroups())
-            .isResponse(modelContext.isReturnType())
-            .build())
-            .properties(properties.values())
-            .maxProperties(properties.size())
-            .minProperties(properties.size()));
+        .compoundModel(cm ->
+            cm.modelKey(m ->
+                m.qualifiedModelName(q ->
+                    q.namespace(safeGetPackageName(propertiesHost))
+                        .name(typeName))
+                    .viewDiscriminator(modelContext.getView().orElse(null))
+                    .validationGroupDiscriminators(modelContext.getValidationGroups())
+                    .isResponse(modelContext.isReturnType())
+                    .build())
+                .properties(properties.values())
+                .maxProperties(properties.size())
+                .minProperties(properties.size()));
     return schemaPluginsManager.modelSpecification(modelContext);
   }
 
@@ -178,14 +179,14 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
           valueType);
       return of(
           mapContext.getModelSpecificationBuilder()
-              .mapModel(
-                  new MapSpecification(
-                      modelSpecifications.create(
+              .mapModel(m ->
+                  m.key(k ->
+                      k.copyOf(modelSpecifications.create(
                           keyContext,
-                          keyType),
-                      modelSpecifications.create(
+                          keyType)))
+                      .value(v -> v.copyOf(modelSpecifications.create(
                           valueContext,
-                          valueType)))
+                          valueType))))
               .build());
     }
     return empty();

@@ -49,7 +49,7 @@ public class ModelSpecificationBuilder {
 
   private CompoundModelSpecificationBuilder compoundModelBuilder() {
     if (compoundModelBuilder == null) {
-      this.compoundModelBuilder = new CompoundModelSpecificationBuilder(this);
+      this.compoundModelBuilder = new CompoundModelSpecificationBuilder();
     }
     return compoundModelBuilder;
   }
@@ -59,12 +59,7 @@ public class ModelSpecificationBuilder {
     return this;
   }
 
-  public ModelSpecificationBuilder collectionModel(CollectionSpecification collection) {
-    collectionBuilder().copyOf(collection);
-    return this;
-  }
-
-  public ModelSpecificationBuilder collectionModel(Consumer<CollectionSpecificationBuilder> consumer) {
+  public ModelSpecificationBuilder collectionModel(@NonNull Consumer<CollectionSpecificationBuilder> consumer) {
     consumer.accept(collectionBuilder());
     return this;
   }
@@ -76,12 +71,7 @@ public class ModelSpecificationBuilder {
     return collection;
   }
 
-  public ModelSpecificationBuilder mapModel(MapSpecification map) {
-    mapBuilder().copyOf(map);
-    return this;
-  }
-
-  public ModelSpecificationBuilder mapModel(Consumer<MapSpecificationBuilder> consumer) {
+  public ModelSpecificationBuilder mapModel(@NonNull Consumer<MapSpecificationBuilder> consumer) {
     consumer.accept(mapBuilder());
     return this;
   }
@@ -91,11 +81,6 @@ public class ModelSpecificationBuilder {
       map = new MapSpecificationBuilder();
     }
     return map;
-  }
-
-  public ModelSpecificationBuilder referenceModel(ReferenceModelSpecification reference) {
-    this.referenceModelBuilder().copyOf(reference);
-    return this;
   }
 
   public ModelSpecificationBuilder referenceModel(Consumer<ReferenceModelSpecificationBuilder> modelKey) {
@@ -141,7 +126,7 @@ public class ModelSpecificationBuilder {
       this.map = null;
       this.collection = null;
       this.referenceModel = null;
-      this.compoundModelBuilder = new CompoundModelSpecificationBuilder(this);
+      this.compoundModelBuilder = new CompoundModelSpecificationBuilder();
 
       this.name(other.getName())
           .scalarModel(scalar)

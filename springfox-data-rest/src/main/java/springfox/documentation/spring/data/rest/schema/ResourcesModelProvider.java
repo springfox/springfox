@@ -24,7 +24,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
-import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -147,12 +146,12 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
                 .attribute(false)))
         .compoundModel(cm -> cm
             .properties(propertySpecifications(context))
-            .modelKey(new ModelKeyBuilder()
-                .isResponse(context.isReturnType())
-                .qualifiedModelName(
-                    q -> q.namespace("org.springframework.hateoas")
-                        .name(name))
-                .build()))
+            .modelKey(m ->
+                m.isResponse(context.isReturnType())
+                    .qualifiedModelName(
+                        q -> q.namespace("org.springframework.hateoas")
+                            .name(name))
+                    .build()))
         .build();
   }
 

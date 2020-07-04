@@ -49,7 +49,7 @@ import static springfox.documentation.spring.web.readers.parameter.ParameterType
 @SuppressWarnings("deprecation")
 public class ParameterTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOGGER = LoggerFactory.getLogger(ParameterTypeReader.class);
-  private static final List<HttpMethod> QUERTY_ONLY_HTTP_METHODS = Arrays.asList(HttpMethod.GET,
+  private static final List<HttpMethod> QUERY_ONLY_HTTP_METHODS = Arrays.asList(HttpMethod.GET,
       HttpMethod.OPTIONS,
       HttpMethod.HEAD);
 
@@ -98,7 +98,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
           parameterContext.getOperationContext().consumes(),
           parameterContext.getOperationContext().httpMethod());
     }
-    return QUERTY_ONLY_HTTP_METHODS.contains(parameterContext.getOperationContext().httpMethod()) ? "query" : "body";
+    return QUERY_ONLY_HTTP_METHODS.contains(parameterContext.getOperationContext().httpMethod()) ? "query" : "body";
   }
 
   private static boolean isListOfFiles(ResolvedType parameterType) {

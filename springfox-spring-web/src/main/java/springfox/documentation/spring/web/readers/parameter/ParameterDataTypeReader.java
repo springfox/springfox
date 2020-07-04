@@ -87,7 +87,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
   @SuppressWarnings({
       "CyclomaticComplexity",
-      "NPathComplexity" })
+      "NPathComplexity"})
   @Override
   public void apply(ParameterContext context) {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
@@ -100,20 +100,15 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       parameterType = resolver.resolve(String.class);
       modelRef = new springfox.documentation.schema.ModelRef("string");
       model.scalarModel(ScalarType.STRING);
+
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
       modelRef = new springfox.documentation.schema.ModelRef(
           "",
           new springfox.documentation.schema.ModelRef("string"),
           true);
-      ModelSpecificationBuilder map = new ModelSpecificationBuilder();
-      model.mapModel(
-          new MapSpecification(
-              new ModelSpecificationBuilder()
-                  .scalarModel(ScalarType.STRING)
-                  .build(),
-              new ModelSpecificationBuilder()
-                  .scalarModel(ScalarType.STRING)
-                  .build()));
+      model.mapModel(m ->
+          m.key(v -> v.scalarModel(ScalarType.STRING))
+              .value(v -> v.scalarModel(ScalarType.STRING)));
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new springfox.documentation.schema.ModelRef("string");
@@ -122,7 +117,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     if (!methodParameter.hasParameterAnnotations()) {
       String typeName = springfox.documentation.schema.Types.typeNameFor(parameterType.getErasedType());
       ScalarTypes.builtInScalarType(parameterType.getErasedType())
-                 .ifPresent(model::scalarModel);
+          .ifPresent(model::scalarModel);
       if (springfox.documentation.schema.Types.isBaseType(typeName)) { //TODO: handle enums
         modelRef = new springfox.documentation.schema.ModelRef(typeName);
       } else {
@@ -137,26 +132,24 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     }
     ViewProviderPlugin viewProvider = pluginsManager
         .viewProvider(context.getDocumentationContext()
-                             .getDocumentationType());
+            .getDocumentationType());
 
     ModelContext modelContext = context.getOperationContext()
-                                       .operationModelsBuilder()
-                                       .addInputParam(
-                                           parameterType,
-                                           viewProvider.viewFor(
-                                               methodParameter),
-                                           new HashSet<>());
+        .operationModelsBuilder()
+        .addInputParam(
+            parameterType,
+            viewProvider.viewFor(methodParameter),
+            new HashSet<>());
 
     context.parameterBuilder()
-           .type(parameterType)
-           .modelRef(Optional.ofNullable(modelRef)
-                             .orElse(modelRefFactory(
-                                 modelContext,
-                                 enumTypeDeterminer,
-                                 nameExtractor).apply(parameterType)));
-    ModelSpecification parameterModel = models.create(
-        modelContext,
-        parameterType);
+        .type(parameterType)
+        .modelRef(Optional.ofNullable(modelRef)
+            .orElse(modelRefFactory(
+                modelContext,
+                enumTypeDeterminer,
+                nameExtractor).apply(parameterType)));
+
+    ModelSpecification parameterModel = models.create(modelContext, parameterType);
     if (isRequestBody) {
       Set<MediaType> consumes = new HashSet<>(context.getOperationContext()
                                                      .consumes());
@@ -171,7 +164,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                                              .apply(r -> r.model(m -> m.copyOf(parameterModel)))));
     } else {
       context.requestParameterBuilder()
-             .query(q -> q.model(m -> m.copyOf(parameterModel)));
+          .query(q -> q.model(m -> m.copyOf(parameterModel)));
     }
   }
 
@@ -183,6 +176,6 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private boolean treatAsAString(ResolvedType parameterType) {
     return !(springfox.documentation.schema.Types.isBaseType(
         springfox.documentation.schema.Types.typeNameFor(parameterType.getErasedType()))
-                 || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
+        || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
   }
 }
