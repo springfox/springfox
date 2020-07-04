@@ -238,6 +238,7 @@
                     {
                         "in": "body",
                         "name": "contents",
+                        "description": "contents",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/CustomTypeFor2031"

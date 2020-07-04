@@ -27,7 +27,7 @@ public class SimpleParameterSpecificationBuilder {
   private Boolean allowEmptyValue;
   private String defaultValue;
   private CollectionFormat collectionFormat;
-  private ModelSpecificationBuilder model;
+  private final ModelSpecificationBuilder model = new ModelSpecificationBuilder();
 
   public SimpleParameterSpecificationBuilder style(ParameterStyle style) {
     this.style = style;
@@ -40,14 +40,11 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder allowReserved(Boolean allowReserved) {
-    this.allowReserved = allowReserved;
+    this.allowReserved = defaultIfAbsent(allowReserved, this.allowReserved);
     return this;
   }
 
   public SimpleParameterSpecificationBuilder model(@NonNull Consumer<ModelSpecificationBuilder> consumer) {
-    if (model == null) {
-      model = new ModelSpecificationBuilder();
-    }
     consumer.accept(model);
     return this;
   }
@@ -58,7 +55,7 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   public SimpleParameterSpecificationBuilder defaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
+    this.defaultValue = defaultIfAbsent(emptyToNull(defaultValue), this.defaultValue);
     return this;
   }
 
@@ -99,9 +96,6 @@ public class SimpleParameterSpecificationBuilder {
   }
 
   SimpleParameterSpecification build() {
-    if (model == null) {
-      return null;
-    }
     ModelSpecification builtModel = model.build();
     if (builtModel == null) {
       return null;

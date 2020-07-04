@@ -179,4 +179,15 @@ public class ModelSpecificationBuilder {
   private Object safeReferenceBuild() {
     return referenceModel != null ? referenceModel.build() : null;
   }
+
+  public ModelSpecificationBuilder maybeConvertToScalar(ScalarType scalar) {
+    scalarModel(scalar);
+    if (compoundModelBuilder != null) {
+      compoundModelBuilder = null;
+    }
+    if (collection != null) {
+      collection = null;
+    }
+    return this;
+  }
 }

@@ -27,7 +27,6 @@ import io.swagger.v3.oas.models.media.StringSchema
 import org.mapstruct.factory.Mappers
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 import springfox.documentation.oas.mappers.SchemaMapper
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ModelTestingSupport
@@ -39,7 +38,6 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
-  @Unroll
   def "Property #property on ComplexType is inferred correctly"() {
     given:
     def provider = defaultModelSpecificationProvider()
@@ -67,11 +65,11 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     response.properties[property] == responseType
 
     where:
-    property            | requestType                            | responseType
-    "name"              | new StringSchema()                     | new StringSchema()
-    "age"               | new IntegerSchema()                    | new IntegerSchema()
-    "category"          | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
-    "customType"        | new NumberSchema()                     | new NumberSchema()
+    property     | requestType                                    | responseType
+    "name"       | new StringSchema()                             | new StringSchema()
+    "age"        | new IntegerSchema()                            | new IntegerSchema()
+    "category"   | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
+    "customType" | new NumberSchema().format("bigdecimal")        | new NumberSchema().format("bigdecimal")
   }
 
   def "recursive type properties are inferred correctly"() {
@@ -105,7 +103,6 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     "parent" | new ObjectSchema().type(null).$ref("RecursiveType")
   }
 
-  @Unroll
   def "Inherited property #property is inferred correctly"() {
     given:
     def complexType = resolver.resolve(inheritedComplexType())
@@ -133,11 +130,11 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     response.properties[property] == responseType
 
     where:
-    property            | requestType                            | responseType
-    "name"              | new StringSchema()                     | new StringSchema()
-    "age"               | new IntegerSchema()                    | new IntegerSchema()
-    "category"          | new ObjectSchema().type(null).$ref("Category") | new ObjectSchema().type(null).$ref("Category")
-    "customType"        | new NumberSchema()                     | new NumberSchema()
-    "inheritedProperty" | new StringSchema()                     | new StringSchema()
+    property            | requestType                                   | responseType
+    "name"              | new StringSchema()                            | new StringSchema()
+    "age"               | new IntegerSchema()                           | new IntegerSchema()
+    "category"          | new ObjectSchema().type(null).$ref("Category")| new ObjectSchema().type(null).$ref("Category")
+    "customType"        | new NumberSchema().format("bigdecimal")       | new NumberSchema().format("bigdecimal")
+    "inheritedProperty" | new StringSchema()                            | new StringSchema()
   }
 }

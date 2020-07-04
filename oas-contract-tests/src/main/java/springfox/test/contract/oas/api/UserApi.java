@@ -47,7 +47,7 @@ import springfox.test.contract.oas.model.User;
 import javax.validation.constraints.NotNull;
 
 @javax.annotation.Generated(value = "org.springdoc.demo.app2.codegen.languages.SpringCodegen",
-                            date = "2019-07-11T00:09:29.839+02:00[Europe/Paris]")
+    date = "2019-07-11T00:09:29.839+02:00[Europe/Paris]")
 
 @Tag(name = "user", description = "the user API")
 public interface UserApi {
@@ -57,60 +57,60 @@ public interface UserApi {
     };
   }
 
-  @Operation(summary = "Create user", description = "This can only be done by the logged in user.", tags = { "user" })
+  @Operation(summary = "Create user", description = "This can only be done by the logged in user.", tags = {"user"})
   @ApiResponses(value = {
       @ApiResponse(description = "successful operation",
-                   content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(
-                                    implementation = User.class)),
-                       @Content(mediaType = "application/xml",
-                                schema =
-                                @Schema(
-                                    implementation = User.class)) }) })
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(
+                      implementation = User.class)),
+              @Content(mediaType = "application/xml",
+                  schema =
+                  @Schema(
+                      implementation = User.class))})})
   @PostMapping(value = "/user",
-               consumes = {
-                   "application/json",
-                   "application/xml",
-                   "application/x-www-form-urlencoded" })
+      consumes = {
+          "application/json",
+          "application/xml",
+          "application/x-www-form-urlencoded"})
   default ResponseEntity<Void> createUser(
       @Parameter(description = "Created user object") @javax.validation.Valid @RequestBody User user) {
     return getDelegate().createUser(user);
   }
 
-  @Operation(summary = "Creates list of users with given input array", tags = { "user" })
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "successful operation") })
+  @Operation(summary = "Creates list of users with given input array", tags = {"user"})
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
 
-  @PostMapping(value = "/user/createWithArray", consumes = { "application/json" })
+  @PostMapping(value = "/user/createWithArray", consumes = {"application/json"})
   default ResponseEntity<Void> createUsersWithArrayInput(
       @Parameter(description = "List of user object",
-                 required = true) @javax.validation.Valid @RequestBody java.util.List<User> user) {
+          required = true) @javax.validation.Valid @RequestBody java.util.List<User> user) {
     return getDelegate().createUsersWithArrayInput(user);
   }
 
   @Operation(summary = "Creates list of users with given input array",
-             description = "Creates list of users with given input array",
-             tags = { "user" })
+      description = "Creates list of users with given input array",
+      tags = {"user"})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200",
-                   description = "Successful operation",
-                   content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(implementation =
-                                                                                         User.class)),
-                       @Content(
-                           mediaType = "application/xml",
-                           schema = @Schema(implementation = User.class)) }),
+          description = "Successful operation",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation =
+                      User.class)),
+              @Content(
+                  mediaType = "application/xml",
+                  schema = @Schema(implementation = User.class))}),
       @ApiResponse(description = "successful operation")
 
   })
-  @PostMapping(value = "/user/createWithList", consumes = { "application/json" })
+  @PostMapping(value = "/user/createWithList", consumes = {"application/json"})
   default ResponseEntity<Void> createUsersWithListInput(
       @Parameter @javax.validation.Valid @RequestBody java.util.List<User> user) {
     return getDelegate().createUsersWithListInput(user);
   }
 
-  @Operation(summary = "Delete user", description = "This can only be done by the logged in user.", tags = { "user" })
+  @Operation(summary = "Delete user", description = "This can only be done by the logged in user.", tags = {"user"})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "400", description = "Invalid username supplied"),
       @ApiResponse(responseCode = "404", description = "User not found")
@@ -118,82 +118,85 @@ public interface UserApi {
   @DeleteMapping(value = "/user/{username}")
   default ResponseEntity<Void> deleteUser(
       @Parameter(description = "The name that needs to be deleted",
-                 required = true) @PathVariable("username") String username) {
+          required = true) @PathVariable("username") String username) {
     return getDelegate().deleteUser(username);
   }
 
-  @Operation(summary = "Get user by user name", tags = { "user" })
+  @Operation(summary = "Get user by user name", tags = {"user"})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200",
-                   description = "successful operation",
-                   content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(implementation =
-                                                                                         User.class)),
-                       @Content(
-                           mediaType = "application/xml",
-                           schema = @Schema(implementation = User.class)) }),
+          description = "successful operation",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation =
+                      User.class)),
+              @Content(
+                  mediaType = "application/xml",
+                  schema = @Schema(implementation = User.class))}),
       @ApiResponse(responseCode = "400", description = "Invalid username supplied", content = @Content),
-      @ApiResponse(responseCode = "404", description = "User not found", content = @Content) })
+      @ApiResponse(responseCode = "404", description = "User not found", content = @Content)})
 
   @GetMapping(value = "/user/{username}")
   default ResponseEntity<User> getUserByName(
       @Parameter(description = "The name that needs to be fetched. Use user1 for testing. ",
-                 required = true) @PathVariable("username") String username) {
+          required = true) @PathVariable("username") String username) {
     return getDelegate().getUserByName(username);
   }
 
-  @Operation(summary = "Logs user into the system", tags = { "user" })
+  @Operation(summary = "Logs user into the system", tags = {"user"})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200",
-                   headers = {
-                       @Header(name = "X-Rate-Limit",
-                               description = "calls per hour allowed by the user",
-                               schema = @Schema(type = "integer",
-                                                format = "int32")),
-                       @Header(name = "X-Expires-After",
-                               description = "date in UTC when toekn expires",
-                               schema = @Schema(type = "string",
-                                                format = "date-time")) },
-                   description = "successful operation",
-                   content = @Content(schema = @Schema(implementation =
-                                                                                               String.class))),
-      @ApiResponse(responseCode = "400", description = "Invalid username/password supplied", content = @Content) })
+          headers = {
+              @Header(name = "X-Rate-Limit",
+                  description = "calls per hour allowed by the user",
+                  schema = @Schema(type = "integer",
+                      format = "int32")),
+              @Header(name = "X-Expires-After",
+                  description = "date in UTC when toekn expires",
+                  schema = @Schema(type = "string",
+                      format = "date-time"))},
+          description = "successful operation",
+          content = @Content(schema = @Schema(implementation =
+              String.class))),
+      @ApiResponse(responseCode = "400", description = "Invalid username/password supplied", content = @Content)})
   @GetMapping(value = "/user/login",
-              produces = {
-                  "application/xml",
-                  "application/json" })
+      produces = {
+          "application/xml",
+          "application/json"})
   default ResponseEntity<String> loginUser(
       @NotNull @Parameter(description = "The user name for login",
-                          required = false) @javax.validation.Valid @RequestParam(value = "username",
-                                                                                  required = false) String username,
-      @NotNull @Parameter(description = "The password for login in clear text",
-                          required = false) @javax.validation.Valid @RequestParam(value = "password",
-                                                                                  required = false) String password) {
+          required = false) @javax.validation.Valid @RequestParam(value = "username",
+          required = false) String username,
+      @NotNull
+      @Parameter(description = "The password for login in clear text",
+          required = false,
+          schema = @Schema(type = "string", format = "password"))
+      @javax.validation.Valid
+      @RequestParam(value = "password", required = false) String password) {
     return getDelegate().loginUser(username, password);
   }
 
-  @Operation(summary = "Logs out current logged in user session", tags = { "user" })
-  @ApiResponses(value = { @ApiResponse(description = "successful operation") })
+  @Operation(summary = "Logs out current logged in user session", tags = {"user"})
+  @ApiResponses(value = {@ApiResponse(description = "successful operation")})
   @GetMapping(value = "/user/logout")
   default ResponseEntity<Void> logoutUser() {
     return getDelegate().logoutUser();
   }
 
-  @Operation(summary = "Update user", description = "This can only be done by the logged in user.", tags = { "user" })
+  @Operation(summary = "Update user", description = "This can only be done by the logged in user.", tags = {"user"})
   @ApiResponses(value = @ApiResponse(description = "successful operation"))
   @PutMapping(value = "/user/{username}", consumes = {
       "application/json",
       "application/xml",
-      "application/x-www-form-urlencoded" })
+      "application/x-www-form-urlencoded"})
   default ResponseEntity<Void> updateUser(
       @Parameter(description = "name that need to be deleted",
-                 required = true,
-                 explode = Explode.FALSE,
-                 in = ParameterIn.PATH,
-                 name = "username",
-                 style = ParameterStyle.SIMPLE,
-                 schema = @Schema(type = "string")) @PathVariable("username") String username,
+          required = true,
+          explode = Explode.FALSE,
+          in = ParameterIn.PATH,
+          name = "username",
+          style = ParameterStyle.SIMPLE,
+          schema = @Schema(type = "string")) @PathVariable("username") String username,
       @Parameter(description = "Update an existent user in the store") @javax.validation.Valid @RequestBody User user) {
     return getDelegate().updateUser(username, user);
   }

@@ -28,6 +28,7 @@ import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.EnumerationFacet
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.ModelSpecification
 import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.schema.ScalarType
 import springfox.documentation.service.AllowableListValues
@@ -139,6 +140,49 @@ class ApiParamParameterBuilderSpec
     apiParamWithAllowableValues("1,2,3,4")   | ['1', '2', '3', '4']
     apiParamWithAllowableValues("1,2,   ,4") | ['1', '2', '4']
     apiParamWithAllowableValues("1")         | ['1']
+  }
+
+  @Unroll
+  def "Api annotation with type and format"() {
+    given:
+    def resolvedMethodParameter = new ResolvedMethodParameter(
+        0,
+        "",
+        [apiParamAnnotation],
+        stubbedResolvedType())
+
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext =
+        new ParameterContext(
+            resolvedMethodParameter,
+            documentationContext(),
+            genericNamingStrategy,
+            Mock(OperationContext), 0)
+
+    when:
+    ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
+    parameterContext.requestParameterBuilder()
+        .query { q -> q.model { it.scalarModel(ScalarType.BIGDECIMAL) } }
+    operationCommand.apply(parameterContext)
+
+    ModelSpecification model = parameterContext.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
+        .parameterSpecification
+        .query
+        .orElse(null)
+        ?.model
+
+    then:
+    model.scalar.get().type == expected
+
+    where:
+    apiParamAnnotation                     | expected
+    apiParamWithType("string", "")         | ScalarType.STRING
+    apiParamWithType("integer", "int64")   | ScalarType.LONG
+    apiParamWithType("string", "password") | ScalarType.PASSWORD
+    apiParamWithType("", "")               | ScalarType.BIGDECIMAL //Default value
   }
 
   @Unroll("Range: #min | #max")

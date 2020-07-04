@@ -43,7 +43,7 @@ public class RequestParameterBuilder {
   private int parameterIndex;
 
   public RequestParameterBuilder name(String name) {
-    this.name = defaultIfAbsent(name, this.name);
+    this.name = defaultIfAbsent(emptyToNull(name), this.name);
     return this;
   }
 
@@ -67,7 +67,7 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder description(String description) {
-    this.description = defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(emptyToNull(description), this.description);
     return this;
   }
 
@@ -110,7 +110,7 @@ public class RequestParameterBuilder {
     return this;
   }
 
-  public RequestParameterBuilder hidden(boolean hidden) {
+  public RequestParameterBuilder hidden(Boolean hidden) {
     this.hidden = defaultIfAbsent(hidden, this.hidden);
     return this;
   }

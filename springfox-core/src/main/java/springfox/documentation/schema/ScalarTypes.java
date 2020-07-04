@@ -59,9 +59,7 @@ public class ScalarTypes {
     if (forType instanceof ResolvedType) {
       return builtInScalarTypeForResolvedType((ResolvedType) forType);
     } else {
-      return Optional.ofNullable(SCALAR_TYPE_LOOKUP.getOrDefault(
-          forType,
-          null));
+      return Optional.ofNullable(SCALAR_TYPE_LOOKUP.get(forType));
     }
   }
 
@@ -72,8 +70,6 @@ public class ScalarTypes {
         return Optional.of(ScalarType.BYTE);
       }
     }
-    return Optional.ofNullable(SCALAR_TYPE_LOOKUP.getOrDefault(
-        forType.getErasedType(),
-        null));
+    return Optional.ofNullable(SCALAR_TYPE_LOOKUP.get(forType.getErasedType()));
   }
 }

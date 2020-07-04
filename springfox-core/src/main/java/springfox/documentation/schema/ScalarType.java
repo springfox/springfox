@@ -63,10 +63,7 @@ public class ScalarType {
     this(type, "");
   }
 
-  public static Optional<ScalarType> from(
-      String type,
-      String format) {
-
+  public static Optional<ScalarType> from(String type, String format) {
     return KNOWN_TYPES.stream()
                       .filter(k -> k.type.equals(type) && k.format.equals(format))
                       .findFirst();

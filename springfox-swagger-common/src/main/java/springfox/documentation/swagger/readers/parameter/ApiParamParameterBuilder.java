@@ -28,6 +28,7 @@ import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.Example;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
@@ -40,9 +41,7 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
-import static java.util.Optional.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
@@ -88,17 +87,12 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
             .value(annotation.example())
             .build();
       }
+      Optional<ScalarType> scalarType = ScalarType.from(annotation.type(), annotation.format());
       context.parameterBuilder()
-          .name(ofNullable(annotation.name())
-              .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
-          .description(ofNullable(descriptions.resolve(annotation.value()))
-              .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
-          .parameterAccess(ofNullable(annotation.access())
-              .filter(((Predicate<String>) String::isEmpty).negate())
-              .orElse(null))
-          .defaultValue(ofNullable(annotation.defaultValue())
-              .filter(((Predicate<String>) String::isEmpty).negate())
-              .orElse(null))
+          .name(annotation.name())
+          .description(descriptions.resolve(annotation.value()))
+          .parameterAccess(annotation.access())
+          .defaultValue(annotation.defaultValue())
           .allowMultiple(annotation.allowMultiple())
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
@@ -108,22 +102,18 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .collectionFormat(annotation.collectionFormat())
           .order(SWAGGER_PLUGIN_ORDER);
       context.requestParameterBuilder()
-          .name(
-              annotation.name().isEmpty()
-                  ? null
-                  : annotation.name())
-          .description(ofNullable(descriptions.resolve(annotation.value()))
-              .filter(desc -> !desc.isEmpty())
-              .orElse(null))
+          .name(annotation.name())
+          .description(descriptions.resolve(annotation.value()))
           .required(annotation.required())
           .hidden(annotation.hidden())
           .precedence(SWAGGER_PLUGIN_ORDER)
-          .query(q -> q.collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
-              .defaultValue(
-                  annotation.defaultValue().isEmpty()
-                      ? null
-                      : annotation.defaultValue())
-              .allowEmptyValue(annotation.allowEmptyValue()))
+          .query(q ->
+              q.model(m -> scalarType.ifPresent(m::maybeConvertToScalar))
+                  .collectionFormat(CollectionFormat.convert(annotation.collectionFormat())
+                      .orElse(null))
+                  .defaultValue(annotation.defaultValue())
+                  .allowEmptyValue(annotation.allowEmptyValue())
+          )
           .example(example)
           .examples(allExamples(annotation.examples()));
     }
