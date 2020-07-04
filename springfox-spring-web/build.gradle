@@ -30,3 +30,7 @@ dependencies {
   testImplementation "javax.servlet:javax.servlet-api:$servlet"
   testImplementation libs.clientProvided
 }
+
+test {
+  maxHeapSize = '3G'
+}

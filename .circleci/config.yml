@@ -5,8 +5,8 @@ jobs:
     docker:
       - image: circleci/openjdk:11-jdk-node-browsers
     environment:
-      JVM_OPTIONS: -Xmx1024M -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512M
-      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3840m -XX:+HeapDumpOnOutOfMemoryError"'
+      JVM_OPTIONS: -Xmx3G -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512M
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3G -XX:+HeapDumpOnOutOfMemoryError"'
     steps:
       - checkout
       - restore_cache:
@@ -34,8 +34,7 @@ jobs:
             ./gradlew clean check codeCoverageReport sonarqube --no-daemon
           no_output_timeout: 900s
           environment:
-            _JAVA_OPTIONS: -Xmx2048M -XX:ReservedCodeCacheSize=512M
-            GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+            _JAVA_OPTIONS: -Xmx3G -XX:ReservedCodeCacheSize=1g
       - run:
           name: Post test
           command: ./node_modules/.bin/codecov
