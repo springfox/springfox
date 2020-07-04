@@ -39,19 +39,9 @@ public class PropertySpecificationBuilder {
 
   private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
   private final List<VendorExtension> vendorExtensions = new ArrayList<>();
-  private final CompoundModelSpecificationBuilder parent;
 
   public PropertySpecificationBuilder(String name) {
-    this(
-        name,
-        null);
-  }
-
-  public PropertySpecificationBuilder(
-      String name,
-      CompoundModelSpecificationBuilder parent) {
     this.name = name;
-    this.parent = parent;
   }
 
   public PropertySpecificationBuilder description(String description) {
@@ -59,6 +49,7 @@ public class PropertySpecificationBuilder {
     return this;
   }
 
+  //TODO: fix this #builder
   public PropertySpecificationBuilder type(ModelSpecification type) {
     this.type = defaultIfAbsent(type, this.type);
     return this;

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,8 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static springfox.documentation.schema.Collections.*;
@@ -49,14 +52,21 @@ import static springfox.documentation.spring.web.readers.parameter.ParameterType
 @SuppressWarnings("deprecation")
 public class ParameterTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOGGER = LoggerFactory.getLogger(ParameterTypeReader.class);
-  private static final List<HttpMethod> QUERTY_ONLY_HTTP_METHODS = Arrays.asList(HttpMethod.GET,
+  private static final List<HttpMethod> QUERY_ONLY_HTTP_METHODS = Arrays.asList(HttpMethod.GET,
       HttpMethod.OPTIONS,
       HttpMethod.HEAD);
 
   @Override
   public void apply(ParameterContext context) {
-    context.parameterBuilder().parameterType(findParameterType(context));
-    context.requestParameterBuilder().in(findParameterType(context));
+    String parameterType = findParameterType(context);
+    context.parameterBuilder().parameterType(parameterType);
+    Collection<MediaType> accepts =
+        "body".equals(parameterType)
+            ? Collections.singleton(MediaType.APPLICATION_JSON)
+            : null;
+    context.requestParameterBuilder()
+        .in(parameterType)
+        .accepts(accepts);
   }
 
   @Override
@@ -73,8 +83,12 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     //Multi-part file trumps any other annotations
     if (isFileType(parameterType) || isListOfFiles(parameterType)) {
       if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
+        parameterContext.requestParameterBuilder()
+            .accepts(Collections.singleton(MediaType.MULTIPART_FORM_DATA));
         return "formData";
       }
+      parameterContext.requestParameterBuilder()
+          .accepts(Collections.singleton(MediaType.APPLICATION_OCTET_STREAM));
       return "body";
     }
     if (resolvedMethodParameter.hasParameterAnnotation(PathVariable.class)) {
@@ -82,6 +96,8 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestBody.class)) {
       return "body";
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
+      parameterContext.requestParameterBuilder()
+          .accepts(Collections.singleton(MediaType.MULTIPART_FORM_DATA));
       return "formData";
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
       return determineScalarParameterType(
@@ -90,6 +106,8 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestHeader.class)) {
       return "header";
     } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
+      parameterContext.requestParameterBuilder()
+          .accepts(Collections.singleton(MediaType.APPLICATION_FORM_URLENCODED));
       LOGGER.warn("@ModelAttribute annotated parameters should have already been expanded via "
           + "the ExpandedParameterBuilderPlugin");
     }
@@ -98,7 +116,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
           parameterContext.getOperationContext().consumes(),
           parameterContext.getOperationContext().httpMethod());
     }
-    return QUERTY_ONLY_HTTP_METHODS.contains(parameterContext.getOperationContext().httpMethod()) ? "query" : "body";
+    return QUERY_ONLY_HTTP_METHODS.contains(parameterContext.getOperationContext().httpMethod()) ? "query" : "body";
   }
 
   private static boolean isListOfFiles(ResolvedType parameterType) {

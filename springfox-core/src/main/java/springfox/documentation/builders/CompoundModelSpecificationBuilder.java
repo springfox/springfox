@@ -1,7 +1,7 @@
 package springfox.documentation.builders;
 
 import springfox.documentation.schema.CompoundModelSpecification;
-import springfox.documentation.schema.ModelKey;
+import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
 
@@ -15,22 +15,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CompoundModelSpecificationBuilder {
-  private final ModelSpecificationBuilder parent;
   private final Map<String, PropertySpecificationBuilder> properties = new HashMap<>();
   private final List<ReferenceModelSpecification> subclassReferences = new ArrayList<>();
   private Integer maxProperties;
   private Integer minProperties;
-  private ModelKey modelKey;
+  private ModelKeyBuilder modelKey;
   private String discriminator;
 
-  public CompoundModelSpecificationBuilder(ModelSpecificationBuilder parent) {
-    this.parent = parent;
-  }
-
   private PropertySpecificationBuilder propertyBuilder(String name) {
-    return properties.computeIfAbsent(
-        name,
-        n -> new PropertySpecificationBuilder(n, this));
+    return properties.computeIfAbsent(name, PropertySpecificationBuilder::new);
   }
 
   public Function<Consumer<PropertySpecificationBuilder>, CompoundModelSpecificationBuilder> property(String name) {
@@ -40,8 +33,11 @@ public class CompoundModelSpecificationBuilder {
     };
   }
 
-  public CompoundModelSpecificationBuilder modelKey(ModelKey modelKey) {
-    this.modelKey = modelKey;
+  public CompoundModelSpecificationBuilder modelKey(Consumer<ModelKeyBuilder> consumer) {
+    if (modelKey == null) {
+      this.modelKey = new ModelKeyBuilder();
+    }
+    consumer.accept(modelKey);
     return this;
   }
 
@@ -56,13 +52,12 @@ public class CompoundModelSpecificationBuilder {
   }
 
   public CompoundModelSpecification build() {
-    List<PropertySpecification> properties
-        = this.properties.values().stream()
-                         .map(PropertySpecificationBuilder::build)
-                         .collect(Collectors.toList());
+    List<PropertySpecification> properties = this.properties.values().stream()
+        .map(PropertySpecificationBuilder::build)
+        .collect(Collectors.toList());
     if (modelKey != null) {
       return new CompoundModelSpecification(
-          modelKey,
+          modelKey.build(),
           properties,
           maxProperties,
           minProperties,
@@ -76,7 +71,7 @@ public class CompoundModelSpecificationBuilder {
     if (other == null) {
       return this;
     }
-    return modelKey(other.getModelKey())
+    return modelKey(m -> m.copyOf(other.getModelKey()))
         .properties(other.getProperties())
         .maxProperties(other.getMaxProperties())
         .minProperties(other.getMinProperties())
@@ -85,28 +80,26 @@ public class CompoundModelSpecificationBuilder {
   }
 
   public CompoundModelSpecificationBuilder properties(Collection<PropertySpecification> properties) {
-    properties.forEach(each -> {
-      this.property(each.getName())
-          .apply(p -> {
-            p.type(each.getType())
-             .allowEmptyValue(each.getAllowEmptyValue())
-             .defaultValue(each.getDefaultValue())
-             .deprecated(each.getDeprecated())
-             .description(each.getDescription())
-             .example(each.getExample())
-             .isHidden(each.getHidden())
-             .nullable(each.getNullable())
-             .position(each.getPosition())
-             .readOnly(each.getReadOnly())
-             .required(each.getRequired())
-             .vendorExtensions(each.getVendorExtensions())
-             .xml(each.getXml())
-             .writeOnly(each.getWriteOnly());
-            each.getFacets()
-                .forEach(f -> p.facetBuilder(f.facetBuilder())
-                               .copyOf(f));
-          });
-    });
+    properties.forEach(each -> this.property(each.getName())
+        .apply(p -> {
+          p.type(each.getType())
+              .allowEmptyValue(each.getAllowEmptyValue())
+              .defaultValue(each.getDefaultValue())
+              .deprecated(each.getDeprecated())
+              .description(each.getDescription())
+              .example(each.getExample())
+              .isHidden(each.getHidden())
+              .nullable(each.getNullable())
+              .position(each.getPosition())
+              .readOnly(each.getReadOnly())
+              .required(each.getRequired())
+              .vendorExtensions(each.getVendorExtensions())
+              .xml(each.getXml())
+              .writeOnly(each.getWriteOnly());
+          each.getFacets()
+              .forEach(f -> p.facetBuilder(f.facetBuilder())
+                  .copyOf(f));
+        }));
     return this;
   }
 

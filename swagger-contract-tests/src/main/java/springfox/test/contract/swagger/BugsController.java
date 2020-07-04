@@ -53,6 +53,7 @@ import springfox.test.contract.swagger.models.EHDTOApplicatorUnits;
 import springfox.test.contract.swagger.models.EnumType;
 import springfox.test.contract.swagger.models.Example;
 import springfox.test.contract.swagger.models.LanguageResponse;
+import springfox.test.contract.swagger.models.Pet;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -86,6 +87,13 @@ public class BugsController {
   @RequestMapping(value = "1306", method = POST)
   public ResponseEntity<Map<String, String>> bug1306(@RequestParam Map<String, String> paramMap) {
     return ResponseEntity.ok(null);
+  }
+
+  @PostMapping(path = "/3351/{id}")
+  public ResponseEntity<String> createPost(
+      @PathVariable final int id,
+      @RequestBody final Pet post) {
+    return ResponseEntity.ok("Success");
   }
 
   @ApiImplicitParams(

@@ -10,7 +10,6 @@ import springfox.documentation.service.SimpleParameterSpecification;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.*;
@@ -31,7 +30,7 @@ public class BodyParameterSpecificationProvider implements ParameterSpecificatio
           .collect(Collectors.toSet()));
     }
     if (accepts.isEmpty()) {
-      accepts.add(MediaType.ALL);
+      accepts.add(MediaType.APPLICATION_JSON);
     }
 
     accepts.stream()
@@ -47,19 +46,10 @@ public class BodyParameterSpecificationProvider implements ParameterSpecificatio
                         .model(m -> m.copyOf(simpleParameter.getModel()))
                         .clearEncodings());
               } else if (contentParameter != null) {
-                Optional<Representation> mediaType = contentParameter.representationFor(each);
-                context.getContentSpecificationBuilder()
-                    .copyOf(contentParameter)
-                    .requestBody(true)
-                    .representation(each)
-                    .apply(r -> r.model(m -> m.copyOf(mediaType
-                        .map(Representation::getModel)
-                        .orElse(new ModelSpecificationBuilder()
-                            .name(context.getName())
-                            .scalarModel(ScalarType.STRING)
-                            .build())))
-                        .clearEncodings());
-
+                contentParameter.representationFor(each)
+                    .ifPresent(representation -> context.getContentSpecificationBuilder()
+                        .representation(representation.getMediaType())
+                        .apply(r -> r.copyOf(representation)));
               } else {
                 LOGGER.warn("Parameter should either be a simple or a content type");
                 context.getContentSpecificationBuilder()

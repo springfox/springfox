@@ -6,10 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import springfox.test.contract.oas.model.Pet;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -38,5 +41,12 @@ public class BugsController {
   @GetMapping(value = "/3348/{callId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
   public Mono<ResponseEntity<InputStreamResource>> bug3348(@PathVariable("callId") String callId) {
     return null;
+  }
+
+  @PostMapping(path = "/3351/{id}")
+  public ResponseEntity<String> createPost(
+      @PathVariable final int id,
+      @RequestBody final Pet post) {
+    return ResponseEntity.ok("Success");
   }
 } 

@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
-import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.service.Encoding;
 import springfox.documentation.service.ParameterType;
@@ -43,7 +42,6 @@ public class ContentParameterAggregator implements ParameterAggregator {
     final ParameterType aggregateIn = in;
     RequestParameterBuilder builder = new RequestParameterBuilder();
 
-    // @formatter:off
     parameters.stream()
         .filter(p -> p.getIn() == ParameterType.FORM)
         .forEach(each -> builder
@@ -53,17 +51,17 @@ public class ContentParameterAggregator implements ParameterAggregator {
                 .requestBody(true)
                 .representation(aggregateMediaType)
                 .apply(r -> r.model(m -> m.compoundModel(cm -> cm
-                                .modelKey(new ModelKeyBuilder()
-                                  .qualifiedModelName(qn ->
-                                      qn.namespace("io.springfox")
-                                          .name(each.getName() + "Aggregate"))
-                                  .viewDiscriminator(null)
-                                  .validationGroupDiscriminators(new ArrayList<>())
-                                  .isResponse(false)
-                                  .build())
+                    .modelKey(mk ->
+                        mk.qualifiedModelName(qn ->
+                            qn.namespace("io.springfox")
+                                .name(each.getName() + "Aggregate"))
+                            .viewDiscriminator(null)
+                            .validationGroupDiscriminators(new ArrayList<>())
+                            .isResponse(false)
+                            .build())
                     .properties(properties(each))))
-                  .encoding(each.getName()).apply(e -> e.copyOf(encoding(each, MediaType.TEXT_PLAIN)))
-            .build())));
+                    .encoding(each.getName()).apply(e -> e.copyOf(encoding(each, MediaType.TEXT_PLAIN)))
+                    .build())));
 
     parameters.stream()
         .filter(p -> p.getIn() == ParameterType.FORMDATA
@@ -78,20 +76,21 @@ public class ContentParameterAggregator implements ParameterAggregator {
             .name("body")
             .in(aggregateIn)
             .content(c -> c
-              .requestBody(true)
-              .representation(aggregateMediaType)
-              .apply(r -> r.model(m -> m.compoundModel(cm -> cm.modelKey(new ModelKeyBuilder()
-                                  .qualifiedModelName(q ->
-                                      q.namespace("io.springfox")
-                                      .name(each.getName() + "Aggregate"))
-                                  .viewDiscriminator(null)
-                                  .validationGroupDiscriminators(new ArrayList<>())
-                                  .isResponse(false).build())
-                    .properties(properties(each))))
-                .encoding(each.getName()).apply(e -> e.copyOf(encoding(each, aggregateMediaType)))))
+                .requestBody(true)
+                .representation(aggregateMediaType)
+                .apply(r -> r.model(m ->
+                    m.compoundModel(cm ->
+                        cm.modelKey(mk ->
+                            mk.qualifiedModelName(q ->
+                                q.namespace("io.springfox")
+                                    .name(each.getName() + "Aggregate"))
+                                .viewDiscriminator(null)
+                                .validationGroupDiscriminators(new ArrayList<>())
+                                .isResponse(false).build())
+                            .properties(properties(each))))
+                    .encoding(each.getName()).apply(e -> e.copyOf(encoding(each, aggregateMediaType)))))
             .build());
     RequestParameter content = builder.build();
-    // @formatter:on
 
     ArrayList<RequestParameter> requestParameters =
         parameters.stream()
@@ -112,9 +111,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
   private List<PropertySpecification> properties(RequestParameter parameter) {
     return parameter.getParameterSpecification().getContent()
         .map(c -> c.getRepresentations().stream()
-            .map(m -> new PropertySpecificationBuilder(
-                parameter.getName(),
-                null)
+            .map(m -> new PropertySpecificationBuilder(parameter.getName())
                 .type(m.getModel())
                 .required(parameter.getRequired())
                 .description(parameter.getDescription())

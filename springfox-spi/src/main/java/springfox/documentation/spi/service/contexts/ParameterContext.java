@@ -71,9 +71,9 @@ public class ParameterContext {
   }
 
   /**
-   * @deprecated
-   * @since 3.0.0 this has been deprecated in favor of @see
    * @return this
+   * @since 3.0.0 this has been deprecated in favor of @see
+   * @deprecated
    */
   @Deprecated
   public springfox.documentation.builders.ParameterBuilder parameterBuilder() {

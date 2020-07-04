@@ -81,11 +81,12 @@ public class ModelSpecificationFactory {
       }
     }
     EnumerationFacet finalEnumerationFacet = enumerationFacet;
+    ReferenceModelSpecification finalReference = reference;
     return new ModelSpecificationBuilder()
         .scalarModel(scalar.orElse(null))
-        .referenceModel(reference)
-        .collectionModel(collectionSpecification)
-        .mapModel(mapSpecification)
+        .referenceModel(r -> r.copyOf(finalReference))
+        .collectionModel(c -> c.copyOf(collectionSpecification))
+        .mapModel(m -> m.copyOf(mapSpecification))
         .facets(f -> f.enumerationFacet(e -> e.copyOf(finalEnumerationFacet)))
         .build();
   }

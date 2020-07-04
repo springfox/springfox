@@ -5,10 +5,7 @@ import spock.lang.Specification
 import springfox.documentation.builders.CompoundModelSpecificationBuilder
 import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.RequestParameterBuilder
-import springfox.documentation.schema.ModelKey
-import springfox.documentation.schema.ModelKeyBuilder
 import springfox.documentation.schema.QualifiedModelName
-import springfox.documentation.schema.ReferenceModelSpecification
 import springfox.documentation.schema.ScalarType
 import springfox.documentation.schema.Xml
 import springfox.documentation.service.Header
@@ -34,15 +31,20 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
    *           address:
    *             # default is application/json
    *             type: object
-   *             properties: {..}*           historyMetadata:
-   *           # need to declare XML format!
-   *           description: metadata in XML format
+   *             properties:
+   *           historyMetadata:
+   *             description: metadata in XML format
    *             type: object
-   *             properties: {...}*           profileImage:
+   *             properties:
+   *           profileImage:
    *             # default is application/octet-stream, need to declare an image type only!
    *             type: string
    *             format: binary
    *       encoding:
+   *         id:
+   *          contentType: text/plain
+   *         address
+   *          contentType: application/json
    *         historyMetadata:
    *           # require XML Content-Type in utf-8 encoding
    *           contentType: application/xml; charset=utf-8
@@ -84,7 +86,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
 
   }
 
-  private RequestParameter idParameter() {
+  RequestParameter idParameter() {
     new RequestParameterBuilder()
         .accepts([MediaType.MULTIPART_FORM_DATA])
         .in(ParameterType.FORMDATA)
@@ -98,7 +100,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .build()
   }
 
-  private RequestParameter addressParameter() {
+  RequestParameter addressParameter() {
     new RequestParameterBuilder()
         .accepts([MediaType.MULTIPART_FORM_DATA])
         .in(ParameterType.FORMDATA)
@@ -106,27 +108,34 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .content { c
           ->
           c.representation(MediaType.MULTIPART_FORM_DATA)
-              .apply(
-                  { r
+              .apply({
+                r
+                  ->
+                  r.model { m
                     ->
-                    r.model { m
-                      ->
-                      m.referenceModel(
-                          new ReferenceModelSpecification(
-                              new ModelKey(
-                                  new QualifiedModelName(
-                                      "io.springfox",
-                                      "Address"),
-                                  null,
-                                  new ArrayList<>(),
-                                  false)))
+                    m.referenceModel {
+                      ref ->
+                        ref.key {
+                          key ->
+                            key.qualifiedModelName {
+                              q ->
+                                q.name("Address")
+                                    .namespace("io.springfox")
+                            }
+                                .isResponse(false)
+                        }
                     }
-                  } as Consumer)
+                  }
+                      .encoding("address")
+                      .apply({ enc ->
+                        enc.contentType("application/json")
+                      } as Consumer)
+              } as Consumer)
         }
         .build()
   }
 
-  private RequestParameter historyMetadataParameter() {
+  RequestParameter historyMetadataParameter() {
     new RequestParameterBuilder()
         .accepts([MediaType.MULTIPART_FORM_DATA])
         .in(ParameterType.FORMDATA)
@@ -144,13 +153,25 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                         historyMetadataBuilder(cm)
                       }
                     }
+                        .encoding("historyMetadata")
+                        .apply({
+                          it.contentType("application/xml")
+                        } as Consumer)
                   } as Consumer)
         }
         .build()
   }
 
-  private CompoundModelSpecificationBuilder historyMetadataBuilder(CompoundModelSpecificationBuilder cm, hidden = null) {
-    cm.modelKey(new ModelKeyBuilder().build())
+  CompoundModelSpecificationBuilder historyMetadataBuilder(CompoundModelSpecificationBuilder cm, hidden = null) {
+    cm
+        .modelKey {
+          mk ->
+            mk.qualifiedModelName {
+              qn ->
+                qn.name("HistoryMetadata")
+                    .namespace("some:namespace")
+            }
+        }
         .property("id")
         .apply(
             { p
@@ -232,11 +253,11 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                         ->
                         m.compoundModel { cm
                           ->
-                          cm.modelKey(new ModelKeyBuilder()
-                              .qualifiedModelName(new QualifiedModelName(
-                                  "io.springfox",
-                                  "profileImageAggregate"))
-                              .build())
+                          cm.modelKey { mk ->
+                            mk.qualifiedModelName(new QualifiedModelName(
+                                "io.springfox",
+                                "profileImageAggregate"))
+                          }
                               .property("id")
                               .apply({
                                 p
@@ -254,15 +275,18 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                                   p.required(false)
                                       .type(
                                           new ModelSpecificationBuilder()
-                                              .referenceModel(
-                                                  new ReferenceModelSpecification(
-                                                      new ModelKey(
-                                                          new QualifiedModelName(
-                                                              "io.springfox",
-                                                              "Address"),
-                                                          null,
-                                                          new ArrayList<>(),
-                                                          false)))
+                                              .referenceModel {
+                                                ref ->
+                                                  ref.key {
+                                                    key ->
+                                                      key.qualifiedModelName {
+                                                        q ->
+                                                          q.name("Address")
+                                                              .namespace("io.springfox")
+                                                      }
+                                                          .isResponse(false)
+                                                  }
+                                              }
                                               .build())
                               } as Consumer)
                               .property("historyMetadata")
@@ -305,6 +329,14 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                         .encoding("id")
                         .apply({
                           it.contentType("text/plain")
+                        } as Consumer)
+                        .encoding("historyMetadata")
+                        .apply({
+                          it.contentType("application/xml")
+                        } as Consumer)
+                        .encoding("address")
+                        .apply({
+                          it.contentType("application/json")
                         } as Consumer)
 
                 } as Consumer)
