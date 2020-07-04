@@ -41,6 +41,10 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
    *             type: string
    *             format: binary
    *       encoding:
+   *         id:
+   *          contentType: text/plain
+   *         address
+   *          contentType: application/json
    *         historyMetadata:
    *           # require XML Content-Type in utf-8 encoding
    *           contentType: application/xml; charset=utf-8
@@ -122,6 +126,10 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                         }
                     }
                   }
+                      .encoding("address")
+                      .apply({ enc ->
+                        enc.contentType("application/json")
+                      } as Consumer)
               } as Consumer)
         }
         .build()
@@ -145,6 +153,10 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                         historyMetadataBuilder(cm)
                       }
                     }
+                        .encoding("historyMetadata")
+                        .apply({
+                          it.contentType("application/xml")
+                        } as Consumer)
                   } as Consumer)
         }
         .build()
@@ -317,6 +329,14 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                         .encoding("id")
                         .apply({
                           it.contentType("text/plain")
+                        } as Consumer)
+                        .encoding("historyMetadata")
+                        .apply({
+                          it.contentType("application/xml")
+                        } as Consumer)
+                        .encoding("address")
+                        .apply({
+                          it.contentType("application/json")
                         } as Consumer)
 
                 } as Consumer)
