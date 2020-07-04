@@ -25,14 +25,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
@@ -49,14 +47,13 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE + 10)
 @SuppressWarnings("deprecation")
 public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOG = LoggerFactory.getLogger(ParameterDataTypeReader.class);
@@ -151,17 +148,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
     ModelSpecification parameterModel = models.create(modelContext, parameterType);
     if (isRequestBody) {
-      Set<MediaType> consumes = new HashSet<>(context.getOperationContext()
-                                                     .consumes());
-      if (consumes.isEmpty()) {
-        consumes.add(MediaType.ALL);
-      }
-      consumes
-          .forEach(mediaType ->
-                       context.requestParameterBuilder()
-                              .content(c -> c.requestBody(true)
-                                             .representation(mediaType)
-                                             .apply(r -> r.model(m -> m.copyOf(parameterModel)))));
+      context.requestParameterBuilder()
+          .contentModel(parameterModel);
     } else {
       context.requestParameterBuilder()
           .query(q -> q.model(m -> m.copyOf(parameterModel)));

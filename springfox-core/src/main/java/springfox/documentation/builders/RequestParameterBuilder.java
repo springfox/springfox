@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 import springfox.documentation.schema.Example;
+import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.service.ParameterSpecification;
 import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.ParameterType;
@@ -12,7 +13,9 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -35,7 +38,7 @@ public class RequestParameterBuilder {
   private final List<VendorExtension> extensions = new ArrayList<>();
   private ParameterSpecificationProvider parameterSpecificationProvider = new RootParameterSpecificationProvider();
   private int precedence;
-  private final List<MediaType> accepts = new ArrayList<>();
+  private final Set<MediaType> accepts = new HashSet<>();
   private Validator<RequestParameterBuilder> validator = new NoopValidator<>();
   private int parameterIndex;
 
@@ -134,7 +137,7 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder accepts(Collection<MediaType> accepts) {
-    this.accepts.addAll(accepts);
+    this.accepts.addAll(nullToEmptyList(accepts));
     return this;
   }
 
@@ -200,4 +203,13 @@ public class RequestParameterBuilder {
         .parameterIndex(source.getParameterIndex());
   }
 
+  public void contentModel(ModelSpecification model) {
+    if (accepts.isEmpty()) {
+      accepts.add(MediaType.APPLICATION_JSON);
+    }
+    accepts.forEach(each -> content(c ->
+        c.requestBody(true)
+            .representation(each)
+            .apply(r -> r.model(m -> m.copyOf(model)))));
+  }
 }
