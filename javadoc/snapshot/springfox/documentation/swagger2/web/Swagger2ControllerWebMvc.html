@@ -134,6 +134,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@RestController
 @ConditionalOnWebApplication(type=SERVLET)
 @RequestMapping("${springfox.documentation.swagger.v2.path:/v2/api-docs}")
+@Conditional(<a href="../../spring/web/OnServletBasedWebApplication.html" title="class in springfox.documentation.spring.web">OnServletBasedWebApplication.class</a>)
+@Order(-2147483648)
 public class <span class="typeNameLabel">Swagger2ControllerWebMvc</span>
 extends java.lang.Object</pre>
 </li>

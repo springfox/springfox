@@ -638,7 +638,7 @@ transition to java 8 function interfaces</p>
 <p>Remove library inclusions of earlier</p>
 </li>
 <li>
-<p>Add <code>@EnableOpenApi</code> for open API (and <code>@EnableSwagger2WebMvc</code> or <code>@EnableSwagger2WebFlux</code> for older versions)</p>
+<p>Add <code>EnableOpenApi</code> for open API (and <code>@EnableSwagger2</code> for swagger 2.0)</p>
 </li>
 <li>
 <p>Added the <code>springfox-oas</code> library</p>
@@ -905,7 +905,7 @@ Would love feedback to make this experience better
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.TagsSorter</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfiguration</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfigurationBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
 <span class="keyword">import</span> <span class="include">springfox.petstore.controller.PetController</span>;
 
 <span class="keyword">import</span> <span class="include">java.util.List</span>;
@@ -915,7 +915,7 @@ Would love feedback to make this experience better
 
 
 <span class="annotation">@SpringBootApplication</span>
-<span class="annotation">@EnableSwagger2WebMvc</span><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="annotation">@EnableSwagger2</span> <i class="conum" data-value="1"></i><b>(1)</b>
 <span class="annotation">@ComponentScan</span>(basePackageClasses = {
     PetController.class
 })<i class="conum" data-value="2"></i><b>(2)</b>
@@ -1618,7 +1618,7 @@ cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-07-04 22:23:05 UTC
+Last updated 2020-07-05 17:09:48 UTC
 </div>
 </div>
 <style>

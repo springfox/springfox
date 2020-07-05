@@ -139,6 +139,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@RestController
 @RequestMapping("${springfox.documentation.open-api.v3.path:/v3/api-docs}")
 @ConditionalOnWebApplication(type=REACTIVE)
+@Conditional(<a href="../../spring/web/OnReactiveWebApplication.html" title="class in springfox.documentation.spring.web">OnReactiveWebApplication.class</a>)
 public class <span class="typeNameLabel">OpenApiControllerWebFlux</span>
 extends <a href="OpenApiControllerWeb.html" title="class in springfox.documentation.oas.web">OpenApiControllerWeb</a></pre>
 </li>
@@ -178,10 +179,9 @@ extends <a href="OpenApiControllerWeb.html" title="class in springfox.documentat
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String,java.lang.String)">OpenApiControllerWebFlux</a></span>&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String)">OpenApiControllerWebFlux</a></span>&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
                         <a href="../mappers/ServiceModelToOpenApiMapper.html" title="class in springfox.documentation.oas.mappers">ServiceModelToOpenApiMapper</a>&nbsp;mapper,
                         <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer,
-                        java.lang.String&nbsp;contextPath,
                         java.lang.String&nbsp;oasPath)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -245,7 +245,7 @@ extends <a href="OpenApiControllerWeb.html" title="class in springfox.documentat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String,java.lang.String)">
+<a id="&lt;init&gt;(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper,springfox.documentation.spring.web.json.JsonSerializer,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -255,8 +255,6 @@ extends <a href="OpenApiControllerWeb.html" title="class in springfox.documentat
 public&nbsp;OpenApiControllerWebFlux&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
                                 <a href="../mappers/ServiceModelToOpenApiMapper.html" title="class in springfox.documentation.oas.mappers">ServiceModelToOpenApiMapper</a>&nbsp;mapper,
                                 <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer,
-                                @Value("${server.servlet.context-path:}")
-                                java.lang.String&nbsp;contextPath,
                                 @Value("${springfox.documentation.open-api.v3.path:/v3/api-docs}")
                                 java.lang.String&nbsp;oasPath)</pre>
 </li>
