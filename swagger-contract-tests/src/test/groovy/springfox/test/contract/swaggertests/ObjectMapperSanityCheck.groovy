@@ -74,13 +74,13 @@ class ObjectMapperSanityCheck extends Specification {
   @ComponentScan(basePackageClasses = [SwaggerApplication.class])
   static class Config {
     @Bean
-    public Docket testCases() {
+    Docket testCases() {
       return new Docket(DocumentationType.SWAGGER_2).select().build()
     }
 
     @Bean
     @Primary
-    public ObjectMapper objectMapperWithIncludeAlways(){
+    ObjectMapper objectMapperWithIncludeAlways(){
       /* Replaces Spring Boot's object mapper
        * http://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html
        */

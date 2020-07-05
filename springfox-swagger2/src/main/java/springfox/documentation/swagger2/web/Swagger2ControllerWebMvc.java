@@ -24,6 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,7 @@ import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.OnServletBasedWebApplication;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -52,6 +56,8 @@ import static springfox.documentation.swagger2.web.Swagger2ControllerWebMvc.*;
 @RestController
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @RequestMapping(SWAGGER2_SPECIFICATION_PATH)
+@Conditional(OnServletBasedWebApplication.class)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class Swagger2ControllerWebMvc {
   public static final String SWAGGER2_SPECIFICATION_PATH
       = "${springfox.documentation.swagger.v2.path:/v2/api-docs}";

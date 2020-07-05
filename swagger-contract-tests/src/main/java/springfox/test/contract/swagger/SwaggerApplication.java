@@ -38,8 +38,6 @@ import springfox.petstore.PetStoreConfiguration;
 @Import(value = {
     SpringDataRestConfiguration.class,
     PetStoreConfiguration.class,
-    SecuritySupport.class,
-    Swagger2TestConfig.class,
     BeanValidatorPluginsConfiguration.class })
 public class SwaggerApplication {
   public static void main(String[] args) {
