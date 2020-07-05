@@ -78,7 +78,7 @@ public class RequestHandlerSelectors {
 
 
   private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
-    return input -> ClassUtils.getPackageName(input).startsWith(basePackage);
+    return input -> (ClassUtils.getPackageName(input) + ".").startsWith(basePackage + ".");
   }
 
   /**
