@@ -124,7 +124,7 @@ transition to java 8 function interfaces
 
 ===== Regular spring mvc
 1. Remove library inclusions of earlier
-2. Add `@EnableOpenApi` for open API (and `@EnableSwagger2WebMvc` or `@EnableSwagger2WebFlux` for older versions)
+2. Add `EnableOpenApiWebMvc` for open API (and `@EnableSwagger2WebMvc` or `@EnableSwagger2WebFlux` for older versions)
 3. Added the `springfox-oas` library
 4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
 and open api libraries for annotations and models) so if you used guava predicates/functions those will need to

@@ -38,7 +38,8 @@ import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
-import springfox.documentation.oas.annotations.EnableOpenApi
+import springfox.documentation.oas.annotations.EnableOpenApiWebFlux
+import springfox.documentation.oas.annotations.EnableOpenApiWebMvc
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 
@@ -73,17 +74,18 @@ class ObjectMapperSanityCheck extends Specification {
     }
 
     @Configuration
-    @EnableOpenApi
+    @EnableOpenApiWebMvc
+    @EnableOpenApiWebFlux
     @ComponentScan(basePackageClasses = [OpenApiApplication.class])
     static class Config {
         @Bean
-        public Docket testCases() {
+        Docket testCases() {
             return new Docket(DocumentationType.SWAGGER_2).select().build()
         }
 
         @Bean
         @Primary
-        public ObjectMapper objectMapperWithIncludeAlways() {
+        ObjectMapper objectMapperWithIncludeAlways() {
             /* Replaces Spring Boot's object mapper
              * http://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html
              */
@@ -97,7 +99,7 @@ class ObjectMapperSanityCheck extends Specification {
         }
 
         @Bean
-        public ObjectMapperEventListener objectMapperEventListener() {
+        ObjectMapperEventListener objectMapperEventListener() {
             //Register an ObjectMapperConfigured event listener
             return new ObjectMapperEventListener()
         }
