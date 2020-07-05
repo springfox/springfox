@@ -26,6 +26,7 @@ dependencies {
   implementation "org.codehaus.groovy:groovy-all:$groovy"
   implementation libs.clientProvided
   implementation "javax.validation:validation-api:$validationApiVersion"
+  implementation 'org.slf4j:slf4j-simple:1.6.1'
 
   testImplementation libs.test
   testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"
@@ -37,9 +38,6 @@ dependencies {
   implementation project(':springfox-petstore')
   implementation project(':springfox-bean-validators')
 
-  implementation(project(path: ':springfox-swagger-ui')) {
-    exclude group: 'org.springframework', module: 'spring-web'
-  }
 }
 // tag::update-contract-tests[]
 // NOTE: Uncomment to bulk update contracts

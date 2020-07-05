@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2015 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,14 +17,15 @@
  *
  */
 
-package springfox.documentation.oas.annotations;
+package springfox.documentation.swagger2.annotations;
 
 import org.springframework.context.annotation.Import;
-import springfox.documentation.oas.configuration.OpenApiDocumentationConfiguration;
+import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 
 /**
  * Indicates that Swagger support should be enabled.
@@ -38,6 +39,6 @@ import java.lang.annotation.Target;
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = {java.lang.annotation.ElementType.TYPE})
 @Documented
-@Import(OpenApiDocumentationConfiguration.class)
-public @interface EnableOpenApi {
+@Import(Swagger2DocumentationConfiguration.class)
+public @interface EnableSwagger2 {
 }

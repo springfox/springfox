@@ -16,20 +16,19 @@
  *
  *
  */
-package springfox.documentation.schema;
+package springfox.documentation.common;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.ClassUtils;
 
-import static org.springframework.util.ClassUtils.forName;
+import static org.springframework.util.ClassUtils.*;
 
-//TODO: Move this class
-public abstract class ClassPresentInClassPathCondition implements Condition {
+public abstract class ClassNotPresentInClassPathCondition implements Condition {
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-    return isPresent(getClassName(), context.getClassLoader());
+    return !isPresent(getClassName(), context.getClassLoader());
   }
 
   protected abstract String getClassName();

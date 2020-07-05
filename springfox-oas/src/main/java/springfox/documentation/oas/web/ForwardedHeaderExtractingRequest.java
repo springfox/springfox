@@ -87,10 +87,9 @@ class ForwardedHeaderExtractingRequest {
   }
 
   public String adjustedRequestURL() {
-    return String.format("%s://%s:%s%s",
+    return String.format("%s://%s:%s",
         getScheme(),
         getServerName(),
-        getServerPort(),
-        getRequestURI());
+        getServerPort());
   }
 }

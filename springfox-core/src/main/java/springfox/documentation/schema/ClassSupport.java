@@ -18,6 +18,8 @@
  */
 package springfox.documentation.schema;
 
+import org.springframework.util.ClassUtils;
+
 import java.util.Optional;
 
 import static java.util.Optional.*;
@@ -27,9 +29,13 @@ public class ClassSupport {
     throw new UnsupportedOperationException();
   }
 
-  public static Optional<? extends Class> classByName(String className) {
+  public static Optional<Class<?>> classByName(String className) {
+    return classByName(className, ClassUtils.getDefaultClassLoader());
+  }
+
+  public static Optional<Class<?>> classByName(String className, ClassLoader classLoader) {
     try {
-      return of(Class.forName(className));
+      return of(ClassUtils.forName(className, classLoader));
     } catch (ClassNotFoundException e) {
       return empty();
     }

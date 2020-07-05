@@ -22,6 +22,7 @@ package springfox.documentation.oas.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ import org.springframework.web.server.adapter.ForwardedHeaderTransformer;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.OnReactiveWebApplication;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 
@@ -42,6 +44,7 @@ import static springfox.documentation.oas.web.OpenApiControllerWeb.*;
 @RestController
 @RequestMapping(OPEN_API_SPECIFICATION_PATH)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+@Conditional(OnReactiveWebApplication.class)
 public class OpenApiControllerWebFlux extends OpenApiControllerWeb {
 
   @Autowired
@@ -49,9 +52,8 @@ public class OpenApiControllerWebFlux extends OpenApiControllerWeb {
       DocumentationCache documentationCache,
       ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
-      @Value("${server.servlet.context-path:}") String contextPath,
       @Value(OPEN_API_SPECIFICATION_PATH) String oasPath) {
-    super(documentationCache, mapper, jsonSerializer, contextPath, oasPath);
+    super(documentationCache, mapper, jsonSerializer, oasPath);
   }
 
   @GetMapping(

@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.OnReactiveWebApplication;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -50,6 +52,7 @@ import static springfox.documentation.swagger2.web.Swagger2ControllerWebMvc.*;
 @ApiIgnore
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @RequestMapping(SWAGGER2_SPECIFICATION_PATH)
+@Conditional({OnReactiveWebApplication.class})
 public class Swagger2ControllerWebFlux {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2ControllerWebFlux.class);
