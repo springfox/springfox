@@ -153,8 +153,8 @@ public class Defaults {
       TypeResolver typeResolver,
       List<AlternateTypeRule> rules,
       String className,
-      Class clazz) {
-    Optional<? extends Class> fromClazz = ClassSupport.classByName(className);
+      Class<?> clazz) {
+    Optional<Class<?>> fromClazz = ClassSupport.classByName(className);
     fromClazz.ifPresent(aClass -> rules.add(newRule(
         typeResolver.resolve(aClass),
         typeResolver.resolve(clazz))));

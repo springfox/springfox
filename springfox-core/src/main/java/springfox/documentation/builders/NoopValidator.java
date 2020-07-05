@@ -21,7 +21,7 @@ public class NoopValidator<T> implements Validator<T> {
     List<ValidationResult> problems = results.stream()
         .filter(v -> v.getLevel().toInt() > Level.INFO.toInt())
         .collect(Collectors.toList());
-    problems.forEach(v -> LOGGER.warn("{} [{}.{}] {}", v.getLevel(), v.getObject(), v.getField(), v.getMessage()));
+    problems.forEach(v -> LOGGER.debug("{} [{}.{}] {}", v.getLevel(), v.getObject(), v.getField(), v.getMessage()));
     return problems;
   }
 }
