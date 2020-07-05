@@ -19,10 +19,12 @@
 
 package springfox.documentation.oas.annotations;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import springfox.documentation.oas.configuration.OpenApiDocumentationConfiguration;
+import springfox.documentation.oas.configuration.OpenApiMappingConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;
-import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
+import springfox.documentation.spring.web.SpringfoxWebFluxConfiguration;
+import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -42,7 +44,13 @@ import java.lang.annotation.Target;
 @Documented
 @Import({
     SpringfoxWebConfiguration.class,
-    SpringfoxWebMvcConfiguration.class,
-    OpenApiDocumentationConfiguration.class})
-public @interface EnableOpenApi {
+    SpringfoxWebFluxConfiguration.class,
+    SwaggerCommonConfiguration.class,
+    OpenApiMappingConfiguration.class
+})
+@ComponentScan(basePackages = {
+    "springfox.documentation.oas.web",
+    "springfox.documentation.oas.mappers"
+})
+public @interface EnableOpenApiWebFlux {
 }
