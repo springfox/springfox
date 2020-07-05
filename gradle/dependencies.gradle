@@ -41,7 +41,9 @@ ext {
           "org.yaml:snakeyaml:${snakeyaml}",
           "org.spockframework:spock-spring:${spock}",
           "org.spockframework:spock-core:${spock}",
-          "org.codehaus.groovy:groovy-all:${groovy}",
+          "org.spockframework:spock-junit4:${spock}",
+          "org.codehaus.groovy:groovy:${groovy}",
+          "org.codehaus.groovy:groovy-json:${groovy}",
           "org.springframework.hateoas:spring-hateoas:${springHateoas}",
           "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
       ],
@@ -55,7 +57,9 @@ ext {
           "org.yaml:snakeyaml:${snakeyaml}",
           "org.spockframework:spock-spring:${spock}",
           "org.spockframework:spock-core:${spock}",
-          "org.codehaus.groovy:groovy-all:${groovy}",
+          "org.spockframework:spock-junit4:${spock}",
+          "org.codehaus.groovy:groovy:${groovy}",
+          "org.codehaus.groovy:groovy-json:${groovy}",
           "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
       ],
       swagger2Core                       : [
