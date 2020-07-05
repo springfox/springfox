@@ -1,6 +1,7 @@
 package springfox.documentation.oas.web;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -14,11 +15,16 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import static org.slf4j.LoggerFactory.*;
+
 public class OpenApiControllerWeb {
+  private static final Logger LOGGER = getLogger(OpenApiControllerWeb.class);
   public static final String OPEN_API_SPECIFICATION_PATH
       = "${springfox.documentation.open-api.v3.path:/v3/api-docs}";
   protected static final String HAL_MEDIA_TYPE = "application/hal+json";
@@ -31,14 +37,11 @@ public class OpenApiControllerWeb {
       DocumentationCache documentationCache,
       ServiceModelToOpenApiMapper mapper,
       JsonSerializer jsonSerializer,
-      String contextPath,
       String oasPath) {
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
-    this.requestPrefix = String.format("%s%s",
-        StringUtils.trimTrailingCharacter(contextPath, '/'),
-        StringUtils.trimTrailingCharacter(oasPath, '/'));
+    this.requestPrefix = StringUtils.trimTrailingCharacter(oasPath, '/');
   }
 
   protected ResponseEntity<Json> toJsonResponse(
@@ -56,8 +59,15 @@ public class OpenApiControllerWeb {
   }
 
   protected Server inferredServer(String requestUrl) {
+    String serverUrl = requestUrl.replace(requestPrefix, "");
+    try {
+      URI url = new URI(requestUrl);
+      serverUrl = String.format("%s://%s:%s", url.getScheme(), url.getHost(), url.getPort());
+    } catch (URISyntaxException e) {
+      LOGGER.error("Unable to parse request url:" + requestUrl);
+    }
     return new ServerBuilder()
-        .url(requestUrl.replace(requestPrefix, ""))
+        .url(serverUrl)
         .description("Inferred Url")
         .build();
   }
