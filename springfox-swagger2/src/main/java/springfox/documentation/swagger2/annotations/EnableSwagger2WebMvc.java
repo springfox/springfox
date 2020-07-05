@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.annotations;
 
 import org.springframework.context.annotation.Import;
 import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
-//import springfox.documentation.swagger2.configuration.Swagger2WebMvcConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -35,10 +34,13 @@ import java.lang.annotation.Target;
  * Loads all required beans defined in @see SpringSwaggerConfig
  *
  * @see springfox.documentation.spring.web.plugins.Docket
+ * Use {@link EnableSwagger2} instead
+ * @deprecated @since 3.0.0
  */
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = {java.lang.annotation.ElementType.TYPE})
 @Documented
 @Import(Swagger2DocumentationConfiguration.class)
+@Deprecated
 public @interface EnableSwagger2WebMvc {
 }

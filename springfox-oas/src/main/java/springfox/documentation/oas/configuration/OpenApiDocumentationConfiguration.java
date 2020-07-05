@@ -22,12 +22,14 @@ package springfox.documentation.oas.configuration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebFluxConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 
 @Configuration
 @Import({
+    SpringfoxWebConfiguration.class,
     SpringfoxWebMvcConfiguration.class,
     SpringfoxWebFluxConfiguration.class,
     SwaggerCommonConfiguration.class,

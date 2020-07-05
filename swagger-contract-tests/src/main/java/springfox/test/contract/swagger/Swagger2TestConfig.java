@@ -22,7 +22,7 @@ import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -41,8 +41,8 @@ import static springfox.documentation.builders.PathSelectors.*;
     "springfox.documentation.spring.web.dummy.controllers",
     "springfox.test.contract.swagger",
     "springfox.petstore.webflux.controller"
-    })
-@EnableSwagger2WebMvc
+})
+@EnableSwagger2
 public class Swagger2TestConfig {
   @Bean
   public Docket petstoreWithUriTemplating(List<SecurityScheme> authorizationTypes) {
@@ -121,7 +121,9 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket featureService(TypeResolver resolver, List<SecurityScheme> authorizationTypes) {
+  public Docket featureService(
+      TypeResolver resolver,
+      List<SecurityScheme> authorizationTypes) {
     // tag::question-27-config[]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("featureService")
@@ -170,9 +172,11 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket bugs(TypeResolver resolver, List<SecurityScheme> authorizationTypes) {
+  public Docket bugs(
+      TypeResolver resolver,
+      List<SecurityScheme> authorizationTypes) {
     AuthorizationScope[] scopes =
-        new AuthorizationScope[] {
+        new AuthorizationScope[]{
             new AuthorizationScopeBuilder()
                 .scope("read")
                 .description("Read access")
@@ -180,12 +184,12 @@ public class Swagger2TestConfig {
         };
     return new Docket(DocumentationType.SWAGGER_2).groupName("bugs")
         .apiInfo(new ApiInfoBuilder().version("1.0")
-                     .title("bugs API")
-                     .description("bugs API")
-                     .extensions(Collections.singletonList(new StringVendorExtension(
-                         "test",
-                         "testValue")))
-                     .build())
+            .title("bugs API")
+            .description("bugs API")
+            .extensions(Collections.singletonList(new StringVendorExtension(
+                "test",
+                "testValue")))
+            .build())
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
         .tags(new Tag(
@@ -227,7 +231,9 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket bugsDifferent(TypeResolver resolver, List<SecurityScheme> authorizationTypes) {
+  public Docket bugsDifferent(
+      TypeResolver resolver,
+      List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2).groupName("bugsDifferent")
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
@@ -416,9 +422,9 @@ public class Swagger2TestConfig {
                 "application/json")))
         .select()
         .paths(PathSelectors.regex("/rest/people.*")
-                   .or(PathSelectors.regex("/rest/tags.*"))
-                   .or(PathSelectors.regex("/rest/categories.*"))
-                   .or(PathSelectors.regex("/rest/addresses.*")))
+            .or(PathSelectors.regex("/rest/tags.*"))
+            .or(PathSelectors.regex("/rest/categories.*"))
+            .or(PathSelectors.regex("/rest/addresses.*")))
         .build();
   }
 
