@@ -22,6 +22,7 @@ package springfox.documentation.oas.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ import org.springframework.web.util.UrlPathHelper;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.oas.mappers.ServiceModelToOpenApiMapper;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.OnServletBasedWebApplication;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 
@@ -43,6 +45,7 @@ import static springfox.documentation.oas.web.OpenApiControllerWebMvc.*;
 @RestController
 @RequestMapping(OPEN_API_SPECIFICATION_PATH)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@Conditional(OnServletBasedWebApplication.class)
 public class OpenApiControllerWebMvc extends OpenApiControllerWeb {
 
   @Autowired

@@ -39,6 +39,7 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc
 import springfox.test.contract.swagger.SwaggerApplication
 import springfox.test.contract.swagger.webflux.listeners.ObjectMapperEventListener
@@ -71,6 +72,7 @@ class ObjectMapperSanityCheck extends Specification {
 
   @Configuration
   @EnableSwagger2WebMvc
+  @EnableSwagger2WebFlux
   @ComponentScan(basePackageClasses = [SwaggerApplication.class])
   static class Config {
     @Bean
