@@ -18,6 +18,8 @@
  */
 package springfox.documentation.schema;
 
+import springfox.documentation.common.ClassPresentInClassPathCondition;
+
 public class JaxbPresentInClassPathCondition extends ClassPresentInClassPathCondition {
   @Override
   protected String getClassName() {
