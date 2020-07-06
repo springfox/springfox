@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.data.domain.Pageable;
 import springfox.documentation.builders.AlternateTypeBuilder;
 import springfox.documentation.builders.AlternateTypePropertyBuilder;
 import springfox.documentation.schema.AlternateTypeRule;
@@ -12,11 +13,10 @@ import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
+import java.util.function.Consumer;
 
+import static java.util.Collections.singletonList;
 import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 @Configuration
@@ -45,7 +45,7 @@ public class SpringPageableConfiguration {
 
             @Override
             public List<AlternateTypeRule> rules() {
-                return Collections.singletonList(
+                return singletonList(
                         newRule(resolver.resolve(Pageable.class), resolver.resolve(pageableMixin())));
             }
         };
@@ -60,12 +60,12 @@ public class SpringPageableConfiguration {
             Annotation limitAnnotation = getApiParamAnnotation("limit");
             Annotation sortAnnotation = getApiParamAnnotation("sort");
             return new AlternateTypeBuilder()
-                    .fullyQualifiedClassName(String.format("%s.generated.%s", Pageable.class.getPackage().getName(),
+                    .fullyQualifiedClassName(String.format("%s.generated.%s",
+                            Pageable.class.getPackage().getName(),
                             Pageable.class.getSimpleName()))
-                    .withProperties(Arrays.asList(
-                            property(Integer.class, "page", pageAnnotation),
-                            property(Integer.class, "limit", limitAnnotation),
-                            property(String[].class, "sort", sortAnnotation)))
+                    .property(property(Integer.class, "page", pageAnnotation))
+                    .property(property(Integer.class, "limit", limitAnnotation))
+                    .property(property(String[].class, "sort", sortAnnotation))
                     .build();
         } catch (NoSuchFieldException e) {
             throw new IllegalStateException("Can't create Pageable convention");
@@ -76,13 +76,12 @@ public class SpringPageableConfiguration {
         return this.getClass().getDeclaredField(fieldName).getAnnotation(ApiParam.class);
     }
 
-    private AlternateTypePropertyBuilder property(Class<?> type, String name, Annotation annotation) {
-        return new AlternateTypePropertyBuilder()
-                .withName(name)
-                .withType(type)
-                .withCanRead(true)
-                .withCanWrite(true)
-                .withAnnotations(Collections.singletonList(annotation));
+    private Consumer<AlternateTypePropertyBuilder> property(Class<?> type, String name, Annotation annotation) {
+        return p -> p.name(name)
+                .type(type)
+                .canRead(true)
+                .canWrite(true)
+                .annotations(singletonList(annotation));
     }
     // tag::alternate-type-builder[]
 }
