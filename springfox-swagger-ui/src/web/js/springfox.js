@@ -100,7 +100,7 @@ window.onload = () => {
       /*--------------------------------------------*\
        * Network
       \*--------------------------------------------*/
-      oauth2RedirectUrl: baseUrl + "/oauth2-redirect.html",
+      oauth2RedirectUrl: baseUrl + "/swagger-ui/oauth2-redirect.html",
       requestInterceptor: (a => a),
       responseInterceptor: (a => a),
       showMutatedRequest: true,
