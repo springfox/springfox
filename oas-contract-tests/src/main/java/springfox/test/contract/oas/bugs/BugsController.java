@@ -49,4 +49,12 @@ public class BugsController {
       @RequestBody final Pet post) {
     return ResponseEntity.ok("Success");
   }
+
+  @PostMapping("/2982/model")
+  public void bug2982Model(Bug2982.MyClass input) {
+  }
+
+  @PostMapping("/2982/body")
+  public void bug2982Body(@RequestBody Bug2982.MyClass input) {
+  }
 } 

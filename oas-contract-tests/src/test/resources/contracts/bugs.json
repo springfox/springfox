@@ -26,6 +26,63 @@
         }
     ],
     "paths": {
+        "/bugs/2982/body": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug2982Body",
+                "operationId": "bug2982BodyUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MyClass"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/bugs/2982/model": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug2982Model",
+                "operationId": "bug2982ModelUsingPOST",
+                "parameters": [
+                    {
+                        "name": "mySubSclass.str",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "test",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/3321": {
             "get": {
                 "tags": [
@@ -222,6 +279,15 @@
                     "name": {
                         "type": "string",
                         "example": "Dogs"
+                    }
+                }
+            },
+            "MyClass": {
+                "title": "MyClass",
+                "type": "object",
+                "properties": {
+                    "test": {
+                        "type": "string"
                     }
                 }
             },
