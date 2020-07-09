@@ -94,6 +94,7 @@ class OpenApiContractSpec extends Specification implements FileAccess {
     contractFile    | groupName
     'petstore.json' | 'petstore'
     'bugs.json'     | 'bugs'
+    'features.json' | 'features'
   }
 
   def "should list swagger resources for open api 3.0"() {
@@ -113,6 +114,11 @@ class OpenApiContractSpec extends Specification implements FileAccess {
     result.find {
       it.name == 'bugs' &&
           it.url == "/v3/api-docs?group=bugs" &&
+          it.swaggerVersion == '3.0.3'
+    }
+    result.find {
+      it.name == 'features' &&
+          it.url == "/v3/api-docs?group=features" &&
           it.swaggerVersion == '3.0.3'
     }
     result.find {

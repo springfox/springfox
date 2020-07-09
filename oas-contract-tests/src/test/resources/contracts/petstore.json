@@ -102,7 +102,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -110,7 +110,7 @@
                                     }
                                 }
                             },
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -155,12 +155,12 @@
                     "200": {
                         "description": "Successful operation",
                         "content": {
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Pet"
                                 }
                             },
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Pet"
                                 }
@@ -211,12 +211,12 @@
                     "200": {
                         "description": "Successful operation",
                         "content": {
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Pet"
                                 }
                             },
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Pet"
                                 }
@@ -267,7 +267,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -275,7 +275,7 @@
                                     }
                                 }
                             },
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -324,7 +324,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -332,7 +332,7 @@
                                     }
                                 }
                             },
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
@@ -381,7 +381,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "*/*": {
+                            "application/xml": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Pet"
                                 }
@@ -391,7 +391,7 @@
                                     "$ref": "#/components/schemas/Pet"
                                 }
                             },
-                            "application/xml": {
+                            "*/*": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Pet"
                                 }
@@ -573,12 +573,12 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ModelApiResponse"
                                 }
                             },
-                            "application/json": {
+                            "*/*": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ModelApiResponse"
                                 }
@@ -655,12 +655,12 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Order"
                                 }
                             },
-                            "application/json": {
+                            "*/*": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Order"
                                 }
@@ -702,7 +702,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "*/*": {
+                            "application/xml": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Order"
                                 }
@@ -712,7 +712,7 @@
                                     "$ref": "#/components/schemas/Order"
                                 }
                             },
-                            "application/xml": {
+                            "*/*": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Order"
                                 }
@@ -789,12 +789,12 @@
                     "default": {
                         "description": "successful operation",
                         "content": {
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "$ref": "#/components/schemas/User"
                                 }
                             },
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/User"
                                 }
@@ -854,12 +854,12 @@
                     "200": {
                         "description": "Successful operation",
                         "content": {
-                            "application/json": {
+                            "application/xml": {
                                 "schema": {
                                     "$ref": "#/components/schemas/User"
                                 }
                             },
-                            "application/xml": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/User"
                                 }
@@ -924,7 +924,7 @@
                             }
                         },
                         "content": {
-                            "*/*": {
+                            "application/xml": {
                                 "schema": {
                                     "type": "string"
                                 }
@@ -934,7 +934,7 @@
                                     "type": "string"
                                 }
                             },
-                            "application/xml": {
+                            "*/*": {
                                 "schema": {
                                     "type": "string"
                                 }
@@ -987,7 +987,7 @@
                     "200": {
                         "description": "successful operation",
                         "content": {
-                            "*/*": {
+                            "application/xml": {
                                 "schema": {
                                     "$ref": "#/components/schemas/User"
                                 }
@@ -997,7 +997,7 @@
                                     "$ref": "#/components/schemas/User"
                                 }
                             },
-                            "application/xml": {
+                            "*/*": {
                                 "schema": {
                                     "$ref": "#/components/schemas/User"
                                 }
