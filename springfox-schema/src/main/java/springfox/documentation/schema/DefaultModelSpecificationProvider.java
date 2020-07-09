@@ -142,9 +142,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                     .validationGroupDiscriminators(modelContext.getValidationGroups())
                     .isResponse(modelContext.isReturnType())
                     .build())
-                .properties(properties.values())
-                .maxProperties(properties.size())
-                .minProperties(properties.size()));
+                .properties(properties.values()));
     return schemaPluginsManager.modelSpecification(modelContext);
   }
 
