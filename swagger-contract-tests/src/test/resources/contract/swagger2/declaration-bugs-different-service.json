@@ -1631,6 +1631,30 @@
                 }
             }
         },
+        "/bugs/2767/swagger15": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2767",
+                "operationId": "bug2767UsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Not Found",
+                        "examples": {
+                            "bar": "The address was invalid",
+                            "foo": "{'invalidField': 'address'}"
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/2822": {
             "post": {
                 "tags": [
@@ -2248,6 +2272,19 @@
             },
             "title": "EntityModel«string»"
         },
+        "ErrorResponse": {
+            "type": "object",
+            "required": [
+                "invalidField"
+            ],
+            "properties": {
+                "invalidField": {
+                    "type": "string",
+                    "example": "address"
+                }
+            },
+            "title": "ErrorResponse"
+        },
         "Example": {
             "type": "object",
             "properties": {
@@ -2427,6 +2464,19 @@
                 }
             },
             "title": "ProductVO"
+        },
+        "Response": {
+            "type": "object",
+            "required": [
+                "data"
+            ],
+            "properties": {
+                "data": {
+                    "type": "string",
+                    "example": "some data"
+                }
+            },
+            "title": "Response"
         },
         "Response«LanguageResponse»": {
             "type": "object",

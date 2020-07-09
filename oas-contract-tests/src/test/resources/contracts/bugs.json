@@ -26,6 +26,89 @@
         }
     ],
     "paths": {
+        "/bugs/2767/swagger15": {
+            "get": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug2767",
+                "operationId": "bug2767UsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "example-0": {
+                                        "value": "{'invalidField': 'address'}"
+                                    }
+                                }
+                            },
+                            "text/plain": {
+                                "examples": {
+                                    "example-1": {
+                                        "value": "The address was invalid"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/bugs/2767/swagger20": {
+            "get": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug2767New",
+                "operationId": "bug2767NewUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "examples": {
+                                    "bar": {
+                                        "summary": "bar example",
+                                        "description": "Bar response",
+                                        "value": "{'invalidField': 'bar'}"
+                                    },
+                                    "foo": {
+                                        "summary": "foo example",
+                                        "description": "Foo response",
+                                        "value": "{'invalidField': 'foo'}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/2982/body": {
             "post": {
                 "tags": [
@@ -282,6 +365,19 @@
                     }
                 }
             },
+            "ErrorResponse": {
+                "title": "ErrorResponse",
+                "required": [
+                    "invalidField"
+                ],
+                "type": "object",
+                "properties": {
+                    "invalidField": {
+                        "type": "string",
+                        "example": "address"
+                    }
+                }
+            },
             "MyClass": {
                 "title": "MyClass",
                 "type": "object",
@@ -331,6 +427,19 @@
                         "items": {
                             "$ref": "#/components/schemas/Tag"
                         }
+                    }
+                }
+            },
+            "Response": {
+                "title": "Response",
+                "required": [
+                    "data"
+                ],
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "string",
+                        "example": "some data"
                     }
                 }
             },

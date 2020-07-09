@@ -121,6 +121,6 @@ public class ExampleBuilder {
         description,
         value,
         externalValue,
-        mediaType);
+        emptyToNull(mediaType));
   }
 }

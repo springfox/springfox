@@ -154,10 +154,15 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                     .apply(context.alternateFor(type.get())));
           }
           List<Example> examples = new ArrayList<>();
+          int index = 0;
           for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
             if (!isEmpty(exampleProperty.value())) {
-              final String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
-              examples.add(new ExampleBuilder().mediaType(mediaType).value(exampleProperty.value()).build());
+              String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
+              examples.add(new ExampleBuilder()
+                  .mediaType(mediaType)
+                  .id("example-" + index++)
+                  .value(exampleProperty.value())
+                  .build());
             }
           }
           Map<String, Header> headers = new HashMap<>(defaultHeaders);
@@ -209,10 +214,10 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       context.operationBuilder().responseModel(responseModel);
       springfox.documentation.service.ResponseMessage defaultMessage =
           new springfox.documentation.builders.ResponseMessageBuilder()
-          .code(httpStatusCode(context))
-          .message(message(context))
-          .responseModel(responseModel)
-          .build();
+              .code(httpStatusCode(context))
+              .message(message(context))
+              .responseModel(responseModel)
+              .build();
       if (!responseMessages.contains(defaultMessage) && !"void".equals(responseModel.getType())) {
         responseMessages.add(defaultMessage);
       }
