@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":6};
+var data = {"i0":18,"i1":18,"i2":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -145,11 +145,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#afterMappingParameter(springfox.documentation.schema.Example,io.swagger.v3.oas.models.examples.Example)">afterMappingParameter</a></span>&#8203;(<a href="../../schema/Example.html" title="class in springfox.documentation.schema">Example</a>&nbsp;from,
+                     io.swagger.v3.oas.models.examples.Example&nbsp;target)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>default java.util.Map&lt;java.lang.String,&#8203;io.swagger.v3.oas.models.examples.Example&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapExamples(java.util.Collection)">mapExamples</a></span>&#8203;(java.util.Collection&lt;<a href="../../schema/Example.html" title="class in springfox.documentation.schema">Example</a>&gt;&nbsp;from)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>io.swagger.v3.oas.models.examples.Example</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toOasExample(springfox.documentation.schema.Example)">toOasExample</a></span>&#8203;(<a href="../../schema/Example.html" title="class in springfox.documentation.schema">Example</a>&nbsp;from)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -178,6 +184,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>mapExamples</h4>
 <pre class="methodSignature">default&nbsp;java.util.Map&lt;java.lang.String,&#8203;io.swagger.v3.oas.models.examples.Example&gt;&nbsp;mapExamples&#8203;(java.util.Collection&lt;<a href="../../schema/Example.html" title="class in springfox.documentation.schema">Example</a>&gt;&nbsp;from)</pre>
+</li>
+</ul>
+<a id="afterMappingParameter(springfox.documentation.schema.Example,io.swagger.v3.oas.models.examples.Example)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>afterMappingParameter</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;afterMappingParameter&#8203;(<a href="../../schema/Example.html" title="class in springfox.documentation.schema">Example</a>&nbsp;from,
+                                   io.swagger.v3.oas.models.examples.Example&nbsp;target)</pre>
 </li>
 </ul>
 <a id="toOasExample(springfox.documentation.schema.Example)">
