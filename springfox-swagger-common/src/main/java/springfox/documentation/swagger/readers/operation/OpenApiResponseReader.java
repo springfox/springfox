@@ -132,6 +132,9 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
           if (!isEmpty(eachExample.value())) {
             examples.add(new ExampleBuilder()
                 .mediaType(each.mediaType())
+                .description(eachExample.description())
+                .summary(eachExample.summary())
+                .id(eachExample.name())
                 .value(eachExample.value()).build());
           }
         }
