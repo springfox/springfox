@@ -1,6 +1,8 @@
 package springfox.documentation.builders;
 
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.MapSpecification;
@@ -15,6 +17,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.builders.NoopValidator.*;
 
 public class ModelSpecificationBuilder {
@@ -27,11 +30,21 @@ public class ModelSpecificationBuilder {
   private CompoundModelSpecificationBuilder compoundModelBuilder;
   private final Validator<ModelSpecificationBuilder> validator = this::validateSpecification;
 
-  public ModelSpecificationBuilder name(String name) {
-    this.name = name;
+  /**
+   * Updates the name of the model
+   * @param name - Name of the model
+   * @return this
+   */
+  public ModelSpecificationBuilder name(@NonNull String name) {
+    this.name = defaultIfAbsent(name, this.name);
     return this;
   }
 
+  /**
+   * Provides a consumer to build facets
+   * @param facets - consumer that facilitates building a facet
+   * @return this
+   */
   public ModelSpecificationBuilder facets(@NonNull Consumer<ModelFacetsBuilder> facets) {
     if (facetsBuilder == null) {
       facetsBuilder = new ModelFacetsBuilder();
@@ -40,6 +53,11 @@ public class ModelSpecificationBuilder {
     return this;
   }
 
+  /**
+   * Updates the scalar type
+   * @param type - scalar type
+   * @return this
+   */
   public ModelSpecificationBuilder scalarModel(ScalarType type) {
     if (type != null) {
       this.scalar = new ScalarModelSpecification(type);
@@ -54,13 +72,57 @@ public class ModelSpecificationBuilder {
     return compoundModelBuilder;
   }
 
+  /**
+   * Provides a consumer to help building a compound model
+   * @param compound - consumer that facilitates building a compound model
+   * @return this
+   */
   public ModelSpecificationBuilder compoundModel(@NonNull Consumer<CompoundModelSpecificationBuilder> compound) {
     compound.accept(compoundModelBuilder());
     return this;
   }
 
+  /**
+   * Provides a consumer to help build a compound model if one already exists. If the model is a different type,
+   * then any operations done with the help of the consumer will be a no-op
+   * @param compound consumer that facilitates building a compound model
+   * @return this
+   */
+  public ModelSpecificationBuilder compoundModelIfExists(
+      @NonNull Consumer<CompoundModelSpecificationBuilder> compound) {
+    if (compoundModelBuilder != null) {
+      compound.accept(compoundModelBuilder);
+    } else {
+      CompoundModelSpecificationBuilder throwAwayBuilder = new CompoundModelSpecificationBuilder();
+      compound.accept(throwAwayBuilder);
+    }
+    return this;
+  }
+
+  /**
+   * Provides a consumer to build the collection model
+   * @param consumer consumer that facilitates building a collection
+   * @return this
+   */
   public ModelSpecificationBuilder collectionModel(@NonNull Consumer<CollectionSpecificationBuilder> consumer) {
     consumer.accept(collectionBuilder());
+    return this;
+  }
+
+  /**
+   * Conditionally provides a consumer to build the colleciton model. If the model is a different type,
+   *    then any operations done with the help of the consumer will be a no-op
+   * @param consumer consumer that facilitates building a collection
+   * @return this
+   */
+  public ModelSpecificationBuilder collectionModelIfExists(
+      @NonNull Consumer<CollectionSpecificationBuilder> consumer) {
+    if (collection != null) {
+      consumer.accept(collection);
+    } else {
+      CollectionSpecificationBuilder throwAwayBuilder = new CollectionSpecificationBuilder();
+      consumer.accept(throwAwayBuilder);
+    }
     return this;
   }
 
@@ -71,8 +133,28 @@ public class ModelSpecificationBuilder {
     return collection;
   }
 
+  /**
+   * Provides a consumer to build the map model.
+   * @param consumer consumer that facilitates building a map
+   * @return this
+   */
   public ModelSpecificationBuilder mapModel(@NonNull Consumer<MapSpecificationBuilder> consumer) {
     consumer.accept(mapBuilder());
+    return this;
+  }
+
+  /**
+   * Conditionally provides a consumer to build the map model.
+   * @param consumer consumer that facilitates building a map
+   * @return this
+   */
+  public ModelSpecificationBuilder mapModelIfExists(@NonNull Consumer<MapSpecificationBuilder> consumer) {
+    if (map != null) {
+      consumer.accept(map);
+    } else {
+      MapSpecificationBuilder throwAwayBuilder = new MapSpecificationBuilder();
+      consumer.accept(throwAwayBuilder);
+    }
     return this;
   }
 
@@ -83,8 +165,28 @@ public class ModelSpecificationBuilder {
     return map;
   }
 
-  public ModelSpecificationBuilder referenceModel(Consumer<ReferenceModelSpecificationBuilder> modelKey) {
-    modelKey.accept(referenceModelBuilder());
+  /**
+   * Provides a consumer to build the reference model.
+   * @param consumer consumer that facilitates building a reference model
+   * @return this
+   */
+  public ModelSpecificationBuilder referenceModel(Consumer<ReferenceModelSpecificationBuilder> consumer) {
+    consumer.accept(referenceModelBuilder());
+    return this;
+  }
+
+  /**
+   * Provides a consumer to build the reference model.
+   * @param consumer consumer that facilitates building a reference model
+   * @return this
+   */
+  public ModelSpecificationBuilder referenceModelIfExists(Consumer<ReferenceModelSpecificationBuilder> consumer) {
+    if (referenceModel != null) {
+      consumer.accept(referenceModel);
+    } else {
+      ReferenceModelSpecificationBuilder throwAwayBuilder = new ReferenceModelSpecificationBuilder();
+      consumer.accept(throwAwayBuilder);
+    }
     return this;
   }
 
@@ -112,7 +214,12 @@ public class ModelSpecificationBuilder {
         referenceModel != null ? referenceModel.build() : null);
   }
 
-  public ModelSpecificationBuilder copyOf(ModelSpecification other) {
+  /**
+   * Copies from an other model
+   * @param other the other model
+   * @return this
+   */
+  public ModelSpecificationBuilder copyOf(@Nullable ModelSpecification other) {
     if (other != null) {
       ScalarType scalar = other.getScalar()
           .map(ScalarModelSpecification::getType)
@@ -180,6 +287,12 @@ public class ModelSpecificationBuilder {
     return referenceModel != null ? referenceModel.build() : null;
   }
 
+  /**
+   * This is an experimental API. May be removed/modified
+   * @param scalar - scalar to replace the models with
+   * @return this
+   */
+  @Incubating("3.0.0")
   public ModelSpecificationBuilder maybeConvertToScalar(ScalarType scalar) {
     scalarModel(scalar);
     if (compoundModelBuilder != null) {
