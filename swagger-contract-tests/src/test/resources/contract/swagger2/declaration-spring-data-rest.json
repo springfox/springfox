@@ -1905,12 +1905,6 @@
                 "rel": {
                     "$ref": "#/definitions/LinkRelation"
                 },
-                "template": {
-                    "$ref": "#/definitions/UriTemplate"
-                },
-                "templated": {
-                    "type": "boolean"
-                },
                 "title": {
                     "type": "string"
                 },

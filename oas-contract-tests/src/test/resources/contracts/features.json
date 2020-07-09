@@ -1,0 +1,68 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Api Documentation",
+        "description": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        },
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:__PORT__",
+            "description": "Inferred Url"
+        }
+    ],
+    "tags": [
+        {
+            "name": "feature-demonstration-service",
+            "description": "Feature Demonstration Service"
+        }
+    ],
+    "paths": {
+        "/features/2613": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "getfeature",
+                "operationId": "getfeatureUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Feature2613"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Feature2613": {
+                "title": "Feature2613",
+                "type": "object",
+                "properties": {
+                    "prop1": {
+                        "type": "string"
+                    },
+                    "prop2": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            }
+        }
+    }
+}

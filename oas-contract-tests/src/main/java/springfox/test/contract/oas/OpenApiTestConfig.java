@@ -38,6 +38,7 @@ public class OpenApiTestConfig {
         .paths(PathSelectors.regex("/.*")
             .and(PathSelectors.regex(".*/error").negate())
             .and(PathSelectors.regex(".*/bugs/.*").negate())
+            .and(PathSelectors.regex(".*/features/.*").negate())
             .and(PathSelectors.regex(".*/profile").negate()))
         .build()
         .enableUrlTemplating(false)
@@ -97,5 +98,31 @@ public class OpenApiTestConfig {
                     new AuthorizationScope("write:pets", "Write scope"),
                     new AuthorizationScope("read:pets", "Read scope")))
                 .build()));
+  }
+
+  @Bean
+  public Docket features(
+      TypeResolver resolver) {
+    return new Docket(DocumentationType.OAS_30)
+        .groupName("features")
+        .useDefaultResponseMessages(false)
+        .produces(new HashSet<String>() {{
+          add("application/xml");
+          add("application/json");
+        }})
+        .select()
+        .paths(PathSelectors.regex(".*/features/.*")
+            .and(PathSelectors.regex(".*/error").negate())
+            .and(PathSelectors.regex(".*/profile").negate()))
+        .build()
+        .enableUrlTemplating(false)
+        .alternateTypeRules(
+            newRule(resolver.resolve(Mono.class,
+                resolver.resolve(ResponseEntity.class, InputStreamResource.class)),
+                resolver.resolve(File.class)))
+        .host("bugs.springfox.io")
+        .protocols(new HashSet<>(Arrays.asList(
+            "http",
+            "https")));
   }
 }
