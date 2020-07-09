@@ -54,7 +54,7 @@ public class DocumentationPluginsBootstrapper
   private static final String SPRINGFOX_DOCUMENTATION_AUTO_STARTUP = "springfox.documentation.auto-startup";
   private final Environment environment;
 
-  private AtomicBoolean initialized = new AtomicBoolean(false);
+  private final AtomicBoolean initialized = new AtomicBoolean(false);
 
   @Autowired
   @SuppressWarnings("ParameterNumber")
@@ -67,7 +67,13 @@ public class DocumentationPluginsBootstrapper
       Defaults defaults,
       PathProvider pathProvider,
       Environment environment) {
-    super(documentationPluginsManager, handlerProviders, scanned, resourceListing, defaults, typeResolver,
+    super(
+        documentationPluginsManager,
+        handlerProviders,
+        scanned,
+        resourceListing,
+        defaults,
+        typeResolver,
         pathProvider);
 
     this.environment = environment;
@@ -79,7 +85,7 @@ public class DocumentationPluginsBootstrapper
         environment.getProperty(
             SPRINGFOX_DOCUMENTATION_AUTO_STARTUP,
             "true");
-    return Boolean.valueOf(autoStartupConfig);
+    return Boolean.parseBoolean(autoStartupConfig);
   }
 
   @Override

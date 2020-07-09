@@ -42,7 +42,6 @@ public class DefaultConfiguration implements DefaultsProviderPlugin {
     this.pathProvider = pathProvider;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public DocumentationContextBuilder create(DocumentationType documentationType) {
     return new DocumentationContextBuilder(documentationType)

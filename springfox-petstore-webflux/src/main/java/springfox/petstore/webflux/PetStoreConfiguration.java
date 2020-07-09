@@ -19,7 +19,6 @@
 package springfox.petstore.webflux;
 
 import com.fasterxml.classmate.TypeResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +41,11 @@ import static springfox.documentation.builders.PathSelectors.*;
 @Configuration
 public class PetStoreConfiguration {
 
-  @Autowired
-  private TypeResolver resolver;
+  private final TypeResolver resolver;
+
+  public PetStoreConfiguration(TypeResolver resolver) {
+    this.resolver = resolver;
+  }
 
   @Bean
   Docket petstore(List<SecurityScheme> authorizationTypes) {

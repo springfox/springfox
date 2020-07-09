@@ -1,7 +1,6 @@
 package springfox.test.contract.swagger.webflux;
 
 import com.fasterxml.classmate.TypeResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +28,13 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
     "springfox.petstore.webflux.controller"
 })
 public class Swagger2WebFluxConfig {
+
+  private final TypeResolver resolver;
+
+  public Swagger2WebFluxConfig(TypeResolver resolver) {
+    this.resolver = resolver;
+  }
+
   @Bean
   public Docket petstoreWithUriTemplating(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
@@ -56,6 +62,4 @@ public class Swagger2WebFluxConfig {
                     resolver.resolve(WildcardType.class)))));
   }
 
-  @Autowired
-  private TypeResolver resolver;
 }

@@ -39,7 +39,7 @@ import static java.util.Optional.*;
 public class SpringIntegrationWebFluxRequestHandler extends WebFluxRequestHandler {
   private final HandlerMethodResolver methodResolver;
   private final HandlerMethod handlerMethod;
-  private SpringIntegrationParametersProvider parametersProvider;
+  private final SpringIntegrationParametersProvider parametersProvider;
 
   public SpringIntegrationWebFluxRequestHandler(
       HandlerMethodResolver methodResolver,
