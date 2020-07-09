@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -182,42 +182,65 @@ extends java.lang.Object</pre>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyOf(springfox.documentation.schema.CompoundModelSpecification)">copyOf</a></span>&#8203;(<a href="../schema/CompoundModelSpecification.html" title="class in springfox.documentation.schema">CompoundModelSpecification</a>&nbsp;other)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Copies from an existing model</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#discriminator(java.lang.String)">discriminator</a></span>&#8203;(java.lang.String&nbsp;discriminator)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Inheritance discriminator</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#maxProperties(java.lang.Integer)">maxProperties</a></span>&#8203;(java.lang.Integer&nbsp;maxProperties)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides override for the max properties.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#minProperties(java.lang.Integer)">minProperties</a></span>&#8203;(java.lang.Integer&nbsp;minProperties)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides override for the min properties.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#modelKey(java.util.function.Consumer)">modelKey</a></span>&#8203;(java.util.function.Consumer&lt;<a href="../schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a>&gt;&nbsp;consumer)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides a fluent builder consumer for building a model key</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#properties(java.util.Collection)">properties</a></span>&#8203;(java.util.Collection&lt;<a href="../schema/PropertySpecification.html" title="class in springfox.documentation.schema">PropertySpecification</a>&gt;&nbsp;properties)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Copies existing set of properties</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a>&gt;,&#8203;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#property(java.lang.String)">property</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides method to create a property with given name</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a>&gt;,&#8203;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#propertyIfExists(java.lang.String)">propertyIfExists</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block">Provides method to maybe create a property with given name.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subclassReferences(java.util.Collection)">subclassReferences</a></span>&#8203;(java.util.Collection&lt;<a href="../schema/ReferenceModelSpecification.html" title="class in springfox.documentation.schema">ReferenceModelSpecification</a>&gt;&nbsp;subclassReferences)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">References to subclasses</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -268,7 +291,33 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>property</h4>
-<pre class="methodSignature">public&nbsp;java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a>&gt;,&#8203;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&gt;&nbsp;property&#8203;(java.lang.String&nbsp;name)</pre>
+<pre class="methodSignature">public&nbsp;java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a>&gt;,&#8203;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&gt;&nbsp;property&#8203;(@NonNull
+                                                                                                                                               java.lang.String&nbsp;name)</pre>
+<div class="block">Provides method to create a property with given name</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - - name of the property to create</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>returns a function that that provides a consumer for building a property</dd>
+</dl>
+</li>
+</ul>
+<a id="propertyIfExists(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>propertyIfExists</h4>
+<pre class="methodSignature">public&nbsp;java.util.function.Function&lt;java.util.function.Consumer&lt;<a href="PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a>&gt;,&#8203;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&gt;&nbsp;propertyIfExists&#8203;(@NonNull
+                                                                                                                                                       java.lang.String&nbsp;name)</pre>
+<div class="block">Provides method to maybe create a property with given name. If the property doesnt exist the consumer is a no-op.
+ Whatever we build downstream when the property doesnt exist is thrown away.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - - name of the property to create</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>returns a function that that provides a consumer for building a property</dd>
+</dl>
 </li>
 </ul>
 <a id="modelKey(java.util.function.Consumer)">
@@ -277,7 +326,15 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>modelKey</h4>
-<pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;modelKey&#8203;(java.util.function.Consumer&lt;<a href="../schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a>&gt;&nbsp;consumer)</pre>
+<pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;modelKey&#8203;(@NonNull
+                                                  java.util.function.Consumer&lt;<a href="../schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a>&gt;&nbsp;consumer)</pre>
+<div class="block">Provides a fluent builder consumer for building a model key</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>consumer</code> - - builder consumer</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="maxProperties(java.lang.Integer)">
@@ -287,6 +344,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>maxProperties</h4>
 <pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;maxProperties&#8203;(java.lang.Integer&nbsp;maxProperties)</pre>
+<div class="block">Provides override for the max properties. It uses the number of actual properties when not provided.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>maxProperties</code> - - maximum properties that need to be set</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="minProperties(java.lang.Integer)">
@@ -296,6 +360,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>minProperties</h4>
 <pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;minProperties&#8203;(java.lang.Integer&nbsp;minProperties)</pre>
+<div class="block">Provides override for the min properties. It uses the number of actual properties when not provided.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>minProperties</code> - - minimum properties that need to be set</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="build()">
@@ -314,6 +385,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>copyOf</h4>
 <pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;copyOf&#8203;(<a href="../schema/CompoundModelSpecification.html" title="class in springfox.documentation.schema">CompoundModelSpecification</a>&nbsp;other)</pre>
+<div class="block">Copies from an existing model</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - - other model to copy from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="properties(java.util.Collection)">
@@ -323,6 +401,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>properties</h4>
 <pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;properties&#8203;(java.util.Collection&lt;<a href="../schema/PropertySpecification.html" title="class in springfox.documentation.schema">PropertySpecification</a>&gt;&nbsp;properties)</pre>
+<div class="block">Copies existing set of properties</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>properties</code> - - properties to copy from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="discriminator(java.lang.String)">
@@ -332,6 +417,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>discriminator</h4>
 <pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;discriminator&#8203;(java.lang.String&nbsp;discriminator)</pre>
+<div class="block">Inheritance discriminator</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>discriminator</code> - - property to discriminate on</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="subclassReferences(java.util.Collection)">
@@ -341,6 +433,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>subclassReferences</h4>
 <pre class="methodSignature">public&nbsp;<a href="CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a>&nbsp;subclassReferences&#8203;(java.util.Collection&lt;<a href="../schema/ReferenceModelSpecification.html" title="class in springfox.documentation.schema">ReferenceModelSpecification</a>&gt;&nbsp;subclassReferences)</pre>
+<div class="block">References to subclasses</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>subclassReferences</code> - - the reference specifications of subclasses</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 </li>

@@ -252,7 +252,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/PropertySpecificationBuilder.html#allowEmptyValue(java.lang.Boolean)">allowEmptyValue(Boolean)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#allowEmptyValue(java.lang.Boolean)">allowEmptyValue(Boolean)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Allows empty values</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ParameterBuilder.html#allowMultiple(boolean)">allowMultiple(boolean)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ParameterBuilder.html" title="class in springfox.documentation.builders">ParameterBuilder</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -265,7 +267,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#allowReserved(java.lang.Boolean)">allowReserved(Boolean)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Allows reserved characters</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/OperationsSorter.html#ALPHA">ALPHA</a></span> - springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/OperationsSorter.html" title="enum in springfox.documentation.swagger.web">OperationsSorter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/TagsSorter.html#ALPHA">ALPHA</a></span> - springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/TagsSorter.html" title="enum in springfox.documentation.swagger.web">TagsSorter</a></dt>
@@ -605,6 +609,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/AlternateTypePropertyBuilder.html#apply(net.bytebuddy.dynamic.DynamicType.Builder)">apply(DynamicType.Builder&lt;Object&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/AlternateTypePropertyBuilder.html" title="class in springfox.documentation.builders">AlternateTypePropertyBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/JacksonXmlModelPlugin.html#apply(springfox.documentation.spi.schema.contexts.ModelContext)">apply(ModelContext)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/JacksonXmlModelPlugin.html" title="class in springfox.documentation.schema.plugins">JacksonXmlModelPlugin</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/JsonIgnorePropertiesModelPlugin.html#apply(springfox.documentation.spi.schema.contexts.ModelContext)">apply(ModelContext)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/JsonIgnorePropertiesModelPlugin.html" title="class in springfox.documentation.schema.plugins">JsonIgnorePropertiesModelPlugin</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/PropertyDiscriminatorBasedInheritancePlugin.html#apply(springfox.documentation.spi.schema.contexts.ModelContext)">apply(ModelContext)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/PropertyDiscriminatorBasedInheritancePlugin.html" title="class in springfox.documentation.schema.plugins">PropertyDiscriminatorBasedInheritancePlugin</a></dt>
 <dd>&nbsp;</dd>
@@ -1170,7 +1176,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/PropertySpecificationBuilder.html#collectionFacet(java.util.function.Consumer)">collectionFacet(Consumer&lt;CollectionElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#collectionFacet(java.util.function.Consumer)">collectionFacet(Consumer&lt;CollectionElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides consumer to help uild collection element facet</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ParameterBuilder.html#collectionFormat(java.lang.String)">collectionFormat(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ParameterBuilder.html" title="class in springfox.documentation.builders">ParameterBuilder</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -1179,11 +1187,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CollectionElementFacetBuilder.html#collectionFormat(springfox.documentation.service.CollectionFormat)">collectionFormat(CollectionFormat)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CollectionElementFacetBuilder.html" title="class in springfox.documentation.builders">CollectionElementFacetBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#collectionFormat(springfox.documentation.service.CollectionFormat)">collectionFormat(CollectionFormat)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+</dd>
 <dt><a href="springfox/documentation/service/CollectionFormat.html" title="class in springfox.documentation.service"><span class="typeNameLink">CollectionFormat</span></a> - Class in <a href="springfox/documentation/service/package-summary.html">springfox.documentation.service</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#collectionModel(java.util.function.Consumer)">collectionModel(Consumer&lt;CollectionSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides a consumer to build the collection model</div>
+</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#collectionModelIfExists(java.util.function.Consumer)">collectionModelIfExists(Consumer&lt;CollectionSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
+<dd>
+<div class="block">Conditionally provides a consumer to build the colleciton model.</div>
+</dd>
 <dt><a href="springfox/documentation/schema/Collections.html" title="class in springfox.documentation.schema"><span class="typeNameLink">Collections</span></a> - Class in <a href="springfox/documentation/schema/package-summary.html">springfox.documentation.schema</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="springfox/documentation/schema/CollectionSpecification.html" title="class in springfox.documentation.schema"><span class="typeNameLink">CollectionSpecification</span></a> - Class in <a href="springfox/documentation/schema/package-summary.html">springfox.documentation.schema</a></dt>
@@ -1259,7 +1275,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/common/HostNameProvider.html#componentsFrom(javax.servlet.http.HttpServletRequest,java.lang.String)">componentsFrom(HttpServletRequest, String)</a></span> - Static method in class springfox.documentation.swagger.common.<a href="springfox/documentation/swagger/common/HostNameProvider.html" title="class in springfox.documentation.swagger.common">HostNameProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#compoundModel(java.util.function.Consumer)">compoundModel(Consumer&lt;CompoundModelSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides a consumer to help building a compound model</div>
+</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#compoundModelIfExists(java.util.function.Consumer)">compoundModelIfExists(Consumer&lt;CompoundModelSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
+<dd>
+<div class="block">Provides a consumer to help build a compound model if one already exists.</div>
+</dd>
 <dt><a href="springfox/documentation/schema/CompoundModelSpecification.html" title="class in springfox.documentation.schema"><span class="typeNameLink">CompoundModelSpecification</span></a> - Class in <a href="springfox/documentation/schema/package-summary.html">springfox.documentation.schema</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/CompoundModelSpecification.html#%3Cinit%3E(springfox.documentation.schema.ModelKey,java.util.Collection,java.lang.Integer,java.lang.Integer,java.lang.String,java.util.List)">CompoundModelSpecification(ModelKey, Collection&lt;PropertySpecification&gt;, Integer, Integer, String, List&lt;ReferenceModelSpecification&gt;)</a></span> - Constructor for class springfox.documentation.schema.<a href="springfox/documentation/schema/CompoundModelSpecification.html" title="class in springfox.documentation.schema">CompoundModelSpecification</a></dt>
@@ -1395,7 +1417,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CollectionSpecificationBuilder.html#copyOf(springfox.documentation.schema.CollectionSpecification)">copyOf(CollectionSpecification)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CollectionSpecificationBuilder.html" title="class in springfox.documentation.builders">CollectionSpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#copyOf(springfox.documentation.schema.CompoundModelSpecification)">copyOf(CompoundModelSpecification)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Copies from an existing model</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CollectionElementFacetBuilder.html#copyOf(springfox.documentation.schema.ElementFacet)">copyOf(ElementFacet)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CollectionElementFacetBuilder.html" title="class in springfox.documentation.builders">CollectionElementFacetBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ElementFacetBuilder.html#copyOf(springfox.documentation.schema.ElementFacet)">copyOf(ElementFacet)</a></span> - Method in interface springfox.documentation.builders.<a href="springfox/documentation/builders/ElementFacetBuilder.html" title="interface in springfox.documentation.builders">ElementFacetBuilder</a></dt>
@@ -1413,7 +1437,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/ModelKeyBuilder.html#copyOf(springfox.documentation.schema.ModelKey)">copyOf(ModelKey)</a></span> - Method in class springfox.documentation.schema.<a href="springfox/documentation/schema/ModelKeyBuilder.html" title="class in springfox.documentation.schema">ModelKeyBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#copyOf(springfox.documentation.schema.ModelSpecification)">copyOf(ModelSpecification)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Copies from an other model</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/QualifiedModelNameBuilder.html#copyOf(springfox.documentation.schema.QualifiedModelName)">copyOf(QualifiedModelName)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/QualifiedModelNameBuilder.html" title="class in springfox.documentation.builders">QualifiedModelNameBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ReferenceModelSpecificationBuilder.html#copyOf(springfox.documentation.schema.ReferenceModelSpecification)">copyOf(ReferenceModelSpecification)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ReferenceModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ReferenceModelSpecificationBuilder</a></dt>
@@ -1429,7 +1455,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ResponseBuilder.html#copyOf(springfox.documentation.service.Response)">copyOf(Response)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ResponseBuilder.html" title="class in springfox.documentation.builders">ResponseBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#copyOf(springfox.documentation.service.SimpleParameterSpecification)">copyOf(SimpleParameterSpecification)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Method they copy from a specification</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/SecurityConfigurationBuilder.html#copyOf(springfox.documentation.swagger.web.SecurityConfiguration)">copyOf(SecurityConfiguration)</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/SecurityConfigurationBuilder.html" title="class in springfox.documentation.swagger.web">SecurityConfigurationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html#copyOf(springfox.documentation.swagger.web.UiConfiguration)">copyOf(UiConfiguration)</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/UiConfigurationBuilder.html" title="class in springfox.documentation.swagger.web">UiConfigurationBuilder</a></dt>
@@ -1671,7 +1699,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ServerVariableBuilder.html#defaultValue(java.lang.String)">defaultValue(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ServerVariableBuilder.html" title="class in springfox.documentation.builders">ServerVariableBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#defaultValue(java.lang.String)">defaultValue(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Default value</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/property/FactoryMethodProvider.html#delegatedFactoryMethods(com.fasterxml.classmate.ResolvedType)">delegatedFactoryMethods(ResolvedType)</a></span> - Method in class springfox.documentation.schema.property.<a href="springfox/documentation/schema/property/FactoryMethodProvider.html" title="class in springfox.documentation.schema.property">FactoryMethodProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/CachingModelProvider.html#dependencies(springfox.documentation.spi.schema.contexts.ModelContext)">dependencies(ModelContext)</a></span> - Method in class springfox.documentation.schema.<a href="springfox/documentation/schema/CachingModelProvider.html" title="class in springfox.documentation.schema">CachingModelProvider</a></dt>
@@ -1778,7 +1808,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  would substitute LocalDate with Date</div>
 </dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#discriminator(java.lang.String)">discriminator(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Inheritance discriminator</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelBuilder.html#discriminator(java.lang.String)">discriminator(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelBuilder.html" title="class in springfox.documentation.builders">ModelBuilder</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -1990,7 +2022,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/PropertySpecificationBuilder.html#enumerationFacet(java.util.function.Consumer)">enumerationFacet(Consumer&lt;EnumerationElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#enumerationFacet(java.util.function.Consumer)">enumerationFacet(Consumer&lt;EnumerationElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides consumer to help build enumeration element facet</div>
+</dd>
 <dt><a href="springfox/documentation/schema/EnumerationFacet.html" title="class in springfox.documentation.schema"><span class="typeNameLink">EnumerationFacet</span></a> - Class in <a href="springfox/documentation/schema/package-summary.html">springfox.documentation.schema</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/EnumerationFacet.html#%3Cinit%3E(java.util.Collection)">EnumerationFacet(Collection&lt;String&gt;)</a></span> - Constructor for class springfox.documentation.schema.<a href="springfox/documentation/schema/EnumerationFacet.html" title="class in springfox.documentation.schema">EnumerationFacet</a></dt>
@@ -2232,7 +2266,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#explode(java.lang.Boolean)">explode(Boolean)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Use this if we want to explode collections</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ExternalDocumentationBuilder.html#extensions(java.util.Collection)">extensions(Collection&lt;VendorExtension&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ExternalDocumentationBuilder.html" title="class in springfox.documentation.builders">ExternalDocumentationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ServerBuilder.html#extensions(java.util.Collection)">extensions(Collection&lt;VendorExtension&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ServerBuilder.html" title="class in springfox.documentation.builders">ServerBuilder</a></dt>
@@ -2324,7 +2360,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/service/SimpleParameterSpecification.html#facetOfType(java.lang.Class)">facetOfType(Class&lt;T&gt;)</a></span> - Method in class springfox.documentation.service.<a href="springfox/documentation/service/SimpleParameterSpecification.html" title="class in springfox.documentation.service">SimpleParameterSpecification</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#facets(java.util.function.Consumer)">facets(Consumer&lt;ModelFacetsBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides a consumer to build facets</div>
+</dd>
 <dt><a href="springfox/documentation/schema/property/FactoryMethodProvider.html" title="class in springfox.documentation.schema.property"><span class="typeNameLink">FactoryMethodProvider</span></a> - Class in <a href="springfox/documentation/schema/property/package-summary.html">springfox.documentation.schema.property</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/property/FactoryMethodProvider.html#%3Cinit%3E(com.fasterxml.classmate.TypeResolver)">FactoryMethodProvider(TypeResolver)</a></span> - Constructor for class springfox.documentation.schema.property.<a href="springfox/documentation/schema/property/FactoryMethodProvider.html" title="class in springfox.documentation.schema.property">FactoryMethodProvider</a></dt>
@@ -4695,6 +4733,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/json/Json.html#%3Cinit%3E(java.lang.String)">Json(String)</a></span> - Constructor for class springfox.documentation.spring.web.json.<a href="springfox/documentation/spring/web/json/Json.html" title="class in springfox.documentation.spring.web.json">Json</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="springfox/documentation/schema/plugins/JsonIgnorePropertiesModelPlugin.html" title="class in springfox.documentation.schema.plugins"><span class="typeNameLink">JsonIgnorePropertiesModelPlugin</span></a> - Class in <a href="springfox/documentation/schema/plugins/package-summary.html">springfox.documentation.schema.plugins</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/JsonIgnorePropertiesModelPlugin.html#%3Cinit%3E(com.fasterxml.classmate.TypeResolver)">JsonIgnorePropertiesModelPlugin(TypeResolver)</a></span> - Constructor for class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/JsonIgnorePropertiesModelPlugin.html" title="class in springfox.documentation.schema.plugins">JsonIgnorePropertiesModelPlugin</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/SpringfoxWebConfiguration.html#jsonSerializer(java.util.List)">jsonSerializer(List&lt;JacksonModuleRegistrar&gt;)</a></span> - Method in class springfox.documentation.spring.web.<a href="springfox/documentation/spring/web/SpringfoxWebConfiguration.html" title="class in springfox.documentation.spring.web">SpringfoxWebConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="springfox/documentation/spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json"><span class="typeNameLink">JsonSerializer</span></a> - Class in <a href="springfox/documentation/spring/web/json/package-summary.html">springfox.documentation.spring.web.json</a></dt>
@@ -4836,9 +4878,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/Maps.html#mapKeyType(com.fasterxml.classmate.ResolvedType)">mapKeyType(ResolvedType)</a></span> - Static method in class springfox.documentation.schema.<a href="springfox/documentation/schema/Maps.html" title="class in springfox.documentation.schema">Maps</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#mapModel(java.util.function.Consumer)">mapModel(Consumer&lt;MapSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides a consumer to build the map model.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/oas/mappers/SchemaMapper.html#mapModel(springfox.documentation.schema.ModelSpecification,springfox.documentation.service.ModelNamesRegistry)">mapModel(ModelSpecification, ModelNamesRegistry)</a></span> - Method in class springfox.documentation.oas.mappers.<a href="springfox/documentation/oas/mappers/SchemaMapper.html" title="class in springfox.documentation.oas.mappers">SchemaMapper</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#mapModelIfExists(java.util.function.Consumer)">mapModelIfExists(Consumer&lt;MapSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
+<dd>
+<div class="block">Conditionally provides a consumer to build the map model.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger2/mappers/ModelMapper.html#mapModels(java.util.Map)">mapModels(Map&lt;String, Model&gt;)</a></span> - Method in class springfox.documentation.swagger2.mappers.<a href="springfox/documentation/swagger2/mappers/ModelMapper.html" title="class in springfox.documentation.swagger2.mappers">ModelMapper</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -4920,7 +4968,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/StringElementFacetBuilder.html#maxLength(java.lang.Integer)">maxLength(Integer)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/StringElementFacetBuilder.html" title="class in springfox.documentation.builders">StringElementFacetBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#maxProperties(java.lang.Integer)">maxProperties(Integer)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides override for the max properties.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/property/bean/Accessors.html#maybeAGetter(java.lang.reflect.Method)">maybeAGetter(Method)</a></span> - Static method in class springfox.documentation.schema.property.bean.<a href="springfox/documentation/schema/property/bean/Accessors.html" title="class in springfox.documentation.schema.property.bean">Accessors</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/property/bean/Accessors.html#maybeASetter(java.lang.reflect.Method)">maybeASetter(Method)</a></span> - Static method in class springfox.documentation.schema.property.bean.<a href="springfox/documentation/schema/property/bean/Accessors.html" title="class in springfox.documentation.schema.property.bean">Accessors</a></dt>
@@ -4930,7 +4980,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/paths/Paths.html#maybeChompTrailingSlash(java.lang.String)">maybeChompTrailingSlash(String)</a></span> - Static method in class springfox.documentation.spring.web.paths.<a href="springfox/documentation/spring/web/paths/Paths.html" title="class in springfox.documentation.spring.web.paths">Paths</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#maybeConvertToScalar(springfox.documentation.schema.ScalarType)">maybeConvertToScalar(ScalarType)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">This is an experimental API.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/oas/configuration/OpenApiJacksonModule.html#maybeRegisterModule(com.fasterxml.jackson.databind.ObjectMapper)">maybeRegisterModule(ObjectMapper)</a></span> - Method in class springfox.documentation.oas.configuration.<a href="springfox/documentation/oas/configuration/OpenApiJacksonModule.html" title="class in springfox.documentation.oas.configuration">OpenApiJacksonModule</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/json/JacksonModuleRegistrar.html#maybeRegisterModule(com.fasterxml.jackson.databind.ObjectMapper)">maybeRegisterModule(ObjectMapper)</a></span> - Method in interface springfox.documentation.spring.web.json.<a href="springfox/documentation/spring/web/json/JacksonModuleRegistrar.html" title="interface in springfox.documentation.spring.web.json">JacksonModuleRegistrar</a></dt>
@@ -5005,13 +5057,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/configuration/BeanValidatorPluginsConfiguration.html#minMaxPlugin()">minMaxPlugin()</a></span> - Method in class springfox.bean.validators.configuration.<a href="springfox/bean/validators/configuration/BeanValidatorPluginsConfiguration.html" title="class in springfox.bean.validators.configuration">BeanValidatorPluginsConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#minProperties(java.lang.Integer)">minProperties(Integer)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides override for the min properties.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CollectionSpecificationBuilder.html#model(java.util.function.Consumer)">model(Consumer&lt;ModelSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CollectionSpecificationBuilder.html" title="class in springfox.documentation.builders">CollectionSpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/RepresentationBuilder.html#model(java.util.function.Consumer)">model(Consumer&lt;ModelSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/RepresentationBuilder.html" title="class in springfox.documentation.builders">RepresentationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#model(java.util.function.Consumer)">model(Consumer&lt;ModelSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides consumer to help build models</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/SchemaPluginsManager.html#model(springfox.documentation.spi.schema.contexts.ModelContext)">model(ModelContext)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/SchemaPluginsManager.html" title="class in springfox.documentation.schema.plugins">SchemaPluginsManager</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
@@ -5091,7 +5147,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#modelKey(java.util.function.Consumer)">modelKey(Consumer&lt;ModelKeyBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides a fluent builder consumer for building a model key</div>
+</dd>
 <dt><a href="springfox/documentation/schema/ModelKey.html" title="class in springfox.documentation.schema"><span class="typeNameLink">ModelKey</span></a> - Class in <a href="springfox/documentation/schema/package-summary.html">springfox.documentation.schema</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/ModelKey.html#%3Cinit%3E(springfox.documentation.schema.QualifiedModelName,com.fasterxml.classmate.ResolvedType,java.util.Collection,boolean)">ModelKey(QualifiedModelName, ResolvedType, Collection&lt;ResolvedType&gt;, boolean)</a></span> - Constructor for class springfox.documentation.schema.<a href="springfox/documentation/schema/ModelKey.html" title="class in springfox.documentation.schema">ModelKey</a></dt>
@@ -5298,7 +5356,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelPropertyBuilder.html#name(java.lang.String)">name(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelPropertyBuilder.html" title="class in springfox.documentation.builders">ModelPropertyBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#name(java.lang.String)">name(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Updates the name of the model</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/OAuth2SchemeBuilder.html#name(java.lang.String)">name(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/OAuth2SchemeBuilder.html" title="class in springfox.documentation.builders">OAuth2SchemeBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/OAuthBuilder.html#name(java.lang.String)">name(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/OAuthBuilder.html" title="class in springfox.documentation.builders">OAuthBuilder</a></dt>
@@ -5448,7 +5508,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/PropertySpecificationBuilder.html#numericFacet(java.util.function.Consumer)">numericFacet(Consumer&lt;NumericElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#numericFacet(java.util.function.Consumer)">numericFacet(Consumer&lt;NumericElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides consumer to help build numeric element facet</div>
+</dd>
 </dl>
 <a id="I:O">
 <!--   -->
@@ -6080,7 +6142,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/Docket.html#produces(java.util.Set)">produces(Set&lt;String&gt;)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/Docket.html" title="class in springfox.documentation.spring.web.plugins">Docket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#properties(java.util.Collection)">properties(Collection&lt;PropertySpecification&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Copies existing set of properties</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelBuilder.html#properties(java.util.Map)">properties(Map&lt;String, ModelProperty&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelBuilder.html" title="class in springfox.documentation.builders">ModelBuilder</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -6099,7 +6163,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/property/OptimizedModelPropertiesProvider.html#propertiesFor(com.fasterxml.classmate.ResolvedType,springfox.documentation.spi.schema.contexts.ModelContext)">propertiesFor(ResolvedType, ModelContext)</a></span> - Method in class springfox.documentation.schema.property.<a href="springfox/documentation/schema/property/OptimizedModelPropertiesProvider.html" title="class in springfox.documentation.schema.property">OptimizedModelPropertiesProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#property(java.lang.String)">property(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides method to create a property with given name</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/AlternateTypeBuilder.html#property(java.util.function.Consumer)">property(Consumer&lt;AlternateTypePropertyBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/AlternateTypeBuilder.html#property(springfox.documentation.builders.AlternateTypePropertyBuilder)">property(AlternateTypePropertyBuilder)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/AlternateTypeBuilder.html" title="class in springfox.documentation.builders">AlternateTypeBuilder</a></dt>
@@ -6118,6 +6184,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/PropertyDiscriminatorBasedInheritancePlugin.html#%3Cinit%3E(com.fasterxml.classmate.TypeResolver,springfox.documentation.spi.schema.EnumTypeDeterminer,springfox.documentation.schema.TypeNameExtractor,springfox.documentation.schema.property.ModelSpecificationFactory)">PropertyDiscriminatorBasedInheritancePlugin(TypeResolver, EnumTypeDeterminer, TypeNameExtractor, ModelSpecificationFactory)</a></span> - Constructor for class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/PropertyDiscriminatorBasedInheritancePlugin.html" title="class in springfox.documentation.schema.plugins">PropertyDiscriminatorBasedInheritancePlugin</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#propertyIfExists(java.lang.String)">propertyIfExists(String)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
+<dd>
+<div class="block">Provides method to maybe create a property with given name.</div>
+</dd>
 <dt><a href="springfox/documentation/swagger2/mappers/PropertyMapper.html" title="class in springfox.documentation.swagger2.mappers"><span class="typeNameLink">PropertyMapper</span></a> - Class in <a href="springfox/documentation/swagger2/mappers/package-summary.html">springfox.documentation.swagger2.mappers</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger2/mappers/PropertyMapper.html#%3Cinit%3E()">PropertyMapper()</a></span> - Constructor for class springfox.documentation.swagger2.mappers.<a href="springfox/documentation/swagger2/mappers/PropertyMapper.html" title="class in springfox.documentation.swagger2.mappers">PropertyMapper</a></dt>
@@ -6252,7 +6322,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger1/dto/ReferenceDataType.html#%3Cinit%3E(java.lang.String)">ReferenceDataType(String)</a></span> - Constructor for class springfox.documentation.swagger1.dto.<a href="springfox/documentation/swagger1/dto/ReferenceDataType.html" title="class in springfox.documentation.swagger1.dto">ReferenceDataType</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#referenceModel(java.util.function.Consumer)">referenceModel(Consumer&lt;ReferenceModelSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides a consumer to build the reference model.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#referenceModelIfExists(java.util.function.Consumer)">referenceModelIfExists(Consumer&lt;ReferenceModelSpecificationBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
+<dd>
+<div class="block">Provides a consumer to build the reference model.</div>
+</dd>
 <dt><a href="springfox/documentation/schema/ReferenceModelSpecification.html" title="class in springfox.documentation.schema"><span class="typeNameLink">ReferenceModelSpecification</span></a> - Class in <a href="springfox/documentation/schema/package-summary.html">springfox.documentation.schema</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/ReferenceModelSpecification.html#%3Cinit%3E(springfox.documentation.schema.ModelKey)">ReferenceModelSpecification(ModelKey)</a></span> - Constructor for class springfox.documentation.schema.<a href="springfox/documentation/schema/ReferenceModelSpecification.html" title="class in springfox.documentation.schema">ReferenceModelSpecification</a></dt>
@@ -6566,7 +6642,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelSpecificationBuilder.html#scalarModel(springfox.documentation.schema.ScalarType)">scalarModel(ScalarType)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Updates the scalar type</div>
+</dd>
 <dt><a href="springfox/documentation/schema/ScalarModelSpecification.html" title="class in springfox.documentation.schema"><span class="typeNameLink">ScalarModelSpecification</span></a> - Class in <a href="springfox/documentation/schema/package-summary.html">springfox.documentation.schema</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/ScalarModelSpecification.html#%3Cinit%3E(springfox.documentation.schema.ScalarType)">ScalarModelSpecification(ScalarType)</a></span> - Constructor for class springfox.documentation.schema.<a href="springfox/documentation/schema/ScalarModelSpecification.html" title="class in springfox.documentation.schema">ScalarModelSpecification</a></dt>
@@ -7274,7 +7352,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/PropertySpecificationBuilder.html#stringFacet(java.util.function.Consumer)">stringFacet(Consumer&lt;StringElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/PropertySpecificationBuilder.html" title="class in springfox.documentation.builders">PropertySpecificationBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#stringFacet(java.util.function.Consumer)">stringFacet(Consumer&lt;StringElementFacetBuilder&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides consumer to help build string element facet</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/bean/validators/plugins/RangeAnnotations.html#stringLengthRange(javax.validation.constraints.Size)">stringLengthRange(Size)</a></span> - Static method in class springfox.bean.validators.plugins.<a href="springfox/bean/validators/plugins/RangeAnnotations.html" title="class in springfox.bean.validators.plugins">RangeAnnotations</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="springfox/documentation/service/StringVendorExtension.html" title="class in springfox.documentation.service"><span class="typeNameLink">StringVendorExtension</span></a> - Class in <a href="springfox/documentation/service/package-summary.html">springfox.documentation.service</a></dt>
@@ -7290,13 +7370,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html#style(springfox.documentation.service.ParameterStyle)">style(ParameterStyle)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Parameter style</div>
+</dd>
 <dt><a href="springfox/documentation/oas/mappers/StyleEnumMapper.html" title="class in springfox.documentation.oas.mappers"><span class="typeNameLink">StyleEnumMapper</span></a> - Class in <a href="springfox/documentation/oas/mappers/package-summary.html">springfox.documentation.oas.mappers</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/oas/mappers/StyleEnumMapper.html#%3Cinit%3E()">StyleEnumMapper()</a></span> - Constructor for class springfox.documentation.oas.mappers.<a href="springfox/documentation/oas/mappers/StyleEnumMapper.html" title="class in springfox.documentation.oas.mappers">StyleEnumMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html#subclassReferences(java.util.Collection)">subclassReferences(Collection&lt;ReferenceModelSpecification&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/CompoundModelSpecificationBuilder.html" title="class in springfox.documentation.builders">CompoundModelSpecificationBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">References to subclasses</div>
+</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/builders/ModelBuilder.html#subTypes(java.util.List)">subTypes(List&lt;ModelReference&gt;)</a></span> - Method in class springfox.documentation.builders.<a href="springfox/documentation/builders/ModelBuilder.html" title="class in springfox.documentation.builders">ModelBuilder</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -7365,6 +7449,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/JacksonJsonViewProvider.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.schema.<a href="springfox/documentation/schema/JacksonJsonViewProvider.html" title="class in springfox.documentation.schema">JacksonJsonViewProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/JacksonXmlModelPlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/JacksonXmlModelPlugin.html" title="class in springfox.documentation.schema.plugins">JacksonXmlModelPlugin</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/JsonIgnorePropertiesModelPlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/JsonIgnorePropertiesModelPlugin.html" title="class in springfox.documentation.schema.plugins">JsonIgnorePropertiesModelPlugin</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/plugins/PropertyDiscriminatorBasedInheritancePlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.schema.plugins.<a href="springfox/documentation/schema/plugins/PropertyDiscriminatorBasedInheritancePlugin.html" title="class in springfox.documentation.schema.plugins">PropertyDiscriminatorBasedInheritancePlugin</a></dt>
 <dd>&nbsp;</dd>

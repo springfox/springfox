@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":42,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -168,7 +168,7 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -177,62 +177,86 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#allowEmptyValue(java.lang.Boolean)">allowEmptyValue</a></span>&#8203;(java.lang.Boolean&nbsp;allowEmptyValue)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Allows empty values</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#allowReserved(java.lang.Boolean)">allowReserved</a></span>&#8203;(java.lang.Boolean&nbsp;allowReserved)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Allows reserved characters</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#collectionFacet(java.util.function.Consumer)">collectionFacet</a></span>&#8203;(java.util.function.Consumer&lt;<a href="CollectionElementFacetBuilder.html" title="class in springfox.documentation.builders">CollectionElementFacetBuilder</a>&gt;&nbsp;facet)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides consumer to help uild collection element facet</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#collectionFormat(springfox.documentation.service.CollectionFormat)">collectionFormat</a></span>&#8203;(<a href="../service/CollectionFormat.html" title="class in springfox.documentation.service">CollectionFormat</a>&nbsp;collectionFormat)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyOf(springfox.documentation.service.SimpleParameterSpecification)">copyOf</a></span>&#8203;(<a href="../service/SimpleParameterSpecification.html" title="class in springfox.documentation.service">SimpleParameterSpecification</a>&nbsp;simple)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyOf(springfox.documentation.service.SimpleParameterSpecification)">copyOf</a></span>&#8203;(<a href="../service/SimpleParameterSpecification.html" title="class in springfox.documentation.service">SimpleParameterSpecification</a>&nbsp;other)</code></th>
+<td class="colLast">
+<div class="block">Method they copy from a specification</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#defaultValue(java.lang.String)">defaultValue</a></span>&#8203;(java.lang.String&nbsp;defaultValue)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Default value</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enumerationFacet(java.util.function.Consumer)">enumerationFacet</a></span>&#8203;(java.util.function.Consumer&lt;<a href="EnumerationElementFacetBuilder.html" title="class in springfox.documentation.builders">EnumerationElementFacetBuilder</a>&gt;&nbsp;facet)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides consumer to help build enumeration element facet</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#explode(java.lang.Boolean)">explode</a></span>&#8203;(java.lang.Boolean&nbsp;explode)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Use this if we want to explode collections</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#model(java.util.function.Consumer)">model</a></span>&#8203;(java.util.function.Consumer&lt;<a href="ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a>&gt;&nbsp;consumer)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides consumer to help build models</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#numericFacet(java.util.function.Consumer)">numericFacet</a></span>&#8203;(java.util.function.Consumer&lt;<a href="../schema/NumericElementFacetBuilder.html" title="class in springfox.documentation.schema">NumericElementFacetBuilder</a>&gt;&nbsp;facet)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides consumer to help build numeric element facet</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stringFacet(java.util.function.Consumer)">stringFacet</a></span>&#8203;(java.util.function.Consumer&lt;<a href="StringElementFacetBuilder.html" title="class in springfox.documentation.builders">StringElementFacetBuilder</a>&gt;&nbsp;facet)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Provides consumer to help build string element facet</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#style(springfox.documentation.service.ParameterStyle)">style</a></span>&#8203;(<a href="../service/ParameterStyle.html" title="enum in springfox.documentation.service">ParameterStyle</a>&nbsp;style)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Parameter style</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -284,6 +308,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>style</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;style&#8203;(<a href="../service/ParameterStyle.html" title="enum in springfox.documentation.service">ParameterStyle</a>&nbsp;style)</pre>
+<div class="block">Parameter style</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>style</code> - - parameter style</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="explode(java.lang.Boolean)">
@@ -293,6 +324,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>explode</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;explode&#8203;(java.lang.Boolean&nbsp;explode)</pre>
+<div class="block">Use this if we want to explode collections</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>explode</code> - - explodes collection</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="allowReserved(java.lang.Boolean)">
@@ -302,6 +340,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>allowReserved</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;allowReserved&#8203;(java.lang.Boolean&nbsp;allowReserved)</pre>
+<div class="block">Allows reserved characters</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>allowReserved</code> - - allow reserved characters</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="model(java.util.function.Consumer)">
@@ -312,6 +357,13 @@ extends java.lang.Object</pre>
 <h4>model</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;model&#8203;(@NonNull
                                                  java.util.function.Consumer&lt;<a href="ModelSpecificationBuilder.html" title="class in springfox.documentation.builders">ModelSpecificationBuilder</a>&gt;&nbsp;consumer)</pre>
+<div class="block">Provides consumer to help build models</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>consumer</code> - - consumer that facilitates building a model</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="allowEmptyValue(java.lang.Boolean)">
@@ -321,6 +373,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>allowEmptyValue</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;allowEmptyValue&#8203;(java.lang.Boolean&nbsp;allowEmptyValue)</pre>
+<div class="block">Allows empty values</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>allowEmptyValue</code> - - flag to indicate empty values are allowed</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="defaultValue(java.lang.String)">
@@ -330,6 +389,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>defaultValue</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;defaultValue&#8203;(java.lang.String&nbsp;defaultValue)</pre>
+<div class="block">Default value</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>defaultValue</code> - - default value</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="collectionFormat(springfox.documentation.service.CollectionFormat)">
@@ -338,7 +404,16 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>collectionFormat</h4>
-<pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;collectionFormat&#8203;(<a href="../service/CollectionFormat.html" title="class in springfox.documentation.service">CollectionFormat</a>&nbsp;collectionFormat)</pre>
+<pre class="methodSignature">@Deprecated
+public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;collectionFormat&#8203;(<a href="../service/CollectionFormat.html" title="class in springfox.documentation.service">CollectionFormat</a>&nbsp;collectionFormat)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">This is only there to set the collection format for swagger 2</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>collectionFormat</code> - - collection format</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="collectionFacet(java.util.function.Consumer)">
@@ -349,6 +424,13 @@ extends java.lang.Object</pre>
 <h4>collectionFacet</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;collectionFacet&#8203;(@NonNull
                                                            java.util.function.Consumer&lt;<a href="CollectionElementFacetBuilder.html" title="class in springfox.documentation.builders">CollectionElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<div class="block">Provides consumer to help uild collection element facet</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>facet</code> - - consumer that facilitates building a collection facet</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="stringFacet(java.util.function.Consumer)">
@@ -359,6 +441,13 @@ extends java.lang.Object</pre>
 <h4>stringFacet</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;stringFacet&#8203;(@NonNull
                                                        java.util.function.Consumer&lt;<a href="StringElementFacetBuilder.html" title="class in springfox.documentation.builders">StringElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<div class="block">Provides consumer to help build string element facet</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>facet</code> - - consumer that facilitates building a string facet</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="numericFacet(java.util.function.Consumer)">
@@ -369,6 +458,13 @@ extends java.lang.Object</pre>
 <h4>numericFacet</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;numericFacet&#8203;(@NonNull
                                                         java.util.function.Consumer&lt;<a href="../schema/NumericElementFacetBuilder.html" title="class in springfox.documentation.schema">NumericElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<div class="block">Provides consumer to help build numeric element facet</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>facet</code> - - consumer that facilitates building a numeric facet</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="enumerationFacet(java.util.function.Consumer)">
@@ -379,6 +475,13 @@ extends java.lang.Object</pre>
 <h4>enumerationFacet</h4>
 <pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;enumerationFacet&#8203;(@NonNull
                                                             java.util.function.Consumer&lt;<a href="EnumerationElementFacetBuilder.html" title="class in springfox.documentation.builders">EnumerationElementFacetBuilder</a>&gt;&nbsp;facet)</pre>
+<div class="block">Provides consumer to help build enumeration element facet</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>facet</code> - - consumer that facilitates building a enumeration facet</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 <a id="copyOf(springfox.documentation.service.SimpleParameterSpecification)">
@@ -387,7 +490,14 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>copyOf</h4>
-<pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;copyOf&#8203;(<a href="../service/SimpleParameterSpecification.html" title="class in springfox.documentation.service">SimpleParameterSpecification</a>&nbsp;simple)</pre>
+<pre class="methodSignature">public&nbsp;<a href="SimpleParameterSpecificationBuilder.html" title="class in springfox.documentation.builders">SimpleParameterSpecificationBuilder</a>&nbsp;copyOf&#8203;(<a href="../service/SimpleParameterSpecification.html" title="class in springfox.documentation.service">SimpleParameterSpecification</a>&nbsp;other)</pre>
+<div class="block">Method they copy from a specification</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - - other spec to copy from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this</dd>
+</dl>
 </li>
 </ul>
 </li>
