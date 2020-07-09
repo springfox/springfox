@@ -47,9 +47,12 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.springframework.http.HttpMethod;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import springfox.documentation.schema.CollectionElementFacet;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.EnumerationFacet;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.NumericElementFacet;
 import springfox.documentation.schema.StringElementFacet;
 import springfox.documentation.service.ApiDescription;
@@ -64,11 +67,14 @@ import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.SimpleParameterSpecification;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.*;
@@ -192,10 +198,31 @@ public abstract class ServiceModelToOpenApiMapper {
       ApiResponse response = new ApiResponse()
           .description(each.getDescription());
       Content content = new Content();
-      for (Representation representation : each.getRepresentations()) {
+      ExamplesMapper exampleMapper = Mappers.getMapper(ExamplesMapper.class);
+      MultiValueMap<String, Example> examplesByMediaType
+          = new LinkedMultiValueMap<>();
+      for (Example example : each.getExamples()) {
+        examplesByMediaType.add(example.getMediaType().orElse("*/*"), example);
+      }
+      Map<String, Representation> representations
+          = each.getRepresentations().stream()
+          .collect(Collectors.toMap(
+              e -> e.getMediaType().toString(),
+              Function.identity(),
+              (o1, o2) -> o1, TreeMap::new));
+      Set<String> mediaTypes = new HashSet<>(representations.keySet());
+      mediaTypes.addAll(examplesByMediaType.keySet());
+      for (String eachMediaType : mediaTypes) {
+        MediaType mediaType = fromRepresentation(
+            representations.getOrDefault(eachMediaType, null),
+            modelNamesRegistry);
+        if (mediaType == null) {
+          mediaType = new MediaType();
+        }
+        mediaType.examples(exampleMapper.mapExamples(nullToEmptyList(examplesByMediaType.get(eachMediaType))));
         content.addMediaType(
-            representation.getMediaType().toString(),
-            fromRepresentation(representation, modelNamesRegistry));
+            eachMediaType,
+            mediaType);
       }
       response.setContent(content);
       response.setHeaders(fromHeaders(each.getHeaders(), modelNamesRegistry));
@@ -276,7 +303,7 @@ public abstract class ServiceModelToOpenApiMapper {
   @Mappings({
       @Mapping(target = "schema", source = "model", qualifiedByName = "ModelsMapping"),
       @Mapping(target = "encoding", source = "encodings"),
-      @Mapping(target = "examples", source = "model.facetExamples"),
+      @Mapping(target = "examples", ignore = true),
       @Mapping(target = "example", ignore = true),
       @Mapping(target = "extensions", source = "model.facetExtensions")
   })
