@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
+import io.swagger.annotations.ExampleProperty;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.test.contract.swagger.models.Bug1749;
+import springfox.test.contract.swagger.models.Bug2767;
 import springfox.test.contract.swagger.models.EHDTOApplicatorUnits;
 import springfox.test.contract.swagger.models.EnumType;
 import springfox.test.contract.swagger.models.Example;
@@ -98,9 +100,9 @@ public class BugsController {
 
   @ApiImplicitParams(
       @ApiImplicitParam(name = "custom-header",
-                        dataTypeClass = String.class,
-                        allowMultiple = true,
-                        paramType = "header")
+          dataTypeClass = String.class,
+          allowMultiple = true,
+          paramType = "header")
   )
   @RequestMapping(value = "1209", method = POST)
   public ResponseEntity<String> bug1209() {
@@ -131,7 +133,7 @@ public class BugsController {
   }
 
   @RequestMapping(value = "1420", method = GET)
-  @ApiOperation(tags = { "foo" }, value = "issue1420")
+  @ApiOperation(tags = {"foo"}, value = "issue1420")
   public String issue1420() {
     return "1420";
   }
@@ -188,8 +190,8 @@ public class BugsController {
 
   @ApiOperation(value = "Remove an apple from a user", notes = "Remove an apple from a user. You must specify the "
       + "user name and the apple name.", response = Void.class, consumes = "application/json, application/xml",
-                produces = "application/json, application/xml")
-  @ApiResponses({ @ApiResponse(code = 200, message = "The apple is removed") })
+      produces = "application/json, application/xml")
+  @ApiResponses({@ApiResponse(code = 200, message = "The apple is removed")})
   @RequestMapping(value = "1722", method = POST)
   public void bug1722(@RequestBody String test) {
   }
@@ -209,11 +211,11 @@ public class BugsController {
 
   @ApiResponses(value = {
       @ApiResponse(code = 200,
-                   message = "list of ids",
-                   response = String.class),
+          message = "list of ids",
+          response = String.class),
       @ApiResponse(code = 204,
-                   message = "no ids found",
-                   response = Void.class)
+          message = "no ids found",
+          response = Void.class)
   })
   @RequestMapping(value = "/1750a", method = GET)
   public ResponseEntity<String> bug1750a() {
@@ -223,11 +225,11 @@ public class BugsController {
   @ApiOperation(value = "1750b", response = String.class)
   @ApiResponses(value = {
       @ApiResponse(code = 200,
-                   message = "list of ids",
-                   response = String.class),
+          message = "list of ids",
+          response = String.class),
       @ApiResponse(code = 204,
-                   message = "no ids found",
-                   response = Void.class)
+          message = "no ids found",
+          response = Void.class)
   })
   @RequestMapping(value = "/1750b", method = GET)
   public ResponseEntity<String> bug1750b() {
@@ -280,8 +282,8 @@ public class BugsController {
   }
 
   @RequestMapping(value = "/1939",
-                  method = GET,
-                  produces = "application/jwt")
+      method = GET,
+      produces = "application/jwt")
   @ApiOperation(value = "authenticate a user using a given set of "
       + "credentials, producing a JWT token that may be "
       + "used for future API operations if successful")
@@ -308,7 +310,7 @@ public class BugsController {
       @RequestParam(value = "xmlUrl") URI xmlUrl,
       @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags,
       @RequestParam(value = "clearIndex", required = false, defaultValue = "false") Boolean clearIndex
-                              ) {
+  ) {
     return null;
   }
 
@@ -323,7 +325,7 @@ public class BugsController {
       @PathVariable("propertyKey") Key propertyKey,
       @ApiParam(name = "environmentKey", value = "Key of the environment", required = false)
       @PathVariable("environmentKey") Key environmentKey
-                                           ) {
+  ) {
     return ResponseEntity.ok("");
   }
 
@@ -347,8 +349,8 @@ public class BugsController {
   }
 
   @PostMapping(value = "/1887/{env}/{list-id}/emails",
-               produces = APPLICATION_JSON_UTF8_VALUE,
-               consumes = APPLICATION_JSON_UTF8_VALUE)
+      produces = APPLICATION_JSON_UTF8_VALUE,
+      consumes = APPLICATION_JSON_UTF8_VALUE)
   @ApiOperation(value = "1887 example", response = Example.class)
   public ResponseEntity<Map<String, List<Example>>> addEmailsToList(
       @PathVariable String env,
@@ -383,14 +385,14 @@ public class BugsController {
 
   @ApiOperation(value = "测试RequesetParam", notes = "测试RequesetParam")
   @ApiImplicitParams({
-                         @ApiImplicitParam(name = "date",
-                                           value = "日期：2017-09-01",
-                                           required = true,
-                                           dataTypeClass = String.class,
-                                           paramType =
-                                               "path"),
-                         @ApiImplicitParam(name = "name", value = "名称", required = false, dataTypeClass = String.class)
-                     })
+      @ApiImplicitParam(name = "date",
+          value = "日期：2017-09-01",
+          required = true,
+          dataTypeClass = String.class,
+          paramType =
+              "path"),
+      @ApiImplicitParam(name = "name", value = "名称", required = false, dataTypeClass = String.class)
+  })
   @GetMapping("/2029")
   public String bug2020(
       @RequestParam(required = true, value = "date") String date,
@@ -418,18 +420,18 @@ public class BugsController {
   }
 
   @ApiOperation(value = "Get all examples", nickname = "bug2268", notes = "Get all examples ", response = Example.class,
-                responseContainer = "List", authorizations = {
+      responseContainer = "List", authorizations = {
       @Authorization(value = "user_auth", scopes = {
           @AuthorizationScope(scope = "ADMIN", description = "Manage users"),
           @AuthorizationScope(scope = "USER", description = "Maintain own user")
       })
-  }, tags = { "example" })
+  }, tags = {"example"})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "Success", response = Example.class, responseContainer = "List"),
   })
   @RequestMapping(value = "/2268",
-                  produces = { "application/json" },
-                  method = RequestMethod.GET)
+      produces = {"application/json"},
+      method = RequestMethod.GET)
   ResponseEntity<List<Example>> bug2268(
       @ApiParam(value = "Filter the list")
       @Valid
@@ -438,7 +440,7 @@ public class BugsController {
   }
 
   @RequestMapping(value = "/bug2203", method = RequestMethod.GET,
-                  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+      produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<Response<LanguageResponse>> bug2203() {
     return ResponseEntity.ok(null);
   }
@@ -469,15 +471,15 @@ public class BugsController {
     return null;
   }
 
-  @GetMapping({ "/bug2220", "/bug2220/{bar}" })
+  @GetMapping({"/bug2220", "/bug2220/{bar}"})
   public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
   }
 
   @ApiResponses({
-                    @ApiResponse(code = 404, message = "No object was found with the given ID"),
-                    @ApiResponse(code = 200, message = "The object was deleted successfully.",
-                                 response = void.class)
-                })
+      @ApiResponse(code = 404, message = "No object was found with the given ID"),
+      @ApiResponse(code = 200, message = "The object was deleted successfully.",
+          response = void.class)
+  })
   @GetMapping("/bug1944")
   public void bug1944() {
   }
@@ -525,6 +527,22 @@ public class BugsController {
   public void bug3321(
       @ApiParam(allowableValues = "one, two, three")
       @RequestParam(name = "expand", required = false) Set<NumberEnum> numbers) {
+  }
+
+  @ApiResponses(value = {
+      @ApiResponse(code = 400, message = "Not Found",
+          examples = @io.swagger.annotations.Example(
+              value = {
+                  @ExampleProperty(
+                      mediaType = "foo",
+                      value = "{'invalidField': 'address'}"),
+                  @ExampleProperty(
+                      mediaType = "bar",
+                      value = "The address was invalid")}),
+          response = Bug2767.ErrorResponse.class)})
+  @GetMapping("/2767/swagger15")
+  public Bug2767.Response bug2767() {
+    return new Bug2767.Response();
   }
 
   public enum NumberEnum {
@@ -848,7 +866,7 @@ public class BugsController {
   public class LangFilteredWrapper {
     private Lang lang;
 
-    @ConstructorProperties({ "lang" })
+    @ConstructorProperties({"lang"})
     public LangFilteredWrapper(Lang lang) {
       this.lang = lang;
     }
@@ -1069,7 +1087,7 @@ public class BugsController {
     @SuppressWarnings("MemberName")
     private Integer AGE;
 
-    @SuppressWarnings({ "MemberName", "VisibilityModifier" })
+    @SuppressWarnings({"MemberName", "VisibilityModifier"})
     public Integer YEAR;
 
     public Integer getAGE() {
