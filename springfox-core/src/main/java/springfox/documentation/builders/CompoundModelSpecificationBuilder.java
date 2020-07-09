@@ -1,7 +1,6 @@
 package springfox.documentation.builders;
 
 import org.springframework.lang.NonNull;
-import org.springframework.lang.NonNullApi;
 import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.PropertySpecification;
@@ -30,6 +29,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * Provides method to create a property with given name
+   *
    * @param name - name of the property to create
    * @return returns a function that that provides a consumer for building a property
    */
@@ -40,10 +40,11 @@ public class CompoundModelSpecificationBuilder {
       return this;
     };
   }
-  
+
   /**
    * Provides method to maybe create a property with given name. If the property doesnt exist the consumer is a no-op.
    * Whatever we build downstream when the property doesnt exist is thrown away.
+   *
    * @param name - name of the property to create
    * @return returns a function that that provides a consumer for building a property
    */
@@ -62,6 +63,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * Provides a fluent builder consumer for building a model key
+   *
    * @param consumer - builder consumer
    * @return this
    */
@@ -75,6 +77,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * Provides override for the max properties. It uses the number of actual properties when not provided.
+   *
    * @param maxProperties - maximum properties that need to be set
    * @return this
    */
@@ -85,6 +88,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * Provides override for the min properties. It uses the number of actual properties when not provided.
+   *
    * @param minProperties - minimum properties that need to be set
    * @return this
    */
@@ -113,6 +117,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * Copies from an existing model
+   *
    * @param other - other model to copy from
    * @return this
    */
@@ -130,6 +135,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * Copies existing set of properties
+   *
    * @param properties - properties to copy from
    * @return this
    */
@@ -159,6 +165,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * Inheritance discriminator
+   *
    * @param discriminator - property to discriminate on
    * @return this
    */
@@ -169,6 +176,7 @@ public class CompoundModelSpecificationBuilder {
 
   /**
    * References to subclasses
+   *
    * @param subclassReferences - the reference specifications of subclasses
    * @return this
    */

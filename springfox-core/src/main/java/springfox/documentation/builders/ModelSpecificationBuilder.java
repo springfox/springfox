@@ -197,23 +197,6 @@ public class ModelSpecificationBuilder {
     return referenceModel;
   }
 
-  public ModelSpecification build() {
-    CompoundModelSpecification compoundModel =
-        compoundModelBuilder != null ? compoundModelBuilder.build() : null;
-    List<ValidationResult> results = validator.validate(this);
-    if (logProblems(results).size() > 0) {
-      return null;
-    }
-    return new ModelSpecification(
-        name,
-        facetsBuilder != null ? facetsBuilder.build() : null,
-        scalar,
-        compoundModel,
-        collection != null ? collection.build() : null,
-        map != null ? map.build() : null,
-        referenceModel != null ? referenceModel.build() : null);
-  }
-
   /**
    * Copies from an other model
    * @param other the other model
@@ -302,5 +285,22 @@ public class ModelSpecificationBuilder {
       collection = null;
     }
     return this;
+  }
+
+  public ModelSpecification build() {
+    CompoundModelSpecification compoundModel =
+        compoundModelBuilder != null ? compoundModelBuilder.build() : null;
+    List<ValidationResult> results = validator.validate(this);
+    if (logProblems(results).size() > 0) {
+      return null;
+    }
+    return new ModelSpecification(
+        name,
+        facetsBuilder != null ? facetsBuilder.build() : null,
+        scalar,
+        compoundModel,
+        collection != null ? collection.build() : null,
+        map != null ? map.build() : null,
+        referenceModel != null ? referenceModel.build() : null);
   }
 }

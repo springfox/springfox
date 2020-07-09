@@ -29,37 +29,72 @@ public class SimpleParameterSpecificationBuilder {
   private CollectionFormat collectionFormat;
   private final ModelSpecificationBuilder model = new ModelSpecificationBuilder();
 
+  /**
+   * Parameter style
+   * @param style - parameter style
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder style(ParameterStyle style) {
     this.style = style;
     return this;
   }
 
+  /**
+   * Use this if we want to explode collections
+   * @param explode - explodes collection
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder explode(Boolean explode) {
     this.explode = defaultIfAbsent(Boolean.TRUE.equals(explode) ? true : null, this.explode);
     return this;
   }
 
+  /**
+   * Allows reserved characters
+   * @param allowReserved - allow reserved characters
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder allowReserved(Boolean allowReserved) {
     this.allowReserved = defaultIfAbsent(allowReserved, this.allowReserved);
     return this;
   }
 
+  /**
+   * Provides consumer to help build models
+   * @param consumer - consumer that facilitates building a model
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder model(@NonNull Consumer<ModelSpecificationBuilder> consumer) {
     consumer.accept(model);
     return this;
   }
 
+  /**
+   * Allows empty values
+   * @param allowEmptyValue - flag to indicate empty values are allowed
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder allowEmptyValue(Boolean allowEmptyValue) {
     this.allowEmptyValue = defaultIfAbsent(Boolean.TRUE.equals(allowEmptyValue) ? true : null, this.allowEmptyValue);
     return this;
   }
 
+  /**
+   * Default value
+   * @param defaultValue - default value
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder defaultValue(String defaultValue) {
     this.defaultValue = defaultIfAbsent(emptyToNull(defaultValue), this.defaultValue);
     return this;
   }
 
-  //TODO: May not be needed for 3.0
+  /**
+   * This is only there to set the collection format for swagger 2
+   * @param collectionFormat - collection format
+   * @return this
+   */
+  @Deprecated
   public SimpleParameterSpecificationBuilder collectionFormat(CollectionFormat collectionFormat) {
     this.collectionFormat = collectionFormat;
     return this;
@@ -71,28 +106,67 @@ public class SimpleParameterSpecificationBuilder {
     return (T) this.facetBuilders.get(clazz);
   }
 
+  /**
+   * Provides consumer to help uild collection element facet
+   * @param facet - consumer that facilitates building a collection facet
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder collectionFacet(
       @NonNull Consumer<CollectionElementFacetBuilder> facet) {
     facet.accept(facetBuilder(CollectionElementFacetBuilder.class));
     return this;
   }
 
+  /**
+   * Provides consumer to help build string element facet
+   * @param facet - consumer that facilitates building a string facet
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder stringFacet(
       @NonNull Consumer<StringElementFacetBuilder> facet) {
     facet.accept(facetBuilder(StringElementFacetBuilder.class));
     return this;
   }
 
+  /**
+   * Provides consumer to help build numeric element facet
+   * @param facet - consumer that facilitates building a numeric facet
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder numericFacet(
       @NonNull Consumer<NumericElementFacetBuilder> facet) {
     facet.accept(facetBuilder(NumericElementFacetBuilder.class));
     return this;
   }
 
+  /**
+   * Provides consumer to help build enumeration element facet
+   * @param facet - consumer that facilitates building a enumeration facet
+   * @return this
+   */
   public SimpleParameterSpecificationBuilder enumerationFacet(
       @NonNull Consumer<EnumerationElementFacetBuilder> facet) {
     facet.accept(facetBuilder(EnumerationElementFacetBuilder.class));
     return this;
+  }
+
+  /**
+   * Method they copy from a specification
+   * @param other - other spec to copy from
+   * @return this
+   */
+  public SimpleParameterSpecificationBuilder copyOf(SimpleParameterSpecification other) {
+    for (ElementFacet each : other.getFacets()) {
+      this.facetBuilder(each.facetBuilder())
+          .copyOf(each);
+    }
+    return this.collectionFormat(other.getCollectionFormat())
+        .allowEmptyValue(other.getAllowEmptyValue())
+        .allowReserved(other.getAllowReserved())
+        .defaultValue(other.getDefaultValue())
+        .explode(other.getExplode())
+        .model(m -> m.copyOf(other.getModel()))
+        .style(other.getStyle());
   }
 
   SimpleParameterSpecification build() {
@@ -121,19 +195,5 @@ public class SimpleParameterSpecificationBuilder {
         builtModel,
         facets
     );
-  }
-
-  public SimpleParameterSpecificationBuilder copyOf(SimpleParameterSpecification simple) {
-    for (ElementFacet each : simple.getFacets()) {
-      this.facetBuilder(each.facetBuilder())
-          .copyOf(each);
-    }
-    return this.collectionFormat(simple.getCollectionFormat())
-        .allowEmptyValue(simple.getAllowEmptyValue())
-        .allowReserved(simple.getAllowReserved())
-        .defaultValue(simple.getDefaultValue())
-        .explode(simple.getExplode())
-        .model(m -> m.copyOf(simple.getModel()))
-        .style(simple.getStyle());
   }
 }
