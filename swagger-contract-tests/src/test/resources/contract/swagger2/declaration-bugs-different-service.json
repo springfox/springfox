@@ -503,7 +503,7 @@
                 }
             }
         },
-        "/bugs/1749{?ascending,companyName,email,headerNames,like,pageNumber,pageSize,set,sortDirection,sortField,status}": {
+        "/bugs/1749{?ascending,companyName,email,like,pageNumber,pageSize,set,sortDirection,sortField}": {
             "get": {
                 "tags": [
                     "Bugs"
@@ -530,16 +530,6 @@
                         "description": "email",
                         "required": false,
                         "type": "string"
-                    },
-                    {
-                        "name": "headerNames",
-                        "in": "query",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "csv"
                     },
                     {
                         "name": "like",
@@ -587,13 +577,6 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
-                    },
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
                     }
                 ],
                 "responses": {
@@ -1970,6 +1953,35 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/bugs/bug2684": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "Get test for response header",
+                "description": "Notes 'bout test",
+                "operationId": "responseHeader_1",
+                "produces": [
+                    "text/plain"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "X-Hello-Bis": {
+                                "type": "string"
+                            },
+                            "X-Hello": {
+                                "type": "string"
+                            }
+                        },
                         "schema": {
                             "type": "string"
                         }

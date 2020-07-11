@@ -1,9 +1,11 @@
 package springfox.test.contract.oas.bugs;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ExampleProperty;
+import io.swagger.annotations.ResponseHeader;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import springfox.test.contract.oas.model.Pet;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -62,6 +66,27 @@ public class BugsController {
 
   @PostMapping("/2982/body")
   public void bug2982Body(@RequestBody Bug2982.MyClass input) {
+  }
+
+  @ApiResponse(
+      code = 200, message = "OK",
+      responseHeaders = {
+          @ResponseHeader(name = "X-Hello-Bis", description = "X-Hello-Bis header description", response = String.class)
+      })
+  @ApiOperation(
+      responseHeaders = {
+          @ResponseHeader(name = "X-Hello", description = "X-Hello header description", response = String.class)
+      },
+      value = "Get test for response header",
+      nickname = "responseHeader", notes = "Notes 'bout test"
+  )
+  @GetMapping(path = "/bug2684", produces = "text/plain")
+  public String bug2684(
+      HttpServletRequest req,
+      HttpServletResponse resp) {
+    resp.addHeader("X-Hello", "Hello!");
+    resp.addHeader("X-Hello-Bis", "Hallo!");
+    return "Hi!";
   }
 
 

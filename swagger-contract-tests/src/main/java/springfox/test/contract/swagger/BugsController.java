@@ -34,6 +34,7 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
 import io.swagger.annotations.ExampleProperty;
+import io.swagger.annotations.ResponseHeader;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,7 @@ import springfox.test.contract.swagger.models.Example;
 import springfox.test.contract.swagger.models.LanguageResponse;
 import springfox.test.contract.swagger.models.Pet;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -543,6 +545,28 @@ public class BugsController {
   @GetMapping("/2767/swagger15")
   public Bug2767.Response bug2767() {
     return new Bug2767.Response();
+  }
+
+
+  @ApiResponse(
+      code = 200, message = "OK",
+      responseHeaders = {
+          @ResponseHeader(name = "X-Hello-Bis", description = "X-Hello-Bis header description", response = String.class)
+      })
+  @ApiOperation(
+      responseHeaders = {
+          @ResponseHeader(name = "X-Hello", description = "X-Hello header description", response = String.class)
+      },
+      value = "Get test for response header",
+      nickname = "responseHeader", notes = "Notes 'bout test"
+  )
+  @GetMapping(path = "/bug2684", produces = "text/plain")
+  public String bug2684(
+      HttpServletRequest req,
+      HttpServletResponse resp) {
+    resp.addHeader("X-Hello", "Hello!");
+    resp.addHeader("X-Hello-Bis", "Hallo!");
+    return "Hi!";
   }
 
   public enum NumberEnum {
