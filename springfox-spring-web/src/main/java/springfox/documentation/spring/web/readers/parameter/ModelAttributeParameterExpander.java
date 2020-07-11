@@ -89,8 +89,9 @@ public class ModelAttributeParameterExpander {
     this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
-  public List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>>
-  expand(ExpansionContext context) {
+  public List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> expand(
+      ExpansionContext context) {
+
     List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters = new ArrayList<>();
     Set<PropertyDescriptor> propertyDescriptors = propertyDescriptors(context.getParamType().getErasedType());
     Map<Method, PropertyDescriptor> propertyLookupByGetter

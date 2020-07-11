@@ -129,8 +129,8 @@ public class DocumentationPluginsManager {
   }
 
   @SuppressWarnings("deprecation")
-  public Compatibility<springfox.documentation.service.Parameter, RequestParameter>
-  expandParameter(ParameterExpansionContext context) {
+  public Compatibility<springfox.documentation.service.Parameter, RequestParameter> expandParameter(
+      ParameterExpansionContext context) {
     for (ExpandedParameterBuilderPlugin each : parameterExpanderPlugins.getPluginsFor(context.getDocumentationType())) {
       each.apply(context);
     }
