@@ -50,6 +50,7 @@ import static java.util.stream.Collectors.*;
 import static org.slf4j.LoggerFactory.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.ScalarTypes.*;
 
 @SuppressWarnings("deprecation")
 @Component
@@ -157,8 +158,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         && !parameter.hasParameterAnnotation(RequestPart.class)
         && !parameter.hasParameterAnnotation(RequestParam.class)
         && !parameter.hasParameterAnnotation(PathVariable.class)
-        && !springfox.documentation.schema.Types.isBaseType(
-            springfox.documentation.schema.Types.typeNameFor(resolvedParamType.getErasedType()))
+        && !builtInScalarType(resolvedParamType.getErasedType()).isPresent()
         && !enumTypeDeterminer.isEnum(resolvedParamType.getErasedType())
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);
