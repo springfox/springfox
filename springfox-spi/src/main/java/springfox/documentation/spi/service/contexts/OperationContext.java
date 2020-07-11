@@ -149,9 +149,8 @@ public class OperationContext {
 
   @SuppressWarnings("rawtypes")
   public Set<Class> getIgnorableParameterTypes() {
-    return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(
-        toSet(),
-        Collections::unmodifiableSet));
+    return getDocumentationContext().getIgnorableParameterTypes().stream()
+    .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
   }
 
   public GenericTypeNamingStrategy getGenericsNamingStrategy() {

@@ -317,12 +317,10 @@ public class Defaults {
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class); //Used to ignore parameters
 
-    boolean exists = true;
-
     classFor("javax.servlet.ServletRequest").ifPresent(it -> ignored.add(it));
     classFor("javax.servlet.ServletResponse").ifPresent(it -> ignored.add(it));
-    classFor("javax.servlet.HttpServletRequest").ifPresent(it -> ignored.add(it));
-    classFor("javax.servlet.HttpServletResponse").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.http.HttpServletRequest").ifPresent(it -> ignored.add(it));
+    classFor("javax.servlet.http.HttpServletResponse").ifPresent(it -> ignored.add(it));
     classFor("javax.servlet.ServletContext").ifPresent(it -> ignored.add(it));
   }
 

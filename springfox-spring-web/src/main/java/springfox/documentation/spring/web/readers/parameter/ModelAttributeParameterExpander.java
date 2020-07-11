@@ -45,6 +45,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,8 +90,9 @@ public class ModelAttributeParameterExpander {
     this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
-  public List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>>
-  expand(ExpansionContext context) {
+  public List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> expand(
+      ExpansionContext context) {
+
     List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters = new ArrayList<>();
     Set<PropertyDescriptor> propertyDescriptors = propertyDescriptors(context.getParamType().getErasedType());
     Map<Method, PropertyDescriptor> propertyLookupByGetter
@@ -104,14 +106,14 @@ public class ModelAttributeParameterExpander {
 
 
     LOG.debug("Expanding parameter type: {}", context.getParamType());
-    final AlternateTypeProvider alternateTypeProvider = context.getDocumentationContext().getAlternateTypeProvider();
-
+    AlternateTypeProvider alternateTypeProvider = context.getAlternateTypeProvider();
     List<ModelAttributeField> attributes =
         allModelAttributes(
             propertyLookupByGetter,
             getters,
             fieldsByName,
-            alternateTypeProvider);
+            alternateTypeProvider,
+            context.ignorableTypes());
 
     attributes.stream()
         .filter(simpleType().negate())
@@ -167,19 +169,35 @@ public class ModelAttributeParameterExpander {
       Map<Method, PropertyDescriptor> propertyLookupByGetter,
       Iterable<ResolvedMethod> getters,
       Map<String, ResolvedField> fieldsByName,
-      AlternateTypeProvider alternateTypeProvider) {
+      AlternateTypeProvider alternateTypeProvider,
+      Collection<Class> ignorables) {
 
-    Stream<ModelAttributeField> modelAttributesFromGetters = StreamSupport.stream(getters.spliterator(), false)
-        .map(toModelAttributeField(fieldsByName, propertyLookupByGetter, alternateTypeProvider));
+    Stream<ModelAttributeField> modelAttributesFromGetters =
+        StreamSupport.stream(getters.spliterator(), false)
+            .filter(method -> !ignored(alternateTypeProvider, method, ignorables))
+            .map(toModelAttributeField(fieldsByName, propertyLookupByGetter, alternateTypeProvider));
 
-    Stream<ModelAttributeField> modelAttributesFromFields = fieldsByName.values().stream()
-        .filter(ResolvedMember::isPublic)
-        .map(toModelAttributeField(alternateTypeProvider));
+    Stream<ModelAttributeField> modelAttributesFromFields =
+        fieldsByName.values().stream()
+            .filter(ResolvedMember::isPublic)
+            .filter(ResolvedMember::isPublic)
+            .map(toModelAttributeField(alternateTypeProvider));
 
     return Stream.concat(
         modelAttributesFromFields,
         modelAttributesFromGetters)
         .collect(toList());
+  }
+
+  private boolean ignored(
+      AlternateTypeProvider alternateTypeProvider,
+      ResolvedMethod method,
+      Collection<Class> ignorables) {
+    boolean annotatedIgnorable = ignorables.stream()
+        .filter(Annotation.class::isAssignableFrom)
+        .anyMatch(annotation -> method.getAnnotations().asList().contains(annotation));
+    return annotatedIgnorable
+        || ignorables.contains(fieldType(alternateTypeProvider, method).getErasedType());
   }
 
   private Function<ResolvedField, ModelAttributeField> toModelAttributeField(
@@ -221,7 +239,7 @@ public class ModelAttributeParameterExpander {
             each.annotatedElements(),
             each.getFieldType(),
             each.getName()),
-        context.getDocumentationContext().getDocumentationType(),
+        context.getDocumentationType(),
         new springfox.documentation.builders.ParameterBuilder(),
         new RequestParameterBuilder());
     return pluginsManager.expandParameter(parameterExpansionContext);
@@ -261,9 +279,9 @@ public class ModelAttributeParameterExpander {
   }
 
   private Function<ResolvedMethod, ModelAttributeField> toModelAttributeField(
-      final Map<String, ResolvedField> fieldsByName,
-      final Map<Method, PropertyDescriptor> propertyLookupByGetter,
-      final AlternateTypeProvider alternateTypeProvider) {
+      Map<String, ResolvedField> fieldsByName,
+      Map<Method, PropertyDescriptor> propertyLookupByGetter,
+      AlternateTypeProvider alternateTypeProvider) {
     return input -> {
       String name = propertyLookupByGetter.get(input.getRawMember()).getName();
       return new ModelAttributeField(

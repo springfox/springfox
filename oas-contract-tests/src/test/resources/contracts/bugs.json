@@ -346,6 +346,44 @@
                     }
                 }
             }
+        },
+        "/bugs/bug2684": {
+            "get": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "Get test for response header",
+                "description": "Notes 'bout test",
+                "operationId": "responseHeader",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "X-Hello-Bis": {
+                                "description": "X-Hello-Bis header description",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "X-Hello": {
+                                "description": "X-Hello header description",
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {

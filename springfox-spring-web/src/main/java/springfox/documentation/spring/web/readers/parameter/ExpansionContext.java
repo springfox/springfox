@@ -20,9 +20,12 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -81,5 +84,17 @@ public class ExpansionContext {
     Set<ResolvedType> childSeenTypes = new HashSet<>(seenTypes);
     childSeenTypes.add(childType);
     return new ExpansionContext(parentName, childType, operationContext, childSeenTypes);
+  }
+
+  public AlternateTypeProvider getAlternateTypeProvider() {
+    return operationContext.getAlternateTypeProvider();
+  }
+
+  public DocumentationType getDocumentationType() {
+    return operationContext.getDocumentationType();
+  }
+
+  public Collection<Class> ignorableTypes() {
+    return operationContext.getIgnorableParameterTypes();
   }
 }
