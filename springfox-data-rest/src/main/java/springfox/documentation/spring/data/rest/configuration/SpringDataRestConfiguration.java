@@ -20,16 +20,17 @@ package springfox.documentation.spring.data.rest.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import springfox.documentation.annotations.Incubating;
 import springfox.documentation.builders.AlternateTypeBuilder;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
+import springfox.documentation.spring.web.OnServletBasedWebApplication;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -39,8 +40,8 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @Configuration
 @ComponentScan(basePackages = "springfox.documentation.spring.data.rest")
-@Incubating("2.5.0")
-@ConditionalOnClass(RepositoryRestConfiguration.class)
+@ConditionalOnWebApplication
+@ConditionalOnClass({RepositoryRestConfiguration.class, OnServletBasedWebApplication.class})
 public class SpringDataRestConfiguration {
 
   // tag::alternate-type-rule-convention[]
