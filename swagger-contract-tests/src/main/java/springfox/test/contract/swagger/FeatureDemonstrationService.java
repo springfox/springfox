@@ -49,6 +49,7 @@ import springfox.test.contract.swagger.models.Business;
 import springfox.test.contract.swagger.models.EnumObjectType;
 import springfox.test.contract.swagger.models.EnumType;
 import springfox.test.contract.swagger.models.Example;
+import springfox.test.contract.swagger.models.ExampleListWrapper;
 import springfox.test.contract.swagger.models.FancyPet;
 import springfox.test.contract.swagger.models.ModelAttributeExample;
 import springfox.test.contract.swagger.models.ModelWithArrayOfArrays;
@@ -140,7 +141,6 @@ public class FeatureDemonstrationService {
     //No-op
   }
 
-
   //Generic collection input
   @RequestMapping(value = "/statuses", method = RequestMethod.POST)
   public void updateBazes(List<EnumType> enumType) {
@@ -155,7 +155,7 @@ public class FeatureDemonstrationService {
 
   //Generic collection input
   @RequestMapping(value = "/examples", method = RequestMethod.PUT)
-  public void updateListOfExamples(List<Example> examples) {
+  public void updateListOfExamples(@ModelAttribute("exampleList") ExampleListWrapper examples) {
     //No-op
   }
 
