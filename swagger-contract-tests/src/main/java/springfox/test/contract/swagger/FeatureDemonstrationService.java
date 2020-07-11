@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,6 +65,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Collections.*;
 
@@ -272,6 +274,22 @@ public class FeatureDemonstrationService {
   @GetMapping(value = "/inheritance")
   public List<Vehicle> findVehicles(@RequestParam("type") String type) {
     return new ArrayList<>();
+  }
+
+  @GetMapping("/2831")
+  @ApiOperation(
+      value = "Demo",
+      notes = "Demo optional header error"
+  )
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "okey"),
+      @ApiResponse(code = 403, message = "ko"),
+      @ApiResponse(code = 404, message = "ko")
+  })
+  public ResponseEntity<Object> feature2831(
+      @ApiParam(value = "foo msg", example = "foo example", type = "header", required = true)
+      @RequestHeader("foo") Optional<String> foo){
+    return ResponseEntity.ok(new Object());
   }
 
   // tag::question-27[]

@@ -269,6 +269,40 @@
                 }
             }
         },
+        "/features/2831": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "Demo",
+                "description": "Demo optional header error",
+                "operationId": "feature2831UsingGET",
+                "parameters": [
+                    {
+                        "name": "foo",
+                        "in": "header",
+                        "description": "foo msg",
+                        "required": true,
+                        "type": "string",
+                        "x-example": "foo example"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "okey",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "403": {
+                        "description": "ko"
+                    },
+                    "404": {
+                        "description": "ko"
+                    }
+                }
+            }
+        },
         "/features/addFiles": {
             "post": {
                 "tags": [
