@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import reactor.core.publisher.Mono;
+import springfox.documentation.annotations.ApiIgnore;
 import springfox.test.contract.oas.model.Pet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -130,8 +132,14 @@ public class BugsController {
           )
       }
   )
+
   @GetMapping("/2767/swagger20")
   public Bug2767.Response bug2767New() {
     return new Bug2767.Response();
+  }
+
+  @GetMapping("/3380")
+  public String bug3380(@ApiIgnore ModelAndView modelAndView) {
+    return "success";
   }
 } 

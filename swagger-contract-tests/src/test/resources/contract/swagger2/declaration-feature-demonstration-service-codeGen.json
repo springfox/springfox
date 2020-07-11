@@ -708,15 +708,89 @@
                 ],
                 "parameters": [
                     {
-                        "name": "examples",
+                        "name": "exampleList[0].allCapsSet",
                         "in": "query",
-                        "description": "examples",
+                        "description": "description of allCapsSet",
                         "required": false,
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/Error-ModelName{namespace='springfox.test.contract.swagger.models', name='Example'}"
+                            "type": "string"
                         },
                         "collectionFormat": "csv"
+                    },
+                    {
+                        "name": "exampleList[0].annotatedEnumType",
+                        "in": "query",
+                        "description": "description of annotatedEnumType",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    },
+                    {
+                        "name": "exampleList[0].bar",
+                        "in": "query",
+                        "description": "description of bar",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "x-example": 10
+                    },
+                    {
+                        "name": "exampleList[0].enumType",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    },
+                    {
+                        "name": "exampleList[0].foo",
+                        "in": "query",
+                        "description": "description of foo",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "chu",
+                            "man"
+                        ]
+                    },
+                    {
+                        "name": "exampleList[0].localDateTime",
+                        "in": "query",
+                        "description": "local date time desc dd-MM-yyyy hh:mm:ss",
+                        "required": true,
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    {
+                        "name": "exampleList[0].nestedType.name",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exampleList[0].parentBeanProperty",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exampleList[0].propertyWithNoSetterMethod",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exampleList[0].readOnlyString",
+                        "in": "query",
+                        "description": "A read only string",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {

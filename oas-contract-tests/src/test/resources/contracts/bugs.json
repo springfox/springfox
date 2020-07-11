@@ -347,6 +347,27 @@
                 }
             }
         },
+        "/bugs/3380": {
+            "get": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3380",
+                "operationId": "bug3380UsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/bug2684": {
             "get": {
                 "tags": [
