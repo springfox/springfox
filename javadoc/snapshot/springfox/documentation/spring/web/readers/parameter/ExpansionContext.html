@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -184,28 +184,43 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../spi/schema/AlternateTypeProvider.html" title="class in springfox.documentation.spi.schema">AlternateTypeProvider</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAlternateTypeProvider()">getAlternateTypeProvider</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../spi/service/contexts/DocumentationContext.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContext</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDocumentationContext()">getDocumentationContext</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDocumentationType()">getDocumentationType</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../spi/service/contexts/OperationContext.html" title="class in springfox.documentation.spi.service.contexts">OperationContext</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOperationContext()">getOperationContext</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>com.fasterxml.classmate.ResolvedType</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getParamType()">getParamType</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getParentName()">getParentName</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasSeenType(com.fasterxml.classmate.ResolvedType)">hasSeenType</a></span>&#8203;(com.fasterxml.classmate.ResolvedType&nbsp;type)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>java.util.Collection&lt;java.lang.Class&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ignorableTypes()">ignorableTypes</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -301,12 +316,39 @@ extends java.lang.Object</pre>
 <a id="childContext(java.lang.String,com.fasterxml.classmate.ResolvedType,springfox.documentation.spi.service.contexts.OperationContext)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>childContext</h4>
 <pre class="methodSignature">public&nbsp;<a href="ExpansionContext.html" title="class in springfox.documentation.spring.web.readers.parameter">ExpansionContext</a>&nbsp;childContext&#8203;(java.lang.String&nbsp;parentName,
                                      com.fasterxml.classmate.ResolvedType&nbsp;childType,
                                      <a href="../../../../spi/service/contexts/OperationContext.html" title="class in springfox.documentation.spi.service.contexts">OperationContext</a>&nbsp;operationContext)</pre>
+</li>
+</ul>
+<a id="getAlternateTypeProvider()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAlternateTypeProvider</h4>
+<pre class="methodSignature">public&nbsp;<a href="../../../../spi/schema/AlternateTypeProvider.html" title="class in springfox.documentation.spi.schema">AlternateTypeProvider</a>&nbsp;getAlternateTypeProvider()</pre>
+</li>
+</ul>
+<a id="getDocumentationType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDocumentationType</h4>
+<pre class="methodSignature">public&nbsp;<a href="../../../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;getDocumentationType()</pre>
+</li>
+</ul>
+<a id="ignorableTypes()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ignorableTypes</h4>
+<pre class="methodSignature">public&nbsp;java.util.Collection&lt;java.lang.Class&gt;&nbsp;ignorableTypes()</pre>
 </li>
 </ul>
 </li>
