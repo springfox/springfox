@@ -52,6 +52,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Optional.*;
 import static org.springframework.util.StringUtils.*;
@@ -108,88 +110,91 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
         operationAnnotation.map(resolvedTypeFromApiOperation(
             typeResolver,
             defaultResponse));
-    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(ApiOperation::responseHeaders);
-    Map<String, Header> defaultHeaders = new HashMap<>();
-    defaultResponseHeaders.ifPresent(responseHeaders -> defaultHeaders.putAll(headers(responseHeaders)));
+    List<ResponseHeader> operationHeaders =
+        operationAnnotation.map(ApiOperation::responseHeaders)
+            .map(headers -> Stream.of(headers)
+                .collect(Collectors.toList()))
+            .orElse(new ArrayList<>());
 
-
-    List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
+    Map<String, Header> defaultHeaders = new HashMap<>(headers(operationHeaders));
+    List<ApiResponse> allApiResponses = Stream.concat(
+        context.findAllAnnotations(ApiResponses.class).stream()
+            .flatMap(responses -> Stream.of(responses.value())),
+        context.findAllAnnotations(ApiResponse.class).stream())
+        .collect(Collectors.toList());
     Set<springfox.documentation.service.ResponseMessage> responseMessages = new HashSet<>();
     Set<Response> responses = new HashSet<>();
 
     Map<Integer, ApiResponse> seenResponsesByCode = new HashMap<>();
-    for (ApiResponses apiResponses : allApiResponses) {
-      ApiResponse[] apiResponseAnnotations = apiResponses.value();
-      for (ApiResponse apiResponse : apiResponseAnnotations) {
-        if (!seenResponsesByCode.containsKey(apiResponse.code())) {
-          ResponseContext responseContext = new ResponseContext(
-              context.getDocumentationContext(),
-              context);
-          seenResponsesByCode.put(
-              apiResponse.code(),
-              apiResponse);
-          Optional<springfox.documentation.schema.ModelReference> responseModel = empty();
-          ModelContext modelContext = context.operationModelsBuilder()
-              .addReturn(
-                  typeResolver.resolve(apiResponse.response()),
-                  Optional.empty());
-          Optional<ResolvedType> type = resolvedType(apiResponse);
-          if (isSuccessful(apiResponse.code())) {
-            type = type.map(Optional::of).orElse(operationResponse);
-          }
-          if (type.isPresent()) {
-            Map<String, String> knownNames = new HashMap<>();
-            Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
-                .orElse(new HashSet<>())
-                .forEach(model -> knownNames.put(
-                    model.getId(),
-                    model.getName()));
-
-            responseModel = Optional.of(
-                modelRefFactory(
-                    modelContext,
-                    enumTypeDeterminer,
-                    typeNameExtractor,
-                    knownNames)
-                    .apply(context.alternateFor(type.get())));
-          }
-          List<Example> examples = new ArrayList<>();
-          int index = 0;
-          for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
-            if (!isEmpty(exampleProperty.value())) {
-              String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
-              examples.add(new ExampleBuilder()
-                  .mediaType(mediaType)
-                  .id("example-" + index++)
-                  .value(exampleProperty.value())
-                  .build());
-            }
-          }
-          Map<String, Header> headers = new HashMap<>(defaultHeaders);
-          headers.putAll(headers(apiResponse.responseHeaders()));
-
-          responseMessages.add(new springfox.documentation.builders.ResponseMessageBuilder()
-              .code(apiResponse.code())
-              .message(apiResponse.message())
-              .responseModel(responseModel.orElse(null))
-              .examples(examples)
-              .headersWithDescription(headers)
-              .build());
-
-          Optional<ResolvedType> finalType = type;
-          context.produces()
-              .forEach(mediaType ->
-                  finalType.map(t -> modelSpecifications.create(modelContext, t))
-                      .ifPresent(model -> responseContext.responseBuilder()
-                          .representation(mediaType)
-                          .apply(r -> r.model(m -> m.copyOf(model)))));
-          responseContext.responseBuilder()
-              .examples(examples)
-              .description(apiResponse.message())
-              .headers(headers.values())
-              .code(String.valueOf(apiResponse.code()));
-          responses.add(documentationPlugins.response(responseContext));
+    for (ApiResponse apiResponse : allApiResponses) {
+      if (!seenResponsesByCode.containsKey(apiResponse.code())) {
+        ResponseContext responseContext = new ResponseContext(
+            context.getDocumentationContext(),
+            context);
+        seenResponsesByCode.put(
+            apiResponse.code(),
+            apiResponse);
+        Optional<springfox.documentation.schema.ModelReference> responseModel = empty();
+        ModelContext modelContext = context.operationModelsBuilder()
+            .addReturn(
+                typeResolver.resolve(apiResponse.response()),
+                Optional.empty());
+        Optional<ResolvedType> type = resolvedType(apiResponse);
+        if (isSuccessful(apiResponse.code())) {
+          type = type.map(Optional::of).orElse(operationResponse);
         }
+        if (type.isPresent()) {
+          Map<String, String> knownNames = new HashMap<>();
+          Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
+              .orElse(new HashSet<>())
+              .forEach(model -> knownNames.put(
+                  model.getId(),
+                  model.getName()));
+
+          responseModel = Optional.of(
+              modelRefFactory(
+                  modelContext,
+                  enumTypeDeterminer,
+                  typeNameExtractor,
+                  knownNames)
+                  .apply(context.alternateFor(type.get())));
+        }
+        List<Example> examples = new ArrayList<>();
+        int index = 0;
+        for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
+          if (!isEmpty(exampleProperty.value())) {
+            String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
+            examples.add(new ExampleBuilder()
+                .mediaType(mediaType)
+                .id("example-" + index++)
+                .value(exampleProperty.value())
+                .build());
+          }
+        }
+        Map<String, Header> headers = new HashMap<>(defaultHeaders);
+        headers.putAll(headers(apiResponse.responseHeaders()));
+
+        responseMessages.add(new springfox.documentation.builders.ResponseMessageBuilder()
+            .code(apiResponse.code())
+            .message(apiResponse.message())
+            .responseModel(responseModel.orElse(null))
+            .examples(examples)
+            .headersWithDescription(headers)
+            .build());
+
+        Optional<ResolvedType> finalType = type;
+        context.produces()
+            .forEach(mediaType ->
+                finalType.map(t -> modelSpecifications.create(modelContext, t))
+                    .ifPresent(model -> responseContext.responseBuilder()
+                        .representation(mediaType)
+                        .apply(r -> r.model(m -> m.copyOf(model)))));
+        responseContext.responseBuilder()
+            .examples(examples)
+            .description(apiResponse.message())
+            .headers(headers.values())
+            .code(String.valueOf(apiResponse.code()));
+        responses.add(documentationPlugins.response(responseContext));
       }
     }
     if (operationResponse.isPresent()) {

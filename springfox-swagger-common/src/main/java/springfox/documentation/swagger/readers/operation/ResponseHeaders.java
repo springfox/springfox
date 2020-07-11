@@ -30,6 +30,7 @@ import springfox.documentation.schema.property.PackageNames;
 import springfox.documentation.service.Header;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -58,8 +59,13 @@ public class ResponseHeaders {
   }
 
   public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
+    return headers(Arrays.asList(responseHeaders));
+  }
+
+  public static Map<String, Header> headers(Collection<ResponseHeader> responseHeaders) {
     Map<String, Header> headers = new HashMap<>();
-    Stream.of(responseHeaders).filter(emptyOrVoid().negate())
+    responseHeaders.stream()
+        .filter(emptyOrVoid().negate())
         .forEachOrdered(each -> headers.put(each.name(), new Header(
             each.name(),
             each.description(),
