@@ -49,6 +49,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.test.contract.swagger.models.Bug1749;
 import springfox.test.contract.swagger.models.Bug2767;
@@ -567,6 +568,11 @@ public class BugsController {
     resp.addHeader("X-Hello", "Hello!");
     resp.addHeader("X-Hello-Bis", "Hallo!");
     return "Hi!";
+  }
+
+  @GetMapping("/3380")
+  public String bug3380(@ApiIgnore ModelAndView modelAndView) {
+    return "success";
   }
 
   public enum NumberEnum {

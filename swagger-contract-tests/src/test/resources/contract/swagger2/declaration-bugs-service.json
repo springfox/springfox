@@ -1746,6 +1746,23 @@
                 }
             }
         },
+        "/bugs/3380": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug3380",
+                "operationId": "bug3380UsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
