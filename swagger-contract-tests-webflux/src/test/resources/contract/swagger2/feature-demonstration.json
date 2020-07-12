@@ -1,0 +1,153 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "petstore.swagger.io",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "feature-demonstration-controller",
+            "description": "Feature Demonstration Controller"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "produces": [
+        "application/json",
+        "application/xml"
+    ],
+    "paths": {
+        "/features/flux{?names}": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-controller"
+                ],
+                "summary": "helloPeople",
+                "operationId": "helloPeopleUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "names",
+                        "in": "query",
+                        "description": "names",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/mono{?name}": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-controller"
+                ],
+                "summary": "helloPerson",
+                "operationId": "helloPersonUsingGET",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "name",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/response-flux{?names}": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-controller"
+                ],
+                "summary": "helloPeople",
+                "operationId": "helloPeopleUsingGET",
+                "parameters": [
+                    {
+                        "name": "names",
+                        "in": "query",
+                        "description": "names",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/response-mono": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-controller"
+                ],
+                "summary": "helloMono",
+                "operationId": "helloMonoUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
+    }
+}

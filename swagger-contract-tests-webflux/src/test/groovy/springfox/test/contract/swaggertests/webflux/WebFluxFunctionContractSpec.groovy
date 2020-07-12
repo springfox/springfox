@@ -70,6 +70,8 @@ class WebFluxFunctionContractSpec extends Specification implements FileAccess {
     contractFile                                                  | groupName
     'swagger.json'                                                | 'petstore'
     'swaggerTemplated.json'                                       | 'petstoreTemplated'
+    'feature-demonstration.json'                                  | 'features'
+
   }
 
   def "should list swagger resources for swagger 2.0"() {
