@@ -80,7 +80,7 @@
                                 "SERVICE"
                             ]
                         },
-                        "collectionFormat": "csv",
+                        "collectionFormat": "multi",
                         "enum": [
                             "PRODUCT",
                             "SERVICE"

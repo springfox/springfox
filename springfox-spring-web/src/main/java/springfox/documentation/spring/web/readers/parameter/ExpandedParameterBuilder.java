@@ -134,7 +134,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .required(Boolean.FALSE)
         .in(context.getParameterType())
         .precedence(DEFAULT_PRECEDENCE)
-        .query(q -> q.collectionFormat(isContainerType(resolved) ? CollectionFormat.CSV : null)
+        .query(q -> q.collectionFormat(isContainerType(resolved) ? CollectionFormat.MULTI : null)
             .model(m -> m.copyOf(modelSpecification))
             .enumerationFacet(e -> e.allowedValues(finalAllowable)));
   }

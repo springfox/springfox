@@ -179,13 +179,10 @@
                         "in": "query",
                         "description": "expand",
                         "required": false,
-                        "style": "pipeDelimited",
+                        "style": "form",
+                        "explode": true,
                         "schema": {
-                            "uniqueItems": true,
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
+                            "type": "string",
                             "enum": [
                                 "one",
                                 "three",

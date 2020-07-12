@@ -65,7 +65,6 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
   ParameterDataTypeReader sut = new ParameterDataTypeReader(
       defaultSchemaPlugins(),
       typeNameExtractor,
-      new TypeResolver(),
       enumTypeDeterminer,
       new ModelSpecificationFactory(
           typeNameExtractor,
@@ -191,7 +190,6 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
     def sut = new ParameterDataTypeReader(
         defaultSchemaPlugins(),
         typeNameExtractor,
-        new TypeResolver(),
         enumTypeDeterminer,
         new ModelSpecificationFactory(
             typeNameExtractor,

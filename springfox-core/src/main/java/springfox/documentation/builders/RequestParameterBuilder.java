@@ -34,13 +34,14 @@ public class RequestParameterBuilder {
   private Boolean deprecated;
   private Boolean hidden = false;
   private Example scalarExample;
+  private int precedence;
+  private int parameterIndex;
+  private Validator<RequestParameterBuilder> validator = new NoopValidator<>();
+  private ParameterSpecificationProvider parameterSpecificationProvider = new RootParameterSpecificationProvider();
+
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
-  private ParameterSpecificationProvider parameterSpecificationProvider = new RootParameterSpecificationProvider();
-  private int precedence;
   private final Set<MediaType> accepts = new HashSet<>();
-  private Validator<RequestParameterBuilder> validator = new NoopValidator<>();
-  private int parameterIndex;
 
   public RequestParameterBuilder name(String name) {
     this.name = defaultIfAbsent(emptyToNull(name), this.name);

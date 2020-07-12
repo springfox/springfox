@@ -35,7 +35,7 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
         if (model.getScalar().isPresent()) {
           validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
               .copyOf(simpleParameter)
-              .explode(null)
+              .explode(simpleParameter.getExplode())
               .style(ParameterStyle.FORM)
               .build();
         } else if (model.getCollection().isPresent()) {
@@ -51,10 +51,7 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
                   .copyOf(simpleParameter)
                   .explode(simpleParameter.getExplode())
                   .style(style)
-                  .collectionFormat(
-                      simpleParameter.nullSafeIsExplode()
-                          ? CollectionFormat.MULTI
-                          : CollectionFormat.CSV)
+                  .collectionFormat(CollectionFormat.MULTI)
                   .build();
         }
       }

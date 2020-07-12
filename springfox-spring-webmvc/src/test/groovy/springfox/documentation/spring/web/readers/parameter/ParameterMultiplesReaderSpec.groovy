@@ -39,7 +39,7 @@ class ParameterMultiplesReaderSpec
     implements RequestMappingSupport,
         ModelProviderForServiceSupport {
 
-  def sut = new ParameterMultiplesReader();
+  def sut = new ParameterMultiplesReader()
 
   def "Should support all documentation types"() {
     expect:
