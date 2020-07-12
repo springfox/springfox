@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
@@ -141,5 +142,10 @@ public class BugsController {
   @GetMapping("/3380")
   public String bug3380(@ApiIgnore ModelAndView modelAndView) {
     return "success";
+  }
+
+  @GetMapping("/3371")
+  public Iterable<String> bug3371() {
+    return new ArrayList<>();
   }
 } 

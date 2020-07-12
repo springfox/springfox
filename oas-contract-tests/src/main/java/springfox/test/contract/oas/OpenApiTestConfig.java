@@ -7,6 +7,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.HttpAuthenticationScheme;
@@ -81,7 +82,9 @@ public class OpenApiTestConfig {
         .alternateTypeRules(
             newRule(resolver.resolve(Mono.class,
                 resolver.resolve(ResponseEntity.class, InputStreamResource.class)),
-                resolver.resolve(File.class)))
+                resolver.resolve(File.class)),
+            newRule(resolver.resolve(Iterable.class, WildcardType.class),
+                resolver.resolve(List.class, WildcardType.class)))
         .host("bugs.springfox.io")
         .protocols(new HashSet<>(Arrays.asList(
             "http",

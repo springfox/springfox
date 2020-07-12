@@ -50,13 +50,6 @@ dependencies {
   }
 }
 
-compileJava {
-  options.compilerArgs += [
-      "-Amapstruct.defaultComponentModel=spring",
-      "-Amapstruct.unmappedTargetPolicy=ERROR"
-  ]
-}
-
 // tag::update-contract-tests[]
 // NOTE: Uncomment to bulk update contracts
 //test {

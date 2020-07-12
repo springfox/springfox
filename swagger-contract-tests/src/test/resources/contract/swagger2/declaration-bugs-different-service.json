@@ -1744,6 +1744,26 @@
                 }
             }
         },
+        "/bugs/3371": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug3371",
+                "operationId": "bug3371UsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/3380": {
             "get": {
                 "tags": [

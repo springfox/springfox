@@ -75,6 +75,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -575,6 +576,11 @@ public class BugsController {
     return "success";
   }
 
+  @GetMapping("/3371")
+  public Iterable<String> bug3371() {
+    return new ArrayList<>();
+  }
+  
   public enum NumberEnum {
     ONE,
     TWO,

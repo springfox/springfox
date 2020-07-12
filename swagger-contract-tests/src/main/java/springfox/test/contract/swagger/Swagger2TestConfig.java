@@ -11,7 +11,7 @@ import org.springframework.http.HttpMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.AuthorizationScopeBuilder;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.schema.AlternateTypeRules;
+import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.SecurityScheme;
@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import static springfox.documentation.builders.PathSelectors.*;
+import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @Configuration
 @ComponentScan({
@@ -134,7 +135,7 @@ public class Swagger2TestConfig {
             Arrays.asList(
                 "application/xml",
                 "application/json")))
-        .alternateTypeRules(AlternateTypeRules.newRule(
+        .alternateTypeRules(newRule(
             LocalDate.class,
             String.class))
         .select().paths(PathSelectors.regex(".*/features/.*"))
@@ -211,17 +212,16 @@ public class Swagger2TestConfig {
                 .forHttpMethods(Predicate.isEqual(HttpMethod.GET))
                 .build()))
         .alternateTypeRules(
-            AlternateTypeRules.newRule(
-                URL.class,
-                String.class),
-            AlternateTypeRules.newRule(
-                resolver.resolve(
-                    List.class,
-                    Link.class),
+            newRule(URL.class, String.class),
+            newRule(resolver.resolve(
+                List.class,
+                Link.class),
                 resolver.resolve(
                     Map.class,
                     String.class,
-                    BugsController.LinkAlternate.class)))
+                    BugsController.LinkAlternate.class)),
+            newRule(resolver.resolve(Iterable.class, WildcardType.class),
+                resolver.resolve(List.class, WildcardType.class)))
         .directModelSubstitute(
             ByteBuffer.class,
             String.class)
@@ -246,17 +246,19 @@ public class Swagger2TestConfig {
                 "application/json")))
         .enableUrlTemplating(true)
         .alternateTypeRules(
-            AlternateTypeRules.newRule(
+            newRule(
                 URL.class,
                 String.class),
-            AlternateTypeRules.newRule(
+            newRule(
                 resolver.resolve(
                     List.class,
                     Link.class),
                 resolver.resolve(
                     Map.class,
                     String.class,
-                    BugsController.LinkAlternate.class)))
+                    BugsController.LinkAlternate.class)),
+            newRule(resolver.resolve(Iterable.class, WildcardType.class),
+                resolver.resolve(List.class, WildcardType.class)))
         .directModelSubstitute(
             ByteBuffer.class,
             String.class)
@@ -281,18 +283,17 @@ public class Swagger2TestConfig {
                 "application/json")))
         .enableUrlTemplating(true)
         .alternateTypeRules(
-            AlternateTypeRules.newRule(
+            newRule(
                 URL.class,
                 String.class),
-            AlternateTypeRules.newRule(
+            newRule(
                 resolver.resolve(
                     List.class,
                     Link.class),
                 resolver.resolve(
                     Map.class,
                     String.class,
-                    BugsController.LinkAlternate
-                        .class)))
+                    BugsController.LinkAlternate.class)))
         .directModelSubstitute(
             ByteBuffer.class,
             String.class)
