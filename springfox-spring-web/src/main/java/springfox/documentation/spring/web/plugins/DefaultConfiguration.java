@@ -59,6 +59,20 @@ public class DefaultConfiguration implements DefaultsProviderPlugin {
   }
 
   @Override
+  public DocumentationContextBuilder apply(DocumentationContextBuilder builder) {
+    return builder.operationOrdering(defaults.operationOrdering())
+        .apiDescriptionOrdering(defaults.apiDescriptionOrdering())
+        .apiListingReferenceOrdering(defaults.apiListingReferenceOrdering())
+        .additionalIgnorableTypes(defaults.defaultIgnorableParameterTypes())
+        .rules(defaults.defaultRules(typeResolver))
+        .defaultResponses(defaults.defaultResponses())
+        .pathProvider(pathProvider)
+        .typeResolver(typeResolver)
+        .enableUrlTemplating(false)
+        .selector(ApiSelector.DEFAULT);
+  }
+
+  @Override
   public boolean supports(DocumentationType delimiter) {
     return true;
   }
