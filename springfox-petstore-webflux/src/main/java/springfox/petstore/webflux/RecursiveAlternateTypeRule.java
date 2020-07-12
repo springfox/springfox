@@ -16,10 +16,11 @@
  *
  *
  */
-package springfox.documentation.schema;
+package springfox.petstore.webflux;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import springfox.documentation.schema.AlternateTypeRule;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
  */
 public class RecursiveAlternateTypeRule extends AlternateTypeRule {
 
-  private List<AlternateTypeRule> rules;
+  private final List<AlternateTypeRule> rules;
 
   public RecursiveAlternateTypeRule(
       TypeResolver typeResolver,

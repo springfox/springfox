@@ -25,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.schema.RecursiveAlternateTypeRule;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
