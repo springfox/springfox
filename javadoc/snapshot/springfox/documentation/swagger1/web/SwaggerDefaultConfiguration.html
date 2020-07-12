@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -183,13 +183,20 @@ implements <a href="../../spi/service/DefaultsProviderPlugin.html" title="interf
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../spi/service/contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(springfox.documentation.spi.DocumentationType)">create</a></span>&#8203;(<a href="../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;documentationType)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">apply</a></span>&#8203;(<a href="../../spi/service/contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;builder)</code></th>
 <td class="colLast">
-<div class="block">Implement this method to override the @see  springfox.documentation.spi.service.contexts
- .DocumentationContextBuilder</div>
+<div class="block">Implement this method to override enrich the documentation context builder with documentation type specific
+ defaults.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../spi/service/contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(springfox.documentation.spi.DocumentationType)">create</a></span>&#8203;(<a href="../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;documentationType)</code></th>
+<td class="colLast">
+<div class="block">Use <a href="../../spi/service/DefaultsProviderPlugin.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)"><code>DefaultsProviderPlugin.apply(DocumentationContextBuilder)</code></a> instead</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#supports(springfox.documentation.spi.DocumentationType)">supports</a></span>&#8203;(<a href="../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;delimiter)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -247,13 +254,32 @@ implements <a href="../../spi/service/DefaultsProviderPlugin.html" title="interf
 <h4>create</h4>
 <pre class="methodSignature">public&nbsp;<a href="../../spi/service/contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;create&#8203;(<a href="../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;documentationType)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../spi/service/DefaultsProviderPlugin.html#create(springfox.documentation.spi.DocumentationType)">DefaultsProviderPlugin</a></code></span></div>
-<div class="block">Implement this method to override the @see  springfox.documentation.spi.service.contexts
- .DocumentationContextBuilder</div>
+<div class="block">Use <a href="../../spi/service/DefaultsProviderPlugin.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)"><code>DefaultsProviderPlugin.apply(DocumentationContextBuilder)</code></a> instead</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../spi/service/DefaultsProviderPlugin.html#create(springfox.documentation.spi.DocumentationType)">create</a></code>&nbsp;in interface&nbsp;<code><a href="../../spi/service/DefaultsProviderPlugin.html" title="interface in springfox.documentation.spi.service">DefaultsProviderPlugin</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>documentationType</code> - - creates a default DocumentationContextBuilder based on documentation type</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>- returns the documentation context builder</dd>
+</dl>
+</li>
+</ul>
+<a id="apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>apply</h4>
+<pre class="methodSignature">public&nbsp;<a href="../../spi/service/contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;apply&#8203;(<a href="../../spi/service/contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;builder)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../spi/service/DefaultsProviderPlugin.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">DefaultsProviderPlugin</a></code></span></div>
+<div class="block">Implement this method to override enrich the documentation context builder with documentation type specific
+ defaults.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../spi/service/DefaultsProviderPlugin.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">apply</a></code>&nbsp;in interface&nbsp;<code><a href="../../spi/service/DefaultsProviderPlugin.html" title="interface in springfox.documentation.spi.service">DefaultsProviderPlugin</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>builder</code> - - creates a default DocumentationContextBuilder based on documentation type</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>- returns the documentation context builder</dd>
 </dl>

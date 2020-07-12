@@ -670,6 +670,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Implement this method to manually add ApiDescriptions</div>
 </dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spi/service/DefaultsProviderPlugin.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">apply(DocumentationContextBuilder)</a></span> - Method in interface springfox.documentation.spi.service.<a href="springfox/documentation/spi/service/DefaultsProviderPlugin.html" title="interface in springfox.documentation.spi.service">DefaultsProviderPlugin</a></dt>
+<dd>
+<div class="block">Implement this method to override enrich the documentation context builder with documentation type specific
+ defaults.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/DefaultConfiguration.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">apply(DocumentationContextBuilder)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/DefaultConfiguration.html" title="class in springfox.documentation.spring.web.plugins">DefaultConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">apply(DocumentationContextBuilder)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html" title="class in springfox.documentation.spring.web.plugins">WebfluxDefaultsProvider</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/swagger1/web/SwaggerDefaultConfiguration.html#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">apply(DocumentationContextBuilder)</a></span> - Method in class springfox.documentation.swagger1.web.<a href="springfox/documentation/swagger1/web/SwaggerDefaultConfiguration.html" title="class in springfox.documentation.swagger1.web">SwaggerDefaultConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/service/OperationBuilderPlugin.html#apply(springfox.documentation.spi.service.contexts.OperationContext)">apply(OperationContext)</a></span> - Method in interface springfox.documentation.spi.service.<a href="springfox/documentation/spi/service/OperationBuilderPlugin.html" title="interface in springfox.documentation.spi.service">OperationBuilderPlugin</a></dt>
 <dd>
 <div class="block">Implement this method to override the Operation using the OperationBuilder available in the context</div>
@@ -793,6 +804,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/DefaultResponseTypeReader.html#apply(springfox.documentation.spi.service.contexts.ResponseContext)">apply(ResponseContext)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/DefaultResponseTypeReader.html" title="class in springfox.documentation.spring.web.plugins">DefaultResponseTypeReader</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/service/contexts/DocumentationContextBuilder.html#applyDefaultResponseMessages(boolean)">applyDefaultResponseMessages(boolean)</a></span> - Method in class springfox.documentation.spi.service.contexts.<a href="springfox/documentation/spi/service/contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/DocumentationPluginsManager.html#applyDefaults(springfox.documentation.spi.DocumentationType,springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">applyDefaults(DocumentationType, DocumentationContextBuilder)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/DocumentationPluginsManager.html" title="class in springfox.documentation.spring.web.plugins">DocumentationPluginsManager</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger/web/SecurityConfigurationBuilder.html#appName(java.lang.String)">appName(String)</a></span> - Method in class springfox.documentation.swagger.web.<a href="springfox/documentation/swagger/web/SecurityConfigurationBuilder.html" title="class in springfox.documentation.swagger.web">SecurityConfigurationBuilder</a></dt>
 <dd>&nbsp;</dd>
@@ -1486,10 +1499,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/service/DefaultsProviderPlugin.html#create(springfox.documentation.spi.DocumentationType)">create(DocumentationType)</a></span> - Method in interface springfox.documentation.spi.service.<a href="springfox/documentation/spi/service/DefaultsProviderPlugin.html" title="interface in springfox.documentation.spi.service">DefaultsProviderPlugin</a></dt>
 <dd>
-<div class="block">Implement this method to override the @see  springfox.documentation.spi.service.contexts
- .DocumentationContextBuilder</div>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/DefaultConfiguration.html#create(springfox.documentation.spi.DocumentationType)">create(DocumentationType)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/DefaultConfiguration.html" title="class in springfox.documentation.spring.web.plugins">DefaultConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html#create(springfox.documentation.spi.DocumentationType)">create(DocumentationType)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html" title="class in springfox.documentation.spring.web.plugins">WebfluxDefaultsProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/swagger1/web/SwaggerDefaultConfiguration.html#create(springfox.documentation.spi.DocumentationType)">create(DocumentationType)</a></span> - Method in class springfox.documentation.swagger1.web.<a href="springfox/documentation/swagger1/web/SwaggerDefaultConfiguration.html" title="class in springfox.documentation.swagger1.web">SwaggerDefaultConfiguration</a></dt>
 <dd>&nbsp;</dd>
@@ -1498,8 +1512,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Creates a synthetic model</div>
 </dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/schema/property/ModelSpecificationFactory.html#create(springfox.documentation.spi.schema.contexts.ModelContext,com.fasterxml.classmate.ResolvedType)">create(ModelContext, ResolvedType)</a></span> - Method in class springfox.documentation.schema.property.<a href="springfox/documentation/schema/property/ModelSpecificationFactory.html" title="class in springfox.documentation.schema.property">ModelSpecificationFactory</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/DocumentationPluginsManager.html#createContextBuilder(springfox.documentation.spi.DocumentationType,springfox.documentation.spi.service.DefaultsProviderPlugin)">createContextBuilder(DocumentationType, DefaultsProviderPlugin)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/DocumentationPluginsManager.html" title="class in springfox.documentation.spring.web.plugins">DocumentationPluginsManager</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/schema/SyntheticModelProviderPlugin.html#createModelSpecification(springfox.documentation.spi.schema.contexts.ModelContext)">createModelSpecification(ModelContext)</a></span> - Method in interface springfox.documentation.spi.schema.<a href="springfox/documentation/spi/schema/SyntheticModelProviderPlugin.html" title="interface in springfox.documentation.spi.schema">SyntheticModelProviderPlugin</a></dt>
 <dd>
@@ -7135,7 +7147,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/paths/Paths.html#splitCamelCase(java.lang.String,java.lang.String)">splitCamelCase(String, String)</a></span> - Static method in class springfox.documentation.spring.web.paths.<a href="springfox/documentation/spring/web/paths/Paths.html" title="class in springfox.documentation.spring.web.paths">Paths</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spi/DocumentationType.html#SPRING_WEB">SPRING_WEB</a></span> - Static variable in class springfox.documentation.spi.<a href="springfox/documentation/spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+</dd>
 <dt><a href="springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.html" title="class in springfox.documentation.spring.data.rest.configuration"><span class="typeNameLink">SpringDataRestConfiguration</span></a> - Class in <a href="springfox/documentation/spring/data/rest/configuration/package-summary.html">springfox.documentation.spring.data.rest.configuration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.html#%3Cinit%3E()">SpringDataRestConfiguration()</a></span> - Constructor for class springfox.documentation.spring.data.rest.configuration.<a href="springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.html" title="class in springfox.documentation.spring.data.rest.configuration">SpringDataRestConfiguration</a></dt>
@@ -7473,6 +7487,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/Docket.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/Docket.html" title="class in springfox.documentation.spring.web.plugins">Docket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/SpringRestDocsOperationBuilderPlugin.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/SpringRestDocsOperationBuilderPlugin.html" title="class in springfox.documentation.spring.web.plugins">SpringRestDocsOperationBuilderPlugin</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html" title="class in springfox.documentation.spring.web.plugins">WebfluxDefaultsProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/readers/operation/AbstractOperationParameterRequestConditionReader.html#supports(springfox.documentation.spi.DocumentationType)">supports(DocumentationType)</a></span> - Method in class springfox.documentation.spring.web.readers.operation.<a href="springfox/documentation/spring/web/readers/operation/AbstractOperationParameterRequestConditionReader.html" title="class in springfox.documentation.spring.web.readers.operation">AbstractOperationParameterRequestConditionReader</a></dt>
 <dd>&nbsp;</dd>
@@ -8313,6 +8329,12 @@ the order they are declared.</div>
 </a>
 <h2 class="title">W</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/SpringfoxWebFluxConfiguration.html#webfluxDefaults(com.fasterxml.classmate.TypeResolver)">webfluxDefaults(TypeResolver)</a></span> - Method in class springfox.documentation.spring.web.<a href="springfox/documentation/spring/web/SpringfoxWebFluxConfiguration.html" title="class in springfox.documentation.spring.web">SpringfoxWebFluxConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html" title="class in springfox.documentation.spring.web.plugins"><span class="typeNameLink">WebfluxDefaultsProvider</span></a> - Class in <a href="springfox/documentation/spring/web/plugins/package-summary.html">springfox.documentation.spring.web.plugins</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html#%3Cinit%3E(com.fasterxml.classmate.TypeResolver)">WebfluxDefaultsProvider(TypeResolver)</a></span> - Constructor for class springfox.documentation.spring.web.plugins.<a href="springfox/documentation/spring/web/plugins/WebfluxDefaultsProvider.html" title="class in springfox.documentation.spring.web.plugins">WebfluxDefaultsProvider</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="springfox/documentation/spring/web/WebFluxNameValueExpressionWrapper.html" title="class in springfox.documentation.spring.web"><span class="typeNameLink">WebFluxNameValueExpressionWrapper</span></a>&lt;<a href="springfox/documentation/spring/web/WebFluxNameValueExpressionWrapper.html" title="type parameter in WebFluxNameValueExpressionWrapper">T</a>&gt; - Class in <a href="springfox/documentation/spring/web/package-summary.html">springfox.documentation.spring.web</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="springfox/documentation/spring/web/SpringfoxWebFluxConfiguration.html#webFluxObjectMapperConfigurer()">webFluxObjectMapperConfigurer()</a></span> - Static method in class springfox.documentation.spring.web.<a href="springfox/documentation/spring/web/SpringfoxWebFluxConfiguration.html" title="class in springfox.documentation.spring.web">SpringfoxWebFluxConfiguration</a></dt>

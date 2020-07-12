@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":6,"i1":38};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -128,7 +128,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="../../spring/web/plugins/DefaultConfiguration.html" title="class in springfox.documentation.spring.web.plugins">DefaultConfiguration</a></code>, <code><a href="../../swagger1/web/SwaggerDefaultConfiguration.html" title="class in springfox.documentation.swagger1.web">SwaggerDefaultConfiguration</a></code></dd>
+<dd><code><a href="../../spring/web/plugins/DefaultConfiguration.html" title="class in springfox.documentation.spring.web.plugins">DefaultConfiguration</a></code>, <code><a href="../../swagger1/web/SwaggerDefaultConfiguration.html" title="class in springfox.documentation.swagger1.web">SwaggerDefaultConfiguration</a></code>, <code><a href="../../spring/web/plugins/WebfluxDefaultsProvider.html" title="class in springfox.documentation.spring.web.plugins">WebfluxDefaultsProvider</a></code></dd>
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">DefaultsProviderPlugin</span>
@@ -147,7 +147,7 @@ extends org.springframework.plugin.core.Plugin&lt;<a href="../DocumentationType.
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -155,10 +155,17 @@ extends org.springframework.plugin.core.Plugin&lt;<a href="../DocumentationType.
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">apply</a></span>&#8203;(<a href="contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;builder)</code></th>
+<td class="colLast">
+<div class="block">Implement this method to override enrich the documentation context builder with documentation type specific
+ defaults.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(springfox.documentation.spi.DocumentationType)">create</a></span>&#8203;(<a href="../DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;documentationType)</code></th>
 <td class="colLast">
-<div class="block">Implement this method to override the @see  springfox.documentation.spi.service.contexts
- .DocumentationContextBuilder</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </td>
 </tr>
 </table>
@@ -188,15 +195,35 @@ extends org.springframework.plugin.core.Plugin&lt;<a href="../DocumentationType.
 <a id="create(springfox.documentation.spi.DocumentationType)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre class="methodSignature"><a href="contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;create&#8203;(<a href="../DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;documentationType)</pre>
-<div class="block">Implement this method to override the @see  springfox.documentation.spi.service.contexts
- .DocumentationContextBuilder</div>
+<pre class="methodSignature">@Deprecated
+<a href="contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;create&#8203;(<a href="../DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&nbsp;documentationType)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Use <a href="#apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)"><code>apply(DocumentationContextBuilder)</code></a> instead</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>documentationType</code> - - creates a default DocumentationContextBuilder based on documentation type</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>- returns the documentation context builder</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>3.0.0</dd>
+</dl>
+</li>
+</ul>
+<a id="apply(springfox.documentation.spi.service.contexts.DocumentationContextBuilder)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>apply</h4>
+<pre class="methodSignature"><a href="contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;apply&#8203;(<a href="contexts/DocumentationContextBuilder.html" title="class in springfox.documentation.spi.service.contexts">DocumentationContextBuilder</a>&nbsp;builder)</pre>
+<div class="block">Implement this method to override enrich the documentation context builder with documentation type specific
+ defaults.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>builder</code> - - creates a default DocumentationContextBuilder based on documentation type</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>- returns the documentation context builder</dd>
 </dl>
