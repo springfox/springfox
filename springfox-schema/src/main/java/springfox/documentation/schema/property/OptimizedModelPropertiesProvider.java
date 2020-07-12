@@ -428,8 +428,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     if (!isInActiveView(
         member,
         givenContext)) {
-      givenContext.getEffectiveModelKeyBuilder()
-          .viewDiscriminator(givenContext.getView().orElse(null));
       return properties;
     }
 

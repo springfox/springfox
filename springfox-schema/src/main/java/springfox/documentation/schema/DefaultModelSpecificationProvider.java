@@ -194,8 +194,6 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       ModelContext context,
       ResolvedType propertiesHost) {
     String typeName = typeNameExtractor.typeName(context);
-    context.getEffectiveModelKeyBuilder()
-        .qualifiedModelName(q -> q.namespace(safeGetPackageName(propertiesHost)).name(typeName));
     return propertiesProvider.propertySpecificationsFor(
         propertiesHost,
         context);
