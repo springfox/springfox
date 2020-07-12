@@ -375,17 +375,13 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       String namePrefix) {
 
     List<springfox.documentation.schema.ModelProperty> properties = new ArrayList<>();
-    if (!isInActiveView(
-        member,
-        givenContext)) {
+    if (!isInActiveView(member, givenContext)) {
       return properties;
     }
 
     if (member instanceof AnnotatedMethod) {
       properties.addAll(
-          findAccessorMethod(
-              type,
-              member)
+          findAccessorMethod(type, member)
               .map(propertyFromBean(
                   givenContext,
                   jacksonProperty,
@@ -425,9 +421,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       String namePrefix) {
 
     List<PropertySpecification> properties = new ArrayList<>();
-    if (!isInActiveView(
-        member,
-        givenContext)) {
+    if (!isInActiveView(member, givenContext)) {
       return properties;
     }
 

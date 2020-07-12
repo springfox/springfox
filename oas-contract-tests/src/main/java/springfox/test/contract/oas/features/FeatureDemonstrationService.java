@@ -32,7 +32,7 @@ public class FeatureDemonstrationService {
   })
   public ResponseEntity<Object> feature2831(
       @ApiParam(value = "foo msg", example = "foo example", type = "header", required = true)
-      @RequestHeader("foo") Optional<String> foo){
+      @RequestHeader("foo") Optional<String> foo) {
     return ResponseEntity.ok(new Object());
   }
 }

@@ -79,11 +79,11 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
       + "ID > 10 or non-integers will simulate API error conditions",
-                response = Pet.class,
-                extensions = {
-                    @Extension(properties = @ExtensionProperty(name = "x-test1", value = "value1")),
-                    @Extension(name = "test2", properties = @ExtensionProperty(name = "name2", value = "value2"))
-                }
+      response = Pet.class,
+      extensions = {
+          @Extension(properties = @ExtensionProperty(name = "x-test1", value = "value1")),
+          @Extension(name = "test2", properties = @ExtensionProperty(name = "name2", value = "value2"))
+      }
   )
   public Pet getPetById(
       @ApiParam(
@@ -288,7 +288,7 @@ public class FeatureDemonstrationService {
   })
   public ResponseEntity<Object> feature2831(
       @ApiParam(value = "foo msg", example = "foo example", type = "header", required = true)
-      @RequestHeader("foo") Optional<String> foo){
+      @RequestHeader("foo") Optional<String> foo) {
     return ResponseEntity.ok(new Object());
   }
 
@@ -297,20 +297,20 @@ public class FeatureDemonstrationService {
   @ResponseBody
   @ApiOperation(value = "/2031")
   @ApiImplicitParams({
-                         @ApiImplicitParam(
-                             name = "contents",
-                             dataTypeClass = CustomTypeFor2031.class,
-                             examples = @io.swagger.annotations.Example(
-                                 value = {
-                                     @ExampleProperty(value = "{'property': 'test'}", mediaType = "application/json")
-                                 })) //<1>
-                     })
+      @ApiImplicitParam(
+          name = "contents",
+          dataTypeClass = CustomTypeFor2031.class,
+          examples = @io.swagger.annotations.Example(
+              value = {
+                  @ExampleProperty(value = "{'property': 'test'}", mediaType = "application/json")
+              })) //<1>
+  })
   public void save(
       @PathVariable("keyId") String keyId,
       @PathVariable("id") String id,
       @RequestBody String contents
       //<2>
-                  ) {
+  ) {
   }
 
   public static class CustomTypeFor2031 { //<3>
@@ -328,7 +328,7 @@ public class FeatureDemonstrationService {
 
   @RequestMapping(value = "/1570", method = RequestMethod.POST)
   @ApiOperation(value = "Demo using examples")
-  @ApiResponses(value = { @ApiResponse(code = 404, message = "User not found"),
+  @ApiResponses(value = {@ApiResponse(code = 404, message = "User not found"),
       @ApiResponse(
           code = 405,
           message = "Validation exception",
@@ -339,7 +339,7 @@ public class FeatureDemonstrationService {
                       value = "{'invalidField': 'address'}"),
                   @ExampleProperty(
                       mediaType = "Example string",
-                      value = "The first name was invalid") })) })
+                      value = "The first name was invalid")}))})
   public void saveUser() {
     //No-op
   }
