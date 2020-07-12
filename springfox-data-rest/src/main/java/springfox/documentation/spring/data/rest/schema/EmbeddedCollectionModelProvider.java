@@ -166,8 +166,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
   public boolean supports(ModelContext delimiter) {
     return EmbeddedCollection.class.equals(resolver.resolve(delimiter.getType()).getErasedType())
         && (delimiter.getDocumentationType() == DocumentationType.SWAGGER_2
-        || delimiter.getDocumentationType() == DocumentationType.OAS_30
-        || delimiter.getDocumentationType() == DocumentationType.SPRING_WEB);
+        || delimiter.getDocumentationType() == DocumentationType.OAS_30);
   }
 
 }

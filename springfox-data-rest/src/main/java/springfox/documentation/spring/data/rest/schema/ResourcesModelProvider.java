@@ -204,8 +204,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
   public boolean supports(ModelContext delimiter) {
     return CollectionModel.class.equals(resourceType(delimiter.getType()).getErasedType())
         && (delimiter.getDocumentationType() == DocumentationType.SWAGGER_2
-        || delimiter.getDocumentationType() == DocumentationType.OAS_30
-        || delimiter.getDocumentationType() == DocumentationType.SPRING_WEB);
+        || delimiter.getDocumentationType() == DocumentationType.OAS_30);
   }
 
   private ResolvedType resourceType(Type type) {
