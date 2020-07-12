@@ -130,7 +130,7 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
       } else if (modelKey.getViewDiscriminator().isPresent()) {
         requestResponseSuffixes.putIfAbsent(
             modelKey,
-            "View");
+            modelKey.getViewDiscriminator().get().getErasedType().getSimpleName() + "View");
       }
     }
 

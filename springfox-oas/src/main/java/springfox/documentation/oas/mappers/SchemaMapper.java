@@ -109,8 +109,7 @@ public abstract class SchemaMapper {
           Map<String, PropertySpecification> properties = c.getProperties().stream()
               .collect(toMap(
                   PropertySpecification::getName,
-                  Function
-                      .identity()));
+                  Function.identity()));
           modelProperties.putAll(mapProperties(properties, namesRegistry));
           model.setProperties(modelProperties);
           List<String> requiredFields = properties.values().stream()
