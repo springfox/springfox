@@ -19,10 +19,13 @@
 
 package springfox.documentation.spring.web;
 
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.spi.service.DefaultsProviderPlugin;
+import springfox.documentation.spring.web.plugins.WebfluxDefaultsProvider;
 
 @Configuration
 @SuppressWarnings("HideUtilityClassConstructor")
@@ -33,5 +36,10 @@ public class SpringfoxWebFluxConfiguration {
   @Bean
   public static WebFluxObjectMapperConfigurer webFluxObjectMapperConfigurer() {
     return new WebFluxObjectMapperConfigurer();
+  }
+
+  @Bean
+  public DefaultsProviderPlugin webfluxDefaults(TypeResolver typeResolver) {
+    return new WebfluxDefaultsProvider(typeResolver);
   }
 }
