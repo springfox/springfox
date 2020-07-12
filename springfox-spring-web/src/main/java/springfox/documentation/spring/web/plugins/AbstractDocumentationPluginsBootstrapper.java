@@ -35,9 +35,8 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.StreamSupport;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
@@ -89,7 +88,7 @@ public class AbstractDocumentationPluginsBootstrapper {
   }
 
   protected DocumentationContext buildContext(DocumentationPlugin each) {
-    return each.configure(defaultContextBuilder(each));
+    return each.configure(withDefaults(each));
   }
 
   protected void scanDocumentation(DocumentationContext context) {
@@ -100,27 +99,24 @@ public class AbstractDocumentationPluginsBootstrapper {
     }
   }
 
-  private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin plugin) {
+  private DocumentationContextBuilder withDefaults(DocumentationPlugin plugin) {
     DocumentationType documentationType = plugin.getDocumentationType();
     List<RequestHandler> requestHandlers = handlerProviders.stream()
-        .map(handlers())
-        .flatMap((handle) -> StreamSupport.stream(handle.spliterator(), false))
+        .map(RequestHandlerProvider::requestHandlers)
+        .flatMap(Collection::stream)
         .collect(toList());
     List<AlternateTypeRule> rules = nullToEmptyList(typeConventions).stream()
         .map(AlternateTypeRuleConvention::rules)
-        .flatMap((rule) -> StreamSupport.stream(rule.spliterator(), false))
+        .flatMap(Collection::stream)
         .collect(toList());
-    return documentationPluginsManager.createContextBuilder(documentationType, defaultConfiguration)
+    DocumentationContextBuilder documentationContextBuilder = defaultConfiguration.create(documentationType)
         .rules(rules)
         .requestHandlers(combiner().combine(requestHandlers));
+    return documentationPluginsManager.applyDefaults(documentationType, documentationContextBuilder);
   }
 
   private RequestHandlerCombiner combiner() {
     return ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
-  }
-
-  private Function<RequestHandlerProvider, Iterable<RequestHandler>> handlers() {
-    return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) RequestHandlerProvider::requestHandlers;
   }
 
   public void setCombiner(RequestHandlerCombiner combiner) {

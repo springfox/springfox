@@ -50,7 +50,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
               new MockEnvironment())
 
   def setup() {
-    pluginManager.createContextBuilder(_, _) >> new DocumentationContextBuilder(DocumentationType.SWAGGER_12)
+    pluginManager.applyDefaults(_, _) >> new DocumentationContextBuilder(DocumentationType.SWAGGER_12)
     handlerProvider.requestHandlers() >> []
     apiGroup.scan(_) >> group
     group.getGroupName() >> "default"

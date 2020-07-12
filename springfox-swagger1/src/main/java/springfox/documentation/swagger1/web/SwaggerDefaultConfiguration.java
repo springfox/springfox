@@ -60,6 +60,15 @@ public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
   }
 
   @Override
+  public DocumentationContextBuilder apply(DocumentationContextBuilder builder) {
+    List<AlternateTypeRule> rules = new ArrayList<>();
+    rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
+        typeResolver.resolve(Object.class)));
+    rules.add(newMapRule(WildcardType.class, WildcardType.class));
+    return builder.rules(rules);
+  }
+
+  @Override
   public boolean supports(DocumentationType delimiter) {
     return DocumentationType.SWAGGER_12.equals(delimiter);
   }

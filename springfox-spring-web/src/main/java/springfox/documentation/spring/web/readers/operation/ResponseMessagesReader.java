@@ -98,13 +98,11 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
-    ResponseContext responseContext = new ResponseContext(
-        context.getDocumentationContext(),
-        context);
+    ResponseContext responseContext = new ResponseContext(context.getDocumentationContext(), context);
     if (!isVoid(returnType)) {
-      ModelContext modelContext = context.operationModelsBuilder().addReturn(
-          returnType,
-          viewProvider.viewFor(context));
+      ModelContext modelContext = context.operationModelsBuilder()
+          .addReturn(returnType,
+              viewProvider.viewFor(context));
 
       Map<String, String> knownNames = new HashMap<>();
       Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
@@ -130,10 +128,10 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     }
     springfox.documentation.service.ResponseMessage built =
         new springfox.documentation.builders.ResponseMessageBuilder()
-        .code(httpStatusCode)
-        .message(message)
-        .responseModel(modelRef)
-        .build();
+            .code(httpStatusCode)
+            .message(message)
+            .responseModel(modelRef)
+            .build();
 
     responseContext.responseBuilder()
         .description(message)

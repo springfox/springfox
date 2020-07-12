@@ -171,11 +171,12 @@ public class DocumentationPluginsManager {
     return new Docket(DocumentationType.OAS_30);
   }
 
-  public DocumentationContextBuilder createContextBuilder(
+  public DocumentationContextBuilder applyDefaults(
       DocumentationType documentationType,
-      DefaultsProviderPlugin defaultConfiguration) {
-    return defaultsProviders.getPluginOrDefaultFor(documentationType, defaultConfiguration)
-        .create(documentationType);
+      DocumentationContextBuilder builder) {
+    defaultsProviders.getPluginsFor(documentationType)
+          .forEach(each -> each.apply(builder));
+    return builder;
   }
 
   public Function<String, String> decorator(final PathContext context) {

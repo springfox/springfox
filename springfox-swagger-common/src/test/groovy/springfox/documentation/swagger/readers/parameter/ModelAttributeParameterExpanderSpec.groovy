@@ -109,6 +109,15 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec imple
     }
 
     @Override
+    DocumentationContextBuilder apply(DocumentationContextBuilder builder) {
+      List<AlternateTypeRule> rules = new ArrayList<>()
+      rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
+          typeResolver.resolve(Object.class)))
+      rules.add(newMapRule(WildcardType.class, WildcardType.class))
+      return builder.rules(rules)
+    }
+
+    @Override
     boolean supports(DocumentationType delimiter) {
       return true
     }

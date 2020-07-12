@@ -26,7 +26,9 @@ public class DocumentationType extends SimplePluginMetadata {
   public static final DocumentationType SWAGGER_12 = new DocumentationType("swagger", "1.2");
   public static final DocumentationType SWAGGER_2 = new DocumentationType("swagger", "2.0");
   public static final DocumentationType OAS_30 = new DocumentationType("openApi", "3.0");
-  public static final DocumentationType SPRING_WEB = new DocumentationType("spring-web", "1.0");
+  //@deprecated since 3.0.0
+  @Deprecated
+  public static final DocumentationType SPRING_WEB = new DocumentationType("spring-web", "5.2");
   private final MediaType mediaType;
 
   /**

@@ -80,8 +80,7 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    Set<Response> read = read(context);
-    context.operationBuilder().responses(read);
+    context.operationBuilder().responses(read(context));
   }
 
   @Override

@@ -25,11 +25,21 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 
 public interface DefaultsProviderPlugin extends Plugin<DocumentationType> {
   /**
-   * Implement this method to override the @see  springfox.documentation.spi.service.contexts
-   * .DocumentationContextBuilder
+   * Use {@link DefaultsProviderPlugin#apply(DocumentationContextBuilder)} instead
    *
    * @param documentationType - creates a default DocumentationContextBuilder based on documentation type
    * @return - returns the documentation context builder
+   * @deprecated @since 3.0.0
    */
+  @Deprecated
   DocumentationContextBuilder create(DocumentationType documentationType);
+
+  /**
+   * Implement this method to override enrich the documentation context builder with documentation type specific
+   * defaults.
+   *
+   * @param builder - creates a default DocumentationContextBuilder based on documentation type
+   * @return - returns the documentation context builder
+   */
+  DocumentationContextBuilder apply(DocumentationContextBuilder builder);
 }
