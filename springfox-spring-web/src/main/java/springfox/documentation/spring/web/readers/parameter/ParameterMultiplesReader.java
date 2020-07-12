@@ -39,9 +39,9 @@ public class ParameterMultiplesReader implements ParameterBuilderPlugin {
     ResolvedType parameterType = context.resolvedMethodParameter().getParameterType();
     context.parameterBuilder().allowMultiple(isCollectionType(parameterType));
     context.requestParameterBuilder()
-           .query(q -> q.collectionFormat(isCollectionType(parameterType)
-                                          ? CollectionFormat.CSV
-                                          : null));
+        .query(q -> q.collectionFormat(isCollectionType(parameterType)
+            ? CollectionFormat.MULTI
+            : null));
   }
 
   private boolean isCollectionType(ResolvedType parameterType) {

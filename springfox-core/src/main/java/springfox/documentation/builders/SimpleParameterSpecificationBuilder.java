@@ -180,11 +180,6 @@ public class SimpleParameterSpecificationBuilder {
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
 
-    if (explode != null
-        && explode
-        && builtModel.getCollection().isPresent()) {
-      builtModel = builtModel.getCollection().get().getModel();
-    }
     return new SimpleParameterSpecification(
         style,
         collectionFormat,
