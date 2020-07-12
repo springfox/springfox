@@ -514,10 +514,7 @@
                         "description": "List of user object",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/UserReq"
-                            }
+                            "type": "string"
                         }
                     }
                 ],
@@ -551,10 +548,7 @@
                         "description": "List of user object",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/UserReq"
-                            }
+                            "type": "string"
                         }
                     }
                 ],

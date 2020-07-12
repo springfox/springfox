@@ -751,7 +751,7 @@
                                 "TWO"
                             ]
                         },
-                        "collectionFormat": "csv",
+                        "collectionFormat": "multi",
                         "enum": [
                             "ONE",
                             "TWO"
@@ -1325,7 +1325,8 @@
                         "in": "query",
                         "description": "xmlUrl",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "format": "uri"
                     }
                 ],
                 "responses": {
@@ -1689,7 +1690,7 @@
                                 "TWO"
                             ]
                         },
-                        "collectionFormat": "csv",
+                        "collectionFormat": "multi",
                         "enum": [
                             "one",
                             "three",
@@ -1777,7 +1778,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "authors[0].books[0].id",

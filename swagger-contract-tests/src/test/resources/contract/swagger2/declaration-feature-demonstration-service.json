@@ -512,7 +512,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "annotatedEnumType",
@@ -750,7 +750,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "exampleList[0].annotatedEnumType",
@@ -884,7 +884,7 @@
                             "type": "integer",
                             "format": "int32"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "multi"
                     }
                 ],
                 "responses": {
@@ -977,7 +977,7 @@
                                 "CASH"
                             ]
                         },
-                        "collectionFormat": "csv",
+                        "collectionFormat": "multi",
                         "enum": [
                             "BANK",
                             "CASH"
@@ -992,7 +992,7 @@
                             "type": "integer",
                             "format": "int32"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "complexProp.name",
@@ -1015,7 +1015,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "stringProp",
@@ -1141,7 +1141,7 @@
                                 "TWO"
                             ]
                         },
-                        "collectionFormat": "csv",
+                        "collectionFormat": "multi",
                         "enum": [
                             "ONE",
                             "TWO"
