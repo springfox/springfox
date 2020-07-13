@@ -53,4 +53,20 @@ public class Swagger2WebFluxConfig {
         .protocols(new HashSet<>(Arrays.asList("http", "https")));
   }
 
+  @Bean
+  public Docket bugs(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("bugs")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .produces(new HashSet<>(Arrays.asList("application/xml",
+            "application/json")))
+        .select()
+        .paths(PathSelectors.regex("/bugs/.*"))
+        .build()
+        .enableUrlTemplating(true)
+        .host("petstore.swagger.io")
+        .protocols(new HashSet<>(Arrays.asList("http", "https")));
+  }
+
 }
