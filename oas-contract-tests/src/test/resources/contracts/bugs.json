@@ -492,6 +492,41 @@
                 }
             }
         },
+        "/bugs/bug1370": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "upload attach file",
+                "operationId": "bug1370UsingPOST",
+                "parameters": [
+                    {
+                        "name": "fileToUpload",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "format": "binary"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug2684": {
             "get": {
                 "tags": [

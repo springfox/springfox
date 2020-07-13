@@ -53,6 +53,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import springfox.documentation.annotations.ApiIgnore;
+import springfox.test.contract.swagger.models.Bug1370;
 import springfox.test.contract.swagger.models.Bug1749;
 import springfox.test.contract.swagger.models.Bug2767;
 import springfox.test.contract.swagger.models.Bug3353;
@@ -592,6 +593,11 @@ public class BugsController {
       @JsonView(Bug3353.Request.class)
           Bug3353.WithdrawQueryRequestView view) {
     return ResponseEntity.ok(null);
+  }
+
+  @RequestMapping(value = "/bug1370", method = RequestMethod.POST, consumes = MULTIPART_FORM_DATA_VALUE)
+  @ApiOperation(value = "upload attach file", httpMethod = "POST")
+  public void bug1370(@ModelAttribute Bug1370 pojo) {
   }
 
   public enum NumberEnum {

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -184,6 +185,11 @@ public class BugsController {
       @JsonView(Bug3353.Request.class)
           Bug3353.WithdrawQueryRequestView view) {
     return ResponseEntity.ok(null);
+  }
+
+  @RequestMapping(value = "/bug1370", method = RequestMethod.POST)
+  @ApiOperation(value = "upload attach file", httpMethod = "POST")
+  public void bug1370(@ModelAttribute Bug1370 pojo) {
   }
 
 } 

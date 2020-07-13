@@ -1755,6 +1755,37 @@
                 }
             }
         },
+        "/bugs/bug1370": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "upload attach file",
+                "operationId": "bug1370UsingPOST_1",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "fileToUpload",
+                        "in": "formData",
+                        "required": false,
+                        "type": "file"
+                    },
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [

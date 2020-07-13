@@ -123,8 +123,9 @@ public class RequestParameterMapper {
           query.map(SimpleParameterSpecification::getModel)
               .flatMap(ModelSpecification::getScalar)
               .ifPresent(scalar -> {
-                ((AbstractSerializableParameter) finalParameter).setType(scalar.getType().getType());
-                ((AbstractSerializableParameter) finalParameter).setFormat(scalar.getType().getFormat());
+                Property property = new ScalarModelToPropertyConverter().convert(scalar);
+                ((AbstractSerializableParameter) finalParameter).setType(property.getType());
+                ((AbstractSerializableParameter) finalParameter).setFormat(property.getFormat());
               });
 
         }

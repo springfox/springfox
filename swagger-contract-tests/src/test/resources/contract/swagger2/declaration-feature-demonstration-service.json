@@ -633,8 +633,7 @@
                         "in": "query",
                         "description": "input",
                         "required": false,
-                        "type": "number",
-                        "format": "bigdecimal"
+                        "type": "number"
                     }
                 ],
                 "responses": {
