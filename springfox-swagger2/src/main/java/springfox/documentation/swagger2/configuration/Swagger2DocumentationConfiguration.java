@@ -15,7 +15,9 @@ import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
     SwaggerCommonConfiguration.class,
     SpringfoxWebConfiguration.class,
     SpringfoxWebFluxConfiguration.class,
-    SpringfoxWebMvcConfiguration.class
+    SpringfoxWebMvcConfiguration.class,
+    Swagger2WebMvcConfiguration.class,
+    Swagger2WebFluxConfiguration.class
 })
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.mappers",
