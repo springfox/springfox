@@ -147,8 +147,8 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder appendProduces(List<String> produces) {
     this.produces.addAll(nullToEmptyList(produces).stream()
-                                                  .filter(Objects::nonNull)
-                                                  .collect(toSet()));
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -160,8 +160,8 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder appendConsumes(List<String> consumes) {
     this.consumes.addAll(nullToEmptyList(consumes).stream()
-                                                  .filter(Objects::nonNull)
-                                                  .collect(toSet()));
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -271,8 +271,8 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder tagNames(Set<String> tagNames) {
     this.tagNames.addAll(nullToEmptySet(tagNames).stream()
-                                                 .filter(Objects::nonNull)
-                                                 .collect(toSet()));
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -296,9 +296,9 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
     this.tagLookup.putAll(nullToEmptySet(availableTags).stream()
-                                                       .collect(toMap(
-                                                           Tag::getName,
-                                                           identity())));
+        .collect(toMap(
+            Tag::getName,
+            identity())));
     return this;
   }
 
@@ -309,11 +309,11 @@ public class ApiListingBuilder {
 
   public ApiListing build() {
     this.tags.addAll(tagNames.stream()
-                             .filter(emptyTags())
-                             .map(toTag(descriptor(
-                                 tagLookup,
-                                 description)))
-                             .collect(toSet()));
+        .filter(emptyTags())
+        .map(toTag(descriptor(
+            tagLookup,
+            description)))
+        .collect(toSet()));
     return new ApiListing(
         apiVersion,
         basePath,

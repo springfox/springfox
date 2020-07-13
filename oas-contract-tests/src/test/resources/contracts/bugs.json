@@ -529,6 +529,57 @@
                     }
                 }
             }
+        },
+        "/bugs/bug3353": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3353",
+                "operationId": "bug3353UsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "agentCode",
+                                    "orderNo",
+                                    "sign",
+                                    "timestamp"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "agentCode": {
+                                        "type": "string"
+                                    },
+                                    "orderNo": {
+                                        "type": "string"
+                                    },
+                                    "sign": {
+                                        "type": "string"
+                                    },
+                                    "timestamp": {
+                                        "type": "number",
+                                        "format": "bigdecimal"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WithdrawQueryRequestViewResponseView"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -657,6 +708,10 @@
                         "type": "string"
                     }
                 }
+            },
+            "WithdrawQueryRequestViewResponseView": {
+                "title": "WithdrawQueryRequestViewResponseView",
+                "type": "object"
             }
         },
         "securitySchemes": {

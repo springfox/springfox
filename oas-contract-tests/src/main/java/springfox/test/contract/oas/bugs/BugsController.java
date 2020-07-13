@@ -1,5 +1,6 @@
 package springfox.test.contract.oas.bugs;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -12,7 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping("/bugs")
@@ -168,6 +173,16 @@ public class BugsController {
       @Valid @RequestPart(name = "sfId") @RequestParam Integer sfId,
       @Valid @RequestPart(name = "sfData") Bug1965 sfData,
       @RequestPart(name = "file", required = false) MultipartFile supportFile) {
+    return ResponseEntity.ok(null);
+  }
+
+  @RequestMapping(value = "/bug3353", method = POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  @JsonView({Bug3353.Response.class})
+  public ResponseEntity<Bug3353.WithdrawQueryRequestView> bug3353(
+      @ModelAttribute
+      @Validated(Bug3353.IRequest.class)
+      @JsonView(Bug3353.Request.class)
+          Bug3353.WithdrawQueryRequestView view) {
     return ResponseEntity.ok(null);
   }
 
