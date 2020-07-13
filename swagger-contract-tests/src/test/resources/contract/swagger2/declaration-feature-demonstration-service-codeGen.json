@@ -303,6 +303,38 @@
                 }
             }
         },
+        "/features/3311": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "feature3311",
+                "operationId": "feature3311UsingPOST_1",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "attachments",
+                        "in": "formData",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "file"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/features/addFiles": {
             "post": {
                 "tags": [
@@ -315,25 +347,14 @@
                 ],
                 "parameters": [
                     {
+                        "name": "files",
                         "in": "formData",
-                        "name": "body",
                         "required": false,
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "files"
-                            ],
-                            "properties": {
-                                "files": {
-                                    "type": "array",
-                                    "description": "files",
-                                    "items": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                }
-                            }
-                        }
+                        "type": "array",
+                        "items": {
+                            "type": "file"
+                        },
+                        "collectionFormat": "multi"
                     }
                 ],
                 "responses": {
@@ -1343,6 +1364,15 @@
                 }
             },
             "title": "FancyPet"
+        },
+        "Feature3311": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "type": "string"
+                }
+            },
+            "title": "Feature3311"
         },
         "ModelWithArrayOfArrays": {
             "type": "object",

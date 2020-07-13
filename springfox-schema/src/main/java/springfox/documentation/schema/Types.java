@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Type;
@@ -83,7 +84,8 @@ public class Types {
           new AbstractMap.SimpleEntry<>(BigInteger.class, "biginteger"),
           new AbstractMap.SimpleEntry<>(Currency.class, "string"),
           new AbstractMap.SimpleEntry<>(UUID.class, "uuid"),
-          new AbstractMap.SimpleEntry<>(MultipartFile.class, "__file"))
+          new AbstractMap.SimpleEntry<>(MultipartFile.class, "__file"),
+          new AbstractMap.SimpleEntry<>(FilePart.class, "__file"))
           .collect(toMap(
               Map.Entry::getKey,
               Map.Entry::getValue)));

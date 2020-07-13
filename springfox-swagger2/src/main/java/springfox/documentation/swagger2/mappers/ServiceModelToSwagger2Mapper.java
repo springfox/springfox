@@ -121,9 +121,8 @@ public abstract class ServiceModelToSwagger2Mapper {
     List<io.swagger.models.parameters.Parameter> parameters = new ArrayList<>();
     if (useModelV3) {
       for (RequestParameter each : source.getRequestParameters()) {
-        Mappers.getMapper(RequestParameterMapper.class)
-            .mapParameter(each, modelNamesRegistry)
-            .ifPresent(parameters::add);
+        parameters.addAll(Mappers.getMapper(RequestParameterMapper.class)
+            .mapParameter(each, modelNamesRegistry));
       }
       target.setResponses(mapResponses(source.getResponses(), modelNamesRegistry));
     } else {

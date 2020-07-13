@@ -20,6 +20,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -66,6 +67,9 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       return new ModelRef("void");
     }
     if (MultipartFile.class.isAssignableFrom(type.getErasedType())) {
+      return new ModelRef("__file");
+    }
+    if (FilePart.class.isAssignableFrom(type.getErasedType())) {
       return new ModelRef("__file");
     }
     String typeName = typeName(type);

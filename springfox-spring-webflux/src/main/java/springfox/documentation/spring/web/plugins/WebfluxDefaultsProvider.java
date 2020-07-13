@@ -41,7 +41,7 @@ public class WebfluxDefaultsProvider implements DefaultsProviderPlugin {
     rules.add(newRule(resolver.resolve(Mono.class, resolver.resolve(ResponseEntity.class, WildcardType.class)),
         resolver.resolve(WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
     rules.add(newRule(resolver.resolve(Flux.class, WildcardType.class),
-        resolver.resolve(WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
+        resolver.resolve(List.class, WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
     rules.add(newRule(resolver.resolve(Mono.class, WildcardType.class),
         resolver.resolve(WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
     return builder.rules(rules);
