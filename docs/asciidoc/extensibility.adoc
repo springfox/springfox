@@ -55,6 +55,36 @@ To explicitly state the extensibility points that are available:
 | for enriching parameters (see <<index.adoc#_example_parameterbuilderplugin,example>>)
 |===
 
+.Swagger 2.0 specific plugins
+|===
+|Name| Description
+
+| `WebMvcSwaggerTransformationFilter`
+| Specifically used with a servlet application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing to use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.
+
+| `WebFluxSwaggerTransformationFilter`
+| Specifically used with a web flux application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing too use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.
+|===
+
+.Open API 3.0 specific plugins
+|===
+|Name| Description
+
+| `WebMvcOpenApiTransformationFilter`
+| Specifically used with a servlet application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing to use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.
+
+| `WebFluxOpenApiTransformationFilter`
+| Specifically used with a web flux application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing to use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.
+|===
+
 
 === Steps To Create A Plugin
 
