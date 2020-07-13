@@ -33,7 +33,9 @@ import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
     SpringfoxWebMvcConfiguration.class,
     SpringfoxWebFluxConfiguration.class,
     SwaggerCommonConfiguration.class,
-    OpenApiMappingConfiguration.class
+    OpenApiMappingConfiguration.class,
+    OpenApiWebMvcConfiguration.class,
+    OpenApiWebFluxConfiguration.class
 })
 @ComponentScan(basePackages = {
     "springfox.documentation.oas.web",
