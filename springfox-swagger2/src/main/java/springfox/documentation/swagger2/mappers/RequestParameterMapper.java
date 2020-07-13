@@ -16,6 +16,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.MediaType;
 import springfox.documentation.schema.CollectionSpecification;
+import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
@@ -29,8 +30,10 @@ import springfox.documentation.service.Representation;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.SimpleParameterSpecification;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
@@ -38,19 +41,11 @@ import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
 @Mapper(componentModel = "spring")
 public class RequestParameterMapper {
-  private static final Set<String> SUPPORTED_FORM_DATA_TYPES = Stream.of(
-      "string",
-      "number",
-      "integer",
-      "boolean",
-      "array",
-      "file").collect(toSet());
-
   private static final VendorExtensionsMapper VENDOR_EXTENSIONS_MAPPER = new VendorExtensionsMapper();
   private final PropertyMapper propertyMapper = Mappers.getMapper(PropertyMapper.class);
 
   @SuppressWarnings({"CyclomaticComplexity", "JavaNCSS", "NestedIfDepth"})
-  Optional<Parameter> mapParameter(
+  Collection<Parameter> mapParameter(
       RequestParameter from,
       @Context ModelNamesRegistry modelNamesRegistry) {
     Parameter parameter;
@@ -135,17 +130,56 @@ public class RequestParameterMapper {
         }
       }
     } else if (from.getIn() == ParameterType.FORMDATA) {
+      boolean isMultipartForm = from.getParameterSpecification().getContent().map(c -> c.getRepresentations().stream()
+          .anyMatch(r -> r.getMediaType().equals(MediaType.MULTIPART_MIXED)
+              || r.getMediaType().equals(MediaType.MULTIPART_FORM_DATA)))
+          .orElse(false);
+      if (isMultipartForm) {
+        return multipartFormParameters(from, modelNamesRegistry);
+      }
       parameter = formParameter(from, modelNamesRegistry);
     } else {
       parameter = bodyParameter(from, modelNamesRegistry);
     }
-    return Optional.ofNullable(parameter);
+    return Collections.singleton(parameter);
+  }
+
+  private Collection<Parameter> multipartFormParameters(
+      RequestParameter from,
+      ModelNamesRegistry modelNamesRegistry) {
+    return from.getParameterSpecification().getContent()
+        .map(c -> c.getRepresentations().stream()
+            .filter(r -> r.getMediaType().equals(MediaType.MULTIPART_MIXED)
+                || r.getMediaType().equals(MediaType.MULTIPART_FORM_DATA))
+            .flatMap(r -> r.getModel().getCompound()
+                .map(CompoundModelSpecification::getProperties)
+                .orElse(new ArrayList<>()).stream())
+            .filter(prop -> prop.getType().getScalar().isPresent() ||
+                prop.getType().getCollection().isPresent() &&
+                    prop.getType().getCollection().get().getModel().getScalar().isPresent())
+            .map(prop -> {
+              FormParameter param = new FormParameter()
+                  .name(prop.getName());
+              prop.getType().getScalar().ifPresent(scalar ->
+                  param.property(new ScalarModelToPropertyConverter().convert(scalar))
+              );
+              prop.getType().getCollection().ifPresent(collection -> {
+                Property collectionProperty = new CollectionSpecificationToPropertyConverter(modelNamesRegistry)
+                    .convert(collection);
+                param.property(collectionProperty);
+              });
+              param.setAllowEmptyValue(prop.getAllowEmptyValue());
+              param.setDefault(prop.getDefaultValue());
+              param.setIn("formData");
+              return param;
+            }))
+        .orElse(Stream.of())
+        .collect(toList());
   }
 
   private Parameter formParameter(
       RequestParameter source,
       ModelNamesRegistry namesRegistry) {
-
     FormParameter parameter = new FormParameter()
         .name(source.getName())
         .description(source.getDescription());
@@ -155,21 +189,14 @@ public class RequestParameterMapper {
         .map(Representation::getModel)
         .ifPresent(m -> parameter.setProperty(propertyMapper.fromModel(m, namesRegistry))));
 
-    if (!SUPPORTED_FORM_DATA_TYPES.contains(parameter.getType())
-        || "array".equals(parameter.getType())
-        && !SUPPORTED_FORM_DATA_TYPES.contains(parameter.getItems().getType())) {
-      // Falling back to BodyParameter is non-compliant with the Swagger 2.0 spec,
-      // but matches previous behavior.
-      return bodyParameter(source, namesRegistry);
-    }
-
     parameter.setIn(source.getIn().getIn());
     Optional<Representation> urlEncoded = content.map(c -> c.getRepresentations().stream()
         .filter(r -> r.getMediaType() == MediaType.APPLICATION_FORM_URLENCODED))
         .orElse(Stream.of())
         .findFirst();
-    
-    urlEncoded.flatMap(m -> m.getModel().getFacets().flatMap(mf -> mf.elementFacet(StringElementFacet.class)))
+
+    urlEncoded.flatMap(m -> m.getModel().getFacets()
+        .flatMap(mf -> mf.elementFacet(StringElementFacet.class)))
         .ifPresent(sf -> parameter.setPattern(sf.getPattern()));
     parameter.setRequired(source.getRequired());
     parameter.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getExtensions()));
@@ -209,7 +236,6 @@ public class RequestParameterMapper {
         break;
       }
     }
-    //TODO: swagger-core Body parameter does not have an enum property
     return parameter;
   }
 

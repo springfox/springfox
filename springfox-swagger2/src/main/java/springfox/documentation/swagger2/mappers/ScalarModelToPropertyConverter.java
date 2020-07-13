@@ -1,12 +1,12 @@
 package springfox.documentation.swagger2.mappers;
 
-import io.swagger.models.properties.BinaryProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.DateTimeProperty;
 import io.swagger.models.properties.DecimalProperty;
 import io.swagger.models.properties.DoubleProperty;
+import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.FloatProperty;
 import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.LongProperty;
@@ -40,7 +40,7 @@ public class ScalarModelToPropertyConverter implements Converter<ScalarModelSpec
     SCALAR_SCHEMA_FACTORY.put(ScalarType.DOUBLE, any -> new DoubleProperty());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.FLOAT, any -> new FloatProperty());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.BOOLEAN, any -> new BooleanProperty());
-    SCALAR_SCHEMA_FACTORY.put(ScalarType.BINARY, any -> new BinaryProperty());
+    SCALAR_SCHEMA_FACTORY.put(ScalarType.BINARY, any -> new FileProperty());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.DATE, any -> new DateProperty());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.DATE_TIME, any -> new DateTimeProperty());
     SCALAR_SCHEMA_FACTORY.put(ScalarType.UUID, any -> new UUIDProperty());
