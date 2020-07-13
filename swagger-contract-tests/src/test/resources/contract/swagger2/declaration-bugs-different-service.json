@@ -1048,45 +1048,17 @@
                 ],
                 "parameters": [
                     {
+                        "name": "file",
                         "in": "formData",
-                        "name": "body",
                         "required": false,
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "paramMap",
-                                "sfData",
-                                "sfId"
-                            ],
-                            "properties": {
-                                "paramMap": {
-                                    "type": "object",
-                                    "description": "paramMap",
-                                    "additionalProperties": {
-                                        "type": "string"
-                                    }
-                                },
-                                "sfData": {
-                                    "description": "sfData",
-                                    "$ref": "#/definitions/Example"
-                                },
-                                "sfId": {
-                                    "type": "integer",
-                                    "format": "int32",
-                                    "description": "sfId"
-                                }
-                            }
-                        }
+                        "type": "file"
                     },
                     {
-                        "in": "body",
-                        "name": "file",
-                        "description": "file",
+                        "name": "sfId",
+                        "in": "formData",
                         "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "binary"
-                        }
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "responses": {
@@ -1111,68 +1083,70 @@
                 ],
                 "parameters": [
                     {
+                        "name": "localDateTime",
                         "in": "formData",
-                        "name": "body",
                         "required": false,
-                        "schema": {
-                            "type": "object",
-                            "required": [
-                                "foo",
-                                "localDateTime"
-                            ],
-                            "properties": {
-                                "allCapsSet": {
-                                    "type": "array",
-                                    "description": "description of allCapsSet",
-                                    "uniqueItems": true,
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "annotatedEnumType": {
-                                    "type": "string",
-                                    "description": "description of annotatedEnumType",
-                                    "enum": [
-                                        "ONE",
-                                        "TWO"
-                                    ]
-                                },
-                                "bar": {
-                                    "type": "integer",
-                                    "format": "int32",
-                                    "description": "description of bar"
-                                },
-                                "enumType": {
-                                    "type": "string",
-                                    "enum": [
-                                        "ONE",
-                                        "TWO"
-                                    ]
-                                },
-                                "foo": {
-                                    "type": "string",
-                                    "description": "description of foo"
-                                },
-                                "localDateTime": {
-                                    "type": "string",
-                                    "format": "date-time",
-                                    "description": "local date time desc dd-MM-yyyy hh:mm:ss"
-                                },
-                                "nestedType.name": {
-                                    "type": "string"
-                                },
-                                "parentBeanProperty": {
-                                    "type": "string"
-                                },
-                                "propertyWithNoSetterMethod": {
-                                    "type": "string"
-                                },
-                                "readOnlyString": {
-                                    "type": "string",
-                                    "description": "A read only string"
-                                }
-                            }
-                        }
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    {
+                        "name": "bar",
+                        "in": "formData",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "parentBeanProperty",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "readOnlyString",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "nestedType.name",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "foo",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "enumType",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "allCapsSet",
+                        "in": "formData",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "propertyWithNoSetterMethod",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "annotatedEnumType",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
                     }
                 ],
                 "responses": {

@@ -26,6 +26,69 @@
         }
     ],
     "paths": {
+        "/bugs/1965": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug1965",
+                "operationId": "bug1965UsingPOST",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "paramMap",
+                                    "sfData",
+                                    "sfId"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "description": "file",
+                                        "format": "binary"
+                                    },
+                                    "paramMap": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                            "type": "string"
+                                        },
+                                        "description": "paramMap"
+                                    },
+                                    "sfData": {
+                                        "description": "sfData",
+                                        "$ref": "#/components/schemas/Bug1965"
+                                    },
+                                    "sfId": {
+                                        "type": "integer",
+                                        "description": "sfId",
+                                        "format": "int32"
+                                    }
+                                }
+                            },
+                            "encoding": {
+                                "paramMap": {
+                                    "contentType": "text/plain"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Bug1965"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/2767/swagger15": {
             "get": {
                 "tags": [
@@ -159,6 +222,46 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/bugs/3311": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3311",
+                "operationId": "bug3311UsingPOST",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "ticket"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "attachments": {
+                                        "type": "array",
+                                        "description": "attachments",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    },
+                                    "ticket": {
+                                        "description": "ticket",
+                                        "$ref": "#/components/schemas/Bug3311"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -430,6 +533,25 @@
     },
     "components": {
         "schemas": {
+            "Bug1965": {
+                "title": "Bug1965",
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Bug3311": {
+                "title": "Bug3311",
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
             "Category": {
                 "title": "Category",
                 "type": "object",

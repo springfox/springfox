@@ -30,6 +30,45 @@
         "application/xml"
     ],
     "paths": {
+        "/features/3364/{name}": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-controller"
+                ],
+                "summary": "feature3364",
+                "operationId": "feature3364UsingPOST",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "files",
+                        "in": "formData",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "file"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
         "/features/flux{?names}": {
             "get": {
                 "tags": [
@@ -54,7 +93,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 }

@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import reactor.core.publisher.Mono;
 import springfox.documentation.annotations.ApiIgnore;
@@ -26,9 +28,11 @@ import springfox.test.contract.oas.model.Pet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -148,4 +152,23 @@ public class BugsController {
   public Iterable<String> bug3371() {
     return new ArrayList<>();
   }
+
+  @PostMapping(path = "/3311",
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Void> bug3311(
+      @RequestPart Bug3311 ticket,
+      @RequestPart(required = false) MultipartFile[] attachments) {
+    return ResponseEntity.ok(null);
+  }
+
+  @PostMapping(path = "/1965", consumes = "multipart/form-data")
+  public ResponseEntity<Bug1965> bug1965(
+      @Valid @RequestPart(name = "sfParamMap") @RequestParam Map<String, String> paramMap,
+      @Valid @RequestPart(name = "sfId") @RequestParam Integer sfId,
+      @Valid @RequestPart(name = "sfData") Bug1965 sfData,
+      @RequestPart(name = "file", required = false) MultipartFile supportFile) {
+    return ResponseEntity.ok(null);
+  }
+
 } 

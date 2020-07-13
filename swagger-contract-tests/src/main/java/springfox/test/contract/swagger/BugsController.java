@@ -373,7 +373,7 @@ public class BugsController {
       @Valid @RequestPart(name = "sfParamMap") @RequestParam Map<String, String> paramMap,
       @Valid @RequestPart(name = "sfId") @RequestParam Integer sfId,
       @Valid @RequestPart(name = "sfData") Example sfData,
-      @RequestParam(name = "file", required = false) MultipartFile supportFile) {
+      @RequestPart(name = "file", required = false) MultipartFile supportFile) {
     return ResponseEntity.ok(null);
   }
 
