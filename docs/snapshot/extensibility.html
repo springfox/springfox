@@ -556,6 +556,60 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 </tr>
 </tbody>
 </table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Swagger 2.0 specific plugins</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WebMvcSwaggerTransformationFilter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifically used with a servlet application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing to use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WebFluxSwaggerTransformationFilter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifically used with a web flux application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing too use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Open API 3.0 specific plugins</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WebMvcOpenApiTransformationFilter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifically used with a servlet application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing to use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WebFluxOpenApiTransformationFilter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifically used with a web flux application, it is useful for transforming the generated open api.
+Out of the box it comes with one plugin that sets the host name and base path. Typically, this the most common
+thing to use this plugin for. Having said that this plugin has the power to rewrite the whole specification if required.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="steps-to-create-a-plugin">Steps To Create A Plugin</h3>
@@ -1040,7 +1094,7 @@ the api will appear under the default group.</td>
 <h2 id="additional-extensibility-options">Additional extensibility options</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Other Extensibility</caption>
+<caption class="title">Table 4. Other Extensibility</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1305,7 +1359,7 @@ These are incubating features and may change.
 </table>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Spring Data REST Extensibility</caption>
+<caption class="title">Table 5. Spring Data REST Extensibility</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1346,7 +1400,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-07-13 11:46:02 UTC
+Last updated 2020-07-13 20:50:01 UTC
 </div>
 </div>
 <style>

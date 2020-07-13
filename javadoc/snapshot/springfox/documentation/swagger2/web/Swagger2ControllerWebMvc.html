@@ -181,10 +181,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(org.springframework.core.env.Environment,springfox.documentation.spring.web.DocumentationCache,springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper,springfox.documentation.spring.web.json.JsonSerializer)">Swagger2ControllerWebMvc</a></span>&#8203;(org.springframework.core.env.Environment&nbsp;environment,
-                        <a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper,springfox.documentation.spring.web.json.JsonSerializer,org.springframework.plugin.core.PluginRegistry)">Swagger2ControllerWebMvc</a></span>&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
                         <a href="../mappers/ServiceModelToSwagger2Mapper.html" title="class in springfox.documentation.swagger2.mappers">ServiceModelToSwagger2Mapper</a>&nbsp;mapper,
-                        <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer)</code></th>
+                        <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer,
+                        org.springframework.plugin.core.PluginRegistry&lt;<a href="WebMvcSwaggerTransformationFilter.html" title="interface in springfox.documentation.swagger2.web">WebMvcSwaggerTransformationFilter</a>,&#8203;<a href="../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&gt;&nbsp;transformations)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -258,17 +258,18 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(org.springframework.core.env.Environment,springfox.documentation.spring.web.DocumentationCache,springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper,springfox.documentation.spring.web.json.JsonSerializer)">
+<a id="&lt;init&gt;(springfox.documentation.spring.web.DocumentationCache,springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper,springfox.documentation.spring.web.json.JsonSerializer,org.springframework.plugin.core.PluginRegistry)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Swagger2ControllerWebMvc</h4>
 <pre>@Autowired
-public&nbsp;Swagger2ControllerWebMvc&#8203;(org.springframework.core.env.Environment&nbsp;environment,
-                                <a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
+public&nbsp;Swagger2ControllerWebMvc&#8203;(<a href="../../spring/web/DocumentationCache.html" title="class in springfox.documentation.spring.web">DocumentationCache</a>&nbsp;documentationCache,
                                 <a href="../mappers/ServiceModelToSwagger2Mapper.html" title="class in springfox.documentation.swagger2.mappers">ServiceModelToSwagger2Mapper</a>&nbsp;mapper,
-                                <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer)</pre>
+                                <a href="../../spring/web/json/JsonSerializer.html" title="class in springfox.documentation.spring.web.json">JsonSerializer</a>&nbsp;jsonSerializer,
+                                @Qualifier("webMvcSwaggerTransformationFilterRegistry")
+                                org.springframework.plugin.core.PluginRegistry&lt;<a href="WebMvcSwaggerTransformationFilter.html" title="interface in springfox.documentation.swagger2.web">WebMvcSwaggerTransformationFilter</a>,&#8203;<a href="../../spi/DocumentationType.html" title="class in springfox.documentation.spi">DocumentationType</a>&gt;&nbsp;transformations)</pre>
 </li>
 </ul>
 </li>
