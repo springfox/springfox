@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,6 +39,7 @@ import io.swagger.annotations.ResponseHeader;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +55,7 @@ import org.springframework.web.servlet.ModelAndView;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.test.contract.swagger.models.Bug1749;
 import springfox.test.contract.swagger.models.Bug2767;
+import springfox.test.contract.swagger.models.Bug3353;
 import springfox.test.contract.swagger.models.EHDTOApplicatorUnits;
 import springfox.test.contract.swagger.models.EnumType;
 import springfox.test.contract.swagger.models.Example;
@@ -580,7 +583,17 @@ public class BugsController {
   public Iterable<String> bug3371() {
     return new ArrayList<>();
   }
-  
+
+  @RequestMapping(value = "/bug3353", method = POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  @JsonView({Bug3353.Response.class})
+  public ResponseEntity<Bug3353.WithdrawQueryRequestView> bug3353(
+      @ModelAttribute
+      @Validated(Bug3353.IRequest.class)
+      @JsonView(Bug3353.Request.class)
+          Bug3353.WithdrawQueryRequestView view) {
+    return ResponseEntity.ok(null);
+  }
+
   public enum NumberEnum {
     ONE,
     TWO,

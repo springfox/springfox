@@ -1109,13 +1109,13 @@
                         "type": "string"
                     },
                     {
-                        "name": "nestedType.name",
+                        "name": "foo",
                         "in": "formData",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "name": "foo",
+                        "name": "nestedType.name",
                         "in": "formData",
                         "required": false,
                         "type": "string"
@@ -2001,6 +2001,52 @@
                 }
             }
         },
+        "/bugs/bug3353": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug3353",
+                "operationId": "bug3353UsingPOST_1",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "parameters": [
+                    {
+                        "name": "orderNo",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "agentCode",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sign",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "timestamp",
+                        "in": "formData",
+                        "required": false,
+                        "type": "number"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WithdrawQueryRequestViewResponseView"
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/{bar}/2148{?year}": {
             "get": {
                 "tags": [
@@ -2554,6 +2600,10 @@
                 }
             },
             "title": "UpperCasedField"
+        },
+        "WithdrawQueryRequestViewResponseView": {
+            "type": "object",
+            "title": "WithdrawQueryRequestViewResponseView"
         }
     }
 }

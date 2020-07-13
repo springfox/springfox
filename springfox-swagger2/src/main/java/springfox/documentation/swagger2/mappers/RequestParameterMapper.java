@@ -22,7 +22,6 @@ import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.StringElementFacet;
-import springfox.documentation.service.ContentSpecification;
 import springfox.documentation.service.ModelNamesRegistry;
 import springfox.documentation.service.ParameterSpecification;
 import springfox.documentation.service.ParameterType;
@@ -33,6 +32,7 @@ import springfox.documentation.service.SimpleParameterSpecification;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -137,8 +137,14 @@ public class RequestParameterMapper {
       if (isMultipartForm) {
         return multipartFormParameters(from, modelNamesRegistry);
       }
-      parameter = formParameter(from, modelNamesRegistry);
+      return formParameter(from, modelNamesRegistry);
     } else {
+      boolean isUrlEncodedForm = from.getParameterSpecification().getContent().map(c -> c.getRepresentations().stream()
+          .anyMatch(r -> r.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED)))
+          .orElse(false);
+      if (isUrlEncodedForm) {
+        return formParameter(from, modelNamesRegistry);
+      }
       parameter = bodyParameter(from, modelNamesRegistry);
     }
     return Collections.singleton(parameter);
@@ -146,7 +152,7 @@ public class RequestParameterMapper {
 
   private Collection<Parameter> multipartFormParameters(
       RequestParameter from,
-      ModelNamesRegistry modelNamesRegistry) {
+      ModelNamesRegistry namesRegistry) {
     return from.getParameterSpecification().getContent()
         .map(c -> c.getRepresentations().stream()
             .filter(r -> r.getMediaType().equals(MediaType.MULTIPART_MIXED)
@@ -163,54 +169,82 @@ public class RequestParameterMapper {
               prop.getType().getScalar().ifPresent(scalar ->
                   param.property(new ScalarModelToPropertyConverter().convert(scalar))
               );
+              prop.getType().getFacets()
+                  .flatMap(mf -> mf.elementFacet(StringElementFacet.class))
+                  .ifPresent(sf -> param.setPattern(sf.getPattern()));
+
               prop.getType().getCollection().ifPresent(collection -> {
-                Property collectionProperty = new CollectionSpecificationToPropertyConverter(modelNamesRegistry)
+                Property collectionProperty = new CollectionSpecificationToPropertyConverter(namesRegistry)
                     .convert(collection);
                 param.property(collectionProperty);
               });
               param.setAllowEmptyValue(prop.getAllowEmptyValue());
               param.setDefault(prop.getDefaultValue());
               param.setIn("formData");
+              param.setRequired(from.getRequired());
+              param.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(from.getExtensions()));
+              if (from.getScalarExample() != null) {
+                param.setExample(String.valueOf(from.getScalarExample()));
+              }
+              for (Example example : from.getExamples()) {
+                if (example.getValue() != null) {
+                  // Form parameters only support a single example
+                  param.example(String.valueOf(example.getValue()));
+                  break;
+                }
+              }
               return param;
             }))
         .orElse(Stream.of())
         .collect(toList());
   }
 
-  private Parameter formParameter(
+  private List<Parameter> formParameter(
       RequestParameter source,
       ModelNamesRegistry namesRegistry) {
-    FormParameter parameter = new FormParameter()
-        .name(source.getName())
-        .description(source.getDescription());
-    Optional<ContentSpecification> content = source.getParameterSpecification().getContent();
-    content.ifPresent(c -> c.getRepresentations().stream()
-        .findFirst()
-        .map(Representation::getModel)
-        .ifPresent(m -> parameter.setProperty(propertyMapper.fromModel(m, namesRegistry))));
+    return source.getParameterSpecification().getContent()
+        .map(c -> c.getRepresentations().stream()
+            .filter(r -> r.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED))
+            .flatMap(r -> r.getModel().getCompound()
+                .map(CompoundModelSpecification::getProperties)
+                .orElse(new ArrayList<>()).stream())
+            .filter(prop -> prop.getType().getScalar().isPresent() ||
+                prop.getType().getCollection().isPresent() &&
+                    prop.getType().getCollection().get().getModel().getScalar().isPresent())
+            .map(prop -> {
+              FormParameter param = new FormParameter()
+                  .description(source.getDescription())
+                  .name(prop.getName());
+              prop.getType().getScalar()
+                  .ifPresent(scalar -> param.property(new ScalarModelToPropertyConverter().convert(scalar)));
+              prop.getType().getFacets()
+                  .flatMap(mf -> mf.elementFacet(StringElementFacet.class))
+                  .ifPresent(sf -> param.setPattern(sf.getPattern()));
 
-    parameter.setIn(source.getIn().getIn());
-    Optional<Representation> urlEncoded = content.map(c -> c.getRepresentations().stream()
-        .filter(r -> r.getMediaType() == MediaType.APPLICATION_FORM_URLENCODED))
+              prop.getType().getCollection().ifPresent(collection -> {
+                Property collectionProperty = new CollectionSpecificationToPropertyConverter(namesRegistry)
+                    .convert(collection);
+                param.property(collectionProperty);
+              });
+              param.setAllowEmptyValue(prop.getAllowEmptyValue());
+              param.setDefault(prop.getDefaultValue());
+              param.setIn("formData");
+              param.setRequired(source.getRequired());
+              param.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getExtensions()));
+              if (source.getScalarExample() != null) {
+                param.setExample(String.valueOf(source.getScalarExample()));
+              }
+              for (Example example : source.getExamples()) {
+                if (example.getValue() != null) {
+                  // Form parameters only support a single example
+                  param.example(String.valueOf(example.getValue()));
+                  break;
+                }
+              }
+              return param;
+            }))
         .orElse(Stream.of())
-        .findFirst();
-
-    urlEncoded.flatMap(m -> m.getModel().getFacets()
-        .flatMap(mf -> mf.elementFacet(StringElementFacet.class)))
-        .ifPresent(sf -> parameter.setPattern(sf.getPattern()));
-    parameter.setRequired(source.getRequired());
-    parameter.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getExtensions()));
-    if (source.getScalarExample() != null) {
-      parameter.setExample(String.valueOf(source.getScalarExample()));
-    }
-    for (Example example : source.getExamples()) {
-      if (example.getValue() != null) {
-        // Form parameters only support a single example
-        parameter.example(String.valueOf(example.getValue()));
-        break;
-      }
-    }
-    return parameter;
+        .collect(toList());
   }
 
   private Parameter bodyParameter(
