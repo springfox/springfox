@@ -56,6 +56,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.test.contract.swagger.models.Bug1370;
 import springfox.test.contract.swagger.models.Bug1749;
 import springfox.test.contract.swagger.models.Bug2767;
+import springfox.test.contract.swagger.models.Bug3087;
 import springfox.test.contract.swagger.models.Bug3353;
 import springfox.test.contract.swagger.models.EHDTOApplicatorUnits;
 import springfox.test.contract.swagger.models.EnumType;
@@ -598,6 +599,10 @@ public class BugsController {
   @RequestMapping(value = "/bug1370", method = RequestMethod.POST, consumes = MULTIPART_FORM_DATA_VALUE)
   @ApiOperation(value = "upload attach file", httpMethod = "POST")
   public void bug1370(@ModelAttribute Bug1370 pojo) {
+  }
+
+  @PostMapping("/bug3087")
+  public void bug3087(@RequestBody Bug3087 test) {
   }
 
   public enum NumberEnum {

@@ -237,9 +237,14 @@ public abstract class ModelSpecificationMapper {
       Map<String, PropertySpecification> properties,
       ModelNamesRegistry modelNamesRegistry) {
     return properties.entrySet().stream()
+        .sorted(Map.Entry.comparingByValue(
+            Comparator.comparing(PropertySpecification::getPosition)
+                .thenComparing(PropertySpecification::getName)))
         .collect(toMap(
             Map.Entry::getKey,
-            e -> propertyMapper.fromProperty(e.getValue(), modelNamesRegistry)));
+            e -> propertyMapper.fromProperty(e.getValue(), modelNamesRegistry),
+            (p1, p2) -> p1,
+            TreeMap::new));
   }
 
   private Xml mapXml(springfox.documentation.schema.Xml xml) {

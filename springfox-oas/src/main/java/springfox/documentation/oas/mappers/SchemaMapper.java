@@ -244,9 +244,14 @@ public abstract class SchemaMapper {
       Map<String, PropertySpecification> properties,
       ModelNamesRegistry modelNamesRegistry) {
     return properties.entrySet().stream()
+        .sorted(Map.Entry.comparingByValue(
+            Comparator.comparing(PropertySpecification::getPosition)
+                .thenComparing(PropertySpecification::getName)))
         .collect(toMap(
             Map.Entry::getKey,
-            e -> fromProperty(e.getValue(), modelNamesRegistry)));
+            e -> fromProperty(e.getValue(), modelNamesRegistry),
+            (p1, p2) -> p1,
+            TreeMap::new));
   }
 
   @SuppressWarnings("unchecked")

@@ -565,6 +565,29 @@
                 }
             }
         },
+        "/bugs/bug3087": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3087",
+                "operationId": "bug3087UsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Bug3087"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug3353": {
             "post": {
                 "tags": [
@@ -626,6 +649,22 @@
                     "value": {
                         "type": "string",
                         "format": "date-time"
+                    }
+                }
+            },
+            "Bug3087": {
+                "title": "Bug3087",
+                "required": [
+                    "password",
+                    "user"
+                ],
+                "type": "object",
+                "properties": {
+                    "password": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
                     }
                 }
             },

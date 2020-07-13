@@ -192,4 +192,8 @@ public class BugsController {
   public void bug1370(@ModelAttribute Bug1370 pojo) {
   }
 
+  @PostMapping("/bug3087")
+  public void bug3087(@RequestBody Bug3087 test) {
+  }
+
 } 

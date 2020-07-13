@@ -18,17 +18,6 @@ configurations {
   all*.exclude group: 'ch.qos.logback'
 }
 
-ext {
-  limits = [
-      'instruction': 89.5,
-      'line'       : 85,
-      'complexity' : 80,
-      'method'     : 80,
-      'branch'     : 85,
-      'class'      : 94
-  ]
-}
-
 dependencies {
   implementation "org.springframework.boot:spring-boot-starter-webflux"
   implementation project(':springfox-swagger2')

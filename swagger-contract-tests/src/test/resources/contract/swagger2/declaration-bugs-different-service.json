@@ -1109,13 +1109,13 @@
                         "type": "string"
                     },
                     {
-                        "name": "foo",
+                        "name": "nestedType.name",
                         "in": "formData",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "name": "nestedType.name",
+                        "name": "foo",
                         "in": "formData",
                         "required": false,
                         "type": "string"
@@ -1767,16 +1767,16 @@
                 ],
                 "parameters": [
                     {
-                        "name": "fileToUpload",
-                        "in": "formData",
-                        "required": false,
-                        "type": "file"
-                    },
-                    {
                         "name": "name",
                         "in": "formData",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "fileToUpload",
+                        "in": "formData",
+                        "required": false,
+                        "type": "file"
                     }
                 ],
                 "responses": {
@@ -2032,6 +2032,34 @@
                 }
             }
         },
+        "/bugs/bug3087": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug3087",
+                "operationId": "bug3087UsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "test",
+                        "description": "test",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Bug3087"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug3353": {
             "post": {
                 "tags": [
@@ -2276,6 +2304,22 @@
                 }
             },
             "title": "Bug2479"
+        },
+        "Bug3087": {
+            "type": "object",
+            "required": [
+                "password",
+                "user"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            },
+            "title": "Bug3087"
         },
         "EHDTOApplicatorUnits": {
             "type": "object",
