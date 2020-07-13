@@ -39,6 +39,7 @@ asciidoctor {
           'springfox-swagger-ui-rfc6570-version': "${rootProject.ext.springfoxRfc6570Version}",
           toc: 'left',
           idprefix: '',
+          sectanchors: '',
           idseparator: '-',
           icons: 'font',
           encoding: 'utf-8'
