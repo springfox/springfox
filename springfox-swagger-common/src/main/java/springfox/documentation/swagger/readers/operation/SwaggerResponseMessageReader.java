@@ -109,7 +109,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     Optional<ResolvedType> operationResponse =
         operationAnnotation.map(resolvedTypeFromApiOperation(
             typeResolver,
-            defaultResponse));
+            defaultResponse))
+        .map(context::alternateFor);
     List<ResponseHeader> operationHeaders =
         operationAnnotation.map(ApiOperation::responseHeaders)
             .map(headers -> Stream.of(headers)
