@@ -2,6 +2,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -45,6 +46,7 @@ public class ScalarTypes {
     SCALAR_TYPE_LOOKUP.put(Currency.class, ScalarType.BIGDECIMAL);
     SCALAR_TYPE_LOOKUP.put(UUID.class, ScalarType.UUID);
     SCALAR_TYPE_LOOKUP.put(MultipartFile.class, ScalarType.BINARY);
+    SCALAR_TYPE_LOOKUP.put(FilePart.class, ScalarType.BINARY);
     SCALAR_TYPE_LOOKUP.put(File.class, ScalarType.BINARY);
     SCALAR_TYPE_LOOKUP.put(URL.class, ScalarType.URL);
     SCALAR_TYPE_LOOKUP.put(URI.class, ScalarType.URI);

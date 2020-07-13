@@ -26,6 +26,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -124,7 +125,8 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
   }
 
   private static boolean isFileType(ResolvedType parameterType) {
-    return MultipartFile.class.isAssignableFrom(parameterType.getErasedType());
+    return MultipartFile.class.isAssignableFrom(parameterType.getErasedType()) ||
+        FilePart.class.isAssignableFrom(parameterType.getErasedType());
   }
 
 }
