@@ -461,14 +461,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="usage-quick-guide-for-1-0-x">Usage (Quick guide) for 1.0.x</h2>
+<h2 id="usage-quick-guide-for-1-0-x"><a class="anchor" href="#usage-quick-guide-for-1-0-x"></a>Usage (Quick guide) for 1.0.x</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This quick guide outlines how to get swagger-springmvc up and running with a default configuration.
 The recommended way to integrate swagger-springmvc with your application is to use the <code>SwaggerSpringMvcPlugin</code> as explained below.</p>
 </div>
 <div class="sect2">
-<h3 id="spring-java-configuration">Spring Java Configuration</h3>
+<h3 id="spring-java-configuration"><a class="anchor" href="#spring-java-configuration"></a>Spring Java Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -499,7 +499,7 @@ json Resource Listing is available at /api-docs</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="spring-xml-configuration">Spring xml Configuration</h3>
+<h3 id="spring-xml-configuration"><a class="anchor" href="#spring-xml-configuration"></a>Spring xml Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -523,7 +523,7 @@ json Resource Listing is available at /api-docs</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="usage-swaggerspringmvcplugin">Usage (SwaggerSpringMvcPlugin)</h3>
+<h3 id="usage-swaggerspringmvcplugin"><a class="anchor" href="#usage-swaggerspringmvcplugin"></a>Usage (SwaggerSpringMvcPlugin)</h3>
 <div class="paragraph">
 <p>The recommended way to integrate swagger-springmvc with your application is to use the <code>SwaggerSpringMvcPlugin</code>. If you are ever
 going to need to configure or customize how swagger-springmvc generates your application&#8217;s swagger api documentation
@@ -531,7 +531,7 @@ you are going to need to use the <code>SwaggerSpringMvcPlugin</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="swaggerspringmvcplugin-xml-configuration">SwaggerSpringMvcPlugin XML Configuration</h3>
+<h3 id="swaggerspringmvcplugin-xml-configuration"><a class="anchor" href="#swaggerspringmvcplugin-xml-configuration"></a>SwaggerSpringMvcPlugin XML Configuration</h3>
 <div class="paragraph">
 <p>To use the plugin you must create a spring java configuration class which uses spring&#8217;s <code>@Configuration</code>.
 This config class must then be defined in your xml application context.</p>
@@ -575,7 +575,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="swaggerspringmvcplugin-spring-java-configuration">SwaggerSpringMvcPlugin Spring Java Configuration</h3>
+<h3 id="swaggerspringmvcplugin-spring-java-configuration"><a class="anchor" href="#swaggerspringmvcplugin-spring-java-configuration"></a>SwaggerSpringMvcPlugin Spring Java Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -627,7 +627,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="how-it-works">How It works</h3>
+<h3 id="how-it-works"><a class="anchor" href="#how-it-works"></a>How It works</h3>
 <div class="paragraph">
 <p>Swagger-springmvc bootstraps your spring application and scans the <code>RequestMappingHandlerMapping&#8217;s</code> created
 by spring to generate the swagger documentation for your applications API&#8217;s.
@@ -635,14 +635,14 @@ Swagger-springmvc stores the generated swagger documentation, in memory, and ser
 </div>
 </div>
 <div class="sect2">
-<h3 id="core-concepts">Core Concepts</h3>
+<h3 id="core-concepts"><a class="anchor" href="#core-concepts"></a>Core Concepts</h3>
 <div class="imageblock">
 <div class="content">
 <img src="swaggerSpringMvc.png" alt="Core Concepts">
 </div>
 </div>
 <div class="sect3">
-<h4 id="swagger-group">Swagger group</h4>
+<h4 id="swagger-group"><a class="anchor" href="#swagger-group"></a>Swagger group</h4>
 <div class="paragraph">
 <p>A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
@@ -655,13 +655,13 @@ Resource Listing. Why would you need more than one Resource Listing?
 </div>
 </div>
 <div class="sect3">
-<h4 id="resource-listing">Resource Listing</h4>
+<h4 id="resource-listing"><a class="anchor" href="#resource-listing"></a>Resource Listing</h4>
 <div class="paragraph">
 <p>Please see the Swagger Specification for a detailed explanation.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="api-documentation-endpoints">API Documentation Endpoints</h4>
+<h4 id="api-documentation-endpoints"><a class="anchor" href="#api-documentation-endpoints"></a>API Documentation Endpoints</h4>
 <div class="paragraph">
 <p>All swagger documentation (JSON responses) are served from DefaultSwaggerController. The controller maintains a cache
 of ResourcesListing&#8217;s which are uniquely identified by the <code>swaggerGroup</code>. There is a 1:1 relationship between
@@ -706,7 +706,7 @@ SwaggerSpringMvcPlugin which is given the unique identifier 'default'.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="urls-swaggerpathprovider">Urls (SwaggerPathProvider)</h3>
+<h3 id="urls-swaggerpathprovider"><a class="anchor" href="#urls-swaggerpathprovider"></a>Urls (SwaggerPathProvider)</h3>
 <div class="paragraph">
 <p>The swagger specification recommends the use of absolute URL&#8217;s where possible - specifically the the <code>path</code> attribute of
 api&#8217;s within the ResourceListing&#8217;s and the <code>basePath</code> attribute of Api Declarations. Most users of swagger-springmvc have expressed
@@ -721,9 +721,9 @@ to use absolute urls use <code>AbsoluteSwaggerPathProvider</code> as a guide and
 </div>
 </div>
 <div class="sect2">
-<h3 id="customization">Customization</h3>
+<h3 id="customization"><a class="anchor" href="#customization"></a>Customization</h3>
 <div class="sect3">
-<h4 id="excluding-api-endpoints">Excluding api endpoints</h4>
+<h4 id="excluding-api-endpoints"><a class="anchor" href="#excluding-api-endpoints"></a>Excluding api endpoints</h4>
 <div class="paragraph">
 <p>Annotate a controller class or controller methods with the <code>@ApiIgnore</code> annotation.</p>
 </div>
@@ -745,7 +745,7 @@ to use absolute urls use <code>AbsoluteSwaggerPathProvider</code> as a guide and
 </div>
 </div>
 <div class="sect3">
-<h4 id="http-response-codes-and-messages">HTTP Response codes and messages</h4>
+<h4 id="http-response-codes-and-messages"><a class="anchor" href="#http-response-codes-and-messages"></a>HTTP Response codes and messages</h4>
 <div class="paragraph">
 <p>Configuring global response messages for RequestMappings</p>
 </div>
@@ -765,7 +765,7 @@ to use absolute urls use <code>AbsoluteSwaggerPathProvider</code> as a guide and
 </div>
 </div>
 <div class="sect3">
-<h4 id="ordering-the-apis-within-a-resourcelisting">Ordering the api&#8217;s within a ResourceListing</h4>
+<h4 id="ordering-the-apis-within-a-resourcelisting"><a class="anchor" href="#ordering-the-apis-within-a-resourcelisting"></a>Ordering the api&#8217;s within a ResourceListing</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -796,7 +796,7 @@ public class BusinessService {
 </div>
 </div>
 <div class="sect3">
-<h4 id="ordering-operations-in-api-declarations">Ordering operations in Api Declarations</h4>
+<h4 id="ordering-operations-in-api-declarations"><a class="anchor" href="#ordering-operations-in-api-declarations"></a>Ordering operations in Api Declarations</h4>
 <div class="paragraph">
 <p>Use the swagger <code>ApiOperation</code> annotation.</p>
 </div>
@@ -811,7 +811,7 @@ public class BusinessService {
 </div>
 </div>
 <div class="sect3">
-<h4 id="ordering-apidescriptions-within-apilistings">Ordering ApiDescriptions (within ApiListings)</h4>
+<h4 id="ordering-apidescriptions-within-apilistings"><a class="anchor" href="#ordering-apidescriptions-within-apilistings"></a>Ordering ApiDescriptions (within ApiListings)</h4>
 <div class="paragraph">
 <p>Defaults to <code>ApiDescriptionLexicographicalOrdering</code></p>
 </div>
@@ -822,7 +822,7 @@ public class BusinessService {
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuring-the-output-of-operationid-in-a-swagger-2-0-spec">Configuring the output of <code>operationId</code> in a Swagger 2.0 spec</h4>
+<h4 id="configuring-the-output-of-operationid-in-a-swagger-2-0-spec"><a class="anchor" href="#configuring-the-output-of-operationid-in-a-swagger-2-0-spec"></a>Configuring the output of <code>operationId</code> in a Swagger 2.0 spec</h4>
 <div class="paragraph">
 <p>As defined <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5"><code>operationId</code> was
 introduced</a> in the Swagger 2.0 spec, the <code>operationId</code> parameter, which was referred to as <code>nickname</code> in pre-2.0
@@ -835,7 +835,7 @@ example of this can be seen in the <a href="https://github.com/swagger-api/swagg
 By default, when using Springfox in Swagger 2.0 mode, the value of <code>operationID</code> will be rendered using the following structure: &#8220;[java_method_name_here]Using[HTTP_verb_here]&#8221;. For example, if one has a method <code>getPets()</code> connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code> for the operationId.</p>
 </div>
 <div class="sect4">
-<h5 id="given-this-annotated-method">Given this annotated method &#8230;&#8203;</h5>
+<h5 id="given-this-annotated-method"><a class="anchor" href="#given-this-annotated-method"></a>Given this annotated method &#8230;&#8203;</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">   <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
@@ -847,7 +847,7 @@ By default, when using Springfox in Swagger 2.0 mode, the value of <code>operati
 </div>
 </div>
 <div class="sect4">
-<h5 id="the-default-operationid-will-render-looking-like-this">the default <code>operationId</code> will render looking like this:</h5>
+<h5 id="the-default-operationid-will-render-looking-like-this"><a class="anchor" href="#the-default-operationid-will-render-looking-like-this"></a>the default <code>operationId</code> will render looking like this:</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
@@ -863,12 +863,12 @@ By default, when using Springfox in Swagger 2.0 mode, the value of <code>operati
 </div>
 </div>
 <div class="sect4">
-<h5 id="customizing-the-value-of-operationid">Customizing the value of <code>operationId</code></h5>
+<h5 id="customizing-the-value-of-operationid"><a class="anchor" href="#customizing-the-value-of-operationid"></a>Customizing the value of <code>operationId</code></h5>
 <div class="paragraph">
 <p>In the event you wish to override the default <code>operationId</code> which Springfox renders, you may do so by providing the <code>nickname</code> element in an <code>@ApiOperation</code> annotation.</p>
 </div>
 <div class="sect5">
-<h6 id="given-this-annotated-method-2">Given this annotated method &#8230;&#8203;</h6>
+<h6 id="given-this-annotated-method-2"><a class="anchor" href="#given-this-annotated-method-2"></a>Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">   <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
@@ -880,7 +880,7 @@ By default, when using Springfox in Swagger 2.0 mode, the value of <code>operati
 </div>
 </div>
 <div class="sect5">
-<h6 id="the-customized-operationid-will-render-looking-like-this">&#8230;&#8203; the customized <code>operationId</code> will render looking like this:</h6>
+<h6 id="the-customized-operationid-will-render-looking-like-this"><a class="anchor" href="#the-customized-operationid-will-render-looking-like-this"></a>&#8230;&#8203; the customized <code>operationId</code> will render looking like this:</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
@@ -898,7 +898,7 @@ By default, when using Springfox in Swagger 2.0 mode, the value of <code>operati
 </div>
 </div>
 <div class="sect3">
-<h4 id="changing-how-generic-types-are-named">Changing how Generic Types are Named</h4>
+<h4 id="changing-how-generic-types-are-named"><a class="anchor" href="#changing-how-generic-types-are-named"></a>Changing how Generic Types are Named</h4>
 <div class="paragraph">
 <p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
@@ -941,9 +941,9 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="model-customization">Model Customization</h3>
+<h3 id="model-customization"><a class="anchor" href="#model-customization"></a>Model Customization</h3>
 <div class="sect3">
-<h4 id="excluding-spring-handler-method-arguments-or-custom-types">Excluding spring handler method arguments or custom types</h4>
+<h4 id="excluding-spring-handler-method-arguments-or-custom-types"><a class="anchor" href="#excluding-spring-handler-method-arguments-or-custom-types"></a>Excluding spring handler method arguments or custom types</h4>
 <div class="paragraph">
 <p>To exclude controller method arguments form the generated swagger model JSON.</p>
 </div>
@@ -963,7 +963,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-07-13 20:50:01 UTC
+Last updated 2020-07-13 21:33:28 UTC
 </div>
 </div>
 <style>

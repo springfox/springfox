@@ -461,10 +461,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="plugins">Plugins</h2>
+<h2 id="plugins"><a class="anchor" href="#plugins"></a>Plugins</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="introduction">Introduction</h3>
+<h3 id="introduction"><a class="anchor" href="#introduction"></a>Introduction</h3>
 <div class="paragraph">
 <p>Any plugin or extensibility hook that is available <a href="https://github.com/springfox/springfox/tree/master/springfox-spi/src/main/java/springfox/documentation/spi">is available in the SPI
 module</a>. In the <code>spi</code> module, anything that ends in <code>*Plugin</code> is generally an extensibility point that is meant for
@@ -477,7 +477,7 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="plugins-available-for-extensibility">Plugins Available For Extensibility</h3>
+<h3 id="plugins-available-for-extensibility"><a class="anchor" href="#plugins-available-for-extensibility"></a>Plugins Available For Extensibility</h3>
 <div class="paragraph">
 <p>To explicitly state the extensibility points that are available:
 * At the schema level
@@ -612,7 +612,7 @@ thing to use this plugin for. Having said that this plugin has the power to rewr
 </table>
 </div>
 <div class="sect2">
-<h3 id="steps-to-create-a-plugin">Steps To Create A Plugin</h3>
+<h3 id="steps-to-create-a-plugin"><a class="anchor" href="#steps-to-create-a-plugin"></a>Steps To Create A Plugin</h3>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -659,14 +659,14 @@ order specified in the bean. In general spring plugins get the highest priority,
 <p>That is it!</p>
 </div>
 <div class="sect3">
-<h4 id="example-operationbuilderplugin">Example OperationBuilderPlugin</h4>
+<h4 id="example-operationbuilderplugin"><a class="anchor" href="#example-operationbuilderplugin"></a>Example OperationBuilderPlugin</h4>
 <div class="paragraph">
 <p>This example by <a href="https://github.com/koderman">@koderman</a>  is a custom extension for <a href="https://aws.amazon.com/api-gateway/">AWS Amazon Api Gateway</a> integration.</p>
 </div>
 <script src="https://gist.github.com/koderman/d49a67274e33f03405a8e45672794968.js"></script>
 </div>
 <div class="sect3">
-<h4 id="example-parameterbuilderplugin">Example ParameterBuilderPlugin</h4>
+<h4 id="example-parameterbuilderplugin"><a class="anchor" href="#example-parameterbuilderplugin"></a>Example ParameterBuilderPlugin</h4>
 <div class="paragraph">
 <p>Here is an example of how to add parameters by hand.</p>
 </div>
@@ -795,7 +795,7 @@ is applied to the parameter.</td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="example-apilistingscannerplugin">Example ApiListingScannerPlugin</h4>
+<h4 id="example-apilistingscannerplugin"><a class="anchor" href="#example-apilistingscannerplugin"></a>Example ApiListingScannerPlugin</h4>
 <div class="paragraph">
 <p>Here is an example of how to add Api Descriptions by hand.</p>
 </div>
@@ -1091,7 +1091,7 @@ the api will appear under the default group.</td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="additional-extensibility-options">Additional extensibility options</h2>
+<h2 id="additional-extensibility-options"><a class="anchor" href="#additional-extensibility-options"></a>Additional extensibility options</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 4. Other Extensibility</caption>
@@ -1144,9 +1144,9 @@ representations. This is a limitation of the OAI Spec 2.0.
 </table>
 </div>
 <div class="sect2">
-<h3 id="examples-of-alternate-type-rule-convention">Examples of alternate type rule convention</h3>
+<h3 id="examples-of-alternate-type-rule-convention"><a class="anchor" href="#examples-of-alternate-type-rule-convention"></a>Examples of alternate type rule convention</h3>
 <div class="sect3">
-<h4 id="jacksonserializerconvention">JacksonSerializerConvention</h4>
+<h4 id="jacksonserializerconvention"><a class="anchor" href="#jacksonserializerconvention"></a>JacksonSerializerConvention</h4>
 <div class="paragraph">
 <p>Here is how we configure the <code>JacksonSerializerConvention</code>.</p>
 </div>
@@ -1170,7 +1170,7 @@ AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="creating-a-convention">Creating a convention</h4>
+<h4 id="creating-a-convention"><a class="anchor" href="#creating-a-convention"></a>Creating a convention</h4>
 <div class="paragraph">
 <p>Below is an example for creating a rule that automatically provides a convention for configuring <code>Pageable</code> type.</p>
 </div>
@@ -1279,7 +1279,7 @@ instead of <code>Pageable</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="aggregating-multiple-swagger-specifications-in-the-same-swagger-ui">Aggregating multiple swagger specifications in the same swagger-ui</h3>
+<h3 id="aggregating-multiple-swagger-specifications-in-the-same-swagger-ui"><a class="anchor" href="#aggregating-multiple-swagger-specifications-in-the-same-swagger-ui"></a>Aggregating multiple swagger specifications in the same swagger-ui</h3>
 <div class="paragraph">
 <p>You need to create a bean that implements the <a href="https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26"><code>SwaggerResourcesProvider</code></a>
 interface. Typically you&#8217;d have to make a composite bean that uses multiple <a href="https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/InMemorySwaggerResourcesProvider.java#L38">InMemorySwaggerResourcesProvider</a>
@@ -1344,7 +1344,7 @@ You need to make this new bean a @Primary bean. otherwise the you&#8217;d get an
 </div>
 </div>
 <div class="sect1">
-<h2 id="spring-data-rest-extensibility">Spring Data Rest extensibility</h2>
+<h2 id="spring-data-rest-extensibility"><a class="anchor" href="#spring-data-rest-extensibility"></a>Spring Data Rest extensibility</h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
 <table>
@@ -1400,7 +1400,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-07-13 20:50:01 UTC
+Last updated 2020-07-13 21:33:28 UTC
 </div>
 </div>
 <style>

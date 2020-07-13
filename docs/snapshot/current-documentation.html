@@ -464,7 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="configuring-springfox">Configuring Springfox</h2>
+<h2 id="configuring-springfox"><a class="anchor" href="#configuring-springfox"></a>Configuring Springfox</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To enable support for swagger specification 1.2 use the <code><code>@EnableSwagger</code></code> annotation</p>
@@ -551,7 +551,7 @@ to this is the ability to provide an expressive predicate based for api selectio
 and <a href="https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java">PathSelectors</a>.</p>
 </div>
 <div class="sect2">
-<h3 id="configuring-the-objectmapper">Configuring the ObjectMapper</h3>
+<h3 id="configuring-the-objectmapper"><a class="anchor" href="#configuring-the-objectmapper"></a>Configuring the ObjectMapper</h3>
 <div class="paragraph">
 <p>A simple way to configure the object mapper is to listen for the <code><code>ObjectMapperConfigured</code></code> event. Regardless of
 whether there is a customized ObjectMapper in play with a corresponding MappingJackson2HttpMessageConverter, the
@@ -578,7 +578,7 @@ good example of where this breaks down is the following <a href="http://stackove
 </div>
 </div>
 <div class="sect2">
-<h3 id="customizing-the-swagger-endpoints">Customizing the swagger endpoints.</h3>
+<h3 id="customizing-the-swagger-endpoints"><a class="anchor" href="#customizing-the-swagger-endpoints"></a>Customizing the swagger endpoints.</h3>
 <div class="paragraph">
 <p>By default the swagger service descriptions are generated at the following urls</p>
 </div>
@@ -652,7 +652,7 @@ allows the properties to be  overridden</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="configuring-startup">Configuring startup.</h3>
+<h3 id="configuring-startup"><a class="anchor" href="#configuring-startup"></a>Configuring startup.</h3>
 <div class="paragraph">
 <p>If you&#8217;d like to delay the startup of springfox, you could choose to set auto-startup to false. The property to use
 is <code>springfox.documentation.auto-startup</code> and this could either be passed in as a <code>-D</code> jvm arg or via a property in
@@ -701,7 +701,7 @@ requesting the swagger endpoints in a thread-safe manner.
 </div>
 </div>
 <div class="sect2">
-<h3 id="overriding-descriptions-via-properties">Overriding descriptions via properties</h3>
+<h3 id="overriding-descriptions-via-properties"><a class="anchor" href="#overriding-descriptions-via-properties"></a>Overriding descriptions via properties</h3>
 <div class="paragraph">
 <p>Added support for resolving properties in property sources to replace expressions in certain annotations. In order to
  use it simply define properties in <code>application.properties</code>, <code>application.yml</code> file or property files in your
@@ -786,7 +786,7 @@ requesting the swagger endpoints in a thread-safe manner.
 </div>
 </div>
 <div class="sect2">
-<h3 id="overriding-property-datatypes">Overriding property datatypes</h3>
+<h3 id="overriding-property-datatypes"><a class="anchor" href="#overriding-property-datatypes"></a>Overriding property datatypes</h3>
 <div class="paragraph">
 <p>Using the <code>ApiModelProperty#dataType</code> we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
@@ -873,7 +873,7 @@ use one of the base types specified in the Types class &#8658;
 </div>
 </div>
 <div class="sect2">
-<h3 id="docket-xml-configuration">Docket XML Configuration</h3>
+<h3 id="docket-xml-configuration"><a class="anchor" href="#docket-xml-configuration"></a>Docket XML Configuration</h3>
 <div class="paragraph">
 <p>To use the plugin you must create a spring java configuration class which uses spring&#8217;s <code>@Configuration</code>.
 This config class must then be defined in your xml application context.</p>
@@ -940,7 +940,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="docket-spring-java-configuration">Docket Spring Java Configuration</h3>
+<h3 id="docket-spring-java-configuration"><a class="anchor" href="#docket-spring-java-configuration"></a>Docket Spring Java Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -995,7 +995,7 @@ This config class must then be defined in your xml application context.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="property-file-lookup">Support for documentation from property file lookup</h3>
+<h3 id="property-file-lookup"><a class="anchor" href="#property-file-lookup"></a>Support for documentation from property file lookup</h3>
 <div class="paragraph">
 <p>Starting with <code>2.7.0</code> we support looking up description from the following annotations given a property just like
 property place holders resolve a value annotation <code>@Value(${key})</code>. The following annotations attributes support
@@ -1116,7 +1116,7 @@ SomeModel.someProperty=Some property description</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="swagger-group">Swagger group</h4>
+<h4 id="swagger-group"><a class="anchor" href="#swagger-group"></a>Swagger group</h4>
 <div class="paragraph">
 <p>A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
@@ -1129,7 +1129,7 @@ Resource Listing. Why would you need more than one Resource Listing?
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuring-the-output-of-operationid-in-a-swagger-2-0-spec">Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</h4>
+<h4 id="configuring-the-output-of-operationid-in-a-swagger-2-0-spec"><a class="anchor" href="#configuring-the-output-of-operationid-in-a-swagger-2-0-spec"></a>Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</h4>
 <div class="paragraph">
 <p>As defined <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5"><code>operationId</code> was
 introduced</a> in the Swagger 2.0 spec, the <code>operationId</code> parameter, which was referred to as <code>nickname</code> in pre-2.0
@@ -1138,14 +1138,14 @@ versions of the Swagger spec, provides the author a means by which to describe a
 example of this can be seen in the <a href="https://github.com/swagger-api/swagger-codegen">swagger-codegen project</a>.</p>
 </div>
 <div class="sect4">
-<h5 id="the-default-value-of-operationid-according-to-springfox">The default value of <code>operationId</code> according to Springfox</h5>
+<h5 id="the-default-value-of-operationid-according-to-springfox"><a class="anchor" href="#the-default-value-of-operationid-according-to-springfox"></a>The default value of <code>operationId</code> according to Springfox</h5>
 <div class="paragraph">
 <p>By default, when using Springfox in Swagger 2.0 mode, the value of <code>operationID</code> will be rendered using the
 following structure: &#8220;[java_method_name_here]Using[HTTP_verb_here]&#8221;. For example, if one has a method <code>getPets()</code>
 connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code> for the operationId.</p>
 </div>
 <div class="sect5">
-<h6 id="given-this-annotated-method">Given this annotated method &#8230;&#8203;</h6>
+<h6 id="given-this-annotated-method"><a class="anchor" href="#given-this-annotated-method"></a>Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
 <div class="title">Standard Annotation On Method</div>
 <div class="content">
@@ -1166,7 +1166,7 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 </div>
 </div>
 <div class="sect5">
-<h6 id="the-default-operationid-will-render-looking-like-this">the default <code>operationId</code> will render looking like this:</h6>
+<h6 id="the-default-operationid-will-render-looking-like-this"><a class="anchor" href="#the-default-operationid-will-render-looking-like-this"></a>the default <code>operationId</code> will render looking like this:</h6>
 <div class="listingblock">
 <div class="title">Default Rendered Operation Id</div>
 <div class="content">
@@ -1199,13 +1199,13 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 </div>
 </div>
 <div class="sect4">
-<h5 id="customizing-the-value-of-operationid">Customizing the value of <em>operationId</em></h5>
+<h5 id="customizing-the-value-of-operationid"><a class="anchor" href="#customizing-the-value-of-operationid"></a>Customizing the value of <em>operationId</em></h5>
 <div class="paragraph">
 <p>In the event you wish to override the default <code>operationId</code> which Springfox renders, you may do so by providing the
 <code>nickname</code> element in an <code>@ApiOperation</code> annotation.</p>
 </div>
 <div class="sect5">
-<h6 id="given-this-annotated-method-2">Given this annotated method &#8230;&#8203;</h6>
+<h6 id="given-this-annotated-method-2"><a class="anchor" href="#given-this-annotated-method-2"></a>Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
 <div class="title">Nickname overrides default operationId</div>
 <div class="content">
@@ -1226,7 +1226,7 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 </div>
 </div>
 <div class="sect5">
-<h6 id="the-customized-operationid-will-render-looking-like-this">&#8230;&#8203; the customized <strong>operationId</strong> will render looking like this:</h6>
+<h6 id="the-customized-operationid-will-render-looking-like-this"><a class="anchor" href="#the-customized-operationid-will-render-looking-like-this"></a>&#8230;&#8203; the customized <strong>operationId</strong> will render looking like this:</h6>
 <div class="listingblock">
 <div class="title">Default Rendered Operation Id</div>
 <div class="content">
@@ -1259,7 +1259,7 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 </div>
 </div>
 <div class="sect3">
-<h4 id="changing-how-generic-types-are-named">Changing how Generic Types are Named</h4>
+<h4 id="changing-how-generic-types-are-named"><a class="anchor" href="#changing-how-generic-types-are-named"></a>Changing how Generic Types are Named</h4>
 <div class="paragraph">
 <p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
@@ -1279,7 +1279,7 @@ plugin customization:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="caching">Caching</h3>
+<h3 id="caching"><a class="anchor" href="#caching"></a>Caching</h3>
 <div class="paragraph">
 <p>The caching feature that was introduced in 2.1.0 has been removed. Springfox no longer uses the cache abstraction to
 improve performance the api scanners and readers. It has been rolled into the library as an internal implementation
@@ -1288,7 +1288,7 @@ other than the introduction of configuration change in consuming applications, w
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuring-security-schemes-and-contexts-an-overview">Configuring Security Schemes and Contexts an Overview</h3>
+<h3 id="configuring-security-schemes-and-contexts-an-overview"><a class="anchor" href="#configuring-security-schemes-and-contexts-an-overview"></a>Configuring Security Schemes and Contexts an Overview</h3>
 <div class="paragraph">
 <p>The security provisions in SpringFox at a high level, without getting into the code, has different pieces
 that all work together in concert</p>
@@ -1311,7 +1311,7 @@ think in your example, you&#8217;re missing the last piece of the puzzle, the se
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-application">Example application</h3>
+<h3 id="example-application"><a class="anchor" href="#example-application"></a>Example application</h3>
 <div class="paragraph">
 <p>For an examples for spring-boot, vanilla spring applications take a look <a href="https://github.com/springfox/springfox-demos">examples</a>
 in the demo application.</p>
@@ -1320,7 +1320,7 @@ in the demo application.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-springfox-staticdocs">Configuring springfox-staticdocs</h2>
+<h2 id="configuring-springfox-staticdocs"><a class="anchor" href="#configuring-springfox-staticdocs"></a>Configuring springfox-staticdocs</h2>
 <div class="sectionbody">
 <div class="admonitionblock important">
 <table>
@@ -1339,7 +1339,7 @@ difficult for build to co-exist with the newer version of swagger2markup. Please
 </div>
 </div>
 <div class="sect1">
-<h2 id="security">Security</h2>
+<h2 id="security"><a class="anchor" href="#security"></a>Security</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Thanks to <a href="https://github.com/mojaiq">Javed Mohammed</a> we now have an example <a href="https://github.com/springfox/springfox-oath2-demo">oauth demo</a>.</p>
@@ -1362,7 +1362,7 @@ this is based on swagger-ui pre 3.x
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-07-13 20:50:01 UTC
+Last updated 2020-07-13 21:33:28 UTC
 </div>
 </div>
 <style>
