@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @ConfigurationProperties("springfox.documentation")
 public class SpringfoxConfigurationProperties {
+  private boolean autoStartup = true;
   private boolean enabled = true;
   @NestedConfigurationProperty
   private SwaggerConfigurationProperties swagger;
@@ -12,6 +13,14 @@ public class SpringfoxConfigurationProperties {
   private OpenApiConfigurationProperties openApi;
   @NestedConfigurationProperty
   private SwaggerUiConfigurationProperties swaggerUi;
+
+  public boolean isAutoStartup() {
+    return autoStartup;
+  }
+
+  public void setAutoStartup(boolean autoStartup) {
+    this.autoStartup = autoStartup;
+  }
 
   public boolean isEnabled() {
     return enabled;

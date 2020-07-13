@@ -14,8 +14,8 @@ public class ServerBuilder {
   private String name;
   private String url;
   private String description;
-  private List<ServerVariable> variables = new ArrayList<>();
-  private List<VendorExtension> extensions = new ArrayList<>();
+  private final List<ServerVariable> variables = new ArrayList<>();
+  private final List<VendorExtension> extensions = new ArrayList<>();
 
   public ServerBuilder name(String name) {
     this.name = name;

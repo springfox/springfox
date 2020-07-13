@@ -23,20 +23,21 @@ import io.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.OnServletBasedWebApplication;
 import springfox.documentation.spring.web.json.Json;
@@ -46,10 +47,10 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.List;
+
 import static java.util.Optional.*;
 import static org.springframework.util.MimeTypeUtils.*;
-import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.swagger.common.HostNameProvider.*;
 import static springfox.documentation.swagger2.web.Swagger2ControllerWebMvc.*;
 
 @ApiIgnore
@@ -64,26 +65,22 @@ public class Swagger2ControllerWebMvc {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2ControllerWebMvc.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
-
-  private final String hostNameOverride;
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
   private final JsonSerializer jsonSerializer;
+  private final PluginRegistry<WebMvcSwaggerTransformationFilter, DocumentationType> transformations;
 
   @Autowired
   public Swagger2ControllerWebMvc(
-      Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
-      JsonSerializer jsonSerializer) {
-
-    this.hostNameOverride =
-        environment.getProperty(
-            "springfox.documentation.swagger.v2.host",
-            "DEFAULT");
+      JsonSerializer jsonSerializer,
+      @Qualifier("webMvcSwaggerTransformationFilterRegistry")
+          PluginRegistry<WebMvcSwaggerTransformationFilter, DocumentationType> transformations) {
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
+    this.transformations = transformations;
   }
 
   @RequestMapping(
@@ -100,24 +97,13 @@ public class Swagger2ControllerWebMvc {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
-    UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
-    String basePath = isEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath();
-    swagger.basePath(basePath.replace(servletRequest.getContextPath(), ""));
-    if (isEmpty(swagger.getHost())) {
-      swagger.host(hostName(uriComponents));
+    SwaggerTransformationContext<HttpServletRequest> context
+        = new SwaggerTransformationContext<>(swagger, servletRequest);
+    List<WebMvcSwaggerTransformationFilter> filters = transformations.getPluginsFor(DocumentationType.SWAGGER_2);
+    for (WebMvcSwaggerTransformationFilter each : filters) {
+      context = context.next(each.transform(context));
     }
-    return new ResponseEntity<>(jsonSerializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<>(jsonSerializer.toJson(context.getSpecification()), HttpStatus.OK);
   }
 
-  private String hostName(UriComponents uriComponents) {
-    if ("DEFAULT".equals(hostNameOverride)) {
-      String host = uriComponents.getHost();
-      int port = uriComponents.getPort();
-      if (port > -1) {
-        return String.format("%s:%d", host, port);
-      }
-      return host;
-    }
-    return hostNameOverride;
-  }
 }

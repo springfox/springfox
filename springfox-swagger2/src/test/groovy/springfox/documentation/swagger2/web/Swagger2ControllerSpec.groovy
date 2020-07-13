@@ -2,6 +2,7 @@ package springfox.documentation.swagger2.web
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
+import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.util.WebUtils
 import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
@@ -37,7 +38,8 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       mockEnvironment(),
       new DocumentationCache(),
       swagger2Mapper(),
-      new JsonSerializer([new Swagger2JacksonModule()]))
+      new JsonSerializer([new Swagger2JacksonModule()]),
+      PluginRegistry.of(new WebMvcBasePathAndHostnameTransformationFilter(env)))
 
   ApiListingReferenceScanner listingReferenceScanner
   ApiListingScanner listingScanner
