@@ -67,10 +67,11 @@ class WebFluxFunctionContractSpec extends Specification implements FileAccess {
     JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
 
     where:
-    contractFile                                                  | groupName
-    'swagger.json'                                                | 'petstore'
-    'swaggerTemplated.json'                                       | 'petstoreTemplated'
-    'feature-demonstration.json'                                  | 'features'
+    contractFile                 | groupName
+    'swagger.json'               | 'petstore'
+    'swaggerTemplated.json'      | 'petstoreTemplated'
+    'feature-demonstration.json' | 'features'
+    'bug-demonstration.json'     | 'bugs'
 
   }
 
@@ -95,6 +96,16 @@ class WebFluxFunctionContractSpec extends Specification implements FileAccess {
     result.find {
       it.name == 'petstoreTemplated' &&
           it.url == '/v2/api-docs?group=petstoreTemplated' &&
+          it.swaggerVersion == '2.0'
+    }
+    result.find {
+      it.name == 'bugs' &&
+          it.url == '/v2/api-docs?group=bugs' &&
+          it.swaggerVersion == '2.0'
+    }
+    result.find {
+      it.name == 'features' &&
+          it.url == '/v2/api-docs?group=features' &&
           it.swaggerVersion == '2.0'
     }
   }

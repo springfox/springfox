@@ -34,11 +34,13 @@ public class WebfluxDefaultsProvider implements DefaultsProviderPlugin {
   @Override
   public DocumentationContextBuilder apply(DocumentationContextBuilder builder) {
     List<AlternateTypeRule> rules = new ArrayList<>();
-    rules.add(newRule(resolver.resolve(ResponseEntity.class, resolver.resolve(Flux.class, WildcardType.class)),
-        resolver.resolve(WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
-    rules.add(newRule(resolver.resolve(ResponseEntity.class, resolver.resolve(Mono.class, WildcardType.class)),
-        resolver.resolve(WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
     rules.add(newRule(resolver.resolve(Mono.class, resolver.resolve(ResponseEntity.class, WildcardType.class)),
+        resolver.resolve(WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
+    rules.add(newRule(resolver.resolve(Flux.class, resolver.resolve(ResponseEntity.class, WildcardType.class)),
+        resolver.resolve(List.class, WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
+    rules.add(newRule(resolver.resolve(ResponseEntity.class, resolver.resolve(Flux.class, WildcardType.class)),
+        resolver.resolve(List.class, WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
+    rules.add(newRule(resolver.resolve(ResponseEntity.class, resolver.resolve(Mono.class, WildcardType.class)),
         resolver.resolve(WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));
     rules.add(newRule(resolver.resolve(Flux.class, WildcardType.class),
         resolver.resolve(List.class, WildcardType.class), Ordered.HIGHEST_PRECEDENCE + 20));

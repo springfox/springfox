@@ -1,0 +1,94 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "petstore.swagger.io",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "web-flux-bug-controller",
+            "description": "Web Flux Bug Controller"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "produces": [
+        "application/json",
+        "application/xml"
+    ],
+    "paths": {
+        "/bugs/bug3343": {
+            "get": {
+                "tags": [
+                    "web-flux-bug-controller"
+                ],
+                "summary": "List all projects",
+                "operationId": "getAllUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Content ready",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse«Payload»"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
+    },
+    "definitions": {
+        "Payload": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            },
+            "title": "Payload"
+        },
+        "SuccessResponse«Payload»": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "payload": {
+                    "$ref": "#/definitions/Payload"
+                }
+            },
+            "title": "SuccessResponse«Payload»"
+        }
+    }
+}
