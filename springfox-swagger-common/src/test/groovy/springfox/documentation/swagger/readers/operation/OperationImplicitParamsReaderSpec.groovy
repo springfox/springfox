@@ -78,14 +78,14 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec impleme
     operationImplicitParameterReader.supports(DocumentationType.SWAGGER_12)
     operationImplicitParameterReader.supports(DocumentationType.SWAGGER_2)
     where:
-    handlerMethod                                                                   | expectedSize
-    dummyHandlerMethod('dummyMethod')                                               | 0
-    dummyHandlerMethod('methodWithApiImplicitParam')                                | 1
-    dummyHandlerMethod('methodWithApiImplicitParamAndInteger', Integer.class)       | 2
-    dummyHandlerMethod('methodWithApiImplicitParamAndExample', Integer.class)       | 2
-    dummyHandlerMethod('methodWithApiImplicitParamAndAllowMultiple', Integer.class) | 2
-    dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)                | 3
-    handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')         | 2
-    dummyHandlerMethodIn(apiImplicitParamsAllowMultipleClass(), 'methodWithApiImplicitParam')   | 3
+    handlerMethod                                                                             | expectedSize
+    dummyHandlerMethod('dummyMethod')                                                         | 0
+    dummyHandlerMethod('methodWithApiImplicitParam')                                          | 1
+    dummyHandlerMethod('methodWithApiImplicitParamAndInteger', Integer.class)                 | 2
+    dummyHandlerMethod('methodWithApiImplicitParamAndExample', Integer.class)                 | 2
+    dummyHandlerMethod('methodWithApiImplicitParamAndAllowMultiple', Integer.class)           | 2
+    dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)                          | 3
+    handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')                   | 2
+    dummyHandlerMethodIn(apiImplicitParamsAllowMultipleClass(), 'methodWithApiImplicitParam') | 3
   }
 }

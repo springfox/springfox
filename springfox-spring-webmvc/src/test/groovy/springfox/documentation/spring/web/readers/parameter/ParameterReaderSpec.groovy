@@ -78,8 +78,8 @@ class ParameterReaderSpec
     where:
     parameterPlugin                         | resultProperty | springParameterMethod | methodReturnValue | apiParamAnnotation | reqParamAnnot | expected
     new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | null          | null
-    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }])                                                                                                              | null          | null
-    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | reqParam([defaultValue: { -> 'defr' }])                                                                                                                              | 'defr'
+    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | apiParam([defaultValue: { -> 'defl' }])| null          | null
+    new ParameterDefaultReader(description) | 'defaultValue' | 'none'                | 'any'             | null               | reqParam([defaultValue: { -> 'defr' }]) | 'defr'
   }
 
   @Unroll

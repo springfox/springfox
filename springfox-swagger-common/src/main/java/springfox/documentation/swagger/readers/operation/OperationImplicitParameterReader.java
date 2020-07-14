@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
@@ -33,6 +34,7 @@ import springfox.documentation.schema.CollectionType;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.CollectionFormat;
@@ -46,9 +48,12 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Optional.*;
 import static org.slf4j.LoggerFactory.*;
@@ -135,8 +140,8 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
     );
   }
 
-  private static Compatibility<springfox.documentation.schema.ModelRef, ModelSpecification>
-  maybeGetModelRef(ApiImplicitParam param) {
+  private static Compatibility<springfox.documentation.schema.ModelRef, ModelSpecification> maybeGetModelRef(
+      ApiImplicitParam param) {
     String dataType = ofNullable(param.dataType())
         .filter(((Predicate<String>) String::isEmpty).negate())
         .orElse("string");
@@ -156,45 +161,60 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         new springfox.documentation.schema.ModelRef(dataType, allowableValues), modelSpecification);
   }
 
-  private static ModelSpecification modelSpecification(
-      ApiImplicitParam param) {
-    Class<?> clazz;
+  static ModelSpecification modelSpecification(ApiImplicitParam param) {
+    ModelSpecification scalarModel = null;
+    ModelSpecification referenceModel = null;
     try {
-      param.dataTypeClass();
+      Class<?> clazz;
       if (param.dataTypeClass() != Void.class) {
         clazz = param.dataTypeClass();
       } else {
-        clazz = Class.forName(param.dataType());
+        clazz = ClassUtils.forName(param.dataType(), null);
       }
+      scalarModel = ScalarTypes.builtInScalarType(clazz)
+          .map(scalarModel(param))
+          .orElse(null);
+
+      ModelKey dataTypeKey = new ModelKeyBuilder()
+          .qualifiedModelName(q ->
+              q.namespace(safeGetPackageName(clazz))
+                  .name(clazz.getSimpleName()))
+          .build();
+      referenceModel = referenceModelSpecification(dataTypeKey, param.allowMultiple());
+
     } catch (ClassNotFoundException e) {
       LOGGER.warn(
           "Unable to interpret the implicit parameter configuration with dataType: {}, dataTypeClass: {}",
           param.dataType(),
           param.dataTypeClass());
-      return null;
     }
-    ModelSpecification modelSpecification = ScalarTypes.builtInScalarType(clazz)
-        .map(scalar -> {
-          if (param.allowMultiple()) {
-            return new ModelSpecificationBuilder()
-                .collectionModel(c ->
-                    c.model(m ->
-                        m.scalarModel(scalar))
-                        .collectionType(CollectionType.LIST))
-                .build();
-          }
-          return new ModelSpecificationBuilder()
-              .scalarModel(scalar)
-              .build();
-        })
+    ModelSpecification scalarFromType = ScalarType.from(param.type(), param.format())
+        .map(scalarModel(param))
         .orElse(null);
-    if (modelSpecification == null) {
-      ModelKey dataTypeKey = new ModelKeyBuilder()
-          .qualifiedModelName(q -> q.namespace(safeGetPackageName(clazz)).name(clazz.getSimpleName()))
+
+    return Stream.of(scalarModel, referenceModel, scalarFromType)
+        .filter(Objects::nonNull)
+        .findFirst()
+        .orElse(null);
+  }
+
+  private static Function<ScalarType, ModelSpecification> scalarModel(ApiImplicitParam param) {
+    return scalar -> {
+      if (scalar == null) {
+        return null;
+      }
+      if (param.allowMultiple()) {
+        return new ModelSpecificationBuilder()
+            .collectionModel(c ->
+                c.model(m ->
+                    m.scalarModel(scalar))
+                    .collectionType(CollectionType.LIST))
+            .build();
+      }
+      return new ModelSpecificationBuilder()
+          .scalarModel(scalar)
           .build();
-      modelSpecification = referenceModelSpecification(dataTypeKey, param.allowMultiple());
-    }
-    return modelSpecification;
+    };
   }
 
   private static ModelSpecification referenceModelSpecification(
@@ -215,8 +235,8 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .build();
   }
 
-  private List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>>
-  readParameters(OperationContext context) {
+  private List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> readParameters(
+      OperationContext context) {
     Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
     List<Compatibility<springfox.documentation.service.Parameter, RequestParameter>> parameters = new ArrayList<>();
     annotation.ifPresent(
