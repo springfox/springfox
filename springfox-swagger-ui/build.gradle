@@ -17,7 +17,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
  */
 plugins {
   id "de.undercouch.download" version "4.1.0"
-  id "com.github.node-gradle.node" version "2.2.3"
+  id "com.github.node-gradle.node" version "2.2.4"
 }
 
 ext {
