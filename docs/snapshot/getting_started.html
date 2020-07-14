@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#springfox-spring-data-rest">Springfox Spring Data Rest</a></li>
 <li><a href="#springfox-support-for-jsr-303">Springfox Support for JSR-303</a></li>
 <li><a href="#springfox-swagger-ui">Springfox Swagger UI</a></li>
-<li><a href="#springfox-rfc6570-support-incubating">Springfox RFC6570 support <strong>incubating</strong></a></li>
+<li><a href="#springfox-rfc6570-support">Springfox RFC6570 support</a></li>
 <li><a href="#springfox-spring-integration-support-incubating">Springfox Spring-Integration Support <strong>incubating</strong></a></li>
 <li><a href="#securing-swagger-ui">Securing swagger-ui</a></li>
 <li><a href="#springfox-samples">Springfox samples</a></li>
@@ -614,13 +614,13 @@ dependencies {
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Remove library inclusions of earlier</p>
+<p>Remove library inclusions of earlier releases. Specifically remove <code>springfox-swagger2</code> and <code>springfox-swagger-ui</code> inclusions.</p>
 </li>
 <li>
 <p>Remove the <code>@EnableSwagger2</code> annotations</p>
 </li>
 <li>
-<p>Added the <code>springfox-boot-starter</code></p>
+<p>Add the <code>springfox-boot-starter</code></p>
 </li>
 <li>
 <p>Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
@@ -635,13 +635,13 @@ transition to java 8 function interfaces</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Remove library inclusions of earlier</p>
+<p>Remove library inclusions of earlier releases. Specifically remove <code>springfox-swagger2</code> and <code>springfox-swagger-ui</code> inclusions.</p>
 </li>
 <li>
-<p>Add <code>EnableOpenApi</code> for open API (and <code>@EnableSwagger2</code> for swagger 2.0)</p>
+<p>For OpenAPI add the <code>@EnableOpenApi</code> annotation (and <code>@EnableSwagger2</code> for swagger 2.0)</p>
 </li>
 <li>
-<p>Added the <code>springfox-oas</code> library</p>
+<p>For OpenAPI add the <code>springfox-oas</code> library dependency (for swagger 2.0 use <code>springfox-swagger2</code>)</p>
 </li>
 <li>
 <p>Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
@@ -650,6 +650,9 @@ transition to java 8 function interfaces</p>
 </li>
 </ol>
 </div>
+</div>
+<div class="sect4">
+<h5 id="changes-in-swagger-ui"><a class="anchor" href="#changes-in-swagger-ui"></a>Changes in swagger-ui</h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -657,10 +660,122 @@ transition to java 8 function interfaces</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Would love feedback to make this experience better
+For non-boot applications <code>springfox-swagger-ui</code> is no longer automatically enabled by adding the dependency. It needs to be explicitly register
+using a resource handler configurer (<code>WebFluxConfigurer</code> or <code>WebMvcConfigurer</code>). Here is how it is configured in
+<code>springfox-boot-starter</code>
 </td>
 </tr>
 </table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+swagger-ui location has moved from <code><a href="http://host/context-path/swagger-ui.html" class="bare">http://host/context-path/swagger-ui.html</a></code>  to <code><a href="http://host/context-path/swagger-ui/index.html" class="bare">http://host/context-path/swagger-ui/index.html</a></code>
+OR <code><a href="http://host/context-path/swagger-ui/" class="bare">http://host/context-path/swagger-ui/</a></code> for short. This makes it work much better with pulling it as a web jar and turning it off
+using configuration properties if not needed.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For WebMvc <a href="https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.java">SwagggerUIWebMvcConfigurer.java</a></p>
+</div>
+<div id="jackson-convention-example-1" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td>
+  <td class="code"><pre><span class="directive">public</span> <span class="type">class</span> <span class="class">SwaggerUiWebMvcConfigurer</span> <span class="directive">implements</span> WebMvcConfigurer {
+  <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> baseUrl;
+
+  <span class="directive">public</span> SwaggerUiWebMvcConfigurer(<span class="predefined-type">String</span> baseUrl) {
+    <span class="local-variable">this</span>.baseUrl = baseUrl;
+  }
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> addResourceHandlers(ResourceHandlerRegistry registry) {
+    <span class="predefined-type">String</span> baseUrl = StringUtils.trimTrailingCharacter(<span class="local-variable">this</span>.baseUrl, <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>);
+    registry.
+        addResourceHandler(baseUrl + <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-ui/**</span><span class="delimiter">&quot;</span></span>)
+        .addResourceLocations(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/META-INF/resources/webjars/springfox-swagger-ui/</span><span class="delimiter">&quot;</span></span>)
+        .resourceChain(<span class="predefined-constant">false</span>);
+  }
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> addViewControllers(ViewControllerRegistry registry) {
+    registry.addViewController(baseUrl + <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-ui/</span><span class="delimiter">&quot;</span></span>)
+        .setViewName(<span class="string"><span class="delimiter">&quot;</span><span class="content">forward:</span><span class="delimiter">&quot;</span></span> + baseUrl + <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-ui/index.html</span><span class="delimiter">&quot;</span></span>);
+  }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For WebFlux <a href="https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.java">SwagggerUIWebMvcConfigurer.java</a></p>
+</div>
+<div id="jackson-convention-example-1" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td>
+  <td class="code"><pre><span class="directive">public</span> <span class="type">class</span> <span class="class">SwaggerUiWebFluxConfigurer</span> <span class="directive">implements</span> WebFluxConfigurer {
+  <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> baseUrl;
+
+  <span class="directive">public</span> SwaggerUiWebFluxConfigurer(<span class="predefined-type">String</span> baseUrl) {
+    <span class="local-variable">this</span>.baseUrl = baseUrl;
+  }
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> addResourceHandlers(ResourceHandlerRegistry registry) {
+    <span class="predefined-type">String</span> baseUrl = StringUtils.trimTrailingCharacter(<span class="local-variable">this</span>.baseUrl, <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>);
+    registry.
+        addResourceHandler(baseUrl + <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-ui/**</span><span class="delimiter">&quot;</span></span>)
+        .addResourceLocations(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:/META-INF/resources/webjars/springfox-swagger-ui/</span><span class="delimiter">&quot;</span></span>)
+        .resourceChain(<span class="predefined-constant">false</span>);
+  }
+}</pre></td>
+</tr></table></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1202,7 +1317,7 @@ This is still in <strong><strong>incubation</strong></strong>.
 </table>
 </div>
 <div class="paragraph">
-<p>In order to use it</p>
+<p>In order to use it (non-spring-boot)</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1254,6 +1369,19 @@ This is still in <strong><strong>incubation</strong></strong>.
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+for spring boot, this section is not needed. Springfox will autoconfigure itself based on the detection of spring
+data rest components.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -1402,7 +1530,7 @@ those are totally configurable.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="springfox-rfc6570-support-incubating"><a class="anchor" href="#springfox-rfc6570-support-incubating"></a>Springfox RFC6570 support <strong>incubating</strong></h3>
+<h3 id="springfox-rfc6570-support"><a class="anchor" href="#springfox-rfc6570-support"></a>Springfox RFC6570 support</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1410,50 +1538,7 @@ those are totally configurable.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<em>Keep in mind this is experimental</em>!
-In order to use this feature
-</td>
-</tr>
-</table>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Add <code>springfox-swagger-ui-rfc6570</code> instead of <code>springfox-swagger-ui</code> as a dependency
-<a href="http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/1.0.0">experimental swagger-ui</a>.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>For gradle:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox.ui:springfox-swagger-ui-rfc6570:1.0.0</span><span class="delimiter">'</span></span>
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For maven:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox.ui<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger-ui-rfc6570<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-The newer version has changed the group id from <code><em>io.springfox</em></code> to <code><em>io.springfox.ui</em></code>!
+Support has been dropped experimental feature as swagger-ui and the spec itself has better support for this.
 </td>
 </tr>
 </table>
@@ -1461,7 +1546,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 <div class="ulist">
 <ul>
 <li>
-<p>Enable url templating; (<a href="http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot">see #21</a>)</p>
+<p>Turn enableUrlTemplating <code>OFF</code>; (<a href="http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot">see #21</a>)</p>
 </li>
 </ul>
 </div>
@@ -1618,7 +1703,7 @@ cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2020-07-13 22:57:08 UTC
+Last updated 2020-07-14 02:56:10 UTC
 </div>
 </div>
 <style>
