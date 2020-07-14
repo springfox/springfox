@@ -547,11 +547,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 [[q27]]
 *27. Controller receives parameter as a String but we are expecting a json Type. How can we model this?
 
-https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java#L243-267[FeatureDemonstrationService.class]
+https://github.com/springfox/springfox/blob/7bd56cac0479384265b90dac62492ab6ce510191/swagger-contract-tests/src/main/java/springfox/test/contract/swagger/FeatureDemonstrationService.java#L307-L339[FeatureDemonstrationService.class]
 [[q27-controller]]
 [source,java,linenums]
 ----
-include::../../springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java[tags=question-27,indent=0]
+include::../../swagger-contract-tests/src/main/java/springfox/test/contract/swagger/FeatureDemonstrationService.java[tags=question-27,indent=0]
 ----
 <1> Assume we have a controller action that has a `String` parameter (contents). This is how we can override the
 on-the-wire type (CustomTypeFor2031).
