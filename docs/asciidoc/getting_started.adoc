@@ -115,22 +115,43 @@ dependencies {
 
 ==== Migrating from existing 2.x version
 ===== Spring Boot Applications
-1. Remove library inclusions of earlier
+1. Remove library inclusions of earlier releases. Specifically remove `springfox-swagger2` and `springfox-swagger-ui` inclusions.
 2. Remove the `@EnableSwagger2` annotations
-3. Added the `springfox-boot-starter`
+3. Add the `springfox-boot-starter`
 4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
 and open api libraries for annotations and models) so if you used guava predicates/functions those will need to
 transition to java 8 function interfaces
 
 ===== Regular spring mvc
-1. Remove library inclusions of earlier
-2. Add `EnableOpenApi` for open API (and `@EnableSwagger2` for swagger 2.0)
-3. Added the `springfox-oas` library
+1. Remove library inclusions of earlier releases. Specifically remove `springfox-swagger2` and `springfox-swagger-ui` inclusions.
+2. For OpenAPI add the `@EnableOpenApi` annotation (and `@EnableSwagger2` for swagger 2.0)
+3. For OpenAPI add the `springfox-oas` library dependency (for swagger 2.0 use `springfox-swagger2`)
 4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
 and open api libraries for annotations and models) so if you used guava predicates/functions those will need to
 transition to java 8 function interfaces
 
-NOTE: Would love feedback to make this experience better
+===== Changes in swagger-ui
+NOTE: For non-boot applications `springfox-swagger-ui` is no longer automatically enabled by adding the dependency. It needs to be explicitly register
+using a resource handler configurer (`WebFluxConfigurer` or `WebMvcConfigurer`). Here is how it is configured in
+`springfox-boot-starter`
+
+NOTE: swagger-ui location has moved from `http://host/context-path/swagger-ui.html`  to `http://host/context-path/swagger-ui/index.html`
+OR `http://host/context-path/swagger-ui/` for short. This makes it work much better with pulling it as a web jar and turning it off
+using configuration properties if not needed.
+
+For WebMvc https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.java[SwagggerUIWebMvcConfigurer.java]
+[[jackson-convention-example-1]]
+[source,java,linenums]
+----
+include::../../springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.java[tags=swagger-ui-configurer,indent=0]
+----
+
+For WebFlux https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.java[SwagggerUIWebMvcConfigurer.java]
+[[jackson-convention-example-1]]
+[source,java,linenums]
+----
+include::../../springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.java[tags=swagger-ui-configurer,indent=0]
+----
 
 == Quick start guides
 === Springfox Spring MVC and Spring Boot
@@ -211,7 +232,7 @@ In version greater than 2.6.0, support for spring data rest was added.
 
 NOTE: This is still in ***incubation***.
 
-In order to use it
+In order to use it (non-spring-boot)
 
 1. add the `springfox-data-rest` dependency (via Gradle or Maven).
 2. Import the configuration from the `springfox-data-rest` module (via Java or xml config) as shown below
@@ -236,8 +257,6 @@ dependencies {
 </dependency>
 ----
 
-
-
 ==== java config
 [source,java]
 [subs="verbatim,attributes"]
@@ -254,6 +273,9 @@ Import the bean in your xml configuration by defining a bean of the following ty
 ----
 <bean class="springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class" />
 ----
+
+NOTE: for spring boot, this section is not needed. Springfox will autoconfigure itself based on the detection of spring
+data rest components.
 
 === Springfox Support for JSR-303
 In version greater than 2.3.2, support for bean validation annotations was added, specifically for @NotNull, @Min,
@@ -347,35 +369,10 @@ Regarding http://springfox.github.io/springfox/docs/current/#q13[where swagger-u
 and http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints[where the api docs are served]
 those are totally configurable.
 
-=== Springfox RFC6570 support *incubating*
-NOTE: _Keep in mind this is experimental_!
-In order to use this feature
+=== Springfox RFC6570 support
+NOTE: Support has been dropped experimental feature as swagger-ui and the spec itself has better support for this.
 
-1. Add `springfox-swagger-ui-rfc6570` instead of `springfox-swagger-ui` as a dependency
-http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/{springfoxRfc6570Version}[experimental swagger-ui].
-
-For gradle:
-[source,groovy]
-[subs="verbatim,attributes"]
-----
-dependencies {
-    compile 'io.springfox.ui:springfox-swagger-ui-rfc6570:{springfoxRfc6570Version}'
-}
-----
-
-For maven:
-[source,xml]
-[subs="verbatim,attributes"]
-----
-<dependency>
-    <groupId>io.springfox.ui</groupId>
-    <artifactId>springfox-swagger-ui-rfc6570</artifactId>
-    <version>{springfoxRfc6570Version}</version>
-</dependency>
-----
-NOTE: The newer version has changed the group id from `_io.springfox_` to `_io.springfox.ui_`!
-
-- Enable url templating; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
+- Turn enableUrlTemplating `OFF`; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
 
 === Springfox Spring-Integration Support *incubating*
 NOTE: _Keep in mind this is experimental_!
@@ -458,7 +455,6 @@ cookies-based auth in the browser. (Credit: https://github.com/evser[@evser])
     return oAuth2ClientAuthenticationFilter;
   }
 ----
-
 
 And configure the Docket to be secured via the `AUTHORIZATION` header:
 [source,java]
