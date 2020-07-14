@@ -23,7 +23,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-webflux"
   implementation "org.springframework.boot:spring-boot-starter-data-rest"
   implementation "org.codehaus.groovy:groovy-all:$groovy"
-  implementation 'org.slf4j:slf4j-simple:1.6.1'
+  implementation 'org.slf4j:slf4j-simple:1.7.30'
   implementation "javax.validation:validation-api:$validationApiVersion"
 
 
