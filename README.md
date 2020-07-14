@@ -40,7 +40,7 @@ For Maven
 <dependency>
     <groupId>io.springfox</groupId>
     <artifactId>springfox-boot-starter</artifactId>
-    <version><version></version>
+    <version>3.0.0</version>
 </dependency>
 
 ```
