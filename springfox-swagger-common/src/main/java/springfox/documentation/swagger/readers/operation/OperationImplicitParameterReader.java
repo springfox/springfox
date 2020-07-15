@@ -128,6 +128,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .query(q -> q.model(m -> modelRef.getModern().ifPresent(m::copyOf))
                 .defaultValue(param.defaultValue())
                 .enumerationFacet(e -> e.allowedValues(allowableValueFromString(param.allowableValues())))
+                .numericFacet(n -> n.from(allowableValueFromString(param.allowableValues())))
                 .collectionFacet(c -> c.collectionFormat(
                     CollectionFormat.convert(param.collectionFormat())
                         .orElse(null))))
