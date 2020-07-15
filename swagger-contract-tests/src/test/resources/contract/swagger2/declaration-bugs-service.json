@@ -2136,6 +2136,33 @@
                 }
             }
         },
+        "/bugs/bug3407{?collection}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug3407",
+                "operationId": "bug3407UsingGET",
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "in": "query",
+                        "description": "collection",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/{bar}/2148{?year}": {
             "get": {
                 "tags": [
