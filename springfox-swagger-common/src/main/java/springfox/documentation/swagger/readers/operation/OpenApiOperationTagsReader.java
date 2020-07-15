@@ -28,7 +28,12 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -42,10 +47,10 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder()
-           .tags(Stream.concat(
-               operationTags(context).stream(),
-               controllerTags(context).stream())
-                       .collect(toSet()));
+        .tags(Stream.concat(
+            operationTags(context).stream(),
+            controllerTags(context).stream())
+            .collect(toSet()));
   }
 
   private Set<String> controllerTags(OperationContext context) {
@@ -61,12 +66,12 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
     List<Tags> tags =
         context.findAllAnnotations(Tags.class);
     tags.forEach(ts ->
-                       Arrays.stream(ts.value())
-                             .forEach(t -> controllerTags
-                                 .add(new springfox.documentation.service.Tag(t.name(), t.description()))));
+        Arrays.stream(ts.value())
+            .forEach(t -> controllerTags.add(
+                new springfox.documentation.service.Tag(t.name(), t.description()))));
     List<Tag> tag = context.findAllAnnotations(Tag.class);
-    tag.forEach(t ->
-                      controllerTags.add(new springfox.documentation.service.Tag(t.name(), t.description())));
+    tag.forEach(t -> controllerTags.add(
+        new springfox.documentation.service.Tag(t.name(), t.description())));
     return controllerTags;
   }
 
@@ -77,8 +82,8 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
 
   private Function<Operation, Set<String>> tagsFromOasOperation() {
     return input -> Stream.of(input.tags())
-                          .filter(emptyTags())
-                          .collect(toCollection(TreeSet::new));
+        .filter(emptyTags())
+        .collect(toCollection(TreeSet::new));
   }
 
   @Override
