@@ -30,6 +30,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -46,10 +47,10 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder()
-           .tags(Stream.concat(
-               operationTags(context).stream(),
-               controllerTags(context).stream())
-                       .collect(toSet()));
+        .tags(Stream.concat(
+            operationTags(context).stream(),
+            controllerTags(context).stream())
+            .collect(toSet()));
   }
 
   private Set<String> controllerTags(OperationContext context) {
@@ -62,15 +63,15 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
   private Set<springfox.documentation.service.Tag> tagsFromOasAnnotations(OperationContext context) {
     HashSet<springfox.documentation.service.Tag> controllerTags
         = new HashSet<>();
-    Optional<Tags> tags =
-        context.findAnnotation(Tags.class);
-    tags.ifPresent(ts ->
-                       Arrays.stream(ts.value())
-                             .forEach(t -> controllerTags
-                                 .add(new springfox.documentation.service.Tag(t.name(), t.description()))));
-    Optional<Tag> tag = context.findAnnotation(Tag.class);
-    tag.ifPresent(t ->
-                      controllerTags.add(new springfox.documentation.service.Tag(t.name(), t.description())));
+    List<Tags> tags =
+        context.findAllAnnotations(Tags.class);
+    tags.forEach(ts ->
+        Arrays.stream(ts.value())
+            .forEach(t -> controllerTags.add(
+                new springfox.documentation.service.Tag(t.name(), t.description()))));
+    List<Tag> tag = context.findAllAnnotations(Tag.class);
+    tag.forEach(t -> controllerTags.add(
+        new springfox.documentation.service.Tag(t.name(), t.description())));
     return controllerTags;
   }
 
@@ -81,8 +82,8 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
 
   private Function<Operation, Set<String>> tagsFromOasOperation() {
     return input -> Stream.of(input.tags())
-                          .filter(emptyTags())
-                          .collect(toCollection(TreeSet::new));
+        .filter(emptyTags())
+        .collect(toCollection(TreeSet::new));
   }
 
   @Override
