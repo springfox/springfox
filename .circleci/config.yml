@@ -31,7 +31,7 @@ jobs:
           name: Run Tests, run static analysis and code coverage
           command: |
             java -XX:+PrintFlagsFinal -Xmx1g -version | grep -Ei "maxheapsize|maxram"
-            ./gradlew clean check codeCoverageReport sonarqube --no-daemon
+            ./gradlew clean check codeCoverageReport --no-daemon
           no_output_timeout: 900s
           environment:
             _JAVA_OPTIONS: -Xmx3G -XX:ReservedCodeCacheSize=1g
