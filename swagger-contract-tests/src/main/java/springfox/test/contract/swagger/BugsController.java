@@ -605,6 +605,11 @@ public class BugsController {
   public void bug3087(@RequestBody Bug3087 test) {
   }
 
+  @GetMapping("/bug3390")
+  @ApiImplicitParam(name = "range", allowableValues = "range[1,99]", dataTypeClass = Integer.class, paramType = "query")
+  public void bug3390() {
+  }
+
   public enum NumberEnum {
     ONE,
     TWO,

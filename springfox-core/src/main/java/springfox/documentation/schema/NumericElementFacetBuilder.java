@@ -4,6 +4,7 @@ import springfox.documentation.builders.ElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 
 import java.math.BigDecimal;
+import springfox.documentation.service.AllowableValues;
 
 public class NumericElementFacetBuilder implements ElementFacetBuilder {
   private BigDecimal multipleOf;
@@ -66,10 +67,11 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
                .multipleOf(other.getMultipleOf());
   }
 
-  public NumericElementFacetBuilder from(AllowableRangeValues range) {
-    if (range == null) {
+  public NumericElementFacetBuilder from(AllowableValues allowableValues) {
+    if (!(allowableValues instanceof AllowableRangeValues)) {
       return this;
     }
+    AllowableRangeValues range = (AllowableRangeValues) allowableValues;
     return this.exclusiveMaximum(range.getExclusiveMax())
                .exclusiveMinimum(range.getExclusiveMin())
                .maximum(range.getMax() != null ? new BigDecimal(range.getMax()) : null)
