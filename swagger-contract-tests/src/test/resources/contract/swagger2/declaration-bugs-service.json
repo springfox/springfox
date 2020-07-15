@@ -1113,13 +1113,13 @@
                         "type": "string"
                     },
                     {
-                        "name": "nestedType.name",
+                        "name": "foo",
                         "in": "formData",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "name": "foo",
+                        "name": "nestedType.name",
                         "in": "formData",
                         "required": false,
                         "type": "string"
@@ -2105,6 +2105,33 @@
                         "schema": {
                             "$ref": "#/definitions/WithdrawQueryRequestViewResponseView"
                         }
+                    }
+                }
+            }
+        },
+        "/bugs/bug3390{?range}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug3390",
+                "operationId": "bug3390UsingGET",
+                "parameters": [
+                    {
+                        "name": "range",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "maximum": 99,
+                        "exclusiveMaximum": false,
+                        "minimum": 1,
+                        "exclusiveMinimum": false,
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
