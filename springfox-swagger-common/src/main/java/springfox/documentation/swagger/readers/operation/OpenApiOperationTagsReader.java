@@ -28,11 +28,7 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -62,14 +58,14 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
   private Set<springfox.documentation.service.Tag> tagsFromOasAnnotations(OperationContext context) {
     HashSet<springfox.documentation.service.Tag> controllerTags
         = new HashSet<>();
-    Optional<Tags> tags =
-        context.findAnnotation(Tags.class);
-    tags.ifPresent(ts ->
+    List<Tags> tags =
+        context.findAllAnnotations(Tags.class);
+    tags.forEach(ts ->
                        Arrays.stream(ts.value())
                              .forEach(t -> controllerTags
                                  .add(new springfox.documentation.service.Tag(t.name(), t.description()))));
-    Optional<Tag> tag = context.findAnnotation(Tag.class);
-    tag.ifPresent(t ->
+    List<Tag> tag = context.findAllAnnotations(Tag.class);
+    tag.forEach(t ->
                       controllerTags.add(new springfox.documentation.service.Tag(t.name(), t.description())));
     return controllerTags;
   }
