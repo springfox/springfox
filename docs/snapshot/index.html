@@ -4881,7 +4881,7 @@ and if it is present in both request and response it will have a, b and c.</p>
 <p>*27. Controller receives parameter as a String but we are expecting a json Type. How can we model this?</p>
 </div>
 <div class="paragraph">
-<p><a href="https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java#L243-267">FeatureDemonstrationService.class</a></p>
+<p><a href="https://github.com/springfox/springfox/blob/7bd56cac0479384265b90dac62492ab6ce510191/swagger-contract-tests/src/main/java/springfox/test/contract/swagger/FeatureDemonstrationService.java#L307-L339">FeatureDemonstrationService.class</a></p>
 </div>
 <div id="q27-controller" class="listingblock">
 <div class="content">
@@ -4915,6 +4915,8 @@ and if it is present in both request and response it will have a, b and c.</p>
 27
 28
 29
+30
+31
 </pre></td>
   <td class="code"><pre><span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/2031</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.POST)
 <span class="annotation">@ResponseBody</span>
@@ -4922,15 +4924,17 @@ and if it is present in both request and response it will have a, b and c.</p>
 <span class="annotation">@ApiImplicitParams</span>({
     <span class="annotation">@ApiImplicitParam</span>(
         name = <span class="string"><span class="delimiter">&quot;</span><span class="content">contents</span><span class="delimiter">&quot;</span></span>,
-        dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">CustomTypeFor2031</span><span class="delimiter">&quot;</span></span>,
+        dataTypeClass = CustomTypeFor2031.class,
         examples = <span class="annotation">@io</span>.swagger.annotations.Example(
             value = {
                 <span class="annotation">@ExampleProperty</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">{'property': 'test'}</span><span class="delimiter">&quot;</span></span>, mediaType = <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
             })) <i class="conum" data-value="1"></i><b>(1)</b>
 })
-<span class="directive">public</span> <span class="type">void</span> save(<span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyId</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> keyId,
-                 <span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> id,
-                 <span class="annotation">@RequestBody</span> <span class="predefined-type">String</span> contents <i class="conum" data-value="2"></i><b>(2)</b>
+<span class="directive">public</span> <span class="type">void</span> save(
+    <span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyId</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> keyId,
+    <span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> id,
+    <span class="annotation">@RequestBody</span> <span class="predefined-type">String</span> contents
+    <i class="conum" data-value="2"></i><b>(2)</b>
 ) {
 }
 
@@ -5035,7 +5039,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.1-SNAPSHOT<br>
-Last updated 2020-07-14 17:11:47 UTC
+Last updated 2020-07-15 02:18:55 UTC
 </div>
 </div>
 <style>
