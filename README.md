@@ -55,6 +55,26 @@ NOTE: Would love feedback to make this better
 1. Remove explicit dependencies on `springfox-swagger2`
 2. Remove any `@EnableSwagger2...` annotations
 3. Add the `springfox-boot-starter` dependency
+I had to do this.  https://github.com/springfox/springfox/issues/2932
+```
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.plugin</groupId>
+                    <artifactId>spring-plugin-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.plugin</groupId>
+            <artifactId>spring-plugin-core</artifactId>
+            <version>2.0.0.RELEASE</version>
+        </dependency>
+```
+ *Still not working for me though* `This application has no explicit mapping for /error, so you are seeing this as a fallback.`
+
 4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
 and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
 transition to java 8 function interfaces.
