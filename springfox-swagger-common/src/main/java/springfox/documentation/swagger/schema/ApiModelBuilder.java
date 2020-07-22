@@ -71,10 +71,10 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
       for (Class<?> each : annotation.subTypes()) {
         modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)
                           .apply(typeResolver.resolve(each)));
-        subclassKeys.add(modelSpecifications.create(
+        modelSpecifications.create(
             context,
             typeResolver.resolve(each)).getReference()
-                                            .orElse(null));
+            .ifPresent(subclassKeys::add);
       }
       context.getBuilder()
              .description(annotation.description())
