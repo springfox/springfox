@@ -118,7 +118,7 @@ public class ModelAttributeParameterExpander {
     attributes.stream()
         .filter(simpleType().negate())
         .filter(recursiveType(context).negate())
-        .forEach((each) -> {
+        .forEach(each -> {
           LOG.debug("Attempting to expand expandable property: {}", each.getName());
           parameters.addAll(
               expand(
@@ -130,7 +130,7 @@ public class ModelAttributeParameterExpander {
 
     Stream<ModelAttributeField> collectionTypes = attributes.stream()
         .filter(isCollection().and(recursiveCollectionItemType(context.getParamType()).negate()));
-    collectionTypes.forEachOrdered((each) -> {
+    collectionTypes.forEachOrdered(each -> {
       LOG.debug("Attempting to expand collection/array field: {}", each.getName());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
@@ -165,6 +165,7 @@ public class ModelAttributeParameterExpander {
         .orElse(false);
   }
 
+  @SuppressWarnings({"rawtypes", "java:S3740"})
   private List<ModelAttributeField> allModelAttributes(
       Map<Method, PropertyDescriptor> propertyLookupByGetter,
       Iterable<ResolvedMethod> getters,
@@ -189,6 +190,7 @@ public class ModelAttributeParameterExpander {
         .collect(toList());
   }
 
+  @SuppressWarnings({"java:S2175", "java:S3740", "rawtypes", "SuspiciousMethodCalls"})
   private boolean ignored(
       AlternateTypeProvider alternateTypeProvider,
       ResolvedMethod method,
