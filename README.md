@@ -68,6 +68,7 @@ NOTE: Would love feedback to make this better
 4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
 and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
 transition to java 8 function interfaces 
+5. If you are using WebMvc but you don't use the [`@EnableWebMvc`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html) annotation yet, add this annotation.
 
 #### Regular spring mvc  
 NOTE: Would love feedback to make this experience better
