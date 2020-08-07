@@ -18,6 +18,7 @@ include 'springfox-swagger-ui'
 include 'springfox-petstore'
 include 'springfox-petstore-webflux'
 include 'springfox-boot-starter'
+include 'springfox-kotlin'
 
 // Auxiliary projects that are not published
 include 'springfox-spring-config'

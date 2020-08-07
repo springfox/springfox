@@ -29,6 +29,10 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.Optional;
 
+import static org.springframework.core.KotlinDetector.isKotlinPresent;
+import static springfox.documentation.spring.kotlin.OperationContextHelper.isControllerDeprecated;
+import static springfox.documentation.spring.kotlin.OperationContextHelper.isMethodDeprecated;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationDeprecatedReader implements OperationBuilderPlugin {
@@ -37,9 +41,10 @@ public class OperationDeprecatedReader implements OperationBuilderPlugin {
     Optional<Deprecated> annotationOnMethod = context.findAnnotation(Deprecated.class);
     Optional<Deprecated> annotationOnController = context.findControllerAnnotation(Deprecated.class);
 
-    boolean deprecated = annotationOnMethod.isPresent() ||
-                                           annotationOnController.isPresent();
-    context.operationBuilder().deprecated(deprecated ? "true" : null);
+    boolean deprecated = annotationOnMethod.isPresent() || annotationOnController.isPresent();
+    boolean kotlinDeprecated = isKotlinPresent() && (isMethodDeprecated(context) || isControllerDeprecated(context));
+
+    context.operationBuilder().deprecated(deprecated || kotlinDeprecated ? "true" : null);
   }
 
   @Override
