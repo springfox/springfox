@@ -128,13 +128,13 @@ public class Example {
       return false;
     }
     Example example = (Example) o;
-    return id.equals(example.id) &&
+    return Objects.equals(id, example.id) &&
         Objects.equals(summary, example.summary) &&
         Objects.equals(description, example.description) &&
-        value.equals(example.value) &&
-        externalValue.equals(example.externalValue) &&
-        mediaType.equals(example.mediaType) &&
-        extensions.equals(example.extensions);
+        Objects.equals(value, example.value) &&
+        Objects.equals(externalValue, example.externalValue) &&
+        Objects.equals(mediaType, example.mediaType) &&
+        Objects.equals(extensions, example.extensions);
   }
 
   @Override
