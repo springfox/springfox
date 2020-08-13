@@ -2,7 +2,7 @@ plugins {
   id 'com.github.ben-manes.versions' version '0.29.0'
   id 'se.patrikerdes.use-latest-versions' version '0.2.14'
   id "com.jfrog.bintray" version "1.8.5"
-  id "com.jfrog.artifactory" version "4.16.1"
+  id "com.jfrog.artifactory" version "4.17.0"
   id "com.github.kt3k.coveralls" version "2.10.1"
   id "org.asciidoctor.jvm.convert" version "2.4.0"
   id "org.ajoberstar.grgit" version "4.0.2"
