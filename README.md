@@ -50,6 +50,9 @@ For Gradle
   implementation "io.springfox:springfox-boot-starter:<version>"
 ```
 #### Migrating from earlier snapshot 
+
+Swagger UI URL is changed to `/swagger-ui/index.html` instead of `/swagger-ui.html`
+
 #### Spring Boot Applications
 NOTE: Would love feedback to make this better
 1. Remove explicit dependencies on `springfox-swagger2`
