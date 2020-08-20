@@ -141,6 +141,9 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
       ParameterExpansionContext context,
       String parameterName) {
     if (!isEmpty(parameterName)) {
+      if ("query".equals(context.getParameterType()) && !isEmpty(context.getParentName())){
+        parameterName = String.format("%s.%s", context.getParentName(), parameterName);
+      }
       context.getParameterBuilder().name(parameterName);
       context.getRequestParameterBuilder().name(parameterName);
     }
