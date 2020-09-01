@@ -136,7 +136,7 @@ NOTE: For non-boot applications `springfox-swagger-ui` is no longer automaticall
 using a resource handler configurer (`WebFluxConfigurer` or `WebMvcConfigurer`). Here is how it is configured in
 `springfox-boot-starter`
 
-NOTE: swagger-ui location has moved from `http://host/context-path/`  to `http://host/context-path/swagger-ui/index.html`
+NOTE: swagger-ui location has moved from `http://host/context-path/swagger-ui.html`  to `http://host/context-path/swagger-ui/index.html`
 OR `http://host/context-path/swagger-ui/` for short. This makes it work much better with pulling it as a web jar and turning it off
 using configuration properties if not needed.
 
