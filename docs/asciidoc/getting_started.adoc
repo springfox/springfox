@@ -147,7 +147,7 @@ For WebMvc https://github.com/springfox/springfox/blob/master/springfox-boot-sta
 include::../../springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.java[tags=swagger-ui-configurer,indent=0]
 ----
 
-For WebFlux https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.java[SwagggerUIWebMvcConfigurer.java]
+For WebFlux https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.java[SwaggerUiWebFluxConfigurer.java]
 [[jackson-convention-example-1]]
 [source,java,linenums]
 ----
