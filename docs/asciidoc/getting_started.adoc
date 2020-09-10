@@ -190,7 +190,7 @@ via swagger.
 <7> The selector needs to be built after configuring the api and path selectors.
 <8> Adds a servlet path mapping, when the servlet has a path mapping.
 This prefixes paths with the provided path mapping.
-<9> Convenience rule builder that substitutes `LocalDate` with `String` when rendering model properties
+<9> Convenience rule builder that substitutes `LocalDate` with `java.sql.Date` when rendering model properties, see <<common-problems.adoc,Common Problems>> and the question "How do we use Java 8 date/time types easily?"
 <10> Convenience rule builder that substitutes a generic type with one type parameter with the type
 parameter. In this example `ResponseEntity<T>` with `T`.
 `alternateTypeRules` allows custom rules that are a bit more involved.

@@ -318,8 +318,10 @@ public class Docket implements DocumentationPlugin {
   /**
    * Directly substitutes a model class with the supplied substitute
    * e.g
-   * <code>directModelSubstitute(LocalDate.class, Date.class)</code>
-   * would substitute LocalDate with Date
+   * <code>directModelSubstitute(java.util.LocalDate.class, java.sql.Date.class)</code>
+   * would substitute LocalDate with java.sql.Date
+   *
+   * NOTE: @see <a href="http://springfox.github.io/springfox/docs/current/#answers-to-common-questions-and-problems</a>
    *
    * @param clazz class to substitute
    * @param with  the class which substitutes 'clazz'
