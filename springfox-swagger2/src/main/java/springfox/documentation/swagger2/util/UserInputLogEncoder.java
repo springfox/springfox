@@ -28,10 +28,12 @@ public class UserInputLogEncoder {
     }
 
     public static String urlEncode(String userInput) {
+        String sanitizedUserInput = userInput;
         try {
-            return URLEncoder.encode(userInput, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException cannotHappen) {
-            return "";
+            sanitizedUserInput = URLEncoder.encode(userInput, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ignored) {
+            // cannot happen, UTF_8 is supported
         }
+        return sanitizedUserInput;
     }
 }

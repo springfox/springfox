@@ -75,6 +75,26 @@ class WebFluxFunctionContractSpec extends Specification implements FileAccess {
 
   }
 
+  @Unroll
+  def 'should ignore invalid #groupName'() {
+    given:
+    RequestEntity<Void> request = RequestEntity.get(
+        new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
+
+    when:
+    def response = http.exchange(request, String)
+    then:
+    response.body == null
+    response.statusCode == HttpStatus.NOT_FOUND
+
+    where:
+    groupName                                              | _
+    'V2%0Ainjected-line'                                   | _
+    'V2%3Cscript%3Ealert%28%27hi%27%29%3C%2Fscript%3E'     | _
+  }
+
   def "should list swagger resources for swagger 2.0"() {
     given:
     def http = new TestRestTemplate()
