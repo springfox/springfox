@@ -47,6 +47,7 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import static java.util.Optional.*;
@@ -93,7 +94,7 @@ public class Swagger2ControllerWebMvc {
     String groupName = ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      LOGGER.warn("Unable to find specification for group {}", groupName);
+      LOGGER.warn("Unable to find specification for group {}", URLEncoder.encode(groupName));
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
