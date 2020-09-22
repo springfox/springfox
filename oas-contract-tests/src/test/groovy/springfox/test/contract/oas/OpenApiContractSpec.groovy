@@ -20,8 +20,8 @@
 package springfox.test.contract.oas
 
 import com.fasterxml.classmate.TypeResolver
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
@@ -39,7 +39,6 @@ import springfox.documentation.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
 import static java.nio.charset.StandardCharsets.*
-import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = OpenApiApplication)
@@ -84,11 +83,12 @@ class OpenApiContractSpec extends Specification implements FileAccess {
             replace(
                 "localhost:$port",
                 "localhost:__PORT__"))
-    JSONAssert.
-        assertEquals(
-            withPortReplaced,
-            raw,
-            NON_EXTENSIBLE)
+
+    // Compare as text with the same formatting to check property order
+    // (JSON object is an unordered set of name/value pairs by spec)
+    def prettyWithPortReplaced = JsonOutput.prettyPrint(withPortReplaced)
+    def prettyRaw = JsonOutput.prettyPrint(raw)
+    prettyWithPortReplaced == prettyRaw
 
     where:
     contractFile    | groupName

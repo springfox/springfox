@@ -25,6 +25,7 @@ import springfox.documentation.service.ModelNamesRegistry;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -105,13 +106,11 @@ public abstract class SchemaMapper {
 
     source.getCompound()
         .ifPresent(c -> {
-          Map<String, Schema> modelProperties = new TreeMap<>(Comparator.naturalOrder());
           Map<String, PropertySpecification> properties = c.getProperties().stream()
               .collect(toMap(
                   PropertySpecification::getName,
                   Function.identity()));
-          modelProperties.putAll(mapProperties(properties, namesRegistry));
-          model.setProperties(modelProperties);
+          model.setProperties(mapProperties(properties, namesRegistry));
           List<String> requiredFields = properties.values().stream()
               .filter(PropertySpecification::nullSafeIsRequired)
               .map(PropertySpecification::getName)
@@ -234,9 +233,7 @@ public abstract class SchemaMapper {
                 PropertySpecification::getName,
                 Function.identity())))
         .orElse(new HashMap<>());
-    Map<String, Schema> modelProperties = new TreeMap<>(Comparator.naturalOrder());
-    modelProperties.putAll(mapProperties(properties, namesRegistry));
-    model.setProperties(modelProperties);
+    model.setProperties(mapProperties(properties, namesRegistry));
     return model;
   }
 
@@ -251,7 +248,7 @@ public abstract class SchemaMapper {
             Map.Entry::getKey,
             e -> fromProperty(e.getValue(), modelNamesRegistry),
             (p1, p2) -> p1,
-            TreeMap::new));
+            LinkedHashMap::new));
   }
 
   @SuppressWarnings("unchecked")

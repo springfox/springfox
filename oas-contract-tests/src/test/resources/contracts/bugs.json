@@ -638,6 +638,29 @@
                     }
                 }
             }
+        },
+        "/bugs/bug3391": {
+            "post": {
+                "tags": [
+                    "bugs-controller"
+                ],
+                "summary": "bug3391",
+                "operationId": "bug3391UsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Bug3391"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -673,6 +696,22 @@
                 "type": "object",
                 "properties": {
                     "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Bug3391": {
+                "title": "Bug3391",
+                "required": [
+                    "bar",
+                    "foo"
+                ],
+                "type": "object",
+                "properties": {
+                    "foo": {
+                        "type": "string"
+                    },
+                    "bar": {
                         "type": "string"
                     }
                 }

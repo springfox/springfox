@@ -196,4 +196,8 @@ public class BugsController {
   public void bug3087(@RequestBody Bug3087 test) {
   }
 
+  @PostMapping("/bug3391")
+  public void bug3391(@RequestBody Bug3391 test) {
+  }
+
 } 

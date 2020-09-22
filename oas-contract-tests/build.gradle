@@ -28,7 +28,6 @@ dependencies {
 
 
   testImplementation libs.test
-  testImplementation "org.skyscreamer:jsonassert:$jsonAssert"
   testImplementation "org.springframework.boot:spring-boot-starter-test"
 
   implementation project(':springfox-boot-starter')
