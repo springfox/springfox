@@ -27,7 +27,7 @@ public class SpecGeneration {
     String serverUrl = requestUrl.replace(requestPrefix, "");
     try {
       URI url = new URI(requestUrl);
-      serverUrl = String.format("%s://%s:%s", url.getScheme(), url.getHost(), url.getPort());
+      serverUrl = String.format("%s://%s:%s%s", url.getScheme(), url.getHost(), url.getPort(), url.getPath());
     } catch (URISyntaxException e) {
       LOGGER.error("Unable to parse request url:" + requestUrl);
     }
