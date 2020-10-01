@@ -74,10 +74,10 @@ class OpenApiContractSpec extends Specification implements FileAccess {
     String raw = response.body
     response.statusCode == HttpStatus.OK
 
-    def withPortReplaced = contract.
+    def withPlaceholdersReplaced = contract.
         replaceAll(
-            "__PORT__",
-            "$port")
+            "__SERVER_URL__",
+            "http://localhost:$port")
     maybeWriteToFile(
         "/contracts/$contractFile",
         raw.
@@ -86,9 +86,58 @@ class OpenApiContractSpec extends Specification implements FileAccess {
                 "localhost:__PORT__"))
     JSONAssert.
         assertEquals(
-            withPortReplaced,
+            withPlaceholdersReplaced,
             raw,
             NON_EXTENSIBLE)
+
+    where:
+    contractFile    | groupName
+    'petstore.json' | 'petstore'
+    'bugs.json'     | 'bugs'
+    'features.json' | 'features'
+  }
+
+  def 'should honor open api 3.0 resource listing with X-Forwarded headers'() {
+    def xForwardProto = "https"
+    def xForwardHost = "test-forwarded-for"
+    def xForwardPort = "8080"
+    def xForwardPrefix = "/test-forwarded-prefix"
+    given:
+    RequestEntity<Void> request = RequestEntity.get(
+            new URI("http://localhost:$port/v3/api-docs?group=$groupName"))
+            .accept(MediaType.APPLICATION_JSON)
+            .header("X-Forwarded-Proto", xForwardProto)
+            .header("X-Forwarded-Host", xForwardHost)
+            .header("X-Forwarded-Port", xForwardPort)
+            .header("X-Forwarded-Prefix", xForwardPrefix)
+            .build()
+    String contract = fileContents("/contracts/$contractFile")
+
+    when:
+    def response = http.
+            exchange(
+                    request,
+                    String)
+    then:
+    String raw = response.body
+    response.statusCode == HttpStatus.OK
+
+    def withPlaceholdersReplaced = contract.
+            replaceAll(
+                    "__SERVER_URL__",
+                    "$xForwardProto://$xForwardHost:$xForwardPort$xForwardPrefix")
+    maybeWriteToFile(
+            "/contracts/$contractFile",
+            raw.
+                    replace(
+                            "localhost:$port",
+                            "localhost:__PORT__"))
+
+    JSONAssert.
+            assertEquals(
+                    withPlaceholdersReplaced,
+                    raw,
+                    NON_EXTENSIBLE)
 
     where:
     contractFile    | groupName

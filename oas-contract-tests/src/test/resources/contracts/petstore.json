@@ -15,7 +15,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:__PORT__",
+            "url": "__SERVER_URL__",
             "description": "Inferred Url"
         }
     ],
