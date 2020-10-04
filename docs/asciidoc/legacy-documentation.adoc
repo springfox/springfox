@@ -121,7 +121,7 @@ public class CustomJavaPluginConfig {
               "My Apps API Description",
               "My Apps API terms of service",
               "My Apps API Contact Email",
-              "My Apps API Licence Type",
+              "My Apps API License Type",
               "My Apps API License URL"
         );
       return apiInfo;

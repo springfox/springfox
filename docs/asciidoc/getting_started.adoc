@@ -216,7 +216,7 @@ this would be represented as http://example.org/findCustomersBy{?name}.
 Second, http://example.org/findCustomersBy?zip=76051 to find customers by zip.
 Per https://tools.ietf.org/html/rfc6570[RFC 6570],
 this would be represented as http://example.org/findCustomersBy{?zip}.
-<22> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.
+<22> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authentication information). Parameters added here will be part of every API Operation in the generated swagger specification.
 on how the security is setup the name of the header used may need to be different. Overriding this value is a way to
 override the default behavior.
 <23> Adding tags is a way to define all the available tags that services/operations can opt into. Currently this only

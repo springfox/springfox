@@ -473,7 +473,7 @@ in the demo application.
 
 == Configuring springfox-staticdocs
 
-IMPORTANT: Support for this module has been deprecated in 2.7.0. Since swagger2markup doesnt support jdk6 anymore it is
+IMPORTANT: Support for this module has been deprecated in 2.7.0. Since swagger2markup doesn't support jdk6 anymore it is
 difficult for build to co-exist with the newer version of swagger2markup. Please use the
 _latest_ instructions provided in the awesome https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup Library].
 
