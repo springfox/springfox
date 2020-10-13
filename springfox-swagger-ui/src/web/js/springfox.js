@@ -54,7 +54,7 @@ window.onload = () => {
 
   const prependBaseUrl = (baseUrl, resources) => {
     resources.forEach(function(r) {
-      r.url = baseUrl + r.url;
+      r.url = (r.url && r.url.startWith("http") ? r.url : (baseUrl + r.url);
     })
     return resources;
   };
