@@ -1,5 +1,6 @@
 package springfox.documentation.builders;
 
+import java.util.Optional;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.service.ContentSpecification;
@@ -51,7 +52,7 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
                   .copyOf(simpleParameter)
                   .explode(simpleParameter.getExplode())
                   .style(style)
-                  .collectionFormat(CollectionFormat.MULTI)
+                  .collectionFormat(Optional.ofNullable(simpleParameter.getCollectionFormat()).orElse(CollectionFormat.MULTI))
                   .build();
         }
       }

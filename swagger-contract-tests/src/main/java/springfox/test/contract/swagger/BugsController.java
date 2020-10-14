@@ -610,6 +610,12 @@ public class BugsController {
   public void bug3390() {
   }
 
+  @GetMapping("/bug3407")
+  public void bug3407(
+      @ApiParam(collectionFormat = "csv", allowMultiple = true)
+      @RequestParam("collection") List<String> collection) {
+  }
+
   public enum NumberEnum {
     ONE,
     TWO,
