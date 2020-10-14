@@ -10,6 +10,8 @@ exemptLabels:
   - investigating
   - dependencies
   - help-wanted
+  - feature
+  - maintenance
   - PR
 # Label to use when marking an issue as stale
 staleLabel: wontfix
