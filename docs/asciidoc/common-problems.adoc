@@ -259,7 +259,22 @@ For e.g. One could move Swagger UI under `/documentation` using this code.
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 	
-		registry.addRedirectViewController("/documentation/v2/api-docs", "/v2/api-docs?group=restful-api");
+		registry.addRedirectViewController(
+				"/documentation/v2/api-docs", 
+				"/v2/api-docs")
+			.setKeepQueryParams(true);
+        	registry.addRedirectViewController(
+				"/documentation/swagger-resources/configuration/ui",
+				"/swagger-resources/configuration/ui")
+			.setKeepQueryParams(true);
+        	registry.addRedirectViewController(
+				"/documentation/swagger-resources/configuration/security",
+				"/swagger-resources/configuration/security")
+			.setKeepQueryParams(true);
+        	registry.addRedirectViewController(
+				"/documentation/swagger-resources", 
+				"/swagger-resources")
+			.setKeepQueryParams(true);
         	registry.addRedirectViewController("/documentation/swagger-resources/configuration/ui","/swagger-resources/configuration/ui");
         	registry.addRedirectViewController("/documentation/swagger-resources/configuration/security","/swagger-resources/configuration/security");
         	registry.addRedirectViewController("/documentation/swagger-resources", "/swagger-resources");
