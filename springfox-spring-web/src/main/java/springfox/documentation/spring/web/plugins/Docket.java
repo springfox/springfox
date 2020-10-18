@@ -408,11 +408,25 @@ public class Docket implements DocumentationPlugin {
    *
    * @param forCodeGen - true|false determines the naming strategy used
    * @return this Docket
+   * @see #genericTypeNamingStrategy
    */
   public Docket forCodeGeneration(boolean forCodeGen) {
     if (forCodeGen) {
       genericsNamingStrategy = new CodeGenGenericTypeNamingStrategy();
     }
+    return this;
+  }
+  
+  /**
+   * Replaces the springfox.documentation.spi.schema.GenericTypeNamingStrategy.
+   * This allows to replace the influence the strategy to provide names for generic types in the swagger output.
+   *
+   * @param strategy - the new strategy
+   * @return this Docket
+   * @see #forCodeGeneration
+   */
+  public Docket genericTypeNamingStrategy(GenericTypeNamingStrategy strategy){
+    genericsNamingStrategy = strategy;
     return this;
   }
 

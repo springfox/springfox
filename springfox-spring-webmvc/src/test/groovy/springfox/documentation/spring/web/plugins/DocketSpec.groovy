@@ -202,6 +202,8 @@ class DocketSpec extends DocumentationContextSpec {
     'tags'                      | new Tag("test", "test")                 | 'tags'
     'globalOperationParameters' | [Mock(Parameter)]                       | 'globalOperationParameters'
     'extensions'                | extensions()                            | 'vendorExtensions'
+    'genericTypeNamingStrategy' | new DefaultGenericTypeNamingStrategy()  | 'genericsNamingStrategy'
+    'genericTypeNamingStrategy' | new CodeGenGenericTypeNamingStrategy()  | 'genericsNamingStrategy'
   }
 
   List<VendorExtension> extensions() {
