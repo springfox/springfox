@@ -20,7 +20,7 @@ dependencies {
 
   implementation "com.athaydes.rawhttp:rawhttp-core:2.4.0"
   compileOnly libs.springProvidedWithSpringIntegration
-  compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.4.RELEASE"
+  compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.5.RELEASE"
   compileOnly libs.clientProvided
 
   testImplementation libs.test
