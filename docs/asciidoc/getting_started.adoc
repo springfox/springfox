@@ -140,14 +140,14 @@ NOTE: swagger-ui location has moved from `http://host/context-path/swagger-ui.ht
 OR `http://host/context-path/swagger-ui/` for short. This makes it work much better with pulling it as a web jar and turning it off
 using configuration properties if not needed.
 
-For WebMvc https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.java[SwagggerUIWebMvcConfigurer.java]
+For WebMvc https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.java[SwaggerUIWebMvcConfigurer.java]
 [[jackson-convention-example-1]]
 [source,java,linenums]
 ----
 include::../../springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebMvcConfigurer.java[tags=swagger-ui-configurer,indent=0]
 ----
 
-For WebFlux https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.java[SwagggerUIWebMvcConfigurer.java]
+For WebFlux https://github.com/springfox/springfox/blob/master/springfox-boot-starter/src/main/java/springfox/boot/starter/autoconfigure/SwaggerUiWebFluxConfigurer.java[SwaggerUIWebMvcConfigurer.java]
 [[jackson-convention-example-1]]
 [source,java,linenums]
 ----
