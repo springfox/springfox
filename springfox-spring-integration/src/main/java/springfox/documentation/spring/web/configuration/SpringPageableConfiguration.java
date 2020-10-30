@@ -27,7 +27,7 @@ public class SpringPageableConfiguration {
     private String page = "";
 
     @ApiParam(value = "Number of records per page.", example = "20")
-    private String limit = "";
+    private String size = "";
 
     @ApiParam(value = "Sorting criteria in the format: property(,asc|desc).", example = "id,asc")
     private String sort = "";
@@ -57,14 +57,14 @@ public class SpringPageableConfiguration {
 
         try {
             Annotation pageAnnotation = getApiParamAnnotation("page");
-            Annotation limitAnnotation = getApiParamAnnotation("limit");
+            Annotation sizeAnnotation = getApiParamAnnotation("size");
             Annotation sortAnnotation = getApiParamAnnotation("sort");
             return new AlternateTypeBuilder()
                     .fullyQualifiedClassName(String.format("%s.generated.%s",
                             Pageable.class.getPackage().getName(),
                             Pageable.class.getSimpleName()))
                     .property(property(Integer.class, "page", pageAnnotation))
-                    .property(property(Integer.class, "limit", limitAnnotation))
+                    .property(property(Integer.class, "size", sizeAnnotation))
                     .property(property(String[].class, "sort", sortAnnotation))
                     .build();
         } catch (NoSuchFieldException e) {
