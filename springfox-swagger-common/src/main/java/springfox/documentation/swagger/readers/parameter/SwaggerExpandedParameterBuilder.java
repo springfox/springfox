@@ -141,6 +141,9 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
       ParameterExpansionContext context,
       String parameterName) {
     if (!isEmpty(parameterName)) {
+      if ("query".equals(context.getParameterType()) && !isEmpty(context.getParentName())) {
+        parameterName = String.format("%s.%s", context.getParentName(), parameterName);
+      }
       context.getParameterBuilder().name(parameterName);
       context.getRequestParameterBuilder().name(parameterName);
     }
@@ -149,7 +152,6 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private AllowableValues allowableValues(
       final Optional<String> optionalAllowable,
       Class<?> fieldType) {
-
     AllowableValues allowable = null;
     if (enumTypeDeterminer.isEnum(fieldType)) {
       allowable = new AllowableListValues(getEnumValues(fieldType), "LIST");
