@@ -152,7 +152,6 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private AllowableValues allowableValues(
       final Optional<String> optionalAllowable,
       Class<?> fieldType) {
-
     AllowableValues allowable = null;
     if (enumTypeDeterminer.isEnum(fieldType)) {
       allowable = new AllowableListValues(getEnumValues(fieldType), "LIST");
