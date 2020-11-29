@@ -88,7 +88,7 @@ public class OpenApiControllerWebFlux {
     OpenAPI oas = mapper.mapDocumentation(documentation);
     OpenApiTransformationContext<ServerHttpRequest> context
         = new OpenApiTransformationContext<>(oas, serverRequest);
-    List<WebFluxOpenApiTransformationFilter> filters = transformations.getPluginsFor(DocumentationType.SWAGGER_2);
+    List<WebFluxOpenApiTransformationFilter> filters = transformations.getPluginsFor(DocumentationType.OAS_30);
     for (WebFluxOpenApiTransformationFilter each : filters) {
       context = context.next(each.transform(context));
     }
