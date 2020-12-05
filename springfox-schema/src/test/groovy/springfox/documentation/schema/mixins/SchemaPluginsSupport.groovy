@@ -25,6 +25,7 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.JacksonJsonViewProvider
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.ValidatedProvider
 import springfox.documentation.schema.plugins.PropertyDiscriminatorBasedInheritancePlugin
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.schema.property.ModelSpecificationFactory
@@ -33,6 +34,7 @@ import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.schema.ValidatedProviderPlugin
 import springfox.documentation.spi.schema.ViewProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 
@@ -62,9 +64,12 @@ trait SchemaPluginsSupport {
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
         OrderAwarePluginRegistry.of([new JacksonJsonViewProvider(new TypeResolver())])
 
+    PluginRegistry<ValidatedProviderPlugin, DocumentationType> validatedProviderRegistry =
+        OrderAwarePluginRegistry.of([new ValidatedProvider(new TypeResolver())])
+
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
         OrderAwarePluginRegistry.of(new ArrayList<>())
 
-    new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry, syntheticModelRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry, validatedProviderRegistry, syntheticModelRegistry)
   }
 }
