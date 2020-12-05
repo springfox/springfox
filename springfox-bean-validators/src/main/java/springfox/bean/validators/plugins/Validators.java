@@ -18,6 +18,7 @@
  */
 package springfox.bean.validators.plugins;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -29,7 +30,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Optional.*;
 
@@ -100,5 +104,22 @@ public class Validators {
       Class<T> annotationType) {
     return annotatedElement
         .map(annotated -> AnnotationUtils.findAnnotation(annotated, annotationType));
+  }
+
+  public static boolean existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(
+      ModelPropertyContext context,
+      Class<?>[] groupsAnnotationArray) {
+
+    Set<ResolvedType> groupsInValidatedAnnotation = context.getOwner().getValidationGroups();
+    if (groupsInValidatedAnnotation.isEmpty()) {
+      return true;
+    }
+
+    Set<Class<?>> groupsInConstraintAnnotation = new HashSet<>(Arrays.asList(groupsAnnotationArray));
+    if (groupsInConstraintAnnotation.isEmpty()) {
+      return true;
+    }
+
+    return groupsInValidatedAnnotation.stream().anyMatch(i -> groupsInConstraintAnnotation.contains(i.getErasedType()));
   }
 }

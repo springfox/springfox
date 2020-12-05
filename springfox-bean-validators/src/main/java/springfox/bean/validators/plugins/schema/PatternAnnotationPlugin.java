@@ -27,9 +27,12 @@ import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Pattern;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static springfox.bean.validators.plugins.Validators.*;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -38,7 +41,7 @@ public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
-    Optional<Pattern> pattern = extractAnnotation(context, Pattern.class);
+    Optional<Pattern> pattern = extractPatternAnnotation(context);
     String patternValueFromAnnotation = createPatternValueFromAnnotation(pattern);
     context.getBuilder().pattern(patternValueFromAnnotation);
     if (patternValueFromAnnotation != null) {
@@ -52,11 +55,22 @@ public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
     return true;
   }
 
+  private Optional<Pattern> extractPatternAnnotation(ModelPropertyContext context) {
+    Set<Pattern> patternSet = new HashSet<>();
+    extractAnnotation(context, Pattern.class).ifPresent(patternSet::add);
+    extractAnnotation(context, Pattern.List.class).map(i -> Arrays.asList(i.value())).ifPresent(patternSet::addAll);
+    return patternSet.stream().filter(pattern -> mustBeAppliedAccordingToValidatedGroups(context, pattern)).findAny();
+  }
+
   private String createPatternValueFromAnnotation(Optional<Pattern> pattern) {
     String patternValue = null;
     if (pattern.isPresent()) {
       patternValue = pattern.get().regexp();
     }
     return patternValue;
+  }
+
+  private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Pattern pattern) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, pattern.groups());
   }
 }

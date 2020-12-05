@@ -21,14 +21,19 @@ package springfox.bean.validators.plugins.schema;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Null;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static springfox.bean.validators.plugins.Validators.*;
+import static springfox.bean.validators.plugins.Validators.BEAN_VALIDATOR_PLUGIN_ORDER;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
 
 @Component
 @Order(BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -48,13 +53,20 @@ public class IsNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
    */
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Null> isNull = extractAnnotation(context);
+    Optional<Null> isNull = extractNullAnnotation(context);
     if (isNull.isPresent()) {
-      context.getBuilder().readOnly(isNull.isPresent());
+      context.getBuilder().readOnly(true);
     }
   }
 
-  private Optional<Null> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, Null.class).map(Optional::of).orElse(annotationFromField(context, Null.class));
+  private Optional<Null> extractNullAnnotation(ModelPropertyContext context) {
+    Set<Null> isNullSet = new HashSet<>();
+    extractAnnotation(context, Null.class).ifPresent(isNullSet::add);
+    extractAnnotation(context, Null.List.class).map(i -> Arrays.asList(i.value())).ifPresent(isNullSet::addAll);
+    return isNullSet.stream().filter(isNull -> mustBeAppliedAccordingToValidatedGroups(context, isNull)).findAny();
+  }
+
+  private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Null isNull) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, isNull.groups());
   }
 }
