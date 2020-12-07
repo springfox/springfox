@@ -262,6 +262,44 @@ public class ModelContext {
   }
 
   /**
+   * Convenience method to provide an new context for an return parameter
+   *
+   * @param parameterId           - parameter id
+   * @param groupName             - group name of the docket
+   * @param type                  - type
+   * @param view                  - view
+   * @param documentationType     - for documentation type
+   * @param alternateTypeProvider - alternate type provider
+   * @param genericNamingStrategy - how generic types should be named
+   * @param ignorableTypes        - types that can be ignored
+   * @return new context
+   */
+  @SuppressWarnings("ParameterNumber")
+  public static ModelContext returnValue(
+      String parameterId,
+      String groupName,
+      ResolvedType type,
+      Optional<ResolvedType> view,
+      DocumentationType documentationType,
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericNamingStrategy,
+      Set<Class> ignorableTypes,
+      Set<ResolvedType> validationGroups) {
+
+    return new ModelContext(
+        parameterId,
+        groupName,
+        type,
+        true,
+        view,
+        validationGroups,
+        documentationType,
+        alternateTypeProvider,
+        genericNamingStrategy,
+        ignorableTypes);
+  }
+
+  /**
    * Convenience method to provide an new context for an input parameter
    *
    * @param context - parent context

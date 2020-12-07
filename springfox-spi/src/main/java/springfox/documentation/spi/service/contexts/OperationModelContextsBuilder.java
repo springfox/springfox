@@ -66,6 +66,10 @@ public class OperationModelContextsBuilder {
   }
 
   public ModelContext addReturn(ResolvedType type, Optional<ResolvedType> view) {
+    return addReturn(type, view, new HashSet<>());
+  }
+
+  public ModelContext addReturn(ResolvedType type, Optional<ResolvedType> view, Set<ResolvedType> validationGroups) {
     ModelContext returnValue = ModelContext.returnValue(
         String.format("%s_%s", requestMappingId, parameterIndex),
         group,
@@ -74,7 +78,8 @@ public class OperationModelContextsBuilder {
         documentationType,
         alternateTypeProvider,
         genericsNamingStrategy,
-        ignorableTypes);
+        ignorableTypes,
+        validationGroups);
     if (this.contexts.add(returnValue)) {
       ++parameterIndex;
       return returnValue;

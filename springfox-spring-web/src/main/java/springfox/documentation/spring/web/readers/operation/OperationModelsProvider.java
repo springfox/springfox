@@ -83,7 +83,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     context.operationModelsBuilder()
            .addReturn(
                modelType,
-               viewForReturn(context));
+               viewForReturn(context), validatedForReturn(context));
   }
 
   private void collectParameters(RequestMappingContext context) {
@@ -135,5 +135,11 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     ValidatedProviderPlugin validatedProviderPlugin =
         pluginsManager.validatedProvider(context.getDocumentationContext().getDocumentationType());
     return validatedProviderPlugin.validationFor(parameter);
+  }
+
+  private Set<ResolvedType> validatedForReturn(RequestMappingContext context) {
+    ValidatedProviderPlugin validatedProviderPlugin =
+        pluginsManager.validatedProvider(context.getDocumentationContext().getDocumentationType());
+    return validatedProviderPlugin.validationFor(context);
   }
 }

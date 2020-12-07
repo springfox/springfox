@@ -44,7 +44,7 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
               k -> String.format(
                   "%s%s%s",
                   modelStems.get(k),
-                      equalsModelsSuffixes.getOrDefault(
+                  equalsModelsSuffixes.getOrDefault(
                       k,
                       ""),
                   requestResponseSuffixes.getOrDefault(

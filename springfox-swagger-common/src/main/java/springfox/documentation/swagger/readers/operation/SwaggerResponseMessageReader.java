@@ -39,6 +39,7 @@ import springfox.documentation.service.Header;
 import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.ValidatedProviderPlugin;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
@@ -134,6 +135,9 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     ViewProviderPlugin viewProvider =
             pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
+    ValidatedProviderPlugin validatedProviderPlugin =
+            pluginsManager.validatedProvider(context.getDocumentationContext().getDocumentationType());
+
     Map<Integer, ApiResponse> seenResponsesByCode = new HashMap<>();
     for (ApiResponse apiResponse : allApiResponses) {
       if (!seenResponsesByCode.containsKey(apiResponse.code())) {
@@ -147,7 +151,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
         ModelContext modelContext = context.operationModelsBuilder()
             .addReturn(
                 typeResolver.resolve(apiResponse.response()),
-                viewProvider.viewFor(context));
+                viewProvider.viewFor(context),
+                validatedProviderPlugin.validationFor(context));
         Optional<ResolvedType> type = resolvedType(apiResponse);
         if (isSuccessful(apiResponse.code())) {
           type = type.map(Optional::of).orElse(operationResponse);
@@ -209,7 +214,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     if (operationResponse.isPresent()) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           operationResponse.get(),
-          viewProvider.viewFor(context));
+          viewProvider.viewFor(context),
+          validatedProviderPlugin.validationFor(context));
       ResolvedType resolvedType = context.alternateFor(operationResponse.get());
 
       Map<String, String> knownNames = new HashMap<>();

@@ -31,6 +31,7 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.ValidatedProviderPlugin;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
@@ -46,8 +47,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Collections.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
+import static java.util.Collections.singleton;
+import static springfox.documentation.schema.ResolvedTypes.isVoid;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -98,11 +100,15 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
+    ValidatedProviderPlugin validatedProviderPlugin =
+        pluginsManager.validatedProvider(context.getDocumentationContext().getDocumentationType());
+
     ResponseContext responseContext = new ResponseContext(context.getDocumentationContext(), context);
     if (!isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder()
           .addReturn(returnType,
-              viewProvider.viewFor(context));
+              viewProvider.viewFor(context),
+                  validatedProviderPlugin.validationFor(context));
 
       Map<String, String> knownNames = new HashMap<>();
       Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
