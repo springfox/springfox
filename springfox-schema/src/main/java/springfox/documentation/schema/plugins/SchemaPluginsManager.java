@@ -29,6 +29,7 @@ import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.ValidatedProviderPlugin;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -45,6 +46,7 @@ public class SchemaPluginsManager {
   private final PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers;
   private final PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers;
   private final PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders;
+  private final PluginRegistry<ValidatedProviderPlugin, DocumentationType> validatedProviders;
   private final PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders;
 
   @Autowired
@@ -55,11 +57,14 @@ public class SchemaPluginsManager {
           PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers,
       @Qualifier("viewProviderPluginRegistry")
           PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders,
+      @Qualifier("validatedProviderPluginRegistry")
+          PluginRegistry<ValidatedProviderPlugin, DocumentationType> validatedProviders,
       @Qualifier("syntheticModelProviderPluginRegistry")
           PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders) {
     this.propertyEnrichers = propertyEnrichers;
     this.modelEnrichers = modelEnrichers;
     this.viewProviders = viewProviders;
+    this.validatedProviders = validatedProviders;
     this.syntheticModelProviders = syntheticModelProviders;
   }
 
@@ -94,6 +99,11 @@ public class SchemaPluginsManager {
   public ViewProviderPlugin viewProvider(DocumentationType documentationType) {
     return viewProviders.getPluginFor(documentationType)
         .orElseThrow(() -> new IllegalStateException("No ViewProviderPlugin for " + documentationType.getName()));
+  }
+
+  public ValidatedProviderPlugin validatedProvider(DocumentationType documentationType) {
+    return validatedProviders.getPluginFor(documentationType)
+        .orElseThrow(() -> new IllegalStateException("No ValidatedProviderPlugin for " + documentationType.getName()));
   }
 
   /**

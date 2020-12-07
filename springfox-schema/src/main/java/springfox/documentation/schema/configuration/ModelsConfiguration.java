@@ -28,6 +28,7 @@ import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
+import springfox.documentation.spi.schema.ValidatedProviderPlugin;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
 
 @Configuration
@@ -40,6 +41,7 @@ import springfox.documentation.spi.schema.ViewProviderPlugin;
     TypeNameProviderPlugin.class,
     SyntheticModelProviderPlugin.class,
     ViewProviderPlugin.class,
+    ValidatedProviderPlugin.class,
 })
 public class ModelsConfiguration {
   @Bean
