@@ -20,10 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.slf4j.LoggerFactory.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class ModelSpecificationRegistryBuilder {
   private static final Logger LOGGER = getLogger(ModelSpecificationRegistryBuilder.class);
@@ -301,13 +302,17 @@ public class ModelSpecificationRegistryBuilder {
     }
 
     @Override
-    public Collection<ModelKey> modelsDifferingOnlyInValidationGroups(ModelKey test) {
+    public Map<ModelKey, String> getPostfixForModelsDifferingOnlyInvalidationGroups(ModelKey test) {
+      AtomicInteger count = new AtomicInteger(0);
       return modelsLookupByKey.keySet().stream()
-                              .filter(mk -> mk.getQualifiedModelName().equals(test.getQualifiedModelName())
-                                  && Objects.equals(mk.getViewDiscriminator(), test.getViewDiscriminator())
-                                  && mk.isResponse() == test.isResponse()
-                                  && !areEquivalent(mk, test))
-                              .collect(Collectors.toSet());
+              .filter(mk -> mk.getQualifiedModelName().equals(test.getQualifiedModelName())
+                      && Objects.equals(mk.getViewDiscriminator(), test.getViewDiscriminator())
+                      && mk.isResponse() == test.isResponse()
+                      && !areEquivalent(mk, test))
+              .collect(Collectors.toMap(Function.identity(), i -> {
+                int index = count.getAndIncrement();
+                return index == 0 ? "" : String.valueOf(index);
+              }));
     }
 
     @Override

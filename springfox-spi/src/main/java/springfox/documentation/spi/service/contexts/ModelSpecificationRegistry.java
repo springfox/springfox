@@ -4,6 +4,7 @@ import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelSpecification;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 public interface ModelSpecificationRegistry {
@@ -11,7 +12,7 @@ public interface ModelSpecificationRegistry {
 
   boolean hasRequestResponsePairs(ModelKey test);
 
-  Collection<ModelKey> modelsDifferingOnlyInValidationGroups(ModelKey test);
+  Map<ModelKey, String> getPostfixForModelsDifferingOnlyInvalidationGroups(ModelKey test);
 
   Collection<ModelKey> modelsWithSameNameAndDifferentNamespace(ModelKey test);
 
