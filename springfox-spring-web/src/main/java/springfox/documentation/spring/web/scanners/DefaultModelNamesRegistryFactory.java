@@ -1,12 +1,8 @@
 package springfox.documentation.spring.web.scanners;
 
-import com.fasterxml.classmate.ResolvedType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelSpecification;
-import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.service.ModelNamesRegistry;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ModelNamesRegistryFactoryPlugin;
@@ -14,10 +10,8 @@ import springfox.documentation.spi.service.contexts.ModelSpecificationRegistry;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,7 +29,7 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
   private static class DefaultModelNamesRegistry implements ModelNamesRegistry {
     private final ModelSpecificationRegistry modelRegistry;
     private final Map<ModelKey, String> modelStems = new HashMap<>();
-    private final Map<Set<ResolvedType>, String> validationSuffixes = new HashMap<>();
+    private final Map<ModelKey, String> equalsModelsSuffixes = new HashMap<>();
     private final Map<ModelKey, String> requestResponseSuffixes = new HashMap<>();
     private final Map<ModelKey, String> modelKeyToName;
 
@@ -50,56 +44,16 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
               k -> String.format(
                   "%s%s%s",
                   modelStems.get(k),
-                  validationSuffixes.getOrDefault(
-                      k.getValidationGroupDiscriminators(),
+                      equalsModelsSuffixes.getOrDefault(
+                      k,
                       ""),
                   requestResponseSuffixes.getOrDefault(
                       k,
                       ""))));
-      adjustForNameCollisions();
-    }
-
-    private void adjustForNameCollisions() {
-      MultiValueMap<String, ModelKey> nameToKey = new LinkedMultiValueMap<>();
-      modelKeyToName.forEach((k, v) -> nameToKey.add(v, k));
-      nameToKey.entrySet()
-          .stream()
-          .filter(e -> e.getValue().size() > 1)
-          .forEach(e -> {
-            Map<QualifiedModelName, String> nameToSuffix = nameSuffixLookup(e);
-            e.getValue()
-                .forEach(modelKey ->
-                             modelKeyToName.put(
-                                 modelKey,
-                                 String.format(
-                                     "%s%s",
-                                     modelKeyToName.get(modelKey),
-                                     nameToSuffix.getOrDefault(modelKey.getQualifiedModelName(), ""))));
-          });
-    }
-
-    private Map<QualifiedModelName, String> nameSuffixLookup(Map.Entry<String, List<ModelKey>> e) {
-      Map<QualifiedModelName, String> modelSuffix = new HashMap<>();
-      Set<QualifiedModelName> distinctModels = e.getValue()
-          .stream()
-          .map(ModelKey::getQualifiedModelName)
-          .collect(Collectors.toSet());
-      if (distinctModels.size() > 1) {
-        int index = 0;
-        for (QualifiedModelName key : distinctModels) {
-          int modelIndex = index;
-          modelSuffix.putIfAbsent(
-              key,
-              String.valueOf(modelIndex));
-          index++;
-        }
-      }
-      return modelSuffix;
     }
 
     private void processKeys(ModelKey modelKey) {
       boolean hasRequestResponsePair = modelRegistry.hasRequestResponsePairs(modelKey);
-      Collection<ModelKey> validationModels = modelRegistry.modelsDifferingOnlyInValidationGroups(modelKey);
       Collection<ModelKey> sameNameDifferentNamespace = modelRegistry.modelsWithSameNameAndDifferentNamespace(modelKey);
       int index = 0;
       for (ModelKey key : sameNameDifferentNamespace) {
@@ -115,14 +69,11 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
       modelStems.computeIfAbsent(
           modelKey,
           k -> k.getQualifiedModelName().getName());
-      index = 0;
-      for (ModelKey key : validationModels) {
-        int modelIndex = index;
-        validationSuffixes.computeIfAbsent(
-            key.getValidationGroupDiscriminators(),
-            k -> modelIndex == 0 ? "" : "_" + modelIndex);
-        index++;
+
+      if (!equalsModelsSuffixes.containsKey(modelKey)) {
+        equalsModelsSuffixes.putAll(modelRegistry.getSuffixesForEqualsModels(modelKey));
       }
+
       if (hasRequestResponsePair) {
         requestResponseSuffixes.computeIfAbsent(
             modelKey,

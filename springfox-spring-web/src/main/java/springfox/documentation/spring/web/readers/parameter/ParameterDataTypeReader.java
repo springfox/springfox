@@ -39,12 +39,12 @@ import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.ValidatedProviderPlugin;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.util.HashSet;
 import java.util.Optional;
 
 import static springfox.documentation.schema.Collections.*;
@@ -164,12 +164,16 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         .viewProvider(context.getDocumentationContext()
             .getDocumentationType());
 
+    ValidatedProviderPlugin validatedProviderPlugin = pluginsManager
+        .validatedProvider(context.getDocumentationContext()
+            .getDocumentationType());
+
     return context.getOperationContext()
         .operationModelsBuilder()
         .addInputParam(
             parameterType,
             viewProvider.viewFor(methodParameter),
-            new HashSet<>());
+            validatedProviderPlugin.validationFor(methodParameter));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {
