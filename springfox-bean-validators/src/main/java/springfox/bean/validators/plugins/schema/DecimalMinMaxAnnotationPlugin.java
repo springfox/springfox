@@ -36,9 +36,12 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static springfox.bean.validators.plugins.Validators.*;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -55,8 +58,8 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
   @Override
   @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
-    Optional<DecimalMin> min = extractAnnotation(context, DecimalMin.class);
-    Optional<DecimalMax> max = extractAnnotation(context, DecimalMax.class);
+    Optional<DecimalMin> min = extractDecimalMinAnnotation(context);
+    Optional<DecimalMax> max = extractDecimalMaxAnnotation(context);
 
     // add support for @DecimalMin/@DecimalMax
     Compatibility<AllowableValues, NumericElementFacet> values =
@@ -115,4 +118,25 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
     return new Compatibility<>(myvalues, numericFacet);
   }
 
+  private Optional<DecimalMax> extractDecimalMaxAnnotation(ModelPropertyContext context) {
+    Set<DecimalMax> decimalSet = new HashSet<>();
+    extractAnnotation(context, DecimalMax.class).ifPresent(decimalSet::add);
+    extractAnnotation(context, DecimalMax.List.class).map(i -> Arrays.asList(i.value())).ifPresent(decimalSet::addAll);
+    return decimalSet.stream().filter(decimal -> mustBeAppliedAccordingToValidatedGroups(context, decimal)).findAny();
+  }
+
+  private Optional<DecimalMin> extractDecimalMinAnnotation(ModelPropertyContext context) {
+    Set<DecimalMin> decimalSet = new HashSet<>();
+    extractAnnotation(context, DecimalMin.class).ifPresent(decimalSet::add);
+    extractAnnotation(context, DecimalMin.List.class).map(i -> Arrays.asList(i.value())).ifPresent(decimalSet::addAll);
+    return decimalSet.stream().filter(decimal -> mustBeAppliedAccordingToValidatedGroups(context, decimal)).findAny();
+  }
+
+  private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, DecimalMax max) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, max.groups());
+  }
+
+  private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, DecimalMin min) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, min.groups());
+  }
 }

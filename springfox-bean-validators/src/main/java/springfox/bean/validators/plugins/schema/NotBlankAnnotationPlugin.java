@@ -27,10 +27,12 @@ import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static springfox.bean.validators.plugins.Validators.annotationFromBean;
-import static springfox.bean.validators.plugins.Validators.annotationFromField;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -51,16 +53,22 @@ public class NotBlankAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
-    Optional<NotBlank> notBlank = extractAnnotation(context);
+    Optional<NotBlank> notBlank = extractNotBlankAnnotation(context);
     if (notBlank.isPresent()) {
       context.getBuilder().required(true);
       context.getSpecificationBuilder().required(true);
     }
   }
 
-  private Optional<NotBlank> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, NotBlank.class)
-        .map(Optional::of)
-        .orElse(annotationFromField(context, NotBlank.class));
+  private Optional<NotBlank> extractNotBlankAnnotation(ModelPropertyContext context) {
+    Set<NotBlank> notBlankSet = new HashSet<>();
+    extractAnnotation(context, NotBlank.class).ifPresent(notBlankSet::add);
+    extractAnnotation(context, NotBlank.List.class).map(i -> Arrays.asList(i.value())).ifPresent(notBlankSet::addAll);
+    return notBlankSet.stream().filter(notBlank -> mustBeAppliedAccordingToValidatedGroups(context, notBlank))
+                               .findAny();
+  }
+
+  private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, NotBlank notBlank) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, notBlank.groups());
   }
 }

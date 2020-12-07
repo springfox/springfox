@@ -27,9 +27,12 @@ import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static springfox.bean.validators.plugins.Validators.*;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -50,16 +53,21 @@ public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
-    Optional<NotNull> notNull = extractAnnotation(context);
+    Optional<NotNull> notNull = extractNotNullAnnotation(context);
     if (notNull.isPresent()) {
       context.getBuilder().required(true);
       context.getSpecificationBuilder().required(true);
     }
   }
 
-  private Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, NotNull.class)
-        .map(Optional::of)
-        .orElse(annotationFromField(context, NotNull.class));
+  private Optional<NotNull> extractNotNullAnnotation(ModelPropertyContext context) {
+    Set<NotNull> notNullSet = new HashSet<>();
+    extractAnnotation(context, NotNull.class).ifPresent(notNullSet::add);
+    extractAnnotation(context, NotNull.List.class).map(i -> Arrays.asList(i.value())).ifPresent(notNullSet::addAll);
+    return notNullSet.stream().filter(notNull -> mustBeAppliedAccordingToValidatedGroups(context, notNull)).findAny();
+  }
+
+  private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, NotNull notNull) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, notNull.groups());
   }
 }

@@ -33,10 +33,13 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
+import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -52,8 +55,8 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
-    Optional<Min> min = extractMin(context);
-    Optional<Max> max = extractMax(context);
+    Optional<Min> min = extractMinAnnotation(context);
+    Optional<Max> max = extractMaxAnnotation(context);
 
     // add support for @Min/@Max
     Compatibility<AllowableRangeValues, NumericElementFacet> values = allowableRange(min, max);
@@ -73,11 +76,25 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   }
 
-  private Optional<Min> extractMin(ModelPropertyContext context) {
-    return annotationFromBean(context, Min.class).map(Optional::of).orElse(annotationFromField(context, Min.class));
+  private Optional<Min> extractMinAnnotation(ModelPropertyContext context) {
+    Set<Min> minSet = new HashSet<>();
+    extractAnnotation(context, Min.class).ifPresent(minSet::add);
+    extractAnnotation(context, Min.List.class).map(i -> Arrays.asList(i.value())).ifPresent(minSet::addAll);
+    return minSet.stream().filter(min -> mustBeAppliedAccordingToValidatedGroups(context, min)).findAny();
   }
 
-  private Optional<Max> extractMax(ModelPropertyContext context) {
-    return annotationFromBean(context, Max.class).map(Optional::of).orElse(annotationFromField(context, Max.class));
+  private Optional<Max> extractMaxAnnotation(ModelPropertyContext context) {
+    Set<Max> maxSet = new HashSet<>();
+    extractAnnotation(context, Max.class).ifPresent(maxSet::add);
+    extractAnnotation(context, Max.List.class).map(i -> Arrays.asList(i.value())).ifPresent(maxSet::addAll);
+    return maxSet.stream().filter(max -> mustBeAppliedAccordingToValidatedGroups(context, max)).findAny();
+  }
+
+  public static boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Max max) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, max.groups());
+  }
+
+  public static boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Min min) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, min.groups());
   }
 }

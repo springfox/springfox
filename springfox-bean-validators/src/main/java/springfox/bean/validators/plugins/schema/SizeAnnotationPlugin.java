@@ -28,10 +28,13 @@ import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Size;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
+import static springfox.bean.validators.plugins.RangeAnnotations.stringLengthRange;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -46,8 +49,7 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   @SuppressWarnings("deprecation")
   public void apply(ModelPropertyContext context) {
-    Optional<Size> size = extractAnnotation(context);
-
+    Optional<Size> size = extractSizeAnnotation(context);
     size.ifPresent(size1 -> {
       AllowableRangeValues allowableRangeValues = stringLengthRange(size1);
       context.getBuilder().allowableValues(allowableRangeValues);
@@ -68,7 +70,14 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
     }
   }
 
-  Optional<Size> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, Size.class).map(Optional::of).orElse(annotationFromField(context, Size.class));
+  private Optional<Size> extractSizeAnnotation(ModelPropertyContext context) {
+    Set<Size> sizeSet = new HashSet<>();
+    extractAnnotation(context, Size.class).ifPresent(sizeSet::add);
+    extractAnnotation(context, Size.List.class).map(i -> Arrays.asList(i.value())).ifPresent(sizeSet::addAll);
+    return sizeSet.stream().filter(size -> mustBeAppliedAccordingToValidatedGroups(context, size)).findAny();
+  }
+
+  public static boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Size size) {
+    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, size.groups());
   }
 }
