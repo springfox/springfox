@@ -270,6 +270,7 @@ public class ModelSpecificationRegistryBuilder {
   }
 
   private static class DefaultModelSpecificationRegistry implements ModelSpecificationRegistry {
+    private static final Map<ModelKey, Integer> globalModelsSuffixesCounter = new HashMap<>();
     private final Map<ModelKey, ModelSpecification> modelsLookupByKey;
     private final MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKeys;
 
@@ -301,18 +302,47 @@ public class ModelSpecificationRegistryBuilder {
           && referenceKeyToEffectiveKeys.get(first).contains(second);
     }
 
+    private boolean haveEqualsSignature(ModelKey modelKey, ModelKey test) {
+      return modelKey.getQualifiedModelName().equals(test.getQualifiedModelName()) &&
+             Objects.equals(modelKey.getViewDiscriminator(), test.getViewDiscriminator()) &&
+             modelKey.isResponse() == test.isResponse() &&
+             !areEquivalent(modelKey, test);
+    }
+
+    private Integer getAtomicInitialValue(ModelKey modelKey) {
+      for (Map.Entry<ModelKey, Integer> e : globalModelsSuffixesCounter.entrySet()) {
+        if (haveEqualsSignature(modelKey, e.getKey())) {
+          return e.getValue();
+        }
+      }
+      return 0;
+    }
+
+    private void setAtomicInitialValue(ModelKey modelKey, int index) {
+      for (Map.Entry<ModelKey, Integer> e : globalModelsSuffixesCounter.entrySet()) {
+        if (haveEqualsSignature(modelKey, e.getKey())) {
+          e.setValue(index);
+          return;
+        }
+      }
+      globalModelsSuffixesCounter.put(modelKey, index);
+    }
+
     @Override
     public Map<ModelKey, String> getSuffixesForEqualsModels(ModelKey test) {
-      AtomicInteger count = new AtomicInteger(0);
-      return modelsLookupByKey.keySet().stream()
-              .filter(mk -> mk.getQualifiedModelName().equals(test.getQualifiedModelName()))
-              .filter(mk -> Objects.equals(mk.getViewDiscriminator(), test.getViewDiscriminator()))
-              .filter(mk -> mk.isResponse() == test.isResponse())
-              .filter(mk -> !areEquivalent(mk, test))
-              .collect(Collectors.toMap(Function.identity(), v -> {
-                int index = count.getAndIncrement();
-                return index == 0 ? "" : String.valueOf(index);
-              }));
+      int initialValue = getAtomicInitialValue(test);
+      AtomicInteger count = new AtomicInteger(initialValue);
+      Map<ModelKey, String> suffixes = new HashMap<>();
+      for (Map.Entry<ModelKey, ModelSpecification> e : modelsLookupByKey.entrySet()) {
+        if (!haveEqualsSignature(e.getKey(), test)) {
+          continue;
+        }
+        int index = count.getAndIncrement();
+        suffixes.put(e.getKey(), index == 0 ? "" : String.valueOf(index));
+      }
+
+      setAtomicInitialValue(test, count.get());
+      return suffixes;
     }
 
     @Override
