@@ -71,6 +71,6 @@ public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Pattern pattern) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, pattern.groups());
+    return Validators.annotationMustBeApplied(context, pattern.groups());
   }
 }

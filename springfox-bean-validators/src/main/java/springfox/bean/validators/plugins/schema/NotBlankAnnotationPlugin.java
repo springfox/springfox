@@ -69,6 +69,6 @@ public class NotBlankAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, NotBlank notBlank) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, notBlank.groups());
+    return Validators.annotationMustBeApplied(context, notBlank.groups());
   }
 }

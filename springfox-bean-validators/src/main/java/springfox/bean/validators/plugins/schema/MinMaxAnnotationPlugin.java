@@ -91,10 +91,10 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   public static boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Max max) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, max.groups());
+    return Validators.annotationMustBeApplied(context, max.groups());
   }
 
   public static boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Min min) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, min.groups());
+    return Validators.annotationMustBeApplied(context, min.groups());
   }
 }

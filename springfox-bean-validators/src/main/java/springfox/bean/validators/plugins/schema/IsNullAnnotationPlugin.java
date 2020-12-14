@@ -67,6 +67,6 @@ public class IsNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Null isNull) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, isNull.groups());
+    return Validators.annotationMustBeApplied(context, isNull.groups());
   }
 }

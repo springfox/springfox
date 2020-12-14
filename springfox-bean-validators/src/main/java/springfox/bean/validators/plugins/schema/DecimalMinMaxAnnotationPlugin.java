@@ -133,10 +133,10 @@ public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin
   }
 
   private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, DecimalMax max) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, max.groups());
+    return Validators.annotationMustBeApplied(context, max.groups());
   }
 
   private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, DecimalMin min) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, min.groups());
+    return Validators.annotationMustBeApplied(context, min.groups());
   }
 }

@@ -68,6 +68,6 @@ public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, NotNull notNull) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, notNull.groups());
+    return Validators.annotationMustBeApplied(context, notNull.groups());
   }
 }

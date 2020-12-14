@@ -78,6 +78,6 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   public static boolean mustBeAppliedAccordingToValidatedGroups(ModelPropertyContext context, Size size) {
-    return Validators.existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(context, size.groups());
+    return Validators.annotationMustBeApplied(context, size.groups());
   }
 }

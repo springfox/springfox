@@ -13,6 +13,7 @@ dependencies {
   api project(':springfox-core')
   api project(':springfox-spi')
 
+  compileOnly "javax.validation:validation-api:$validationApiVersion"
   compileOnly "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson}"
   compileOnly libs.springProvided
   compileOnly libs.clientProvided

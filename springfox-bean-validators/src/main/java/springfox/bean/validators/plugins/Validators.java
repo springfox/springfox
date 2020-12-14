@@ -26,10 +26,12 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
+import javax.validation.groups.Default;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -108,23 +110,30 @@ public class Validators {
         .map(annotated -> AnnotationUtils.findAnnotation(annotated, annotationType));
   }
 
-  public static boolean existsIntersectionBetweenGroupsFromValidatedAndConstraintAnnotations(
-      ModelPropertyContext context,
-      Class<?>[] groupsAnnotationArray) {
-
-    Set<ResolvedType> groupsInValidatedAnnotation = context.getOwner().getValidationGroups();
-    if (groupsInValidatedAnnotation.isEmpty()) {
-      return true;
+  public static boolean annotationMustBeApplied(ModelPropertyContext context, Class<?>[] groupsConstraint) {
+    // Case #1: @Validated and @Valid is not presented
+    // set of resolved type must be empty. This case breaks tests. Return must be true.
+    Set<ResolvedType> validatedGroups = context.getOwner().getValidationGroups();
+    if (validatedGroups.isEmpty()) {
+      return false;
     }
 
-    Set<Class<?>> groupsInConstraintAnnotation = Stream.of(groupsAnnotationArray)
-                                                       .flatMap(i -> getSuperClasses(i).stream())
-                                                       .collect(Collectors.toSet());
-    if (groupsInConstraintAnnotation.isEmpty()) {
-      return true;
+    Set<Class<?>> validatedGroupsClasses = getGroupClasses(validatedGroups.stream().map(ResolvedType::getErasedType));
+    Set<Class<?>> constraintGroupClasses = getGroupClasses(Stream.of(groupsConstraint));
+
+    // Case #2: Validated groups contains Default.class
+    // Constrain groups contains Default.class
+    if (validatedGroupsClasses.contains(Default.class)) {
+      return constraintGroupClasses.isEmpty() || constraintGroupClasses.contains(Default.class);
     }
 
-    return groupsInValidatedAnnotation.stream().anyMatch(i -> groupsInConstraintAnnotation.contains(i.getErasedType()));
+    // Case #3: Validated groups does not contain Default.class
+    // Constrain groups may contain Default.class
+    return !Collections.disjoint(validatedGroupsClasses, constraintGroupClasses);
+  }
+
+  private static Set<Class<?>> getGroupClasses(Stream<Class<?>> stream) {
+    return stream.flatMap(i -> getSuperClasses(i).stream()).collect(Collectors.toSet());
   }
 
   public static Set<Class<?>> getSuperClasses(Class<?> c) {

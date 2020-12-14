@@ -33,6 +33,8 @@ import springfox.documentation.spi.schema.ValidatedProviderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
+import javax.validation.Valid;
+import javax.validation.groups.Default;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,8 +65,9 @@ public class ValidatedProvider implements ValidatedProviderPlugin {
         String.format("Parameter name: %s @ index: %s",
                       parameter.defaultName().orElse("<none>"),
                       parameter.getParameterIndex()),
-        parameter.findAnnotation(Validated.class)
-                 .orElse(null));
+        parameter.findAnnotation(Validated.class).orElse(null),
+        parameter.findAnnotation(Valid.class).orElse(null)
+    );
   }
 
   @Override
@@ -72,8 +75,9 @@ public class ValidatedProvider implements ValidatedProviderPlugin {
       RequestMappingContext context) {
     return validationFor(
         String.format("Request Mapping: %s", context.getRequestMappingPattern()),
-        context.findAnnotation(Validated.class)
-               .orElse(null));
+        context.findAnnotation(Validated.class).orElse(null),
+        context.findAnnotation(Valid.class).orElse(null)
+    );
   }
 
   @Override
@@ -81,22 +85,32 @@ public class ValidatedProvider implements ValidatedProviderPlugin {
       OperationContext context) {
     return validationFor(
         String.format("Operation: %s", context.getName()),
-        context.findAnnotation(Validated.class).orElse(null));
+        context.findAnnotation(Validated.class).orElse(null),
+        context.findAnnotation(Valid.class).orElse(null)
+    );
   }
 
-  private Set<ResolvedType> validationFor(
-      String context,
-      Validated annotation) {
+  private Set<ResolvedType> validationFor(String context, Validated validated, Valid valid) {
     Set<ResolvedType> resolvedTypes = new HashSet<>();
-    if (annotation != null) {
-      Class<?>[] validatedGroups = annotation.value();
-      resolvedTypes = Stream.of(validatedGroups).map(typeResolver::resolve).collect(Collectors.toSet());
-      LOG.debug(
-          "Found validation groups {} for type {}",
-          resolvedTypes.stream().map(ResolvedTypes::resolvedTypeSignature).toString(),
-          context);
+    if (validated == null && valid == null) {
+      return resolvedTypes;
     }
 
+    if (validated != null) {
+      Class<?>[] validatedGroups = validated.value();
+      if (validatedGroups.length == 0) {
+        resolvedTypes.add(typeResolver.resolve(Default.class));
+      } else {
+        resolvedTypes = Stream.of(validatedGroups).map(typeResolver::resolve).collect(Collectors.toSet());
+      }
+    } else {
+      resolvedTypes.add(typeResolver.resolve(Default.class));
+    }
+
+    LOG.debug("Found validation groups {} for type {}",
+              resolvedTypes.stream().map(ResolvedType::getErasedType).map(Class::toString)
+                           .collect(Collectors.joining(",")),
+              context);
     return resolvedTypes;
   }
 }
