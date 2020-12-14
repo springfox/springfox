@@ -119,12 +119,11 @@ public class Validators {
     }
 
     Set<Class<?>> validatedGroupsClasses = getGroupClasses(validatedGroups.stream().map(ResolvedType::getErasedType));
-    Set<Class<?>> constraintGroupClasses = getGroupClasses(Stream.of(groupsConstraint));
+    Set<Class<?>> constraintGroupClasses = Stream.of(groupsConstraint).collect(Collectors.toSet());
 
-    // Case #2: Validated groups contains Default.class
-    // Constrain groups contains Default.class
-    if (validatedGroupsClasses.contains(Default.class)) {
-      return constraintGroupClasses.isEmpty() || constraintGroupClasses.contains(Default.class);
+    // Case #2: constraintGroupClasses is empty
+    if (constraintGroupClasses.isEmpty()) {
+      constraintGroupClasses.add(Default.class);
     }
 
     // Case #3: Validated groups does not contain Default.class
@@ -133,16 +132,18 @@ public class Validators {
   }
 
   private static Set<Class<?>> getGroupClasses(Stream<Class<?>> stream) {
-    return stream.flatMap(i -> getSuperClasses(i).stream()).collect(Collectors.toSet());
+    return stream.flatMap(i -> getAllInterfaces(i).stream()).collect(Collectors.toSet());
   }
 
-  public static Set<Class<?>> getSuperClasses(Class<?> c) {
-    Set<Class<?>> classSet = new HashSet<>();
-    classSet.add(c);
-    for (Class<?> superclass = c; superclass != null; c = superclass) {
-      classSet.add(superclass);
-      superclass = c.getSuperclass();
+  public static Set<Class<?>> getAllInterfaces(Class<?> c) {
+    Set<Class<?>> set = new HashSet<>();
+    if (!c.isInterface()) {
+      return set;
     }
-    return classSet;
+    set.add(c);
+    for (Class<?> superInterfaces : c.getInterfaces()) {
+      set.addAll(getAllInterfaces(superInterfaces));
+    }
+    return set;
   }
 }
