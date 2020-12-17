@@ -37,7 +37,7 @@ public class OperationHiddenReader implements OperationBuilderPlugin {
   public void apply(OperationContext context) {
 
     Optional<ApiOperation> methodAnnotation = context.findAnnotation(ApiOperation.class);
-    if (methodAnnotation.isPresent()) {
+    if (methodAnnotation.isPresent() && methodAnnotation.get().hidden()) {
       context.operationBuilder().hidden(methodAnnotation.get().hidden());
     }
   }
