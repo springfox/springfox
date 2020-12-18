@@ -187,6 +187,27 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
+   * Convience method to override multiple default http response messages at the http request method level.
+   *
+   * To set specific response messages for specific api operations use the swagger core annotations on
+   * the appropiate controller methods.
+   *
+   * @param requestMethods - list of http request methods for which to apply the message
+   * @param responseMessages - the message
+   * @return this Docket
+   * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
+   *  @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
+   */
+  public Docket globalResponseMessage(List<RequestMethod> requestMethods,
+                                       List<ResponseMessage> responseMessages) {
+    for(RequestMethod requestMethod : requestMethods) {
+      this.globalResponseMessage(requestMethod, responseMessages);
+    }
+
+    return this;
+  }
+
+  /**
    * Overrides the default http response messages at the http request method level.
    * <p>
    * To set specific response messages for specific api operations use the swagger core annotations on
