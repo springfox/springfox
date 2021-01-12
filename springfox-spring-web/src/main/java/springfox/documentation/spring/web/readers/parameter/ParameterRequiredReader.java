@@ -120,7 +120,8 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   @SuppressWarnings("squid:S1872")
   boolean isOptional(ResolvedMethodParameter methodParameter) {
-    return Stream.of("java.util.Optional", "com.google.common.base.Optional").anyMatch(methodParameter.getParameterType().getErasedType().getName()::equals);
+    return Stream.of("java.util.Optional", "com.google.common.base.Optional")
+            .anyMatch(methodParameter.getParameterType().getErasedType().getName()::equals);
   }
 
   private boolean isRequired(RequestParam annotation) {
