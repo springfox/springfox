@@ -43,6 +43,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Optional.*;
+import java.util.stream.Stream;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -119,7 +120,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   @SuppressWarnings("squid:S1872")
   boolean isOptional(ResolvedMethodParameter methodParameter) {
-    return "com.google.common.base.Optional".equals(methodParameter.getParameterType().getErasedType().getName());
+    return Stream.of("java.util.Optional", "com.google.common.base.Optional").anyMatch(methodParameter.getParameterType().getErasedType().getName()::equals);
   }
 
   private boolean isRequired(RequestParam annotation) {
