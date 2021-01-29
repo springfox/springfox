@@ -67,6 +67,10 @@ public class OpenApiSchemaPropertyBuilder implements ModelPropertyBuilderPlugin 
              .example(annotation.example())
              .enumerationFacet(e -> e.allowedValues(Arrays.asList(annotation.allowableValues())));
 
+      if (annotation.nullable()) {
+        context.getSpecificationBuilder().nullable(annotation.nullable());
+      }
+
     }
   }
 

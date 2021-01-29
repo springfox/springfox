@@ -298,6 +298,9 @@ public abstract class SchemaMapper {
       property.setExample(source.getExample());
       property.setExtensions(extensions);
       property.setXml(mapXml(source.getXml()));
+      if (source.getNullable() != null && source.getNullable()) {
+        property.setNullable(source.getNullable());
+      }
     }
 
     return property;
