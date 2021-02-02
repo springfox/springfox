@@ -175,7 +175,7 @@ public class User {
    *
    * @return email
    */
-  @io.swagger.v3.oas.annotations.media.Schema(example = "john@email.com", description = "")
+  @io.swagger.v3.oas.annotations.media.Schema(example = "john@email.com", description = "", nullable = true)
 
 
   public String getEmail() {

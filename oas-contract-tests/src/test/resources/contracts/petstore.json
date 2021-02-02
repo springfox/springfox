@@ -1221,7 +1221,8 @@
                 "properties": {
                     "email": {
                         "type": "string",
-                        "example": "john@email.com"
+                        "example": "john@email.com",
+                        "nullable": true
                     },
                     "firstName": {
                         "type": "string",
