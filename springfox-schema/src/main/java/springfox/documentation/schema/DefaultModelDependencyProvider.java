@@ -77,7 +77,6 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   @Override
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
     return Stream.concat(resolvedDependencies(modelContext).stream()
-            .filter(ignorableTypes(modelContext))
             .filter(baseTypes(modelContext).negate()),
         schemaPluginsManager.dependencies(modelContext).stream())
         .collect(toSet());
@@ -91,12 +90,6 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     String typeName = nameExtractor.typeName(modelContext);
     return Types.isBaseType(typeName);
   }
-
-  private Predicate<ResolvedType> ignorableTypes(final ModelContext modelContext) {
-    return input -> !modelContext.hasSeenBefore(input);
-  }
-
-
   private Set<ResolvedType> resolvedDependencies(ModelContext modelContext) {
     ResolvedType resolvedType = modelContext.alternateEvaluatedType();
     if (isBaseType(ModelContext.fromParent(modelContext, resolvedType))) {

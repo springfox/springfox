@@ -56,7 +56,7 @@ class ModelProviderSpec extends Specification implements ModelProviderSupport {
         alternateTypeProvider(),
         namingStrategy,
         emptySet())
-    context.seen(new TypeResolver().resolve(HttpHeaders))
+    context.processed(new TypeResolver().resolve(HttpHeaders))
     def dependentTypeNames = sut.dependencies(context).values().stream()
         .collect(Collectors.toMap(getNames,
             Function.identity()))

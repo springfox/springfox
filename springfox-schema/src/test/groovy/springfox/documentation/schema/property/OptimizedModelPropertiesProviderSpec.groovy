@@ -214,8 +214,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
         emptySet())
 
     when:
-    inputContext.seen(typeResolver.resolve(Category))
-    returnContext.seen(typeResolver.resolve(Category))
+    inputContext.processed(typeResolver.resolve(Category))
+    returnContext.processed(typeResolver.resolve(Category))
 
     and:
     def inputValue = sut.propertiesFor(type, inputContext)
