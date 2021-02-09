@@ -48,7 +48,7 @@ public class ApiModelSpecificationReader {
       ModelContext modelContext) {
 
     for (Class ignorableParameterType : ignorableParameterTypes) {
-      modelContext.seen(resolver.resolve(ignorableParameterType));
+      modelContext.processed(resolver.resolve(ignorableParameterType));
     }
   }
 

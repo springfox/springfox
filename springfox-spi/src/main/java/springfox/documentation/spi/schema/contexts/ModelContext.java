@@ -43,6 +43,7 @@ public class ModelContext {
 
   private final ModelContext parentContext;
   private final Set<ResolvedType> seenTypes = new HashSet<>();
+  private final Set<ResolvedType> processedTypes = new HashSet<>();
   private final springfox.documentation.builders.ModelBuilder modelBuilder;
   private final ModelSpecificationBuilder modelSpecificationBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
@@ -282,27 +283,24 @@ public class ModelContext {
    * @param resolvedType - type to check
    * @return true or false
    */
+  public boolean isProcessed(ResolvedType resolvedType) {
+    return processedTypes.contains(resolvedType)
+        || processedTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()))
+        || Optional.ofNullable(parentContext)
+        .filter(parentContext -> parentContext.isProcessed(resolvedType))
+        .isPresent();
+  }
+
   public boolean hasSeenBefore(ResolvedType resolvedType) {
     return seenTypes.contains(resolvedType)
         || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()))
-        || parentHasSeenBefore(resolvedType);
+        || Optional.ofNullable(parentContext)
+        .filter(parentContext -> parentContext.hasSeenBefore(resolvedType))
+        .isPresent();
   }
 
   public DocumentationType getDocumentationType() {
     return documentationType;
-  }
-
-  /**
-   * Answers the question, has the given type been processed by its parent context?
-   *
-   * @param resolvedType - type to check
-   * @return true or false
-   */
-  private boolean parentHasSeenBefore(ResolvedType resolvedType) {
-    if (parentContext == null) {
-      return false;
-    }
-    return parentContext.hasSeenBefore(resolvedType);
   }
 
   public GenericTypeNamingStrategy getGenericNamingStrategy() {
@@ -326,8 +324,15 @@ public class ModelContext {
     return modelSpecificationBuilder;
   }
 
+  public void processed(ResolvedType resolvedType) {
+    processedTypes.add(resolvedType);
+  }
+
   public void seen(ResolvedType resolvedType) {
     seenTypes.add(resolvedType);
+    if (parentContext != null) {
+      parentContext.seen(resolvedType);
+    }
   }
 
   @Override

@@ -85,7 +85,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         || isMapType(propertiesHost)
         || enumTypeDeterminer.isEnum(propertiesHost.getErasedType())
         || ScalarTypes.builtInScalarType(propertiesHost).isPresent()
-        || modelContext.hasSeenBefore(propertiesHost)) {
+        || modelContext.isProcessed(propertiesHost)) {
       LOG.debug(
           "Skipping model of type {} as its either a container type, map, enum or base type, or its already "
               + "been handled",
@@ -166,7 +166,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
   private Optional<ModelSpecification> mapModel(
       ModelContext mapContext,
       ResolvedType resolvedType) {
-    if (isMapType(resolvedType) && !mapContext.hasSeenBefore(resolvedType)) {
+    if (isMapType(resolvedType) && !mapContext.isProcessed(resolvedType)) {
       ResolvedType keyType = resolver.resolve(String.class);
       ModelContext keyContext = ModelContext.fromParent(
           mapContext,
