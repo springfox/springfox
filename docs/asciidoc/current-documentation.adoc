@@ -97,6 +97,24 @@ allows the properties to be  overridden
 |2.0             | springfox.documentation.swagger.v2.path
 |=======================
 
+=== Customizing the server url.
+
+By default, Springfox infers server url from the request url of swagger endpoint (say /v3/api-docs).
+
+This may not work if your application is behind a proxy with path prefix. In this case, you can specify a custom server url when building docket:
+
+.Custom server url configuration
+[source,java,linenums]
+----
+  @Bean
+  public Docket swaggerSpringMvcPlugin() {
+    return new Docket(DocumentationType.OAS_30)
+            .servers(new ServerBuilder().name("relative").url("../").description("Relative server url").build());
+  }
+----
+
+NOTE: Swagger client will resolve relative server url against swagger endpoint (say /v3/api-docs) instead of the Swagger UI url (say /swagger-ui/) you are visiting in Browser.
+
 === Configuring startup.
 If you'd like to delay the startup of springfox, you could choose to set auto-startup to false. The property to use
 is `springfox.documentation.auto-startup` and this could either be passed in as a `-D` jvm arg or via a property in

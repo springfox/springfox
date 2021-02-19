@@ -28,6 +28,9 @@ public class WebMvcBasePathAndHostnameTransformationFilter implements WebMvcOpen
   @Override
   public OpenAPI transform(OpenApiTransformationContext<HttpServletRequest> context) {
     OpenAPI openApi = context.getSpecification();
+    if (openApi.getServers() != null && !openApi.getServers().isEmpty()) {
+      return openApi;
+    }
     context.request().ifPresent(servletRequest -> {
       ForwardedHeaderExtractingRequest filter
           = new ForwardedHeaderExtractingRequest(servletRequest, new UrlPathHelper());

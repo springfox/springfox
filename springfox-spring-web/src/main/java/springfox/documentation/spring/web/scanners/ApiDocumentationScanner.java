@@ -27,6 +27,7 @@ import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.PathAdjuster;
+import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
@@ -89,7 +90,13 @@ public class ApiDocumentationScanner {
             .securitySchemes(context.getSecuritySchemes())
             .info(context.getApiInfo())
             .servers(context.getServers()));
-    return group.build();
+    Documentation documentation = group.build();
+    if (!context.getServers().isEmpty()) {
+      for (Server server : context.getServers()) {
+        documentation.addServer(server);
+      }
+    }
+    return documentation;
   }
 
   private Collection<ApiListingReference> apiListingReferences(

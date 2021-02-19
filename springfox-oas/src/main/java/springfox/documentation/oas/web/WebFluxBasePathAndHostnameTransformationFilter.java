@@ -27,6 +27,9 @@ public class WebFluxBasePathAndHostnameTransformationFilter implements WebFluxOp
   @Override
   public OpenAPI transform(OpenApiTransformationContext<ServerHttpRequest> context) {
     OpenAPI openApi = context.getSpecification();
+    if (openApi.getServers() != null && !openApi.getServers().isEmpty()) {
+      return openApi;
+    }
     context.request().ifPresent(request -> {
       String requestUrl = decode(new ForwardedHeaderTransformer().apply(request).getURI().toString());
       openApi.servers(Collections.singletonList(inferredServer(requestPrefix, requestUrl)));
