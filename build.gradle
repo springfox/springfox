@@ -4,7 +4,7 @@ plugins {
   id "com.jfrog.bintray" version "1.8.5"
   id "com.jfrog.artifactory" version "4.16.1"
   id "com.github.kt3k.coveralls" version "2.10.1"
-  id "org.asciidoctor.jvm.convert" version "2.4.0"
+  id "org.asciidoctor.jvm.convert" version "3.3.2"
   id "org.ajoberstar.grgit" version "4.0.2"
   id "org.ajoberstar.git-publish" version "3.0.0-rc.1"
   id "org.sonarqube" version "3.0"
