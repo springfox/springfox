@@ -5,6 +5,8 @@ ext {
   classGraph = "4.8.83"
   equalsverifierVersion = '3.3'
   groovy = "2.5.12"
+  kotlin = "1.4.31"
+  kotlinxCoroutines = "1.4.3"
   jacocoVersion = '0.8.5'
   jackson = '2.11.0'
   joda = "2.10.6"

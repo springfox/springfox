@@ -13,6 +13,7 @@ dependencies {
   api project(':springfox-spi')
   api project(':springfox-schema')
   api project(':springfox-core')
+  api project(':springfox-kotlin')
 
   api "io.github.classgraph:classgraph:$classGraph"
   api libs.core

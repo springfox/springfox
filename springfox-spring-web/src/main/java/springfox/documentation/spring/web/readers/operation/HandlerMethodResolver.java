@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2019 the original author or authors.
+ *  Copyright 2015-2020 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.kotlin.KotlinReflectHelper;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -48,6 +49,8 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
+import static org.springframework.core.KotlinDetector.isKotlinReflectPresent;
+import static org.springframework.core.KotlinDetector.isKotlinType;
 
 
 public class HandlerMethodResolver {
@@ -55,7 +58,7 @@ public class HandlerMethodResolver {
   private static final String SPRING4_DISCOVERER = "org.springframework.core.DefaultParameterNameDiscoverer";
   private final ParameterNameDiscoverer parameterNameDiscover = parameterNameDiscoverer();
   private final TypeResolver typeResolver;
-  private Map<Class, List<ResolvedMethod>> methodsResolvedForHostClasses = new HashMap<>();
+  private final Map<Class, List<ResolvedMethod>> methodsResolvedForHostClasses = new HashMap<>();
 
   public HandlerMethodResolver(TypeResolver typeResolver) {
     this.typeResolver = typeResolver;
@@ -63,7 +66,10 @@ public class HandlerMethodResolver {
 
   public ResolvedType methodReturnType(HandlerMethod handlerMethod) {
     return resolvedMethod(handlerMethod)
-        .map(toReturnType(typeResolver))
+        .map(handlerMethod != null && isKotlinType(handlerMethod.getBeanType()) && isKotlinReflectPresent()
+            ? KotlinReflectHelper.toReturnType(typeResolver)
+            : HandlerMethodResolver.toReturnType(typeResolver)
+        )
         .orElse(typeResolver.resolve(Void.TYPE));
   }
 
@@ -138,8 +144,7 @@ public class HandlerMethodResolver {
     return resolveToMethodWithMaxResolvedTypes(filtered, handlerMethod.getMethod());
   }
 
-  private List<ResolvedMethod> getMemberMethods(
-      Class hostClass) {
+  private List<ResolvedMethod> getMemberMethods(Class hostClass) {
     if (!methodsResolvedForHostClasses.containsKey(hostClass)) {
       ResolvedType beanType = typeResolver.resolve(hostClass);
       MemberResolver resolver = new MemberResolver(typeResolver);

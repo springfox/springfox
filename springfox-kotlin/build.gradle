@@ -1,0 +1,35 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "${kotlin}"
+}
+
+ext {
+    limits = [
+            'instruction': 96.5,
+            'branch'     : 91,
+            'line'       : 96.5,
+            'complexity' : 92,
+            'method'     : 96,
+            'class'      : 100
+    ]
+}
+
+dependencies {
+    api project(':springfox-spi')
+
+    api libs.core
+    api libs.spring
+
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
+    compileOnly "org.jetbrains.kotlin:kotlin-reflect"
+
+    testApi "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:${kotlinxCoroutines}"
+    testApi "com.fasterxml.jackson.module:jackson-module-kotlin:${jackson}"
+
+    testImplementation libs.test
+    testImplementation libs.swagger2Core
+    testImplementation libs.springProvidedWithFlux
+
+    testImplementation project(':springfox-core').sourceSets.test.output
+    testImplementation project(':springfox-spring-web').sourceSets.test.output
+    testImplementation project(':springfox-schema').sourceSets.test.output
+}
