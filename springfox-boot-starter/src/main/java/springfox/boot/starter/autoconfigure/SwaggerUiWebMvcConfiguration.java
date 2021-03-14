@@ -1,6 +1,5 @@
 package springfox.boot.starter.autoconfigure;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +15,10 @@ import static springfox.documentation.builders.BuilderDefaults.*;
     havingValue = "true",
     matchIfMissing = true)
 public class SwaggerUiWebMvcConfiguration {
-  @Value("${springfox.documentation.swagger-ui.base-url:}")
-  private String swaggerBaseUrl;
 
   @Bean
-  public SwaggerUiWebMvcConfigurer swaggerUiConfigurer() {
-    return new SwaggerUiWebMvcConfigurer(fixup(swaggerBaseUrl));
+  public SwaggerUiWebMvcConfigurer swaggerUiConfigurer(SpringfoxConfigurationProperties properties) {
+    return new SwaggerUiWebMvcConfigurer(fixup(properties.getSwaggerUi().getBaseUrl()));
   }
 
   private String fixup(String swaggerBaseUrl) {
