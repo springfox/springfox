@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import static org.slf4j.LoggerFactory.*;
 
 public class NoopValidator<T> implements Validator<T> {
-  private static final Logger LOGGER = getLogger("Validator");
+  private static final Logger LOGGER = getLogger(NoopValidator.class);
 
   @Override
   public List<ValidationResult> validate(T builder) {
