@@ -154,6 +154,9 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
           modelContext,
           resolvedType);
       Optional<ModelSpecification> model = modelSpecificationsFor(parentContext);
+      if(resolvedType instanceof ResolvedRecursiveType) {
+        continue;
+      }
       if (model.isPresent()) {
         models.add(model.get());
       } else {
