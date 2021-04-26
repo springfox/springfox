@@ -19,7 +19,7 @@
 
 package springfox.documentation.schema;
 
-public class InheritedRecursiveComplexType extends ComplexType {
+public class InheritedRecursiveComplexType extends GenericType<InheritedRecursiveComplexType> {
   private InheritedRecursiveComplexType parent;
   private SimpleType simpleProperties;
 

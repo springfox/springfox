@@ -304,9 +304,9 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
   @Unroll
   def "Inherited recursive complex property #property is inferred correctly"() {
     given:
-      def inheritedRecursiveComplexType = resolver.resolve(inheritedRecursiveComplexType())
+      def inheritedRecursiveComplexType = genericClassOfType(inheritedRecursiveComplexType())
       def provider = defaultModelSpecificationProvider()
-      ModelSpecification asInput = provider.modelSpecificationsFor(inputParam("0_0",
+      Set<ModelSpecification> asInputModels = provider.modelDependenciesSpecifications(inputParam("0_0",
               "group",
               inheritedRecursiveComplexType,
               Optional.empty(),
@@ -314,32 +314,32 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              emptySet())).get()
+              emptySet()))
 
-      ModelSpecification asReturn = provider.modelSpecificationsFor(returnValue("0_0",
+      Set<ModelSpecification> asReturnModels = provider.modelDependenciesSpecifications(returnValue("0_0",
               "group",
               inheritedRecursiveComplexType,
               Optional.empty(),
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              emptySet())).get()
+              emptySet()))
 
     expect:
-      asInput.getName() == "InheritedRecursiveComplexType"
-      asInput.getCompound().isPresent()
+      ModelSpecification asInput = asInputModels.find { it.name.equals("InheritedRecursiveComplexType") }
+      asInput != null
+      asInput.compound.isPresent()
       assertPropertySpecification(asInput.getCompound().get(), property, type, true)
 
-      asReturn.getName() == "InheritedRecursiveComplexType"
-      asReturn.getCompound().isPresent()
+
+      ModelSpecification asReturn = asReturnModels.find { it.name.equals("InheritedRecursiveComplexType") }
+      asReturn != null
+      asReturn.compound.isPresent()
       assertPropertySpecification(asReturn.getCompound().get(), property, type, false)
 
     where:
       property            | type
-      "name"              | ScalarType.STRING
-      "age"               | ScalarType.INTEGER
-      "category"          | Category
-      "customType"        | ScalarType.BIGDECIMAL
+      "genericField"      | InheritedRecursiveComplexType
       "parent"            | InheritedRecursiveComplexType
       "simpleProperties"  | SimpleType
   }
