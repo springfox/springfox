@@ -300,4 +300,47 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     "customType"        | ScalarType.BIGDECIMAL
     "inheritedProperty" | ScalarType.STRING
   }
+
+  @Unroll
+  def "Inherited recursive complex property #property is inferred correctly"() {
+    given:
+      def inheritedRecursiveComplexType = resolver.resolve(inheritedRecursiveComplexType())
+      def provider = defaultModelSpecificationProvider()
+      ModelSpecification asInput = provider.modelSpecificationsFor(inputParam("0_0",
+              "group",
+              inheritedRecursiveComplexType,
+              Optional.empty(),
+              new HashSet<>(),
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              emptySet())).get()
+
+      ModelSpecification asReturn = provider.modelSpecificationsFor(returnValue("0_0",
+              "group",
+              inheritedRecursiveComplexType,
+              Optional.empty(),
+              SWAGGER_12,
+              alternateTypeProvider(),
+              namingStrategy,
+              emptySet())).get()
+
+    expect:
+      asInput.getName() == "InheritedRecursiveComplexType"
+      asInput.getCompound().isPresent()
+      assertPropertySpecification(asInput.getCompound().get(), property, type, true)
+
+      asReturn.getName() == "InheritedRecursiveComplexType"
+      asReturn.getCompound().isPresent()
+      assertPropertySpecification(asReturn.getCompound().get(), property, type, false)
+
+    where:
+      property            | type
+      "name"              | ScalarType.STRING
+      "age"               | ScalarType.INTEGER
+      "category"          | Category
+      "customType"        | ScalarType.BIGDECIMAL
+      "parent"            | InheritedRecursiveComplexType
+      "simpleProperties"  | SimpleType
+  }
 }

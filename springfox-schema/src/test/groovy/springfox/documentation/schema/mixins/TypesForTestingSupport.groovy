@@ -82,6 +82,10 @@ trait TypesForTestingSupport {
     InheritedComplexType
   }
 
+  Class inheritedRecursiveComplexType() {
+    InheritedRecursiveComplexType
+  }
+
   ResolvedType genericClassWithTypeErased() {
     typeResolver().resolve(GenericType)
   }
