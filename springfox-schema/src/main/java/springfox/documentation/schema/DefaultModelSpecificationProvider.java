@@ -21,6 +21,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.classmate.types.ResolvedRecursiveType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +155,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
           modelContext,
           resolvedType);
       Optional<ModelSpecification> model = modelSpecificationsFor(parentContext);
-      if(resolvedType instanceof ResolvedRecursiveType) {
+      if (resolvedType instanceof ResolvedRecursiveType) {
         continue;
       }
       if (model.isPresent()) {
