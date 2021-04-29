@@ -1,0 +1,32 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.springframework.boot:spring-boot-gradle-plugin
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: org.springframework.boot:spring-boot-configuration-processor
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: com.github.kt3k.coveralls
+    versions:
+    - 2.10.2
+    - 2.11.0
+  - dependency-name: org.asciidoctor.jvm.convert
+    versions:
+    - 3.3.0
+    - 3.3.1
+  - dependency-name: com.jfrog.artifactory
+    versions:
+    - 4.20.0
+  - dependency-name: com.github.ben-manes.versions
+    versions:
+    - 0.36.0
