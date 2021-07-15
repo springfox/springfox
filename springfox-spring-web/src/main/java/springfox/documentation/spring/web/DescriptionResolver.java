@@ -19,20 +19,21 @@
 package springfox.documentation.spring.web;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static org.springframework.util.StringUtils.*;
+import static org.springframework.util.StringUtils.isEmpty;
 
 public class DescriptionResolver {
-  @SuppressWarnings("java:S4784")
-  private static final Pattern PATTERN = Pattern.compile("\\Q${\\E(.+?)(:(.*))?\\Q}\\E");
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DescriptionResolver.class);
+
   private final Environment environment;
-  private Map<String, String> cache;
+  private final Map<String, String> cache;
 
   public DescriptionResolver(Environment environment) {
     this.environment = environment;
@@ -45,58 +46,24 @@ public class DescriptionResolver {
       return expression;
     }
 
+    try {
+      expression = environment.resolveRequiredPlaceholders(expression);
+    } catch (IllegalArgumentException e) {
+      String errorMessage = "Some of the property placeholders in the following expression could not be resolved: '{}'";
+      LOGGER.warn(errorMessage, expression);
+      expression = environment.resolvePlaceholders(expression);
+    }
+
     // Check if the expression is already been parsed
     if (cache.containsKey(expression)) {
       return cache.get(expression);
 
-    }
-
-    // If the expression does not start with $, then no need to do PATTERN
-    if (!expression.startsWith("$")) {
-
+    } else {
       // Add to the mapping with key and value as expression
       cache.put(expression, expression);
 
       // If no match, then return the expression as it is
       return expression;
-
     }
-
-    // Create the matcher
-    Matcher matcher = PATTERN.matcher(expression);
-
-    // If the matching is there, then add it to the map and return the value
-    if (matcher.find()) {
-
-      // Store the value
-      String key = matcher.group(1);
-      String defaultValue = matcher.group(3);
-
-      // Get the value
-      String value = environment.getProperty(key);
-
-      // Store the value in the setting
-      if (value != null) {
-
-        // Store in the map
-        cache.put(expression, value);
-
-        // return the value
-        return value;
-
-      } else if (defaultValue != null) {
-        // use default if value not found
-        cache.put(expression, defaultValue);
-
-        return defaultValue;
-      }
-
-    }
-
-    // Add to the mapping with key and value as expression
-    cache.put(expression, expression);
-
-    // If no match, then return the expression as it is
-    return expression;
   }
 }
