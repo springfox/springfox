@@ -53,9 +53,11 @@ class ModelPropertyIsNullAnnotationPluginSpec extends Specification {
     when:
     sut.apply(context)
     def property = context.builder.build()
+    def propertySpec = context.specificationBuilder.build()
 
     then:
     property.isReadOnly() == readOnly
+    propertySpec.getReadOnly() == readOnly
 
     where:
     propertyName    | readOnly
@@ -80,9 +82,11 @@ class ModelPropertyIsNullAnnotationPluginSpec extends Specification {
     when:
     sut.apply(context)
     def property = context.builder.build()
+    def propertySpec = context.specificationBuilder.build()
 
     then:
     property.isReadOnly() == readOnly
+    propertySpec.getReadOnly() == readOnly
 
     where:
     propertyName    | readOnly

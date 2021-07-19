@@ -50,7 +50,8 @@ public class IsNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
   public void apply(ModelPropertyContext context) {
     Optional<Null> isNull = extractAnnotation(context);
     if (isNull.isPresent()) {
-      context.getBuilder().readOnly(isNull.isPresent());
+      context.getBuilder().readOnly(true);
+      context.getSpecificationBuilder().readOnly(true);
     }
   }
 
