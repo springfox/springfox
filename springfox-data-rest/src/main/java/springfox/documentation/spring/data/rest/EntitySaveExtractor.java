@@ -19,6 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.http.MediaType;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
@@ -43,6 +44,7 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
                                   context.resourcePath()))
               .supportsMethod(PUT)
               .supportsMethod(PATCH)
+              .produces(MediaType.APPLICATION_JSON)
               .parameterType(ParameterType.ID)
               .parameterType(ParameterType.RESOURCE)
               .build()
@@ -51,6 +53,7 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
 
           entityAction(context, handler)
               .supportsMethod(POST)
+              .produces(MediaType.APPLICATION_JSON)
               .parameterType(ParameterType.RESOURCE)
               .build()
               .map(post -> new SpringDataRestRequestHandler(context, post))
