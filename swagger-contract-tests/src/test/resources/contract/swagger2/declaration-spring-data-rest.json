@@ -455,20 +455,57 @@
                     {
                         "name": "page",
                         "in": "query",
+                        "description": "Results page you want to retrieve (0..N)",
                         "required": false,
                         "type": "integer",
-                        "format": "int32"
+                        "format": "int32",
+                        "x-example": 0
                     },
                     {
                         "name": "size",
                         "in": "query",
+                        "description": "Number of records per page",
                         "required": false,
                         "type": "integer",
-                        "format": "int32"
+                        "format": "int32",
+                        "x-example": 20
                     },
                     {
                         "name": "sort",
                         "in": "query",
+                        "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Person"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rest/people/sort{?sort}": {
+            "patch": {
+                "tags": [
+                    "person-controller"
+                ],
+                "summary": "sortResults",
+                "operationId": "sortResultsUsingPATCH_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
                         "required": false,
                         "type": "string"
                     }

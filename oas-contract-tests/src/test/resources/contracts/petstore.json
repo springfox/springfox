@@ -71,6 +71,7 @@
                     {
                         "name": "page",
                         "in": "query",
+                        "description": "Results page you want to retrieve (0..N)",
                         "required": false,
                         "style": "form",
                         "schema": {
@@ -81,6 +82,7 @@
                     {
                         "name": "size",
                         "in": "query",
+                        "description": "Number of records per page",
                         "required": false,
                         "style": "form",
                         "schema": {
@@ -91,6 +93,7 @@
                     {
                         "name": "sort",
                         "in": "query",
+                        "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
                         "required": false,
                         "style": "form",
                         "schema": {

@@ -15,6 +15,7 @@ dependencies {
   api project(':springfox-spi')
   api project(':springfox-core')
   api project(':springfox-spring-webmvc')
+  implementation libs.swagger2Core
 
   compileOnly "org.springframework.data:spring-data-rest-webmvc:$springDataRest"
   compileOnly "org.springframework.hateoas:spring-hateoas:${springHateoas}"
