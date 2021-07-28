@@ -18,12 +18,13 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.http.MediaType;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -35,6 +36,11 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
     List<RequestHandler> handlers = new ArrayList<>();
 
     context.crudMethods().getSaveMethod()
+        .filter(method ->
+            Arrays.stream(method.getDeclaredAnnotations())
+                    .filter((rr) -> rr instanceof RestResource)
+                    .allMatch (rr -> ((RestResource) rr).exported())
+        )
         .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
         .ifPresent(handler -> {
 
