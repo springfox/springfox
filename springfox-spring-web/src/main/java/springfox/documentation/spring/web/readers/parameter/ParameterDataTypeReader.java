@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import springfox.documentation.schema.CollectionType;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
@@ -132,7 +133,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         && context.getDocumentationType() == DocumentationType.OAS_30) {
       modelRef = new springfox.documentation.schema.ModelRef("string");
       context.requestParameterBuilder()
-          .query(q -> q.model(m -> m.scalarModel(collectionItemScalarType(parameterModel)))
+          .query(q -> q.model(m -> m.collectionModel(cm -> cm.collectionType(CollectionType.LIST).model(m2 -> m2.scalarModel(collectionItemScalarType(parameterModel)))))
               .explode(true));
     } else {
       String typeName = springfox.documentation.schema.Types.typeNameFor(parameterType.getErasedType());
