@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import patchRequestInterceptor, {getCsrf} from './csrf';
+import patchRequestInterceptor, { getCsrf } from './csrf';
 import fetchMock from 'fetch-mock';
 import { FetchError } from 'node-fetch';
 
@@ -13,10 +13,10 @@ afterEach(() => {
   fetchMock.restore();
   // clear cookie
   document.cookie
-      .split(";")
-      .forEach((c) => {
-        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-      });
+    .split(";")
+    .forEach((c) => {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
 });
 
 async function expectOk() {
