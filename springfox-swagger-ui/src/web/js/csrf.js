@@ -34,9 +34,9 @@ export function csrfRequestInterceptor(request, csrf) {
  * 2. getCsrfFromEndpoint.
  * 3. getCsrfFromCookie
  * @param baseUrl
- * @returns {Promise<{headerName: string, token: string} | undefined>}
+ * @returns {{headerName: string, token: string} | undefined}
  */
-export async function getCsrf(baseUrl) {
+export function getCsrf(baseUrl) {
   return getCsrfFromCookie() || getCsrfFromEndpoint(baseUrl)
     .then(v => v ? v : getCsrfFromMeta(baseUrl));
 }
