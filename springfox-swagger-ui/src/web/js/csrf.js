@@ -7,18 +7,13 @@ export default async function patchRequestInterceptor(baseUrl) {
   const existingInterceptor = window.ui.getConfigs().requestInterceptor;
 
   try {
-    const result = await getCsrf(baseUrl);
-
-    if (result) {
-      window.ui.getConfigs().requestInterceptor = request => {
-        request.headers[result.headerName] = result.token;
-        // console.debug(request);
-        return existingInterceptor ? existingInterceptor(request) : request;
-      };
-      console.debug('Successfully added csrf header for all requests');
-    } else {
-      console.debug('No csrf token can be found');
-    }
+    window.ui.getConfigs().requestInterceptor = request => {
+      const result = getCsrf(request.baseUrl);
+      request.headers[result.headerName] = result.token;
+      // console.debug(request);
+      return existingInterceptor ? existingInterceptor(request) : request;
+    };
+    console.debug('Successfully configured csrf interceptor for all requests');
   } catch (e) {
     console.error('Add csrf header encounter error', e)
   }
@@ -32,9 +27,8 @@ export default async function patchRequestInterceptor(baseUrl) {
  * @returns {Promise<{headerName: string, token: string} | undefined>}
  */
 export async function getCsrf(baseUrl) {
-  return await getCsrfFromMeta(baseUrl)
-    .then(v => v ? v : getCsrfFromEndpoint(baseUrl))
-    .then(v => v ? v : getCsrfFromCookie());
+  return getCsrfFromCookie() || getCsrfFromEndpoint(baseUrl)
+    .then(v => v ? v : getCsrfFromMeta(baseUrl));
 }
 
 /**

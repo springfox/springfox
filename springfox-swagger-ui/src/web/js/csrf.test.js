@@ -26,13 +26,15 @@ async function expectOk() {
 }
 
 /*
- * 1 2 3: get from meta, get from endpoint, get from cookie
+ * 1 2 3: get from cookie, get from endpoint, get from meta
  * x: mock csrf not found
  * o: mock found!
  * ?: mock not define
  */
 
 test('x x x', async () => {
+  document.cookie = 'first=hi';
+  document.cookie = 'last=hi';
   fetchMock.mock(`${baseUrl}/`, 404);
   fetchMock.mock(`${baseUrl}/csrf`, 404);
 
@@ -41,27 +43,26 @@ test('x x x', async () => {
 });
 
 test('o ? ?', async () => {
-  fetchMock.mock(`${baseUrl}/`, `<html><head><title>Title</title>
-  <meta name="_csrf" content="${token}">
-  <meta name="_csrf_header" content="${headerName}">
-</head><body></body></html>`);
+  document.cookie = 'first=hi';
+  document.cookie = `${cookieName}=${token}`;
+  document.cookie = 'last=hi';
 
   await expectOk();
 });
 
 test('x o ?', async () => {
-  fetchMock.mock(`${baseUrl}/`, `<html><head><title>No Meta</title></head><body></body></html>`);
+  document.cookie = 'first=hi';
+  document.cookie = 'last=hi';
   fetchMock.mock(`${baseUrl}/csrf`, { headerName, token });
 
   await expectOk();
 });
 
 test('x x o', async () => {
-  fetchMock.mock(`${baseUrl}/`, 404);
-  fetchMock.mock(`${baseUrl}/csrf`, 404);
   document.cookie = 'first=hi';
-  document.cookie = `${cookieName}=${token}`;
   document.cookie = 'last=hi';
+  fetchMock.mock(`${baseUrl}/csrf`, 404);
+  fetchMock.mock(`${baseUrl}/`, `<html><head><title>Title</title><meta name="_csrf" content="${token}"><meta name="_csrf_header" content="${headerName}"></head><body></body></html>`);
   await expectOk();
 });
 
@@ -86,6 +87,12 @@ test('x invalid-json ?', async () => {
     error = e;
   }
   expect(error).toBeInstanceOf(FetchError);
+});
+
+
+test('interceptor initialization', async () => {
+  window.ui = {};
+  window.ui.getConfigs = () => { return {} };
 
 
   window.ui = {};
