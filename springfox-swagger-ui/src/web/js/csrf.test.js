@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import patchRequestInterceptor, {getCsrf} from './csrf';
+import patchRequestInterceptor, { getCsrf } from './csrf';
 import fetchMock from 'fetch-mock';
 import { FetchError } from 'node-fetch';
 
@@ -13,10 +13,10 @@ afterEach(() => {
   fetchMock.restore();
   // clear cookie
   document.cookie
-      .split(";")
-      .forEach((c) => {
-        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-      });
+    .split(";")
+    .forEach((c) => {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
 });
 
 async function expectOk() {
@@ -87,6 +87,36 @@ test('x invalid-json ?', async () => {
   }
   expect(error).toBeInstanceOf(FetchError);
 
+
+  window.ui = {};
+  window.ui.getConfigs = () => { return {} };
+
   // Make sure this function will not throw exception.
   await patchRequestInterceptor(baseUrl);
+});
+
+test('request interceptor chain', async () => {
+  fetchMock.mock(`${baseUrl}/`, 404);
+  fetchMock.mock(`${baseUrl}/csrf`, 404);
+
+  var updatedByCustomInterceptor = false;
+  var customInterceptor = request => {
+    updatedByCustomInterceptor = true;
+    return request;
+  };
+
+  window.ui = {};
+  window.ui.getConfigs = () => { return { requestInterceptor: customInterceptor } };
+
+  // Initialize interceptor
+  await patchRequestInterceptor(baseUrl);
+
+  // Initialization should not invoke interceptor
+  expect(updatedByCustomInterceptor).toBeFalsy();
+
+  // Invoke interceptor chain
+  window.ui.getConfigs().requestInterceptor({ url: baseUrl });
+
+  // Custom interceptor must have been called
+  expect(updatedByCustomInterceptor).toBeTruthy();
 });
