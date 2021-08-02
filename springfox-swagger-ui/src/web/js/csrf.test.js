@@ -86,6 +86,12 @@ test('x invalid-json ?', async () => {
     error = e;
   }
   expect(error).toBeInstanceOf(FetchError);
+});
+
+
+test('interceptor initialization', async () => {
+  window.ui = {};
+  window.ui.getConfigs = () => { return {} };
 
   // Make sure this function will not throw exception.
   await patchRequestInterceptor(baseUrl);
