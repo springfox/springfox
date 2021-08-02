@@ -4,19 +4,29 @@
  * @returns {Promise<void>}
  */
 export default async function patchRequestInterceptor(baseUrl) {
-  const existingInterceptor = window.ui.getConfigs().requestInterceptor;
-
   try {
+    const existingInterceptor = window.ui.getConfigs().requestInterceptor;
     window.ui.getConfigs().requestInterceptor = request => {
       const result = getCsrf(request.baseUrl);
-      request.headers[result.headerName] = result.token;
-      // console.debug(request);
-      return existingInterceptor ? existingInterceptor(request) : request;
+      const r = result ? csrfRequestInterceptor(request, result) : request;
+      return existingInterceptor ? existingInterceptor(r) : r;
     };
-    console.debug('Successfully configured csrf interceptor for all requests');
+    console.debug('Successfully added csrf header for all requests');
   } catch (e) {
     console.error('Add csrf header encounter error', e)
   }
+}
+
+/**
+ * Add csrf header is necessary
+ * @returns boolean 
+ */
+export function csrfRequestInterceptor(request, csrf) {
+  if (isSameOrigin(window.location.href, request.url)) {
+    request.headers[csrf.headerName] = csrf.token;
+  }
+  //console.debug(request);
+  return request;
 }
 
 /**
@@ -82,4 +92,14 @@ function getCsrfFromCookie() {
       token: matcher.pop()
     }
   }
+}
+
+/**
+ * return true if two parameters shares the same origin
+ * @returns boolean 
+ */
+function isSameOrigin(current, request) {
+  var currentURL = new URL(current);
+  var requestURL = new URL(request);
+  return currentURL.protocol === requestURL.protocol && currentURL.host === requestURL.host;
 }

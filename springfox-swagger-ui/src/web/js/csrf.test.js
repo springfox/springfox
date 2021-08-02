@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import patchRequestInterceptor, { getCsrf } from './csrf';
+import patchRequestInterceptor, { getCsrf, csrfRequestInterceptor } from './csrf';
 import fetchMock from 'fetch-mock';
 import { FetchError } from 'node-fetch';
 
@@ -126,4 +126,29 @@ test('request interceptor chain', async () => {
 
   // Custom interceptor must have been called
   expect(updatedByCustomInterceptor).toBeTruthy();
+});
+
+test('cross-origin-request', async () => {
+  var request = { url: `${baseUrl}/test-endpoint`, headers: [] };
+  const csrf = {
+    headerName: `${headerName}`,
+    token: `${token}`
+  };
+  const modifiedRequest = csrfRequestInterceptor(request, csrf);
+
+  expect(modifiedRequest).toBe(request);
+  expect(modifiedRequest.headers).toHaveLength(0);
+});
+
+test('same-origin-request', async () => {
+  const request = { url: `http://localhost/test-endpoint`, headers: [] };
+  const csrf = {
+    headerName: `${headerName}`,
+    token: `${token}`
+  };
+
+  const modifiedRequest = csrfRequestInterceptor(request, csrf);
+
+  expect(modifiedRequest).toBe(request);
+  expect(modifiedRequest.headers[headerName]).toBe(token);
 });
