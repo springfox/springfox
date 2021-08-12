@@ -95,7 +95,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
            .parameterAccess(apiParam.access())
            .hidden(apiParam.hidden())
            .scalarExample(apiParam.example())
-           .complexExamples(examples(apiParam.examples()))
+           .complexExamples(examples(descriptions, apiParam.examples()))
            .order(SWAGGER_PLUGIN_ORDER)
            .build();
 

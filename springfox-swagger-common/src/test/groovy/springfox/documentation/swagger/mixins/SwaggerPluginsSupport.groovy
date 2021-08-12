@@ -77,7 +77,8 @@ trait SwaggerPluginsSupport {
             resolver,
             typeNameExtractor,
             enumTypeDeterminer,
-            new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))])
+            new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer),
+            descriptions)])
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
         of([new JacksonJsonViewProvider(new TypeResolver())])

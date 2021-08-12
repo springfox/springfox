@@ -92,7 +92,7 @@ public class OpenApiParameterBuilder implements ParameterBuilderPlugin {
                   .explode(translateExplodeOption(annotation.explode()))
                   .style(translateStyle(annotation.style())))
           .example(example)
-          .examples(allExamples("", annotation.examples()))
+          .examples(allExamples(descriptions, "", annotation.examples()))
           .examples(contentExamples(annotation.content()));
     }
   }
@@ -110,7 +110,7 @@ public class OpenApiParameterBuilder implements ParameterBuilderPlugin {
 
   private Collection<Example> contentExamples(Content[] contents) {
     return Arrays.stream(contents)
-        .flatMap(c -> allExamples(c.mediaType(), c.examples()).stream())
+        .flatMap(c -> allExamples(descriptions, c.mediaType(), c.examples()).stream())
         .collect(Collectors.toList());
   }
 

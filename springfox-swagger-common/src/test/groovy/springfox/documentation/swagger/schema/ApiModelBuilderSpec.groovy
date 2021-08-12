@@ -41,7 +41,8 @@ class ApiModelBuilderSpec extends Specification {
           resolver,
           Mock(TypeNameExtractor),
           Mock(EnumTypeDeterminer),
-          Mock(ModelSpecificationFactory))
+          Mock(ModelSpecificationFactory),
+          descriptions)
     expect:
       !sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
@@ -54,7 +55,8 @@ class ApiModelBuilderSpec extends Specification {
           resolver,
           Mock(TypeNameExtractor),
           Mock(EnumTypeDeterminer),
-          Mock(ModelSpecificationFactory))
+          Mock(ModelSpecificationFactory),
+          descriptions)
       ModelContext context = ModelContext.inputParam(
           "0",
           "group",

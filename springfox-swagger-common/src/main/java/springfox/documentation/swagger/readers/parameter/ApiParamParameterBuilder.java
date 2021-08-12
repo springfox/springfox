@@ -97,7 +97,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
           .scalarExample(example)
-          .complexExamples(examples(annotation.examples()))
+          .complexExamples(examples(descriptions, annotation.examples()))
           .hidden(annotation.hidden())
           .collectionFormat(annotation.collectionFormat())
           .order(SWAGGER_PLUGIN_ORDER);
@@ -115,7 +115,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
                   .allowEmptyValue(annotation.allowEmptyValue())
           )
           .example(example)
-          .examples(allExamples(annotation.examples()));
+          .examples(allExamples(descriptions, annotation.examples()));
     }
   }
 

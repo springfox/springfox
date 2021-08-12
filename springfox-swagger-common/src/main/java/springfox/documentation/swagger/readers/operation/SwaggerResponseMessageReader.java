@@ -42,6 +42,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ResponseContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
@@ -72,6 +73,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   private final TypeResolver typeResolver;
   private final ModelSpecificationFactory modelSpecifications;
   private final DocumentationPluginsManager documentationPlugins;
+  private final DescriptionResolver descriptions;
 
   @Autowired
   public SwaggerResponseMessageReader(
@@ -79,12 +81,14 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       TypeNameExtractor typeNameExtractor,
       TypeResolver typeResolver,
       ModelSpecificationFactory modelSpecifications,
-      DocumentationPluginsManager documentationPlugins) {
+      DocumentationPluginsManager documentationPlugins, DescriptionResolver descriptions
+  ) {
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
     this.typeResolver = typeResolver;
     this.modelSpecifications = modelSpecifications;
     this.documentationPlugins = documentationPlugins;
+    this.descriptions = descriptions;
   }
 
   @Override
@@ -168,7 +172,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
             examples.add(new ExampleBuilder()
                 .mediaType(mediaType)
                 .id("example-" + index++)
-                .value(exampleProperty.value())
+                .value(descriptions.resolve(exampleProperty.value()))
                 .build());
           }
         }
@@ -177,7 +181,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
         responseMessages.add(new springfox.documentation.builders.ResponseMessageBuilder()
             .code(apiResponse.code())
-            .message(apiResponse.message())
+            .message(descriptions.resolve(apiResponse.message()))
             .responseModel(responseModel.orElse(null))
             .examples(examples)
             .headersWithDescription(headers)
@@ -192,7 +196,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                         .apply(r -> r.model(m -> m.copyOf(model)))));
         responseContext.responseBuilder()
             .examples(examples)
-            .description(apiResponse.message())
+            .description(descriptions.resolve(apiResponse.message()))
             .headers(headers.values())
             .code(String.valueOf(apiResponse.code()));
         responses.add(documentationPlugins.response(responseContext));

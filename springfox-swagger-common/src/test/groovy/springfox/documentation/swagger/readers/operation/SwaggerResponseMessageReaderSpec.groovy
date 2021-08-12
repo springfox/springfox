@@ -62,7 +62,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         enumTypeDeterminer,
         typeNameExtractor,
         resolver,
-        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins(), descriptions)
         .apply(operationContext)
 
     and:
@@ -112,7 +112,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         enumTypeDeterminer,
         typeNameExtractor,
         resolver,
-        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins(), descriptions)
         .apply(operationContext)
 
     and:
@@ -161,7 +161,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
     new SwaggerResponseMessageReader(enumTypeDeterminer,
         typeNameExtractor,
         resolver,
-        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins(), descriptions)
         .apply(operationContext)
 
     and:
@@ -232,7 +232,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         new JacksonEnumTypeDeterminer(),
         typeNameExtractor,
         resolver,
-        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins(), descriptions)
 
     then:
     !sut.supports(DocumentationType.SPRING_WEB)
@@ -262,7 +262,8 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         typeNameExtractor,
         resolver,
         new ModelSpecificationFactory(typeNameExtractor, Mock(EnumTypeDeterminer)),
-        defaultWebPlugins())
+        defaultWebPlugins(),
+        descriptions)
         .apply(operationContext)
 
     and:

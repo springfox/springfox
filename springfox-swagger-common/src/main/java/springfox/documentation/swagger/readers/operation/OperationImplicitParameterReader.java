@@ -116,7 +116,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
             .parameterAccess(param.access())
             .order(SWAGGER_PLUGIN_ORDER)
             .scalarExample(param.example())
-            .complexExamples(examples(param.examples()))
+            .complexExamples(examples(descriptions, param.examples()))
             .collectionFormat(param.collectionFormat())
             .build(),
         new RequestParameterBuilder()
@@ -134,7 +134,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
                         .orElse(null))))
             .precedence(SWAGGER_PLUGIN_ORDER)
             .example(new ExampleBuilder().value(param.example()).build())
-            .examples(examples(param.examples()).entrySet().stream()
+            .examples(examples(descriptions, param.examples()).entrySet().stream()
                 .flatMap(e -> e.getValue().stream())
                 .collect(Collectors.toList()))
             .build()

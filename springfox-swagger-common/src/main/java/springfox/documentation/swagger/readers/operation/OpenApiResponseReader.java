@@ -41,6 +41,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ResponseContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
@@ -67,15 +68,18 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
   private final TypeResolver typeResolver;
   private final ModelSpecificationFactory modelSpecifications;
   private final DocumentationPluginsManager documentationPlugins;
+  private final DescriptionResolver descriptions;
 
   @Autowired
   public OpenApiResponseReader(
       TypeResolver typeResolver,
       ModelSpecificationFactory modelSpecifications,
-      DocumentationPluginsManager documentationPlugins) {
+      DocumentationPluginsManager documentationPlugins, DescriptionResolver descriptions
+  ) {
     this.typeResolver = typeResolver;
     this.modelSpecifications = modelSpecifications;
     this.documentationPlugins = documentationPlugins;
+    this.descriptions = descriptions;
   }
 
   @Override
@@ -134,7 +138,7 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
                 .description(eachExample.description())
                 .summary(eachExample.summary())
                 .id(eachExample.name())
-                .value(eachExample.value()).build());
+                .value(descriptions.resolve(eachExample.value())).build());
           }
         }
         headers.putAll(headers(apiResponse.headers()));

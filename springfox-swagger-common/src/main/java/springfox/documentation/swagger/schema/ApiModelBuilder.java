@@ -32,6 +32,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
@@ -48,17 +49,20 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
   private final TypeNameExtractor typeNameExtractor;
   private final EnumTypeDeterminer enumTypeDeterminer;
   private final ModelSpecificationFactory modelSpecifications;
+  private final DescriptionResolver descriptions;
 
   @Autowired
   public ApiModelBuilder(
       TypeResolver typeResolver,
       TypeNameExtractor typeNameExtractor,
       EnumTypeDeterminer enumTypeDeterminer,
-      ModelSpecificationFactory modelSpecifications) {
+      ModelSpecificationFactory modelSpecifications, DescriptionResolver descriptions
+  ) {
     this.typeResolver = typeResolver;
     this.typeNameExtractor = typeNameExtractor;
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.modelSpecifications = modelSpecifications;
+    this.descriptions = descriptions;
   }
 
   @Override
@@ -77,11 +81,11 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
             .ifPresent(subclassKeys::add);
       }
       context.getBuilder()
-             .description(annotation.description())
+             .description(descriptions.resolve(annotation.description()))
              .discriminator(annotation.discriminator())
              .subTypes(modelRefs);
       context.getModelSpecificationBuilder()
-             .facets(f -> f.description(annotation.description()))
+             .facets(f -> f.description(descriptions.resolve(annotation.description())))
              .compoundModel(cm -> cm.discriminator(annotation.discriminator())
                                     .subclassReferences(subclassKeys));
     }
