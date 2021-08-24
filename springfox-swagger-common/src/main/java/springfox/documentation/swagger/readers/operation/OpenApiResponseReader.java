@@ -137,13 +137,15 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
                 .value(eachExample.value()).build());
           }
         }
-        headers.putAll(headers(apiResponse.headers()));
 
         type.ifPresent(t -> responseContext.responseBuilder()
             .representation(each.mediaType().isEmpty() ? MediaType.ALL : MediaType.valueOf(each.mediaType()))
             .apply(r -> r.model(
                 m -> m.copyOf(modelSpecifications.create(modelContext, t)))));
       }
+
+      headers.putAll(headers(apiResponse.headers()));
+
       responseContext.responseBuilder()
           .examples(examples)
           .description(apiResponse.description())
