@@ -156,8 +156,9 @@ public class OpenApiResponseReader implements OperationBuilderPlugin {
 
   static boolean isSuccessful(String code) {
     try {
-      return HttpStatus.Series.SUCCESSFUL.equals(HttpStatus.Series.valueOf(code));
+      return HttpStatus.Series.SUCCESSFUL.equals(HttpStatus.Series.valueOf(Integer.parseInt(code)));
     } catch (Exception ignored) {
+      // Either couldn't parse the string to an integer, or the integer didn't match any status code series.
       return false;
     }
   }
