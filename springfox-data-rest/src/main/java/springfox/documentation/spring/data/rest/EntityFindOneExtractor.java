@@ -35,19 +35,15 @@ class EntityFindOneExtractor implements EntityOperationsExtractor {
 
     context.crudMethods().getFindOneMethod()
         .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
-        .ifPresent(handler -> {
-
-          entityAction(context, handler)
-              .path(String.format("%s%s/{id}",
-                                  context.basePath(),
-                                  context.resourcePath()))
-              .supportsMethod(GET)
-              .parameterType(ParameterType.ID)
-              .build()
-              .map(get -> new SpringDataRestRequestHandler(context, get))
-              .ifPresent(handlers::add);
-
-        });
+        .flatMap(handler -> entityAction(context, handler)
+                .path(String.format("%s%s/{id}",
+                        context.basePath(),
+                        context.resourcePath()))
+                .supportsMethod(GET)
+                .parameterType(ParameterType.ID)
+                .build())
+        .map(get -> new SpringDataRestRequestHandler(context, get))
+        .ifPresent(handlers::add);
 
     return handlers;
   }
