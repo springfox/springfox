@@ -37,6 +37,7 @@ import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
+import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -133,8 +134,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         && context.getDocumentationType() == DocumentationType.OAS_30) {
       modelRef = new springfox.documentation.schema.ModelRef("string");
       context.requestParameterBuilder()
-          .query(q -> q.model(m -> m.collectionModel(cm -> cm.collectionType(CollectionType.LIST).model(m2 -> m2.scalarModel(collectionItemScalarType(parameterModel)))))
-              .explode(true));
+          .query(q -> q.style(ParameterStyle.FORM).explode(false).model(m -> m.collectionModel(cm -> cm.collectionType(CollectionType.LIST).model(m2 -> m2.scalarModel(collectionItemScalarType(parameterModel))))));
     } else {
       String typeName = springfox.documentation.schema.Types.typeNameFor(parameterType.getErasedType());
       if (builtInScalarType(parameterType).isPresent()) {
