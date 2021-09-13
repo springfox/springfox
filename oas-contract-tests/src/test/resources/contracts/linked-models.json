@@ -1,0 +1,793 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Api Documentation",
+    "description": "Api Documentation",
+    "termsOfService": "urn:tos",
+    "contact": {},
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:__PORT__",
+      "description": "Inferred Url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "linked-models-controller",
+      "description": "Linked Models Controller"
+    }
+  ],
+  "paths": {
+    "/linked-models": {
+      "get": {
+        "tags": [
+          "linked-models-controller"
+        ],
+        "summary": "linkedModels",
+        "operationId": "linkedModelsUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Model"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Model": {
+        "title": "Model",
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Model01": {
+        "title": "Model01",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model02"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model01",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model02"
+              }
+            }
+          }
+        ]
+      },
+      "Model02": {
+        "title": "Model02",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model03"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model01"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model02",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model03"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model01"
+              }
+            }
+          }
+        ]
+      },
+      "Model03": {
+        "title": "Model03",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model04"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model02"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model03",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model04"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model02"
+              }
+            }
+          }
+        ]
+      },
+      "Model04": {
+        "title": "Model04",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model05"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model03"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model04",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model05"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model03"
+              }
+            }
+          }
+        ]
+      },
+      "Model05": {
+        "title": "Model05",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model06"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model04"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model05",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model06"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model04"
+              }
+            }
+          }
+        ]
+      },
+      "Model06": {
+        "title": "Model06",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model07"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model05"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model06",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model07"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model05"
+              }
+            }
+          }
+        ]
+      },
+      "Model07": {
+        "title": "Model07",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model08"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model06"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model07",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model08"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model06"
+              }
+            }
+          }
+        ]
+      },
+      "Model08": {
+        "title": "Model08",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model09"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model07"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model08",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model09"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model07"
+              }
+            }
+          }
+        ]
+      },
+      "Model09": {
+        "title": "Model09",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model10"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model08"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model09",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model10"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model08"
+              }
+            }
+          }
+        ]
+      },
+      "Model10": {
+        "title": "Model10",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model11"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model09"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model10",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model11"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model09"
+              }
+            }
+          }
+        ]
+      },
+      "Model11": {
+        "title": "Model11",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model12"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model10"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model11",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model12"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model10"
+              }
+            }
+          }
+        ]
+      },
+      "Model12": {
+        "title": "Model12",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model13"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model11"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model12",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model13"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model11"
+              }
+            }
+          }
+        ]
+      },
+      "Model13": {
+        "title": "Model13",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model14"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model12"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model13",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model14"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model12"
+              }
+            }
+          }
+        ]
+      },
+      "Model14": {
+        "title": "Model14",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model15"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model13"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model14",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model15"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model13"
+              }
+            }
+          }
+        ]
+      },
+      "Model15": {
+        "title": "Model15",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model16"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model14"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model15",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model16"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model14"
+              }
+            }
+          }
+        ]
+      },
+      "Model16": {
+        "title": "Model16",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model17"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model15"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model16",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model17"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model15"
+              }
+            }
+          }
+        ]
+      },
+      "Model17": {
+        "title": "Model17",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model18"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model16"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model17",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model18"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model16"
+              }
+            }
+          }
+        ]
+      },
+      "Model18": {
+        "title": "Model18",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model19"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model17"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model18",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model19"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model17"
+              }
+            }
+          }
+        ]
+      },
+      "Model19": {
+        "title": "Model19",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Model20"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model18"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model19",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "next": {
+                "$ref": "#/components/schemas/Model20"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model18"
+              }
+            }
+          }
+        ]
+      },
+      "Model20": {
+        "title": "Model20",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "previous": {
+            "$ref": "#/components/schemas/Model19"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Model"
+          },
+          {
+            "title": "Model20",
+            "required": [
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "previous": {
+                "$ref": "#/components/schemas/Model19"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

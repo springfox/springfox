@@ -8,11 +8,7 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.schema.WildcardType;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.HttpAuthenticationScheme;
-import springfox.documentation.service.OAuth2Scheme;
-import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -21,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static springfox.documentation.schema.AlternateTypeRules.*;
+import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 @Configuration
 public class OpenApiTestConfig {
@@ -40,6 +36,7 @@ public class OpenApiTestConfig {
             .and(PathSelectors.regex(".*/error").negate())
             .and(PathSelectors.regex(".*/bugs/.*").negate())
             .and(PathSelectors.regex(".*/features/.*").negate())
+            .and(PathSelectors.regex(".*/linked-models(/.*)?").negate())
             .and(PathSelectors.regex(".*/profile").negate()))
         .build()
         .enableUrlTemplating(false)
@@ -123,7 +120,26 @@ public class OpenApiTestConfig {
             newRule(resolver.resolve(Mono.class,
                 resolver.resolve(ResponseEntity.class, InputStreamResource.class)),
                 resolver.resolve(File.class)))
-        .host("bugs.springfox.io")
+        .host("features.springfox.io")
+        .protocols(new HashSet<>(Arrays.asList(
+            "http",
+            "https")));
+  }
+
+  @Bean
+  public Docket linkedModels() {
+    return new Docket(DocumentationType.OAS_30)
+        .groupName("linked-models")
+        .useDefaultResponseMessages(false)
+        .produces(new HashSet<String>() {{
+          add("application/json");
+        }})
+        .select()
+        .paths(PathSelectors.regex(".*/linked-models(/.*)?")
+            .and(PathSelectors.regex(".*/error").negate())
+            .and(PathSelectors.regex(".*/profile").negate()))
+        .build()
+        .host("linked-models.springfox.io")
         .protocols(new HashSet<>(Arrays.asList(
             "http",
             "https")));

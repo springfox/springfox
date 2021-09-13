@@ -38,9 +38,9 @@ import spock.lang.Specification
 import springfox.documentation.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
-import static java.nio.charset.StandardCharsets.*
-import static org.skyscreamer.jsonassert.JSONCompareMode.*
-import static org.springframework.boot.test.context.SpringBootTest.*
+import static java.nio.charset.StandardCharsets.UTF_8
+import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = OpenApiApplication)
 class OpenApiContractSpec extends Specification implements FileAccess {
@@ -91,10 +91,11 @@ class OpenApiContractSpec extends Specification implements FileAccess {
             NON_EXTENSIBLE)
 
     where:
-    contractFile    | groupName
-    'petstore.json' | 'petstore'
-    'bugs.json'     | 'bugs'
-    'features.json' | 'features'
+    contractFile         | groupName
+    'petstore.json'      | 'petstore'
+    'bugs.json'          | 'bugs'
+    'features.json'      | 'features'
+    'linked-models.json' | 'linked-models'
   }
 
   def "should list swagger resources for open api 3.0"() {
@@ -125,6 +126,11 @@ class OpenApiContractSpec extends Specification implements FileAccess {
       it.name == 'petstore' &&
           it.url == "/v3/api-docs?group=petstore" &&
           it.swaggerVersion == '3.0.3'
+    }
+    result.find {
+      it.name == 'linked-models' &&
+              it.url == "/v3/api-docs?group=linked-models" &&
+              it.swaggerVersion == '3.0.3'
     }
     result.find {
       it.name == 'default' &&
