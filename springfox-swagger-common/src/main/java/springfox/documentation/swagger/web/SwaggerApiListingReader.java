@@ -20,6 +20,7 @@ package springfox.documentation.swagger.web;
 
 
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.BuilderDefaults;
@@ -35,6 +36,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import springfox.documentation.spring.web.DescriptionResolver;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
@@ -45,6 +47,14 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 @Component
 @Order(value = SWAGGER_PLUGIN_ORDER)
 public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
+
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public SwaggerApiListingReader(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
+
   @Override
   public void apply(ApiListingContext apiListingContext) {
     Optional<? extends Class<?>> controller = apiListingContext.getResourceGroup().getControllerClass();
@@ -77,12 +87,16 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
         findAnnotation(controller, io.swagger.v3.oas.annotations.tags.Tags.class);
     if (tags != null) {
       Arrays.stream(tags.value())
-          .forEach(t -> controllerTags.add(new Tag(t.name(), t.description())));
+          .forEach(t -> controllerTags.add(new Tag(
+              descriptions.resolve(t.name()),
+              descriptions.resolve(t.description()))));
     }
     io.swagger.v3.oas.annotations.tags.Tag tag
         = findAnnotation(controller, io.swagger.v3.oas.annotations.tags.Tag.class);
     if (tag != null) {
-      controllerTags.add(new Tag(tag.name(), tag.description()));
+      controllerTags.add(new Tag(
+          descriptions.resolve(tag.name()),
+          descriptions.resolve(tag.description())));
     }
     return controllerTags;
   }

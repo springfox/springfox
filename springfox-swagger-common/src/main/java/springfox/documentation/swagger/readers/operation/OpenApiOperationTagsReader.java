@@ -18,16 +18,13 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toSet;
+import static springfox.documentation.service.Tags.emptyTags;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.swagger.common.SwaggerPluginSupport;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -36,21 +33,34 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.*;
-import static springfox.documentation.service.Tags.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.OperationBuilderPlugin;
+import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.DescriptionResolver;
+import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 @Component
 @Order(SwaggerPluginSupport.OAS_PLUGIN_ORDER)
 public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
 
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public OpenApiOperationTagsReader(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
+
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder()
         .tags(Stream.concat(
-            operationTags(context).stream(),
-            controllerTags(context).stream())
-            .collect(toSet()));
+                operationTags(context).stream(),
+                controllerTags(context).stream()
+            )
+                  .collect(toSet()));
   }
 
   private Set<String> controllerTags(OperationContext context) {
@@ -65,14 +75,20 @@ public class OpenApiOperationTagsReader implements OperationBuilderPlugin {
         = new HashSet<>();
     List<Tags> tags =
         context.findAllAnnotations(Tags.class);
-    tags.forEach(ts ->
-        Arrays.stream(ts.value())
-            .forEach(t -> controllerTags.add(
-                new springfox.documentation.service.Tag(t.name(), t.description()))));
+    tags.forEach(ts -> mapToServiceTag(Arrays.stream(ts.value()))
+        .forEach(controllerTags::add));
     List<Tag> tag = context.findAllAnnotations(Tag.class);
-    tag.forEach(t -> controllerTags.add(
-        new springfox.documentation.service.Tag(t.name(), t.description())));
+    mapToServiceTag(tag.stream())
+        .forEach(controllerTags::add);
     return controllerTags;
+  }
+
+  private Stream<springfox.documentation.service.Tag> mapToServiceTag(Stream<Tag> tags) {
+    return tags.map(tag -> new springfox.documentation.service.Tag(
+                        descriptions.resolve(tag.name()),
+                        descriptions.resolve(tag.description())
+                    )
+    );
   }
 
   private Set<String> operationTags(OperationContext context) {
