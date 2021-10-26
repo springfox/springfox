@@ -147,9 +147,8 @@ public abstract class SchemaMapper {
     source.getReference()
         .ifPresent(r -> {
           if (emptyToNull(r.getKey().getQualifiedModelName().getName()) != null) { //TODO: Find out why
-            ObjectSchema refModel = new ObjectSchema();
-            refModel.type(null);
-            refModel.set$ref(namesRegistry.nameByKey(r.getKey())
+            model.type(null);
+            model.set$ref(namesRegistry.nameByKey(r.getKey())
                 .orElse("ERROR - " + r.getKey().getQualifiedModelName()));
           }
         });
@@ -348,6 +347,7 @@ public abstract class SchemaMapper {
           .map(cm -> new ReferenceModelSpecificationToSchemaConverter(modelNamesRegistry)
               .convert(cm))
           .orElse(null);
+      // TODO mjp
     }
 
     if (schema != null) {
