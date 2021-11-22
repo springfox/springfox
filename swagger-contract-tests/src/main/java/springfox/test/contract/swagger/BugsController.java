@@ -149,7 +149,7 @@ public class BugsController {
 
   @RequestMapping(value = "1440", method = GET)
   public EntityModel<String> issue1440() {
-    return new EntityModel<>("1420");
+    return EntityModel.of("1420");
   }
 
   @RequestMapping(value = "1475", method = GET)
