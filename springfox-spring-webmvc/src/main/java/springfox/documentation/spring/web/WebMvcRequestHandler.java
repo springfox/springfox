@@ -24,6 +24,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.util.pattern.PathPattern;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -36,6 +38,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
 
@@ -80,7 +83,7 @@ public class WebMvcRequestHandler implements RequestHandler {
   public PatternsRequestCondition getPatternsCondition() {
     return new WebMvcPatternsRequestConditionWrapper(
         contextPath,
-        requestMapping.getPatternsCondition());
+        requestMapping.getPathPatternsCondition());
   }
 
   @Override
@@ -126,7 +129,7 @@ public class WebMvcRequestHandler implements RequestHandler {
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
-        requestMapping.getPatternsCondition().getPatterns(),
+        requestMapping.getPathPatternsCondition().getPatterns().stream().map(PathPattern::toString).collect(Collectors.toSet()),
         requestMapping.getMethodsCondition().getMethods(),
         requestMapping.getConsumesCondition().getConsumableMediaTypes(),
         requestMapping.getProducesCondition().getProducibleMediaTypes());

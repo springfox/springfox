@@ -19,13 +19,13 @@ ext {
   slf4j = "1.7.25"
   snakeyaml = '1.26'
   spock = "1.3-groovy-2.5"
-  spring = "5.2.7.RELEASE"
-  springIntegration = "5.2.6.RELEASE"
+  spring = "5.3.13"
+  springIntegration = "5.5.6"
   springHateoas = "1.1.0.RELEASE"
   springDataRest = "3.3.0.RELEASE"
   springPluginVersion = "2.0.0.RELEASE"
   swagger2Core = "1.5.20"
-  springBoot = "2.3.1.RELEASE"
+  springBoot = "2.6.1"
   springfoxRfc6570Version = "1.0.0"
   undercouch = "4.0.4"
   validationApiVersion = '2.0.1.Final'

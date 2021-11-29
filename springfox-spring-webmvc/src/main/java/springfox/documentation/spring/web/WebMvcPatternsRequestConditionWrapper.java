@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web;
 
+import org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 
 import java.util.Set;
@@ -30,11 +31,11 @@ public class WebMvcPatternsRequestConditionWrapper
     implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
   private final String contextPath;
-  private final PatternsRequestCondition condition;
+  private final PathPatternsRequestCondition condition;
 
   public WebMvcPatternsRequestConditionWrapper(
       String contextPath,
-      PatternsRequestCondition condition) {
+      PathPatternsRequestCondition condition) {
 
     this.contextPath = contextPath;
     this.condition = condition;
@@ -54,7 +55,7 @@ public class WebMvcPatternsRequestConditionWrapper
   @Override
   public Set<String> getPatterns() {
     return this.condition.getPatterns().stream()
-        .map(p -> String.format("%s/%s", maybeChompTrailingSlash(contextPath),  maybeChompLeadingSlash(p)))
+        .map(p -> String.format("%s/%s", maybeChompTrailingSlash(contextPath),  maybeChompLeadingSlash(p.toString())))
         .collect(Collectors.toSet());
   }
 
