@@ -55,7 +55,7 @@ public abstract class HashMapRepository<T, ID> implements CrudRepository<T, ID> 
     return entity;
   }
 
-  public void deleteAllById(Iterable<? extends Long> ids) {
+  public void deleteAllById(Iterable<ID> ids) {
   }
 
 
