@@ -129,7 +129,9 @@ public class WebMvcRequestHandler implements RequestHandler {
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
-        requestMapping.getPathPatternsCondition().getPatterns().stream().map(PathPattern::toString).collect(Collectors.toSet()),
+        requestMapping.getPathPatternsCondition().getPatterns().stream()
+                      .map(PathPattern::toString)
+                      .collect(Collectors.toSet()),
         requestMapping.getMethodsCondition().getMethods(),
         requestMapping.getConsumesCondition().getConsumableMediaTypes(),
         requestMapping.getProducesCondition().getProducibleMediaTypes());
