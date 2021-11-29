@@ -74,7 +74,8 @@ class SpringDataRestRequestHandler implements RequestHandler {
   public PatternsRequestCondition getPatternsCondition() {
     return new WebMvcPatternsRequestConditionWrapper(
         contextPath,
-        new org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition(new PathPatternParser(), actionSpecification.getPath())
+        new org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition(new PathPatternParser(),
+                                                                                       actionSpecification.getPath())
     );
   }
 
