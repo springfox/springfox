@@ -55,6 +55,10 @@ public abstract class HashMapRepository<T, ID> implements CrudRepository<T, ID> 
     return entity;
   }
 
+  void deleteAllById(Iterable<? extends Long> ids) {
+  }
+
+
   @Override
   public <S extends T> java.util.List<S> saveAll(Iterable<S> entities) {
     Assert.notNull(entities, "entities cannot be null");
