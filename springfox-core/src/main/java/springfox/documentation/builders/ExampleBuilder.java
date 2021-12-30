@@ -116,11 +116,11 @@ public class ExampleBuilder {
 
   public Example build() {
     return new Example(
-        id,
-        summary,
-        description,
-        value,
-        externalValue,
-        emptyToNull(mediaType));
+      nullToEmpty(id),
+      nullToEmpty(summary),
+      nullToEmpty(description),
+      nullToEmpty(String.valueOf(value)),
+      nullToEmpty(externalValue),
+      nullToEmpty(mediaType));
   }
 }
