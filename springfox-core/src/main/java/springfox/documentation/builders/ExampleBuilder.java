@@ -106,7 +106,7 @@ public class ExampleBuilder {
   /**
    * @see ExampleBuilder#externalValue(String)
    * @since 3.0
-   * @param externalValue - externalValue
+   * @param externalValue - externalValue fix
    * @return ExampleBuilder
    */
   public ExampleBuilder externalValue(String externalValue) {
