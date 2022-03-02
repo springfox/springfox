@@ -21,9 +21,11 @@ package springfox.documentation.spring.web;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.util.pattern.PathPattern;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -78,9 +80,23 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new WebMvcPatternsRequestConditionWrapper(
-        contextPath,
-        requestMapping.getPatternsCondition());
+    Assert.isTrue(requestMapping.getPatternsCondition() != null ||
+                    requestMapping.getPathPatternsCondition() != null,
+            "Either patternsConditions or pathPatternsCondition must not be null");
+    if (requestMapping.getPatternsCondition() == null) {
+      var pathPatterns = requestMapping.getPathPatternsCondition();
+      var pathPatternStrings = pathPatterns.getPatterns().stream()
+              .map(PathPattern::getPatternString)
+              .toList()
+              .toArray(new String[0]);
+      return new WebMvcPatternsRequestConditionWrapper(
+              contextPath,
+              new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(pathPatternStrings));
+    } else {
+      return new WebMvcPatternsRequestConditionWrapper(
+              contextPath,
+              requestMapping.getPatternsCondition());
+    }
   }
 
   @Override
