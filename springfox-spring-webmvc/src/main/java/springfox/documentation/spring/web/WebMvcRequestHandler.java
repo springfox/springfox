@@ -52,7 +52,7 @@ public class WebMvcRequestHandler implements RequestHandler {
       HandlerMethod handlerMethod) {
     this.contextPath = contextPath;
     this.methodResolver = methodResolver;
-    this.requestMapping = requestMapping;
+    this.requestMapping =  new RequestMappingInfo(requestMapping, requestMapping.getCustomCondition());
     this.handlerMethod = handlerMethod;
   }
 
