@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.Scopes;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.mapstruct.Mapper;
+import org.slf4j.Logger;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.HttpAuthenticationScheme;
 import springfox.documentation.service.OAuth2Scheme;
@@ -14,8 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.slf4j.LoggerFactory.*;
+
 @Mapper(componentModel = "spring")
 public class SecuritySchemeMapper {
+  private static final Logger LOGGER = getLogger(ServiceModelToOpenApiMapper.class);
+
   Map<String, SecurityScheme> map(List<springfox.documentation.service.SecurityScheme> schemes) {
     Map<String, SecurityScheme> mapped = new HashMap<>();
     schemes.forEach(each -> mapScheme(mapped, each));
@@ -71,6 +76,8 @@ public class SecuritySchemeMapper {
           .type(SecurityScheme.Type.OPENIDCONNECT)
           .name(scheme.getName())
           .openIdConnectUrl(((OpenIdConnectScheme) scheme).getOpenIdConnectUrl());
+    } else {
+      LOGGER.error("Unsupported SecurityScheme instance: {}", scheme.getClass());
     }
     if (mapped != null) {
       map.put(scheme.getName(), mapped);
