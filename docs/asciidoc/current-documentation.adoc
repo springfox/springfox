@@ -156,9 +156,9 @@ Currently supported list of annotations are in order of priority within the anno
 | e.g. `@ApiOperation(notes="${operation1.description}")`
 
 | ApiOperation
-| summary
-| Operation#summary
-| e.g. `@ApiOperation(value="${operation1.summary}")`
+| value
+| Operation#value
+| e.g. `@ApiOperation(value="${operation1.value}")`
 
 | RequestParam
 | defaultValue
