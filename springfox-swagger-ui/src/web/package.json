@@ -22,7 +22,7 @@
     "babel-loader": "^8.0.5",
     "fetch-mock": "^6.4.2",
     "jest": "^24.1.0",
-    "node-fetch": "^2.1.2",
+    "node-fetch": "^2.6.7",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.11"
   }
