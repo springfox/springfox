@@ -60,6 +60,9 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
       if (oasTags.isEmpty()) {
         tagSet.addAll(apiAnnotation.map(tags())
             .orElse(new TreeSet<>()));
+        if (tagSet.isEmpty() && apiAnnotation.map(Api::value).isPresent()) {
+          tagSet.add(apiAnnotation.map(Api::value).get());
+        }
         if (tagSet.isEmpty()) {
           tagSet.add(apiListingContext.getResourceGroup().getGroupName());
         }
