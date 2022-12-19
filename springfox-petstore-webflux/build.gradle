@@ -2,7 +2,7 @@ dependencies {
   implementation libs.core
   implementation libs.spring
   implementation libs.springProvidedWithMvc
-  compileOnly "org.springframework:spring-webflux:$spring"
+  compileOnly "org.springframework:spring-webflux:$springWeb"
 
   implementation libs.swagger2Core
 

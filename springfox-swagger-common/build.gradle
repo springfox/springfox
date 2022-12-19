@@ -22,7 +22,7 @@ dependencies {
 
   compileOnly libs.clientProvided
   compileOnly libs.springProvidedWithMvc
-  compileOnly "javax.servlet:javax.servlet-api:$servlet"
+  compileOnly "jakarta.servlet:jakarta.servlet-api:$servlet"
 
 
   testImplementation project(':springfox-core')
@@ -33,7 +33,7 @@ dependencies {
 
   testImplementation libs.test
   testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"
-  testImplementation "javax.servlet:javax.servlet-api:$servlet"
+  testImplementation "jakarta.servlet:jakarta.servlet-api:$servlet"
   testImplementation libs.clientProvided
   testImplementation libs.springProvidedWithMvc
 }

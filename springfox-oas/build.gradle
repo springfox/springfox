@@ -1,6 +1,6 @@
-plugins {
-  id "net.ltgt.apt-idea" version "0.21"
-}
+//plugins {
+//  id "net.ltgt.apt-idea" version "0.21"
+//}
 
 ext {
   limits = [
@@ -14,7 +14,6 @@ ext {
 }
 
 dependencies {
-  api libs.oasCore
   api project(':springfox-spi')
   api project(':springfox-schema')
   api project(':springfox-core')
@@ -24,14 +23,15 @@ dependencies {
   api project(':springfox-swagger-common')
   api libs.core
   api libs.spring
+  api libs.oasCore
 
   implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
 
   compileOnly libs.springProvidedWithMvc
-  compileOnly "org.springframework:spring-webflux:$spring"
+  compileOnly "org.springframework:spring-webflux:$springWeb"
   compileOnly "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
-  compileOnly "javax.servlet:javax.servlet-api:$servlet"
+  compileOnly "jakarta.servlet:jakarta.servlet-api:$servlet"
   compileOnly libs.clientProvided
 
   testImplementation project(':springfox-core').sourceSets.test.output
@@ -48,4 +48,5 @@ compileJava {
       "-Amapstruct.defaultComponentModel=spring",
       "-Amapstruct.unmappedTargetPolicy=ERROR"
   ]
+
 }
