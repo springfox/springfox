@@ -1,3 +1,38 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        mavenLocal()
+        //maven {url "https://plugins.gradle.org/m2/"}
+        maven{ url 'https://maven.aliyun.com/repository/public'}
+        maven{ url 'https://maven.aliyun.com/repository/central'}
+        maven {url 'https://maven.aliyun.com/repository/google'}
+        maven {url 'https://maven.aliyun.com/repository/spring'}
+        maven {url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        maven {url 'https://maven.aliyun.com/repository/spring-plugin'}
+        maven { url 'https://jitpack.io' }
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        //maven {url "https://plugins.gradle.org/m2/"}
+        maven {url 'https://maven.aliyun.com/repository/public'}
+        maven {url 'https://maven.aliyun.com/repository/central'}
+        maven {url 'https://maven.aliyun.com/repository/google'}
+        maven {url 'https://maven.aliyun.com/repository/spring'}
+        maven {url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        maven {url 'https://maven.aliyun.com/repository/spring-plugin'}
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+
+
 rootProject.name = 'springfox'
 include 'springfox-core'
 include 'springfox-spi'
