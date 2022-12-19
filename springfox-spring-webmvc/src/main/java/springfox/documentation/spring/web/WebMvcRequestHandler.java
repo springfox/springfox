@@ -32,10 +32,7 @@ import springfox.documentation.spring.wrapper.NameValueExpression;
 import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static java.util.Optional.*;
 
@@ -125,8 +122,9 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public RequestHandlerKey key() {
+    org.springframework.web.servlet.mvc.condition.PatternsRequestCondition sets = requestMapping.getPatternsCondition();
     return new RequestHandlerKey(
-        requestMapping.getPatternsCondition().getPatterns(),
+        sets!=null?sets.getPatterns():new HashSet<>(),
         requestMapping.getMethodsCondition().getMethods(),
         requestMapping.getConsumesCondition().getConsumableMediaTypes(),
         requestMapping.getProducesCondition().getProducibleMediaTypes());

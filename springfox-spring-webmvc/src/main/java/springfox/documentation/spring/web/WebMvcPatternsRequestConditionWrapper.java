@@ -21,6 +21,9 @@ package springfox.documentation.spring.web;
 
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,6 +56,9 @@ public class WebMvcPatternsRequestConditionWrapper
 
   @Override
   public Set<String> getPatterns() {
+    if(null == this.condition){
+      return new HashSet<>();
+    }
     return this.condition.getPatterns().stream()
         .map(p -> String.format("%s/%s", maybeChompTrailingSlash(contextPath),  maybeChompLeadingSlash(p)))
         .collect(Collectors.toSet());
@@ -62,20 +68,24 @@ public class WebMvcPatternsRequestConditionWrapper
   @Override
   public boolean equals(Object o) {
     if (o instanceof WebMvcPatternsRequestConditionWrapper) {
-      return this.condition.equals(((WebMvcPatternsRequestConditionWrapper) o).condition);
+      WebMvcPatternsRequestConditionWrapper oo = (WebMvcPatternsRequestConditionWrapper) o;
+      if(this.condition == null) {
+        return oo.condition == null;
+      }
+      return this.condition.equals(oo.condition);
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return this.condition.hashCode();
+    return Objects.hashCode(this.condition);
   }
 
 
   @Override
   public String toString() {
-    return this.condition.toString();
+    return String.valueOf(this.condition);
   }
 }
 
