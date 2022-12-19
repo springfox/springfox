@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    springBootVersion = '3.0.0'
+    springBootVersion = '2.3.1.RELEASE'
   }
   repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-web"
   implementation "org.springframework.boot:spring-boot-starter-webflux"
   implementation "org.springframework.boot:spring-boot-starter-data-rest"
-  implementation "org.apache.groovy:groovy-all:$groovy"
+  implementation "org.codehaus.groovy:groovy-all:$groovy"
   implementation 'org.slf4j:slf4j-simple:1.7.30'
   implementation "javax.validation:validation-api:$validationApiVersion"
 

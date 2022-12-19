@@ -1,6 +1,6 @@
-//plugins {
-//  id "net.ltgt.apt-idea" version "0.21"
-//}
+plugins {
+  id "net.ltgt.apt-idea" version "0.21"
+}
 
 ext {
   limits = [
@@ -42,7 +42,7 @@ dependencies {
   api libs.swagger2Core
   compileOnly libs.springProvidedWithMvc
   compileOnly libs.clientProvided
-  compileOnly "jakarta.servlet:jakarta.servlet-api:$servlet"
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
   implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
@@ -55,12 +55,12 @@ dependencies {
   testImplementation libs.test
   testImplementation libs.springProvidedWithMvc
   testImplementation libs.clientProvided
-  testImplementation "jakarta.servlet:jakarta.servlet-api:$servlet"
+  testImplementation "javax.servlet:javax.servlet-api:$servlet"
 
-  integrationTestImplementation sourceSets.main.output
-  integrationTestImplementation sourceSets.test.output
-//  integrationTestImplementation configurations.testImplementation
-//  integrationTestImplementation configurations.testRuntime
+  integrationTestCompile sourceSets.main.output
+  integrationTestCompile sourceSets.test.output
+  integrationTestCompile configurations.testImplementation
+  integrationTestRuntime configurations.testRuntime
 }
 
 compileJava {

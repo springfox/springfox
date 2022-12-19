@@ -21,7 +21,7 @@ dependencies {
   compileOnly libs.springBootProvided
   
   compileOnly libs.springProvidedWithMvc
-  compileOnly "jakarta.servlet:jakarta.servlet-api:$servlet"
+  compileOnly "javax.servlet:javax.servlet-api:$servlet"
 
   testImplementation libs.test
 }
