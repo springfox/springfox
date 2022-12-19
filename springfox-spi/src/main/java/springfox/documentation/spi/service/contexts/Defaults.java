@@ -317,11 +317,11 @@ public class Defaults {
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class); //Used to ignore parameters
 
-    classFor("javax.servlet.ServletRequest").ifPresent(it -> ignored.add(it));
-    classFor("javax.servlet.ServletResponse").ifPresent(it -> ignored.add(it));
-    classFor("javax.servlet.http.HttpServletRequest").ifPresent(it -> ignored.add(it));
-    classFor("javax.servlet.http.HttpServletResponse").ifPresent(it -> ignored.add(it));
-    classFor("javax.servlet.ServletContext").ifPresent(it -> ignored.add(it));
+    classFor("jakarta.servlet.ServletRequest").ifPresent(it -> ignored.add(it));
+    classFor("jakarta.servlet.ServletResponse").ifPresent(it -> ignored.add(it));
+    classFor("jakarta.servlet.http.HttpServletRequest").ifPresent(it -> ignored.add(it));
+    classFor("jakarta.servlet.http.HttpServletResponse").ifPresent(it -> ignored.add(it));
+    classFor("jakarta.servlet.ServletContext").ifPresent(it -> ignored.add(it));
   }
 
   Optional<Class> classFor(String className) {

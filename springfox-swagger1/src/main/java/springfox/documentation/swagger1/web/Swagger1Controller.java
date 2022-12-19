@@ -37,7 +37,7 @@ import springfox.documentation.swagger1.dto.ApiListing;
 import springfox.documentation.swagger1.dto.ResourceListing;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

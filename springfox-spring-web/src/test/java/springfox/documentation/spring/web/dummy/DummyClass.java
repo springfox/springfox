@@ -68,8 +68,8 @@ import springfox.documentation.spring.web.dummy.models.Street;
 import springfox.documentation.spring.web.dummy.models.Treeish;
 import springfox.documentation.spring.web.dummy.models.Wrapper;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;

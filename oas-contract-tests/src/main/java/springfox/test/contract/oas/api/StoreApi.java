@@ -42,7 +42,7 @@ import springfox.test.contract.oas.model.Order;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 
-@javax.annotation.Generated(value = "org.springdoc.demo.app2.codegen.languages.SpringCodegen",
+@javax.annotation.processing.Generated(value = "org.springdoc.demo.app2.codegen.languages.SpringCodegen",
                             date = "2019-07-11T00:09:29.839+02:00[Europe/Paris]")
 
 @Tag(name = "store", description = "the store API")

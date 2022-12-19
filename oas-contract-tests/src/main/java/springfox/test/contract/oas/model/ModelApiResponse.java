@@ -26,7 +26,7 @@ import java.util.Objects;
  * ModelApiResponse
  */
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen",
+@javax.annotation.processing.Generated(value = "org.openapitools.codegen.languages.SpringCodegen",
                             date = "2019-11-30T09:49:26.034469-01:00[Atlantic/Azores]")
 
 

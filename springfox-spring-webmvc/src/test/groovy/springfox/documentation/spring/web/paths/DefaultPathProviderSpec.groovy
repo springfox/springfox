@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.paths
 import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
-import javax.servlet.ServletContext
+import jakarta.servlet.ServletContext
 
 class DefaultPathProviderSpec extends Specification implements RequestMappingSupport {
 

@@ -49,11 +49,11 @@ import springfox.documentation.spring.web.readers.parameter.ModelAttributeParame
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 
-import javax.servlet.ServletContext
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.ServletContext
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.ServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 

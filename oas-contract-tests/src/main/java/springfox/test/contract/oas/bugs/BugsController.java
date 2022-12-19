@@ -30,8 +30,8 @@ import reactor.core.publisher.Mono;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.test.contract.oas.model.Pet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

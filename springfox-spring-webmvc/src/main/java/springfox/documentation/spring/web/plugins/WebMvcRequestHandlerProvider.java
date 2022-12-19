@@ -34,7 +34,7 @@ import springfox.documentation.spring.web.OnServletBasedWebApplication;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

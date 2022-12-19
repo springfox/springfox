@@ -3,7 +3,7 @@ package springfox.documentation.swagger.common
 import org.springframework.http.HttpHeaders
 import spock.lang.Specification
 
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 import static java.util.Collections.*
 import static springfox.documentation.swagger.common.HostNameProvider.*

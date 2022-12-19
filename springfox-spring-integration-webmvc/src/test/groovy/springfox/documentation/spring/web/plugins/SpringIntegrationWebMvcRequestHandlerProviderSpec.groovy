@@ -28,8 +28,8 @@ import spock.lang.Specification
 import springfox.documentation.spring.web.SpringIntegrationWebMvcRequestHandler
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 class SpringIntegrationWebMvcRequestHandlerProviderSpec extends Specification {
   def methodResolver = Mock(HandlerMethodResolver)

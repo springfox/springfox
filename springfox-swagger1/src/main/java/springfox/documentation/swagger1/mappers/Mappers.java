@@ -22,7 +22,7 @@ package springfox.documentation.swagger1.mappers;
 import org.springframework.web.util.UriComponents;
 import springfox.documentation.swagger1.dto.ApiListing;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class Mappers {
       UriComponents uriComponents,
       String hostNameOverride,
       String basePath) {
-    if (!isEmpty(hostNameOverride)) {
+    if (hasLength(hostNameOverride)) {
       int port = uriComponents.getPort();
       if (port > -1) {
         return String.format("%s://%s:%d%s", uriComponents.getScheme(), hostNameOverride, port, basePath);
