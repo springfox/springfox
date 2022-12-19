@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: circleci/openjdk:11-jdk-node-browsers
+      - image: circleci/openjdk:17-jdk-node-browsers
     environment:
       JVM_OPTIONS: -Xmx2G -XX:ReservedCodeCacheSize=1G
       GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xms256m -Xmx3072m -XX:+HeapDumpOnOutOfMemoryError"'
