@@ -98,7 +98,7 @@ public class OpenApiSchemaPropertyBuilder implements ModelPropertyBuilderPlugin 
 
     return annotation -> {
       String description = "";
-      if (!isEmpty(annotation.description())) {
+      if (hasLength(annotation.description())) {
         description = annotation.description();
       }
       return descriptions.resolve(description);

@@ -20,6 +20,7 @@ package springfox.documentation.swagger.readers.operation;
 
 import io.swagger.annotations.ResponseHeader;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.CollectionType;
@@ -110,8 +111,8 @@ public class ResponseHeaders {
   }
 
   private static Predicate<io.swagger.v3.oas.annotations.headers.Header> emptyOrVoidHeader() {
-    return input -> isEmpty(input.name()) ||
-        (isVoidImplementation(input) && StringUtils.isEmpty(input.schema().type()));
+    return input -> !hasLength(input.name()) ||
+        (isVoidImplementation(input) && !hasLength(input.schema().type()));
   }
 
   private static boolean isVoidImplementation(io.swagger.v3.oas.annotations.headers.Header input) {
@@ -119,7 +120,7 @@ public class ResponseHeaders {
   }
 
   private static Predicate<ResponseHeader> emptyOrVoid() {
-    return input -> isEmpty(input.name()) || Void.class.equals(input.response());
+    return input -> ObjectUtils.isEmpty(input.name()) || Void.class.equals(input.response());
   }
 
   @SuppressWarnings("deprecation")
@@ -127,7 +128,7 @@ public class ResponseHeaders {
     springfox.documentation.schema.ModelReference modelReference;
     String typeName = ofNullable(springfox.documentation.schema.Types.typeNameFor(each.response()))
         .orElse("string");
-    if (isEmpty(each.responseContainer())) {
+    if (!hasLength(each.responseContainer())) {
       modelReference = new springfox.documentation.schema.ModelRef(typeName);
     } else {
       modelReference = new springfox.documentation.schema.ModelRef(each.responseContainer(),
@@ -174,7 +175,7 @@ public class ResponseHeaders {
   }
 
   private static Optional<ScalarType> scalarType(Schema schema) {
-    if (StringUtils.isEmpty(schema.type())) {
+    if (!StringUtils.hasLength(schema.type())) {
       return Optional.empty();
     }
     return ScalarType.from(schema.type(), schema.format());

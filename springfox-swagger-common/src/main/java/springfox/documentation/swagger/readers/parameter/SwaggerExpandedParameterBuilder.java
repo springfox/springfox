@@ -140,7 +140,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private void maybeSetParameterName(
       ParameterExpansionContext context,
       String parameterName) {
-    if (!isEmpty(parameterName)) {
+    if (hasLength(parameterName)) {
       context.getParameterBuilder().name(parameterName);
       context.getRequestParameterBuilder().name(parameterName);
     }

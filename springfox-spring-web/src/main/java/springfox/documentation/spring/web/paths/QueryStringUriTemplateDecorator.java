@@ -48,7 +48,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
     return input -> {
       StringBuilder sb = new StringBuilder(input);
       String prefilled = prefilledQueryParams(context);
-      if (!isEmpty(prefilled)) {
+      if (hasLength(prefilled)) {
         sb.append(requiresContinuation(input) ? "&" : "?");
         sb.append(prefilled);
       }
@@ -67,7 +67,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
       String input,
       String prefilled) {
     String prefix;
-    if (isEmpty(prefilled)) {
+    if (!hasLength(prefilled)) {
       if (requiresContinuation(input)) {
         prefix = "{&";
       } else {

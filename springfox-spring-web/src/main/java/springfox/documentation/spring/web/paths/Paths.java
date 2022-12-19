@@ -36,7 +36,7 @@ public class Paths {
   public static String splitCamelCase(
       String s,
       String separator) {
-    if (isEmpty(s)) {
+    if (!hasLength(s)) {
       return "";
     }
     return s.replaceAll(
@@ -54,14 +54,14 @@ public class Paths {
   }
 
   public static String maybeChompLeadingSlash(String path) {
-    if (isEmpty(path) || !path.startsWith("/")) {
+    if (!hasLength(path) || !path.startsWith("/")) {
       return path;
     }
     return path.replaceFirst("^/", "");
   }
 
   public static String maybeChompTrailingSlash(String path) {
-    if (isEmpty(path) || !path.endsWith("/")) {
+    if (!hasLength(path) || !path.endsWith("/")) {
       return path;
     }
     return path.replaceFirst("/$", "");
@@ -69,7 +69,7 @@ public class Paths {
 
 
   public static String firstPathSegment(String path) {
-    if (isEmpty(path)) {
+    if (!hasLength(path)) {
       return path;
     }
     Matcher matcher = FIRST_PATH_FRAGMENT_REGEX.matcher(path);
@@ -106,6 +106,6 @@ public class Paths {
   }
 
   public static String rootPathWhenEmpty(String path) {
-    return !isEmpty(path) ? path : ROOT;
+    return hasLength(path) ? path : ROOT;
   }
 }

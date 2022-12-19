@@ -53,7 +53,7 @@ public class OAuth2SchemeValidator<T> implements Validator<OAuth2SchemeBuilder> 
       List<ValidationResult> results,
       String name,
       String value) {
-    if (StringUtils.isEmpty(value)) {
+    if (!StringUtils.hasLength(value)) {
       results.add(new ValidationResult(
           "OAuth2Scheme",
           "name",

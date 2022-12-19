@@ -123,7 +123,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
       ResolvedType parameterType,
       String allowableValueString) {
     AllowableValues allowableValues = null;
-    if (!isEmpty(allowableValueString)) {
+    if (hasLength(allowableValueString)) {
       allowableValues = ApiModelProperties.allowableValueFromString(allowableValueString);
     } else {
       if (enumTypeDeterminer.isEnum(parameterType.getErasedType())) {

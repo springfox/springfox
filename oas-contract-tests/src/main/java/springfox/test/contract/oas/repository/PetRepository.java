@@ -66,4 +66,11 @@ public class PetRepository extends HashMapRepository<Pet, Long> {
                           )
                    .collect(Collectors.toList());
   }
+
+  @Override
+  public void deleteAllById(Iterable<? extends Long> longs) {
+    for (Long aLong : longs) {
+      entities.remove(aLong);
+    }
+  }
 }

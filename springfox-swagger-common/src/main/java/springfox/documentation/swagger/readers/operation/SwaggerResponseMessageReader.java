@@ -163,7 +163,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
         List<Example> examples = new ArrayList<>();
         int index = 0;
         for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
-          if (!isEmpty(exampleProperty.value())) {
+          if (hasLength(exampleProperty.value())) {
             String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
             examples.add(new ExampleBuilder()
                 .mediaType(mediaType)

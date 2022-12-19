@@ -52,7 +52,7 @@ public class Enums {
     return transformUnique(subject.getEnumConstants(), (Function<Object, String>) input -> {
       Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
               .map(evaluateJsonValue(input));
-      if (jsonValue.isPresent() && !isEmpty(jsonValue.get())) {
+      if (jsonValue.isPresent() && hasLength(jsonValue.get())) {
         return jsonValue.get();
       }
       return ((Enum) input).name();

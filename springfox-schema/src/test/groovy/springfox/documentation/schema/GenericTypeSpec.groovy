@@ -166,7 +166,7 @@ class GenericTypeSpec extends SchemaSpecification {
   }
 
   def expectedModelName(String modelName, String hostType = "GenericType") {
-    if (!isEmpty(modelName)) {
+    if (hasLength(modelName)) {
       "$hostType«$modelName»"
     } else {
       hostType

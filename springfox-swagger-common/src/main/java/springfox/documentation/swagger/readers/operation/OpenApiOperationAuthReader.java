@@ -84,7 +84,7 @@ public class OpenApiOperationAuthReader implements OperationBuilderPlugin {
         for (String eachScope : scopes) {
           // @Authorization has a default blank each scope, which we need to
           // ignore in the case of api keys.
-          if (!isEmpty(eachScope)) {
+          if (hasLength(eachScope)) {
             authorizationScopeList.add(
                 new AuthorizationScopeBuilder()
                     .scope(eachScope)
@@ -114,7 +114,7 @@ public class OpenApiOperationAuthReader implements OperationBuilderPlugin {
 
   private Collection<SecurityRequirement> securityRequirements(Operation operation) {
     return Stream.of(operation.security())
-                 .filter(input -> !isEmpty(input.name()))
+                 .filter(input -> hasLength(input.name()))
                  .collect(toList());
   }
 

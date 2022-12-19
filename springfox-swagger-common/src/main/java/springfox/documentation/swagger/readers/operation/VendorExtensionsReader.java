@@ -77,7 +77,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   private VendorExtension objectExtension(Extension each) {
     ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(ofNullable(each.name()).orElse("")));
     for (ExtensionProperty property : each.properties()) {
-      if (!isEmpty(property.name()) && !isEmpty(property.value())) {
+      if (hasLength(property.name()) && hasLength(property.value())) {
         extension.addProperty(new StringVendorExtension(property.name(), property.value()));
       }
     }
@@ -95,7 +95,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private String ensurePrefixed(String name) {
-    if (!isEmpty(name) && !name.startsWith("x-")) {
+    if (hasLength(name) && !name.startsWith("x-")) {
       return "x-" + name;
     }
     return name;

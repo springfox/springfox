@@ -63,7 +63,7 @@ class ParameterAnnotationReaderSpec extends Specification {
     when:
       Optional<ApiParam> annotation = ParameterAnnotationReader.fromHierarchy(methodParameter, ApiParam.class)
     then:
-      annotation.isPresent() == !isEmpty(expected)
+      annotation.isPresent() == hasLength(expected)
       !annotation.isPresent() || annotation.get().name() == expected
     where:
       methodName  | expected

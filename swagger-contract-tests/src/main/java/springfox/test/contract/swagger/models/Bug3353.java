@@ -144,7 +144,7 @@ public class Bug3353 {
     public void addProperty(
         String name,
         Object property) {
-      if (!StringUtils.isEmpty(property)) {
+      if (StringUtils.hasLength(property)) {
         this.builder.append(property);
       }
     }
@@ -190,7 +190,7 @@ public class Bug3353 {
     public void addToUri(
         String name,
         Object property) {
-      if (!StringUtils.isEmpty(property)) {
+      if (StringUtils.hasLength(property)) {
         if (this.builder.length() > 0) {
           this.builder.append("&");
         }

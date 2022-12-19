@@ -166,7 +166,7 @@ public class ParameterBuilder {
    */
   @Deprecated
   public ParameterBuilder parameterType(String paramType) {
-    if (!StringUtils.isEmpty(paramType)) {
+    if (StringUtils.hasLength(paramType)) {
       this.paramType = defaultIfAbsent(ParameterType.valueOf(paramType.toUpperCase()), this.paramType);
     }
     return this;

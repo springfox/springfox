@@ -42,7 +42,6 @@ import springfox.documentation.swagger1.dto.ResponseMessage;
 })
 @SuppressWarnings("deprecation")
 public interface ServiceModelToSwaggerMapper {
-  //Api related
   ApiDescription toSwaggerApiDescription(springfox.documentation.service.ApiDescription from);
 
   @Mappings({
@@ -81,6 +80,7 @@ public interface ServiceModelToSwaggerMapper {
   @Mappings({
       @Mapping(target = "dataType", source = "responseModel", qualifiedBy = DataTypeMapper.OperationType.class),
       @Mapping(target = "nickname", source = "uniqueId"),
+      @Mapping(target = "method", expression = "java(from.getMethod()!=null? from.getMethod().name():\"\")"),
       @Mapping(target = "authorizations", source = "securityReferences")
   })
   Operation toSwaggerOperation(springfox.documentation.service.Operation from);

@@ -347,7 +347,7 @@ public class ApiModelReader {
 
       modelsToCompare.stream()
           .filter(
-              m -> StringUtils.isEmpty(parameter)
+              m -> !StringUtils.hasLength(parameter)
                   || parameter.equals(mergingContext.getModelParameter(m.getId())))
           .filter(m -> m.equalsIgnoringName(modelToCompare))
           .map(springfox.documentation.schema.Model::getId)
