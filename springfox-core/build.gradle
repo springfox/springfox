@@ -19,7 +19,7 @@ dependencies {
 
   testImplementation libs.test
   testImplementation libs.clientProvided
-  testImplementation "javax.servlet:javax.servlet-api:$servlet"
+  testImplementation "jakarta.servlet:jakarta.servlet-api:$servlet"
 
   testImplementation libs.springProvidedWithMvc
 }

@@ -23,7 +23,8 @@ repositories {
 dependencies {
   implementation gradleApi()
   implementation localGroovy() //Gradle 2.3 -> Groovy 2.3.9
-  testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5@jar'
+  implementation 'org.opentest4j:opentest4j:1.2.0'
+  testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0@jar'
   testImplementation 'junit:junit:4.12'
 }
 

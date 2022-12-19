@@ -14,10 +14,10 @@ dependencies {
   api libs.spring
 
   compileOnly libs.springProvidedWithMvc
-  compileOnly "org.springframework:spring-webflux:$spring"
+  compileOnly "org.springframework:spring-webflux:$springWeb"
   compileOnly libs.springBootProvided
   compileOnly libs.clientProvided
-  compileOnly "javax.servlet:javax.servlet-api:$servlet"
-  annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:2.3.1.RELEASE"
+  compileOnly "jakarta.servlet:jakarta.servlet-api:$servlet"
+  annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:3.0.0"
 
 }
