@@ -18,6 +18,7 @@
 
 package springfox.test.contract.oas.api;
 
+import jakarta.annotation.PostConstruct;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,6 @@ import springfox.test.contract.oas.model.Pet;
 import springfox.test.contract.oas.model.Tag;
 import springfox.test.contract.oas.repository.PetRepository;
 
-import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.FileOutputStream;
 import java.util.Arrays;

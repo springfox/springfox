@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiParam;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.Digits;
@@ -144,7 +145,7 @@ public class Bug3353 {
     public void addProperty(
         String name,
         Object property) {
-      if (StringUtils.hasLength(property)) {
+      if (!ObjectUtils.isEmpty(property)) {
         this.builder.append(property);
       }
     }
@@ -190,7 +191,7 @@ public class Bug3353 {
     public void addToUri(
         String name,
         Object property) {
-      if (StringUtils.hasLength(property)) {
+      if (!ObjectUtils.isEmpty(property)) {
         if (this.builder.length() > 0) {
           this.builder.append("&");
         }
