@@ -7,13 +7,10 @@ Date buildTimeAndDate = new Date()
 ext {
   buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
   buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
-  projectUrl = "https://github.com/springfox/springfox"
-  bintrayUser = project.hasProperty('bintrayUsername') ?
-      project.property('bintrayUsername') :
-      System.getenv('BINTRAY_USER_NAME')
-  bintrayApiKey = project.hasProperty('bintrayApiKey') ?
-      project.property('bintrayApiKey') :
-      System.getenv('BINTRAY_PASSWORD')
+  projectUrl = "https://github.com/XSComSoft/springfox-springboot3"
+  publishUrl = project.hasProperty('publishUrl') ?
+        project.property('publishUrl') :
+        System.getenv('PUBLISH_URL')
   passphrase = project.hasProperty('gpgPassphrase') ?
       project.property('gpgPassphrase') :
       System.getenv('GPG_PASSPHRASE')
@@ -29,8 +26,6 @@ ext {
 }
 
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: "com.jfrog.artifactory"
 
 jar {
   manifest {
@@ -76,6 +71,16 @@ javadoc {
 }
 
 publishing {
+  repositories  {
+    maven {
+      name 'nexus'
+      url = project.publishUrl
+      credentials{
+        username = project.ossUser
+        password = project.ossPassword
+      }
+    }
+  }
   publications {
     mavenJava(MavenPublication) {
       from components.java
@@ -89,7 +94,7 @@ publishing {
       }
       pom {
         name = "${project.name}"
-        url = "https://github.com/springfox/springfox"
+        url = "https://github.com/XSComSoft/springfox-springboot3"
         description = "JSON API documentation for spring based applications"
 
         scm {
@@ -131,59 +136,4 @@ publishing {
 }
 
 
-artifactory {
-  contextUrl = 'https://oss.jfrog.org'
-  resolve {
-    repository {
-      repoKey = 'libs-release'
-      maven = true
-    }
-  }
-  publish {
-    repository {
-      repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
-      //when using oss.jfrog.org the credentials are from Bintray. For local build we expect them to be found in
-      //~/.gradle/gradle.properties, otherwise to be set in the build server
-      username = project.bintrayUser
-      password = project.bintrayApiKey
-    }
-    defaults {
-      publications('mavenJava')
-    }
-  }
-}
-
-bintray {
-  user = project.bintrayUser
-  key = project.bintrayApiKey
-  dryRun = MultiProjectReleasePlugin.dryRun(project) //Whether to run this as dry-run, without deploying
-  publish = true //If version should be auto published after an upload
-  publications = ['mavenJava']
-  pkg {
-    repo = 'maven-repo'
-    name = "springfox"
-    userOrg = "springfox"
-    websiteUrl = "${project.projectUrl}"
-    issueTrackerUrl = "${project.projectUrl}/issues"
-    vcsUrl = "${project.projectUrl}.git"
-    desc = project.description
-    licenses = ['Apache-2.0']
-    labels = ['spring', 'swagger', 'apis', 'oas', 'openapi', 'springfox']
-    publicDownloadNumbers = true
-    version {
-      vcsTag = project.version
-      gpg {
-        sign = true //Determines whether to GPG sign the files. The default is false
-        //Optional. The passphrase for GPG signing'
-        passphrase = project.passphrase
-      }
-      mavenCentralSync {
-        sync = ("true" == project.shouldSyncWithMavenCentral)
-        user = project.sonatypeUser
-        password = project.sonatypePassword
-        close = '1'
-      }
-    }
-  }
-}
 
