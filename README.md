@@ -142,3 +142,6 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 现在你可以在/swagger-ui/index.html访问你的OAS_30文档了
 
 Now you can access your OAS_30 documentation at /swagger-ui/index.html
+
+ **mawserver@foxmail.com 连旭灿进行的修改，如果你有各种软件需求欢迎联系**
+
