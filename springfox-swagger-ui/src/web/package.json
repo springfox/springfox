@@ -19,11 +19,11 @@
     "@babel/core": "^7.3.3",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.3.0",
     "fetch-mock": "^6.4.2",
     "jest": "^24.1.0",
     "node-fetch": "^2.1.2",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.11"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   }
 }
