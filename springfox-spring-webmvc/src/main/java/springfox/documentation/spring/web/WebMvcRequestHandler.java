@@ -77,7 +77,7 @@ public class WebMvcRequestHandler implements RequestHandler {
   public PatternsRequestCondition getPatternsCondition() {
     return new WebMvcPatternsRequestConditionWrapper(
         contextPath,
-        requestMapping.getPatternsCondition());
+        requestMapping.getPathPatternsCondition());
   }
 
   @Override
@@ -122,7 +122,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public RequestHandlerKey key() {
-    org.springframework.web.servlet.mvc.condition.PatternsRequestCondition sets = requestMapping.getPatternsCondition();
+    org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition sets = requestMapping.getPathPatternsCondition();
     return new RequestHandlerKey(
         sets!=null?sets.getPatterns():new HashSet<>(),
         requestMapping.getMethodsCondition().getMethods(),

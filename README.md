@@ -43,7 +43,7 @@ and add this to your project dependencies
 <dependency>
    <groupId>io.springfox</groupId>
    <artifactId>springfox-boot-starter</artifactId>
-   <version>4.0.0</version>
+   <version>4.0.3</version>
 </dependency>
 ```
 

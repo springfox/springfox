@@ -121,9 +121,7 @@ public class WebFluxRequestHandler implements RequestHandler {
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
-        requestMapping.getPatternsCondition().getPatterns().stream()
-            .map(PathPattern::getPatternString)
-            .collect(Collectors.toSet()),
+        requestMapping.getPatternsCondition().getPatterns(),
         requestMapping.getMethodsCondition().getMethods(),
         requestMapping.getConsumesCondition().getConsumableMediaTypes(),
         requestMapping.getProducesCondition().getProducibleMediaTypes());
