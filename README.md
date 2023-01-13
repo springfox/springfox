@@ -51,6 +51,41 @@ and add this to your project dependencies
 
 and create this Spring Configuration
 
+### 简易版本
+### Simple Version
+```java
+@Configuration
+@EnableOpenApi
+public class SpringFoxConfig implements WebMvcConfigurer {
+    private final SwaggerProperties swaggerProperties;
+
+    public SpringFoxConfig(SwaggerProperties swaggerProperties) {
+        this.swaggerProperties = swaggerProperties;
+    }
+
+    /**
+     * Swagger挂载点设置
+     * @return
+     */
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.OAS_30)
+                .enable(swaggerProperties.getEnable())
+                .apiInfo(apiInfo())
+                .select()
+                .apis(e -> !e.getName().equals("error"))
+                .paths(e -> !e.equals(""))
+                .build()
+                .host(swaggerProperties.getTryHost())
+                .protocols(newHashSet("https", "http"));
+    }
+}
+```
+
+### SpringSecurity启用时复杂版本
+### Complex version when SpringSecurity enabled
+
+
 ```java
 @Configuration
 @EnableOpenApi
@@ -142,6 +177,43 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 现在你可以在/swagger-ui/index.html访问你的OAS_30文档了
 
 Now you can access your OAS_30 documentation at /swagger-ui/index.html
+
+其中SwaggerProperties的Demo
+
+And the SwaggerProperties Demo
+
+```java
+@Data
+@Configuration
+@PropertySource(value = "classpath:swagger.properties", encoding = "UTF-8")
+@ConfigurationProperties
+public class SwaggerProperties {
+    /**
+     * 是否开启swagger，生产环境一般关闭，所以这里定义一个变量
+     */
+    private Boolean enable;
+
+    /**
+     * 项目应用名
+     */
+    private String applicationName;
+
+    /**
+     * 项目版本信息
+     */
+    private String applicationVersion;
+
+    /**
+     * 项目描述信息
+     */
+    private String applicationDescription;
+
+    /**
+     * 接口调试地址
+     */
+    private String tryHost;
+}
+```
 
  **mawserver@foxmail.com 连旭灿进行的修改，如果你有各种软件需求欢迎联系**
 
