@@ -23,6 +23,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.util.pattern.PathPatternParser;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -72,7 +73,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
   public PatternsRequestCondition getPatternsCondition() {
     return new WebMvcPatternsRequestConditionWrapper(
         contextPath,
-        new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(actionSpecification.getPath())
+        new org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition(PathPatternParser.defaultInstance, actionSpecification.getPath())
     );
   }
 

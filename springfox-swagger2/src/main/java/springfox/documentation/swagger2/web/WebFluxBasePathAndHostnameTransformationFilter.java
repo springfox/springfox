@@ -15,10 +15,10 @@ public class WebFluxBasePathAndHostnameTransformationFilter implements WebFluxSw
   public Swagger transform(SwaggerTransformationContext<ServerHttpRequest> context) {
     Swagger swagger = context.getSpecification();
     context.request().ifPresent(request -> {
-      swagger.basePath(isEmpty(request.getPath().contextPath().value())
+      swagger.basePath(!hasLength(request.getPath().contextPath().value())
           ? "/"
           : request.getPath().contextPath().value());
-      if (isEmpty(swagger.getHost())) {
+      if (!hasLength(swagger.getHost())) {
         swagger.host(request.getURI().getAuthority());
       }
     });

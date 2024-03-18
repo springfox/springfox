@@ -35,7 +35,7 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 
-import javax.servlet.ServletRequest
+import jakarta.servlet.ServletRequest
 
 import static java.util.Collections.*
 import static org.springframework.http.HttpStatus.*

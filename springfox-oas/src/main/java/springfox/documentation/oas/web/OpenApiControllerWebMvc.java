@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Conditional;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.plugin.core.PluginRegistry;
@@ -41,7 +43,7 @@ import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +55,7 @@ import static springfox.documentation.oas.web.SpecGeneration.*;
 @RequestMapping(OPEN_API_SPECIFICATION_PATH)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @Conditional(OnServletBasedWebApplication.class)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OpenApiControllerWebMvc {
 
   private final DocumentationCache documentationCache;

@@ -197,7 +197,6 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
-   * Use {@link Docket#responses} instead
    * @deprecated @since 3.0.0
    */
   @Deprecated
@@ -545,6 +544,7 @@ public class Docket implements DocumentationPlugin {
   public DocumentationType getDocumentationType() {
     return documentationType;
   }
+
 
   @Override
   public boolean supports(DocumentationType delimiter) {

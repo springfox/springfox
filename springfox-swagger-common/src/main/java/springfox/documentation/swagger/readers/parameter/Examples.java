@@ -40,7 +40,7 @@ public class Examples {
   public static Map<String, List<Example>> examples(io.swagger.annotations.Example example) {
     Map<String, List<Example>> examples = new HashMap<>();
     for (ExampleProperty each : example.value()) {
-      if (!isEmpty(each.value())) {
+      if (hasLength(each.value())) {
         examples.putIfAbsent(each.mediaType(), new LinkedList<>());
         examples.get(each.mediaType()).add(new ExampleBuilder()
             .mediaType(each.mediaType())
@@ -54,7 +54,7 @@ public class Examples {
   public static List<Example> allExamples(io.swagger.annotations.Example example) {
     List<Example> examples = new ArrayList<>();
     for (ExampleProperty each : example.value()) {
-      if (!isEmpty(each.value())) {
+      if (hasLength(each.value())) {
         examples.add(new ExampleBuilder()
             .mediaType(each.mediaType())
             .value(each.value())
@@ -67,7 +67,7 @@ public class Examples {
   public static Map<String, List<Example>> examples(String mediaType, ExampleObject[] exampleObjects) {
     Map<String, List<Example>> examples = new HashMap<>();
     for (ExampleObject each : exampleObjects) {
-      if (!isEmpty(each.value())) {
+      if (hasLength(each.value())) {
         examples.putIfAbsent(mediaType, new LinkedList<>());
         examples.get(mediaType).add(new ExampleBuilder()
                                                .mediaType(mediaType)
@@ -81,7 +81,7 @@ public class Examples {
   public static List<Example> allExamples(String mediaType, ExampleObject[] exampleObjects) {
     List<Example> examples = new ArrayList<>();
     for (ExampleObject each : exampleObjects) {
-      if (!isEmpty(each.value())) {
+      if (hasLength(each.value())) {
         examples.add(new ExampleBuilder()
                          .mediaType(mediaType)
                          .value(each.value())

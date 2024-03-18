@@ -88,9 +88,9 @@ public final class ApiModelProperties {
 
     return annotation -> {
       String description = "";
-      if (!isEmpty(annotation.value())) {
+      if (hasLength(annotation.value())) {
         description = annotation.value();
-      } else if (!isEmpty(annotation.notes())) {
+      } else if (hasLength(annotation.notes())) {
         description = annotation.notes();
       }
       return descriptions.resolve(description);
@@ -123,7 +123,7 @@ public final class ApiModelProperties {
   static Function<ApiModelProperty, String> toExample() {
     return annotation -> {
       String example = "";
-      if (!isEmpty(annotation.example())) {
+      if (hasLength(annotation.example())) {
         example = annotation.example();
       }
       return example;

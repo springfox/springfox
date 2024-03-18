@@ -32,8 +32,8 @@ import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spring.web.plugins.SpringIntegrationParametersProvider
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 class SpringIntegrationWebMvcRequestHandlerSpec extends Specification {
 

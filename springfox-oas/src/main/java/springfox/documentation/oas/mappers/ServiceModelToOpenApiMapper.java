@@ -288,7 +288,9 @@ public abstract class ServiceModelToOpenApiMapper {
     return path;
   }
 
-  abstract PathItem.HttpMethod mapHttpMethod(HttpMethod method);
+  private PathItem.HttpMethod mapHttpMethod(HttpMethod method){
+    return PathItem.HttpMethod.valueOf(method.name());
+  }
 
   private Content map(
       SortedSet<Representation> value,

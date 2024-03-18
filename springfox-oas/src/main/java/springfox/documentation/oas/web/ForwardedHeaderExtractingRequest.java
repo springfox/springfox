@@ -22,13 +22,13 @@
  */
 package springfox.documentation.oas.web;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UrlPathHelper;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.function.Supplier;
 
 class ForwardedHeaderExtractingRequest {

@@ -79,6 +79,6 @@ public class Tags {
   }
 
   public static Predicate<String> emptyTags() {
-    return input -> !isEmpty(input);
+    return input -> hasLength(input);
   }
 }

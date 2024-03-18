@@ -74,7 +74,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   }
 
   private String fixup(String path) {
-    if (StringUtils.isEmpty(path)
+    if (!StringUtils.hasLength(path)
         || "/".equals(path)
         || "//".equals(path)) {
       return "/";

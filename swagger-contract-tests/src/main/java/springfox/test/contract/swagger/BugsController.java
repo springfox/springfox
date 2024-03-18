@@ -64,8 +64,8 @@ import springfox.test.contract.swagger.models.Example;
 import springfox.test.contract.swagger.models.LanguageResponse;
 import springfox.test.contract.swagger.models.Pet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

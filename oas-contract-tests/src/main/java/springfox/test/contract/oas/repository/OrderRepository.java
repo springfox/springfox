@@ -32,4 +32,11 @@ public class OrderRepository extends HashMapRepository<Order, Long> {
   <S extends Order> Long getEntityId(S order) {
     return order.getId();
   }
+
+  @Override
+  public void deleteAllById(Iterable<? extends Long> longs) {
+    for (Long aLong : longs) {
+      entities.remove(aLong);
+    }
+  }
 }

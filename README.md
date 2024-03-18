@@ -1,101 +1,219 @@
-# Springfox
+# SpringFox Reload
 
-[![Join the chat at https://gitter.im/springfox/springfox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/springfox/springfox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox?ref=badge_shield)
-[ ![Download](https://api.bintray.com/packages/springfox/maven-repo/springfox/images/download.svg) ](https://bintray.com/springfox/maven-repo/springfox/_latestVersion) 
-[![Project Stats](https://www.openhub.net/p/springfox/widgets/project_thin_badge.gif)](https://www.openhub.net/p/springfox)
+项目基于[springfox/springfox: Automated JSON API documentation for API's built with Spring (github.com)](https://github.com/springfox/springfox)进行的改动
 
-| Build Status  | Coverage   | Code Analysis |
-|---|---|---|
-|[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![codecov](https://codecov.io/gh/springfox/springfox/branch/master/graph/badge.svg)](https://codecov.io/gh/springfox/springfox) |[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=alert_status)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+The project is based on the changes made by [springfox/springfox: Automated JSON API documentation for API's built with Spring (github.com)](https://github.com/springfox/springfox)
 
-| Sonar Cloud |
-|------------ |
-|[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=security_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=sqale_index)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
-|[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=springfox_springfox&metric=coverage)](https://sonarcloud.io/dashboard?id=springfox_springfox)|
+因为在SpringBoot3中直接使用springfox来启用文档会导致报错从而无法进行正常的使用，其原因是SpringBoot3中有一些Class被执行了重构，比如原本调用的Enum常量变成了String常量等等。
 
-### About
-For more information on this project visit the [Springfox Website](http://springfox.io) or
- [http://springfox.github.io/springfox/](http://springfox.github.io/springfox/)
+Because using springfox directly in SpringBoot3 to enable documents will result in an error and cannot be used normally. The reason is that some Classes in SpringBoot3 have been refactored, such as the originally called Enum constants become String constants and so on.
 
-### Useful links
-- [Reference Documentation](http://springfox.io)
-- [Examples repository](https://github.com/springfox/springfox-demos)
-- [Contribution Guidelines](https://github.com/springfox/springfox/wiki/Contribution-guidelines)
-- [Core contributors](http://springfox.github.io/springfox/contributors.html)
-- [Development and contribution guidelines](https://github.com/martypitt/swagger-springmvc/wiki/Development)
-- [Change log](docs/release-notes.md)
-- [Development Environment](http://springfox.github.io/springfox/docs/current/#development-environment)
-- [Release Instructions](http://springfox.github.io/springfox/docs/current/#releasing)
+您可以直接通过引用我的私人Repository来引用这份重构之后的SpringFox，这个源同时包含了springplugin、mavencentral、google、gradle、milestone等源的代理镜像
 
-### Getting Started
+You can directly refer to this refactored SpringFox by citing my private Repository. This source also includes proxy images of sources such as springplugin, mavencentral, google, gradle, and milestone
 
-#### For new projects
-For Maven
-```xml 
+## 使用方法/Usage
+
+**Maven使用方法/Usage for maven**
+
+在你的项目中添加该节点
+
+Add this repository in your project
+
+```xml
+<repositories>
+   <repository>
+      <id>xssoft</id>
+      <url>https://xssoft.club:5678/repository/main</url>
+      <releases>
+         <enabled>true</enabled>
+      </releases>
+      <snapshots>
+         <enabled>true</enabled>
+      </snapshots>
+   </repository>
+</repositories>
+```
+
+在你的maven项目依赖中添加
+
+and add this to your project dependencies
+
+```xml
 <dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-boot-starter</artifactId>
-    <version>3.0.0</version>
+   <groupId>io.springfox</groupId>
+   <artifactId>springfox-boot-starter</artifactId>
+   <version>4.0.3</version>
 </dependency>
-
 ```
 
-For Gradle
-```gradle 
-  implementation "io.springfox:springfox-boot-starter:<version>"
+并且创建Spring Configuration
+
+and create this Spring Configuration
+
+### 简易版本
+### Simple Version
+```java
+@Configuration
+@EnableOpenApi
+public class SpringFoxConfig implements WebMvcConfigurer {
+    private final SwaggerProperties swaggerProperties;
+
+    public SpringFoxConfig(SwaggerProperties swaggerProperties) {
+        this.swaggerProperties = swaggerProperties;
+    }
+
+    /**
+     * Swagger挂载点设置
+     * @return
+     */
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.OAS_30)
+                .enable(swaggerProperties.getEnable())
+                .apiInfo(apiInfo())
+                .select()
+                .apis(e -> !e.getName().equals("error"))
+                .paths(e -> !e.equals(""))
+                .build()
+                .host(swaggerProperties.getTryHost())
+                .protocols(newHashSet("https", "http"));
+    }
+}
 ```
-#### Migrating from earlier snapshot 
-#### Spring Boot Applications
-NOTE: Would love feedback to make this better
-1. Remove explicit dependencies on `springfox-swagger2`
-2. Remove any `@EnableSwagger2...` annotations
-3. Add the `springfox-boot-starter` dependency
-4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
-and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
-transition to java 8 function interfaces.
 
-#### Migrating from existing 2.x version
-#### Spring Boot Applications
-NOTE: Would love feedback to make this better
-1. Remove explicit dependencies on `springfox-swagger2`
-2. Remove the `@EnableSwagger2` annotations
-3. Add the `springfox-boot-starter` dependency
-4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
-and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
-transition to java 8 function interfaces 
-5. If you are using WebMvc but you don't use the [`@EnableWebMvc`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html) annotation yet, add this annotation.
-
-#### Regular spring mvc  
-NOTE: Would love feedback to make this experience better
-1. Remove explicit dependencies on `springfox-swagger2`
-2. Add `@EnableOpenApi` for open API (and `@EnableSwagger2WebMvc` or `@EnableSwagger2WebFlux` for older versions)  
-3. Added the `springfox-oas` library 
-4. Springfox 3.x removes dependencies on guava and other 3rd party libraries (not zero dep yet! depends on spring plugin
-and open api libraries for annotations and models) so if you used guava predicates/functions those will need to 
-transition to java 8 function interfaces 
+### SpringSecurity启用时复杂版本
+### Complex version when SpringSecurity enabled
 
 
-License
--------
+```java
+@Configuration
+@EnableOpenApi
+public class SpringFoxConfig implements WebMvcConfigurer {
+    private final SwaggerProperties swaggerProperties;
 
-Copyright 2015 Marty Pitt - [@martypitt](https://github.com/martypitt), Dilip Krishnan - [@dilipkrish](https://github.com/dilipkrish),
-Adrian Kelly -  [@adrianbk](https://github.com/adrianbk),
+    public SpringFoxConfig(SwaggerProperties swaggerProperties) {
+        this.swaggerProperties = swaggerProperties;
+    }
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at [apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+    /**
+     * Swagger挂载点设置
+     * @return
+     */
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.OAS_30)
+                .enable(swaggerProperties.getEnable())
+                .apiInfo(apiInfo())
+                .host(swaggerProperties.getTryHost())
+                .protocols(newHashSet("https", "http"))
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts());
+    }
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+    /**
+     * API 页面上半部分展示信息
+     */
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder().title(swaggerProperties.getApplicationName() + " Api Doc")
+            .description(swaggerProperties.getApplicationDescription())
+            .contact(new Contact("MawManager", null, "mawserver@foxmail.com"))
+            .version("程序版本号: " + swaggerProperties.getApplicationVersion() + ", Spring Boot框架版本号: " + SpringBootVersion.getVersion())
+            .build();
+    }
 
+    /**
+     * 设置授权信息
+     */
+    private List<SecurityScheme> securitySchemes() {
+        ApiKey apiKey = new ApiKey("BASE_TOKEN", "token", In.HEADER.toValue());
+        return Collections.singletonList(apiKey);
+    }
 
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox?ref=badge_large)
+    /**
+     * 授权信息全局应用
+     */
+    private List<SecurityContext> securityContexts() {
+        return Collections.singletonList(
+                SecurityContext.builder()
+                        .securityReferences(Collections.singletonList(new SecurityReference("BASE_TOKEN", new AuthorizationScope[]{new AuthorizationScope("global", "")})))
+                        .build()
+        );
+    }
+
+    /**
+     * 新的哈希数组
+     * @param ts 参数
+     * @return 新的哈希数组
+     * @param <T> 类型
+     */
+    @SafeVarargs
+    private <T> Set<T> newHashSet(T... ts) {
+        if (ts.length > 0) {
+            return new LinkedHashSet<>(Arrays.asList(ts));
+        }
+        return null;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/swagger-ui/**").addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/").resourceChain(false);
+        registry.addResourceHandler("/documentation/swagger-ui.html**").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+        registry.addResourceHandler("/documentation/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/swagger-ui").setViewName("forward:/swagger-ui/index.html");
+        registry.addRedirectViewController("/documentation/v3/api-docs", "/v3/api-docs?group=restful-api");
+        registry.addRedirectViewController("/documentation/swagger-resources/configuration/ui", "/swagger-resources/configuration/ui");
+        registry.addRedirectViewController("/documentation/swagger-resources/configuration/security", "/swagger-resources/configuration/security");
+        registry.addRedirectViewController("/documentation/swagger-resources", "/swagger-resources");
+    }
+}
+```
+
+现在你可以在/swagger-ui/index.html访问你的OAS_30文档了
+
+Now you can access your OAS_30 documentation at /swagger-ui/index.html
+
+其中SwaggerProperties的Demo
+
+And the SwaggerProperties Demo
+
+```java
+@Data
+@Configuration
+@PropertySource(value = "classpath:swagger.properties", encoding = "UTF-8")
+@ConfigurationProperties
+public class SwaggerProperties {
+    /**
+     * 是否开启swagger，生产环境一般关闭，所以这里定义一个变量
+     */
+    private Boolean enable;
+
+    /**
+     * 项目应用名
+     */
+    private String applicationName;
+
+    /**
+     * 项目版本信息
+     */
+    private String applicationVersion;
+
+    /**
+     * 项目描述信息
+     */
+    private String applicationDescription;
+
+    /**
+     * 接口调试地址
+     */
+    private String tryHost;
+}
+```
+
+ **mawserver@foxmail.com 连旭灿进行的修改，如果你有各种软件需求欢迎联系**
+

@@ -308,7 +308,7 @@ public class ModelAttributeParameterExpander {
       name += "[0]";
     }
 
-    if (isEmpty(parentName)) {
+    if (!hasLength(parentName)) {
       return name;
     }
     return String.format("%s.%s", parentName, name);

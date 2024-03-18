@@ -67,6 +67,7 @@ public class SecurityConfiguration {
   /**
    * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
    */
+  @Deprecated
   private SecurityConfiguration() {
     this(
         null,

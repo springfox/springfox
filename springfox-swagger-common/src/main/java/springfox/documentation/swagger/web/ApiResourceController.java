@@ -61,16 +61,16 @@ public class ApiResourceController {
 
   @GetMapping(value = "/configuration/security", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<SecurityConfiguration> securityConfiguration() {
-    return new ResponseEntity<>(securityConfiguration, HttpStatus.OK);
+    return new ResponseEntity<SecurityConfiguration>(securityConfiguration, HttpStatus.OK);
   }
 
   @GetMapping(value = "/configuration/ui", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<UiConfiguration> uiConfiguration() {
-    return new ResponseEntity<>(uiConfiguration, HttpStatus.OK);
+    return new ResponseEntity<UiConfiguration>(uiConfiguration, HttpStatus.OK);
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<SwaggerResource>> swaggerResources() {
-    return new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK);
+    return new ResponseEntity<List<SwaggerResource>>(swaggerResources.get(), HttpStatus.OK);
   }
 }

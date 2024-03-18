@@ -59,7 +59,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
 
       String paramValue = expression.getValue();
       AllowableListValues allowableValues = null;
-      if (!isEmpty(paramValue)) {
+      if (hasLength(paramValue)) {
         allowableValues = new AllowableListValues(singletonList(paramValue), "string");
       }
       springfox.documentation.service.Parameter parameter = new springfox.documentation.builders.ParameterBuilder()
@@ -91,7 +91,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
 
       String paramValue = expression.getValue();
       AllowableListValues allowableValues = null;
-      if (!isEmpty(paramValue)) {
+      if (hasLength(paramValue)) {
         allowableValues = new AllowableListValues(singletonList(paramValue), "string");
       }
       AllowableListValues finalAllowableValues = allowableValues;

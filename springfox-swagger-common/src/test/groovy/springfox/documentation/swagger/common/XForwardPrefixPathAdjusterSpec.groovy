@@ -5,7 +5,7 @@ import spock.lang.Unroll
 import springfox.documentation.common.SpringVersion
 import springfox.documentation.common.Version
 
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 
 class XForwardPrefixPathAdjusterSpec extends Specification {

@@ -18,6 +18,7 @@
 
 package springfox.test.contract.oas.api;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ import springfox.test.contract.oas.model.Order;
 import springfox.test.contract.oas.repository.OrderRepository;
 import springfox.test.contract.oas.repository.PetRepository;
 
-import javax.annotation.PostConstruct;
+
 import java.util.Date;
 
 @Service

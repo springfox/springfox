@@ -59,7 +59,7 @@ public class VendorExtensionsMapper {
 
   private Function<ObjectVendorExtension, Map<String, Object>> toExtensionMap() {
     return input -> {
-      if (!isEmpty(input.getName())) {
+      if (hasLength(input.getName())) {
         Map<String, Object> map = new HashMap<>();
         map.put(
             input.getName(),

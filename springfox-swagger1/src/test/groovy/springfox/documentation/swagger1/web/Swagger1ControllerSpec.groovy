@@ -40,8 +40,8 @@ import springfox.documentation.spring.web.scanners.ApiListingScanner
 import springfox.documentation.swagger1.configuration.SwaggerJacksonModule
 import springfox.documentation.swagger1.mixins.MapperSupport
 
-import javax.servlet.ServletContext
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.ServletContext
+import jakarta.servlet.http.HttpServletRequest
 
 class Swagger1ControllerSpec extends DocumentationContextSpec
     implements MapperSupport,

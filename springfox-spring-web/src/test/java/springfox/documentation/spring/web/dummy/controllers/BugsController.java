@@ -55,7 +55,7 @@ import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.LanguageResponse;
 import springfox.documentation.spring.web.dummy.models.Response;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

@@ -21,3 +21,4 @@ package-lock.json
 .eclipse/
 bin/
 .envrc
+gradle.properties

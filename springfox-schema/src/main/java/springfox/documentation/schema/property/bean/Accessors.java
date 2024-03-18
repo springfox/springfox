@@ -62,11 +62,11 @@ public class Accessors {
   @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
   public static String propertyName(Method method) {
     Optional<JsonGetter> jsonGetterAnnotation = getterAnnotation(method);
-    if (jsonGetterAnnotation.isPresent() && !isEmpty(jsonGetterAnnotation.get().value())) {
+    if (jsonGetterAnnotation.isPresent() && hasLength(jsonGetterAnnotation.get().value())) {
       return jsonGetterAnnotation.get().value();
     }
     Optional<JsonSetter> jsonSetterAnnotation = setterAnnotation(method);
-    if (jsonSetterAnnotation.isPresent() && !isEmpty(jsonSetterAnnotation.get().value())) {
+    if (jsonSetterAnnotation.isPresent() && hasLength(jsonSetterAnnotation.get().value())) {
       return jsonSetterAnnotation.get().value();
     }
     Matcher matcher = getter.matcher(method.getName());

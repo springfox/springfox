@@ -85,7 +85,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
           String scope = authorizationScope.scope();
           // @Authorization has a default blank authorization scope, which we need to
           // ignore in the case of api keys.
-          if (!isEmpty(scope)) {
+          if (hasLength(scope)) {
             authorizationScopeList.add(
                 new AuthorizationScopeBuilder()
                     .scope(scope)
@@ -114,7 +114,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
   private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
     return Stream.of(apiOperationAnnotation.authorizations())
-                 .filter(input -> !isEmpty(input.value())).collect(toList());
+                 .filter(input -> hasLength(input.value())).collect(toList());
   }
 
   @Override

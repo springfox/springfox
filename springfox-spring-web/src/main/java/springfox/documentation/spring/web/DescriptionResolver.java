@@ -41,7 +41,7 @@ public class DescriptionResolver {
 
   //Thanks to http://stackoverflow.com/a/37962230/19219
   public String resolve(String expression) {
-    if (isEmpty(expression)) {
+    if (!hasLength(expression)) {
       return expression;
     }
 

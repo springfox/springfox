@@ -30,7 +30,7 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import springfox.documentation.schema.Example;
 
 import java.util.List;
@@ -39,8 +39,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.*;
-import static springfox.documentation.swagger2.mappers.EnumMapper.*;
+import static java.util.stream.Collectors.toSet;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValues;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValuesToParameter;
 
 /**
  * Use {@link RequestParameterMapper} instead
@@ -128,7 +129,7 @@ public class ParameterMapper {
   private Model toSchema(springfox.documentation.service.Parameter source) {
     Model schema = fromModelRef(source.getModelRef());
 
-    if (!StringUtils.isEmpty(source.getScalarExample()) && !isEmptyExample(source.getScalarExample())) {
+    if (!ObjectUtils.isEmpty(source.getScalarExample()) && !isEmptyExample(source.getScalarExample())) {
       schema.setExample(source.getScalarExample());
     }
 
@@ -136,7 +137,7 @@ public class ParameterMapper {
   }
 
   private boolean isEmptyExample(Object object) {
-    return object instanceof Example && StringUtils.isEmpty(((Example) object).getValue());
+    return object instanceof Example && ObjectUtils.isEmpty(((Example) object).getValue());
   }
 
   Model fromModelRef(springfox.documentation.schema.ModelReference modelRef) {

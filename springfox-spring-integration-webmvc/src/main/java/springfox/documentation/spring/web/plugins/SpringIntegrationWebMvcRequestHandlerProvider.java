@@ -29,7 +29,7 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.SpringIntegrationWebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

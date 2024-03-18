@@ -46,7 +46,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     String name = findParameterNameFromAnnotations(context.resolvedMethodParameter());
-    if (isEmpty(name)) {
+    if (!hasLength(name)) {
       Optional<String> discoveredName = context.resolvedMethodParameter().defaultName();
       name = discoveredName
           .orElseGet(() -> format("param%s", context.resolvedMethodParameter().getParameterIndex()));

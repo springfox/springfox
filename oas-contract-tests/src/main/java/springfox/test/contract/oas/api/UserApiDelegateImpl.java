@@ -25,7 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import springfox.test.contract.oas.model.User;
 import springfox.test.contract.oas.repository.UserRepository;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;

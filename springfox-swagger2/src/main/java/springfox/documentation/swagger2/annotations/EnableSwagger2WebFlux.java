@@ -33,7 +33,6 @@ import java.lang.annotation.Target;
  * <p>
  * Loads all required beans defined in @see SpringSwaggerConfig
  *
- * @see springfox.documentation.spring.web.plugins.Docket
  * Use {@link EnableSwagger2} instead
  * @deprecated @since 3.0.0
  */

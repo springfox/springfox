@@ -4,10 +4,11 @@ import io.swagger.models.Swagger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.util.UriComponents;
 import springfox.documentation.spi.DocumentationType;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
@@ -29,9 +30,9 @@ public class WebMvcBasePathAndHostnameTransformationFilter implements WebMvcSwag
             "DEFAULT");
     context.request().ifPresent(servletRequest -> {
       UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
-      String basePath = isEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath();
+      String basePath = ObjectUtils.isEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath();
       swagger.basePath(basePath.replace(servletRequest.getContextPath(), ""));
-      if (isEmpty(swagger.getHost())) {
+      if (!hasLength(swagger.getHost())) {
         swagger.host(hostName(uriComponents, hostNameOverride));
       }
     });

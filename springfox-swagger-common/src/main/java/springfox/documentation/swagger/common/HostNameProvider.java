@@ -24,10 +24,10 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UrlPathHelper;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-import static org.springframework.util.StringUtils.*;
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.*;
+import static org.springframework.util.StringUtils.hasText;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromContextPath;
 
 public class HostNameProvider {
 

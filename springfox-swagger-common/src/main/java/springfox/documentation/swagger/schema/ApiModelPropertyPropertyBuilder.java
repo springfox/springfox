@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.schema;
 
+import com.fasterxml.classmate.ResolvedType;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -77,6 +78,8 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
           })
                     .orElse(null);
       Optional<ApiModelProperty> finalAnnotation = annotation;
+
+
       context.getSpecificationBuilder()
              .description(annotation.map(toDescription(descriptions)).orElse(null))
              .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))

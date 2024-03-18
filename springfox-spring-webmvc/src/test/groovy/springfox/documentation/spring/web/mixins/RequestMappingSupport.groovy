@@ -48,7 +48,7 @@ import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import javax.servlet.ServletContext
+import jakarta.servlet.ServletContext
 
 trait RequestMappingSupport {
 

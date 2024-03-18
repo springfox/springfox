@@ -21,19 +21,20 @@ package springfox.documentation;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.util.pattern.PathPattern;
 
 import java.util.Objects;
 import java.util.Set;
 
 public class RequestHandlerKey {
 
-  private final Set<String> pathMappings;
+  private final Set<PathPattern> pathMappings;
   private final Set<RequestMethod> supportedMethods;
   private final Set<MediaType> supportedMediaTypes;
   private final Set<MediaType> producibleMediaTypes;
 
   public RequestHandlerKey(
-      Set<String> pathMappings,
+      Set<PathPattern> pathMappings,
       Set<RequestMethod> supportedMethods,
       Set<MediaType> supportedMediaTypes,
       Set<MediaType> producibleMediaTypes) {
@@ -44,7 +45,7 @@ public class RequestHandlerKey {
     this.producibleMediaTypes = producibleMediaTypes;
   }
 
-  public Set<String> getPathMappings() {
+  public Set<PathPattern> getPathMappings() {
     return pathMappings;
   }
 

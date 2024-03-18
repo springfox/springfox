@@ -61,7 +61,7 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder in(String in) {
-    if (!StringUtils.isEmpty(in)) {
+    if (StringUtils.hasLength(in)) {
       this.in = ParameterType.from(in);
     }
     return this;

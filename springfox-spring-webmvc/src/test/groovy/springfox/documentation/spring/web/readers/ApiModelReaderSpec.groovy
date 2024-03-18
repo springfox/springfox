@@ -62,7 +62,7 @@ import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.scanners.ApiModelReader
 
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletResponse
 import java.util.function.Function
 import java.util.stream.Collectors
 

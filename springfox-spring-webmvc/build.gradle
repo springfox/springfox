@@ -21,7 +21,7 @@ dependencies {
   compileOnly libs.springProvidedWithMvc
   compileOnly libs.clientProvided
   compileOnly libs.springBootProvided
-  compileOnly "javax.servlet:javax.servlet-api:$servlet"
+  compileOnly "jakarta.servlet:jakarta.servlet-api:$servlet"
 
   testImplementation libs.test
   testImplementation libs.swagger2Core
@@ -29,7 +29,7 @@ dependencies {
   testImplementation project(':springfox-core').sourceSets.test.output
   testImplementation project(':springfox-schema').sourceSets.test.output
   testImplementation "javax.validation:validation-api:$validationApiVersion"
-  testImplementation "javax.servlet:javax.servlet-api:$servlet"
+  testImplementation "jakarta.servlet:jakarta.servlet-api:$servlet"
   testImplementation libs.springProvidedWithMvc
   testImplementation libs.clientProvided
   testImplementation libs.springBootProvided

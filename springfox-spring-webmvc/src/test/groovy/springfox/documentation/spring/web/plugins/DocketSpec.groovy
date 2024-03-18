@@ -43,7 +43,7 @@ import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 
-import javax.servlet.ServletRequest
+import jakarta.servlet.ServletRequest
 
 import static java.util.Collections.*
 import static java.util.Optional.*

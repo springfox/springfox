@@ -1,6 +1,7 @@
 package springfox.documentation.builders;
 
 import org.springframework.lang.NonNull;
+import org.springframework.util.ObjectUtils;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.NumericElementFacetBuilder;
@@ -152,7 +153,7 @@ public class PropertySpecificationBuilder {
         .map(ElementFacetBuilder::build)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-    if (xml != null && isEmpty(xml.getName())) {
+    if (xml != null && ObjectUtils.isEmpty(xml.getName())) {
       xml.setName(name);
     }
 

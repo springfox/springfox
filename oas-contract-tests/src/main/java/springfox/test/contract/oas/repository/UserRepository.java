@@ -32,4 +32,11 @@ public class UserRepository extends HashMapRepository<User, String> {
   <S extends User> String getEntityId(S user) {
     return user.getUsername();
   }
+
+  @Override
+  public void deleteAllById(Iterable<? extends String> strings) {
+    for (String string : strings) {
+      entities.remove(string);
+    }
+  }
 }

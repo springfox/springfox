@@ -24,7 +24,7 @@ package springfox.documentation.oas.web;
 
 import org.springframework.web.util.UrlPathHelper;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.function.Supplier;
 

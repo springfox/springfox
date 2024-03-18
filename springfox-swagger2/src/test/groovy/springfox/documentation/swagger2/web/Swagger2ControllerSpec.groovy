@@ -22,8 +22,8 @@ import springfox.documentation.spring.web.scanners.ApiListingScanner
 import springfox.documentation.swagger2.configuration.Swagger2JacksonModule
 import springfox.documentation.swagger2.mappers.MapperSupport
 
-import javax.servlet.ServletContext
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.ServletContext
+import jakarta.servlet.http.HttpServletRequest
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.service.contexts.Orderings.*
