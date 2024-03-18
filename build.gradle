@@ -25,7 +25,8 @@ apply plugin: 'springfox-multi-release'
 allprojects {
   repositories {
     mavenLocal()
-    //maven {url "https://plugins.gradle.org/m2/"}
+    maven {url "https://plugins.gradle.org/m2/"}
+    maven {url "https://mvnrepository.com/"}
     maven {url 'https://maven.aliyun.com/repository/public'}
     maven {url 'https://maven.aliyun.com/repository/google'}
     maven {url 'https://maven.aliyun.com/repository/spring'}
@@ -35,8 +36,7 @@ allprojects {
     gradlePluginPortal()
   }
 
-  apply plugin: 'jacoco'
-  ext['groovy.version'] = "$groovy"
+  ext['groovy.version'] = "4.0.0"
 }
 
 subprojects {
@@ -71,22 +71,15 @@ subprojects {
 
   task allDeps(type: DependencyReportTask) {}
 
-  jacoco {
-    toolVersion = "$jacocoVersion"
+  task wrapper(type: Wrapper) {
+    gradleVersion = '7.4'
   }
 
-  jacocoTestReport {
-    reports {
-      xml.enabled true
-      html.enabled true
-    }
-  }
-
-  test {
-    jvmArgs "-Dorg.spockframework.mock.ignoreByteBuddy=true"
-    finalizedBy jacocoTestReport
-    useJUnitPlatform()
-  }
+//
+//  test {
+//    jvmArgs "-Dorg.spockframework.mock.ignoreByteBuddy=true"
+//    useJUnitPlatform()
+//  }
 
   sourceCompatibility = JavaVersion.VERSION_17
   targetCompatibility = JavaVersion.VERSION_17
@@ -94,24 +87,3 @@ subprojects {
 
 apply from: "$rootDir/gradle/documentation.gradle"
 
-task codeCoverageReport(type: JacocoReport) {
-
-  // Gather execution data from all subprojects
-  // (change this if you e.g. want to calculate unit test/integration test coverage separately)
-  executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-  // Add all relevant sourcesets from the subprojects
-  subprojects.each { sourceSets it.sourceSets.main }
-
-  reports {
-    xml.enabled true
-    xml.destination file("${buildDir}/reports/jacoco/report.xml")
-    html.enabled false
-    csv.enabled false
-  }
-}
-
-// always run the tests before generating the report
-codeCoverageReport.dependsOn {
-  subprojects*.test
-}

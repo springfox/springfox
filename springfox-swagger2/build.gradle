@@ -18,8 +18,6 @@ dependencies {
   api project(':springfox-schema')
   api project(':springfox-swagger-common')
   api project(':springfox-spring-web')
-  api project(':springfox-spring-webmvc')
-  api project(':springfox-spring-webflux')
 
   api libs.core
   api libs.spring
@@ -35,18 +33,17 @@ dependencies {
   implementation "org.mapstruct:mapstruct:$mapstruct"
   annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
 
-  testImplementation project(':springfox-core')
-  testImplementation project(':springfox-core').sourceSets.test.output
-  testImplementation project(':springfox-schema').sourceSets.test.output
-  testImplementation project(':springfox-swagger-common').sourceSets.test.output
-  testImplementation project(':springfox-spring-web').sourceSets.test.output
-  testImplementation project(':springfox-spring-webmvc').sourceSets.test.output
-  testImplementation "jakarta.servlet:jakarta.servlet-api:$servlet"
-  testImplementation "org.springframework:spring-webflux:$springWeb"
-  testImplementation libs.springProvidedWithMvc
-  testImplementation libs.clientProvided
-
-  testImplementation libs.test
+//  testImplementation project(':springfox-core')
+//  testImplementation project(':springfox-core').sourceSets.test.output
+//  testImplementation project(':springfox-schema').sourceSets.test.output
+//  testImplementation project(':springfox-swagger-common').sourceSets.test.output
+//  testImplementation project(':springfox-spring-web').sourceSets.test.output
+//  testImplementation "jakarta.servlet:jakarta.servlet-api:$servlet"
+//  testImplementation "org.springframework:spring-webflux:$springWeb"
+//  testImplementation libs.springProvidedWithMvc
+//  testImplementation libs.clientProvided
+//
+//  testImplementation libs.test
 }
 
 

@@ -32,6 +32,6 @@ dependencies {
   testImplementation libs.clientProvided
 }
 
-test {
-  maxHeapSize = '3G'
-}
+//test {
+//  maxHeapSize = '3G'
+//}

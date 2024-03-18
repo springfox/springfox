@@ -1,9 +1,0 @@
-dependencies {
-  implementation libs.spring
-  implementation libs.springProvided
-  implementation libs.swagger2Core
-  implementation libs.core
-  implementation project(':springfox-spi')
-  implementation project(':springfox-core')
-  implementation project(':springfox-spring-webmvc')
-}

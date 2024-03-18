@@ -1,7 +1,0 @@
-dependencies {
-  implementation "org.springframework.boot:spring-boot-starter-web:${springBoot}"
-  implementation libs.clientProvided
-  implementation project(':springfox-swagger1')
-  implementation project(':springfox-petstore')
-  implementation project(':springfox-swagger2')
-}

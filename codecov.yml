@@ -44,6 +44,6 @@ ignore:
   - "springfox-spring-config" # ignore project used for documentation
   - "swagger-contract-tests" # ignore contract tests as its purely for testing
   - "swagger-contract-tests-webflux" # ignore contract tests as its purely for testing
-  - "oas-contract-tests" # ignore contract tests as its purely for testing
+#  - "oas-contract-tests" # ignore contract tests as its purely for testing
   - "springfox-boot-starter" # ignore contract tests as its purely for testing
 

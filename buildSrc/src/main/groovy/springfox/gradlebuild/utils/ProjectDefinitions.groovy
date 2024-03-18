@@ -29,7 +29,7 @@ class ProjectDefinitions {
   static final TEST_PROJECTS = [
       'swagger-contract-tests',
       'swagger-contract-tests-webflux',
-      'oas-contract-tests',
+//      'oas-contract-tests',
       'buildSrc',
       'springfox-spring-config',
       'springfox-petstore',

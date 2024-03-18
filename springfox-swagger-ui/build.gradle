@@ -31,7 +31,6 @@ ext {
 }
 
 dependencies {
-  implementation project(':springfox-spring-webmvc')
   testImplementation libs.test
 }
 
@@ -39,7 +38,7 @@ node {
   version = '12.16.2' // LTS
   npmVersion = '6.4.1'
   distBaseUrl = 'https://nodejs.org/dist'
-  download = true
+//  download = true
   workDir = file("${project.buildDir}/nodejs")
   npmWorkDir = file("${project.buildDir}/npm")
   nodeModulesDir = file("${project.projectDir}/src/web")

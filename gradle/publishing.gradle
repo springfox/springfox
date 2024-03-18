@@ -72,14 +72,7 @@ javadoc {
 
 publishing {
   repositories  {
-    maven {
-      name 'nexus'
-      url = project.publishUrl
-      credentials{
-        username = project.ossUser
-        password = project.ossPassword
-      }
-    }
+    mavenLocal()
   }
   publications {
     mavenJava(MavenPublication) {

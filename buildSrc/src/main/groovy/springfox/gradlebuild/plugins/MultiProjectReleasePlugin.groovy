@@ -89,7 +89,7 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
 
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
-      def artifactoryPublishTasks = evaluatedProject.getTasksByName('artifactoryPublish', true)
+      def artifactoryPublishTasks = evaluatedProject.getTasksByName('artifactoryPublish', false)
       publishSnapshot.dependsOn javaCheckTasks
       publishSnapshot.dependsOn artifactoryPublishTasks
     }

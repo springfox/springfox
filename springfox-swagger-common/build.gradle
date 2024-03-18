@@ -13,7 +13,6 @@ dependencies {
   api project(':springfox-spi')
   api project(':springfox-schema')
   api project(':springfox-spring-web')
-  api project(':springfox-spring-webmvc')
 
   api libs.core
   api libs.spring
@@ -29,7 +28,6 @@ dependencies {
   testImplementation project(':springfox-core').sourceSets.test.output
   testImplementation project(':springfox-schema').sourceSets.test.output
   testImplementation project(':springfox-spring-web').sourceSets.test.output
-  testImplementation project(':springfox-spring-webmvc').sourceSets.test.output
 
   testImplementation libs.test
   testImplementation "org.skyscreamer:jsonassert:${jsonAssert}"

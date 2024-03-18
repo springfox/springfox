@@ -5,7 +5,6 @@ ext {
   classGraph = "4.8.83"
   equalsverifierVersion = '3.3'
   groovy = "4.0.6"
-  jacocoVersion = '0.8.5'
   jackson = '2.14.1'
   joda = "2.10.6"
   jsonPath = "2.4.0"

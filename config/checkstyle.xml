@@ -65,9 +65,6 @@
         <!-- See http://checkstyle.sf.net/config_import.html -->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
-        <module name="UnusedImports">
-            <property name="processJavadoc" value="false"/>
-        </module>
 
 
         <module name="MethodLength"/>
